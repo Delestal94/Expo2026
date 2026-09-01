@@ -79,6 +79,14 @@ Español (base) · Inglés · Portugués · Chino mandarín · quinto idioma a c
 | Asistente con IA | `aiAssistant` | RAG acotado al contenido real; deriva a humano fuera de dominio |
 | Mapa interactivo | `interactiveMap` | Estado de sesiones en vivo, no geolocalización indoor (fuera de alcance v1) |
 
+## Entornos y ramas
+
+| Entorno | Rama | Se actualiza |
+|---|---|---|
+| Preview | `feature/*`, `fix/*`, ... | Automático, uno por Pull Request |
+| Staging | `develop` | Automático en cada merge a `develop` |
+| Producción | `main` | Automático en cada merge `develop → main` (ver [`CONTRIBUTING.md`](../CONTRIBUTING.md)) |
+
 ## Seguridad y cumplimiento
 
 - Datos de tarjeta nunca tocan el servidor propio (Mercado Pago Checkout Pro).
