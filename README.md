@@ -41,6 +41,10 @@ Antes de mergear se corre todo esto en CI (`.github/workflows/ci.yml`) — corre
 
 Etapa actual: **Fase 0 — mockup + memoria descriptiva para el concurso** (fecha límite 8/9/2026).
 
+## Licencia
+
+Público, sin licencia declarada — el copyright queda reservado para el equipo por defecto (ver [ADR-0004](docs/adr/0004-visibilidad-repositorio.md)).
+
 ## Equipo
 
 - [Delestal94](https://github.com/Delestal94)
