@@ -11,6 +11,7 @@ Propuesta y desarrollo del sitio oficial de ExpoJuy 2026 para el **Desafío Digi
 | Decisiones de arquitectura (ADR) | [`docs/adr/`](docs/adr) |
 | Documento ejecutivo (memoria para la presentación) | [`docs/memoria-ejecutiva.md`](docs/memoria-ejecutiva.md) |
 | Cómo contribuir (branches, commits, PRs) | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| Board de tareas (roadmap → issues) | [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1) |
 
 ## Stack
 
