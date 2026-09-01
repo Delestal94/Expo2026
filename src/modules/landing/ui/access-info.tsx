@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { getFeatureFlags } from "@/lib/config/flags";
+
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 const WHATSAPP_URL = "https://wa.me/5493884212955";
 
@@ -7,7 +10,9 @@ const REFERENCE_PRICING = [
   { label: "Menores de 5 años", price: "Sin cargo" },
 ];
 
-export function AccessInfo() {
+export async function AccessInfo() {
+  const flags = await getFeatureFlags();
+
   return (
     <section
       id="acceso"
@@ -45,10 +50,22 @@ export function AccessInfo() {
       </div>
 
       <div className="mx-auto mt-6 max-w-xl text-center">
-        <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
-          Comprar entrada — disponible en la próxima etapa
-        </span>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
+            Comprar entrada — disponible en la próxima etapa
+          </span>
+          {flags.visitorAccess && (
+            <Link
+              href="/cuenta"
+              className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
+            >
+              Crear tu cuenta de visitante
+            </Link>
+          )}
+        </div>
         <p className="mt-2 font-mono text-xs text-paper-dim">
+          {flags.visitorAccess &&
+            "Podés crear tu cuenta ahora — la compra de la entrada se habilita en la próxima etapa. "}
           Precios de referencia, edición 2024. Sujeto a confirmación 2026.
         </p>
       </div>
