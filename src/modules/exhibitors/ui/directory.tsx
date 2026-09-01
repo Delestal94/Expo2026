@@ -36,7 +36,7 @@ export function Directory() {
               className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition"
               style={
                 isActive
-                  ? { backgroundColor: eje.color, borderColor: eje.color, color: "#0b0a12" }
+                  ? { backgroundColor: eje.color, borderColor: eje.color, color: "var(--color-ink)" }
                   : { borderColor: "var(--color-line)", color: "var(--color-paper-dim)" }
               }
             >
