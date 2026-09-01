@@ -41,10 +41,12 @@ export function Hero() {
             Quiero asistir
           </a>
           <a
-            href="#acceso"
+            href="https://forms.gle/ChErBuBgp3QfuxRr7"
+            target="_blank"
+            rel="noopener"
             className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
           >
-            Sumar mi empresa como expositora
+            Sumar mi empresa como proveedora
           </a>
         </div>
       </div>

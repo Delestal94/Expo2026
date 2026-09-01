@@ -63,9 +63,11 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
 | Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | **Construido** (mockup con datos de ejemplo) — ver sección 10 |
 
-## 7. Una decisión que no bloqueó el avance
+## 7. Dos decisiones que no bloquearon el avance
 
-No hay confirmación pública de que ExpoJuy 2026 cobre entrada como lo hizo la edición 2024. En vez de esperar esa respuesta para seguir construyendo, diseñamos el módulo de registro con el cobro como un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`) y avanzamos con **acceso gratuito** como supuesto de trabajo. Si la Cámara confirma que 2026 es pago, el cambio es una variable de entorno y activar el adaptador de Mercado Pago — no un rediseño. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
+**Acceso general.** La edición 2024 fue paga, con venta de entradas online ($4.000 menores/jubilados, $6.000 adultos, sin cargo menores de 5). No hay confirmación pública de que 2026 mantenga ese esquema. En vez de esperar esa respuesta para seguir construyendo, diseñamos el registro de acceso con el cobro como un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`) — el sitio muestra los valores de referencia 2024 y ya está preparado para cobrar por Mercado Pago apenas se confirme el esquema 2026, sin rediseño. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
+
+**Alta de expositores.** Los proveedores no se registran en el sitio: se postulan por la convocatoria oficial de la Cámara (formulario de Google) y por WhatsApp. El portal de expositores deriva a esos canales reales en vez de duplicar un formulario propio. Detalle en [ADR-0005](adr/0005-acceso-libre-sin-registro.md).
 
 ## 8. Uso responsable de IA
 

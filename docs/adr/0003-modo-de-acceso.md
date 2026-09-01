@@ -5,7 +5,7 @@
 
 ## Contexto
 
-La edición 2024 de ExpoJuy cobraba entrada ($4.000 menores/jubilados, $6.000 adultos, gratis menores de 5 — fuente: Somos Jujuy). No hay confirmación pública de que la edición 2026 mantenga ese esquema. Ante la falta de esa confirmación, el equipo decidió avanzar con acceso gratuito como supuesto de trabajo, sin esperar la respuesta de la Cámara para seguir construyendo.
+La edición 2024 de ExpoJuy cobraba entrada ($4.000 menores de 6 a 12 años y jubilados, $6.000 adultos, gratis menores de 5), con venta **online** — confirmado por dos fuentes independientes (Somos Jujuy y la cobertura completa del programa de actividades 2024). No hay confirmación pública de que la edición 2026 mantenga ese esquema, pero el antecedente de cobro con venta online en al menos una edición reciente es sólido. Ante la falta de confirmación específica para 2026, el equipo decidió avanzar con `ADMISSION_MODE=free` como default de trabajo — no porque haya evidencia de que 2026 sea gratis, sino para no exponer un checkout de pago sin terminar en el mockup del concurso. La arquitectura (QR + Mercado Pago condicional) está lista para el caso pago, que es el más probable según el antecedente.
 
 ## Decisión
 
