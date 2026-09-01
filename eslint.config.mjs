@@ -37,11 +37,18 @@ const eslintConfig = defineConfig([
           ],
         },
       ],
+      // Solo module/ exige un único punto de entrada (index.ts). lib/
+      // (config, ports, adapters) es utilitario, no un módulo de negocio
+      // aislado, así que sus archivos internos se pueden importar libre
+      // entre sí — target: "module" ya cubre la restricción que importa.
       "boundaries/entry-point": [
         "error",
         {
           default: "disallow",
-          rules: [{ target: "module", allow: "index.ts" }],
+          rules: [
+            { target: "module", allow: "index.ts" },
+            { target: "lib", allow: "**/*" },
+          ],
         },
       ],
     },
