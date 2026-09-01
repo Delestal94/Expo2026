@@ -96,4 +96,11 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 
 **Límite conocido:** GitHub no permite restringir por API "a `main` solo le puede llegar un PR desde `develop`" — es una convención de equipo, no algo que la plataforma bloquee técnicamente.
 
-CI corre en `.github/workflows/ci.yml` (lint, type-check, tests, build) en cada PR y en cada push a `develop`/`main`. Su check (`build-and-test`) se suma como *required status check* apenas corra en verde por primera vez sobre `develop` — activarlo antes bloquearía cualquier PR abierto que no tenga el workflow todavía.
+CI corre en `.github/workflows/ci.yml` (lint, type-check, tests, build) en cada PR y en cada push a `develop`/`main`. Su check (`build-and-test`) es *required status check* en ambas ramas desde 2026-09-01 — un PR no se puede mergear si el CI está en rojo.
+
+> **⚠️ Excepción temporal (desde 2026-09-01):** `required_approving_review_count` está en **0** en ambas ramas porque todavía hay un solo integrante con acceso al repo — no hay quién apruebe un PR ajeno. Todo lo demás de la regla de oro sigue vigente: nadie pushea directo, CI tiene que estar en verde, conversaciones sin resolver bloquean el merge. **En cuanto el segundo integrante acepte la invitación, volver a 1** (comando abajo) y borrar este aviso.
+>
+> ```bash
+> gh api -X PATCH repos/Delestal94/Expo2026/branches/develop/protection/required_pull_request_reviews -F required_approving_review_count=1
+> gh api -X PATCH repos/Delestal94/Expo2026/branches/main/protection/required_pull_request_reviews -F required_approving_review_count=1
+> ```

@@ -44,9 +44,11 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | CI verificado en verde en GitHub; activado como *required status check* en `main` y `develop` | [Actions](https://github.com/Delestal94/Expo2026/actions) |
 | 2026-09-01 | Repositorio | 4 milestones (Fase 0-3), 8 issues fundacionales y board de tareas | [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1) |
 | 2026-09-01 | Repositorio | Repositorio confirmado público sin licencia (copyright reservado por defecto) | [ADR-0004](adr/0004-visibilidad-repositorio.md) |
+| 2026-09-01 | Repositorio | Excepción temporal: 0 aprobaciones requeridas hasta sumar al segundo integrante | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## 6. Próximos pasos
 
 - [ ] Confirmar con la Cámara de Comercio Exterior si el acceso 2026 es gratuito o pago ([issue](https://github.com/Delestal94/Expo2026/issues/3), [ADR-0003](adr/0003-modo-de-acceso.md)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Mockup navegable para el 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
+- [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.
