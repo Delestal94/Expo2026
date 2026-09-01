@@ -57,7 +57,9 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | Se detectó y corrigió una contradicción propia: "historial lineal obligatorio" en `main` bloqueaba el merge commit que el mismo `CONTRIBUTING.md` reserva para `develop → main`. Se desactivó historial lineal solo en `main` | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 2026-09-01 | Registro de acceso | Puerto `AuthProvider` + adaptador real de Supabase Auth (signUp/signIn/signOut/getSession), con tests sobre el SDK mockeado. Corrige de paso un bug propio en `eslint.config.mjs` que bloqueaba imports cruzados dentro de `lib/` | [PR #28](https://github.com/Delestal94/Expo2026/pull/28) |
 | 2026-09-01 | Decisión | Confirmado con evidencia sólida (cobertura completa del programa 2024): el ingreso general **fue pago con venta online**, no gratuito — se revierte la suposición de "acceso libre" evaluada brevemente antes. Se confirma además que expositores/proveedores se postulan por canales externos (formulario de Google + WhatsApp de la Cámara), no por el sitio | [ADR-0003](adr/0003-modo-de-acceso.md), [ADR-0005](adr/0005-acceso-libre-sin-registro.md) |
-| 2026-09-01 | Landing | Sección de acceso rehecha con precios de referencia 2024 reales, CTA de "comprar entrada" honesto (deshabilitado, próxima etapa) y links reales a la convocatoria de proveedores (Google Form) y WhatsApp de la Cámara | PR pendiente de mergear |
+| 2026-09-01 | Landing | Sección de acceso rehecha con precios de referencia 2024 reales, CTA de "comprar entrada" honesto (deshabilitado, próxima etapa) y links reales a la convocatoria de proveedores (Google Form) y WhatsApp de la Cámara | [PR #29](https://github.com/Delestal94/Expo2026/pull/29) |
+| 2026-09-01 | Repositorio | Maximiliano Lezano (@MaxLezano) aceptó la invitación con permiso `write` — restaurada la aprobación obligatoria (1 revisión) en `main`/`develop`, CODEOWNERS y README actualizados | [.github/CODEOWNERS](../.github/CODEOWNERS) |
+| 2026-09-01 | Repositorio | Repaso general: los 4 agentes horarios llevan 10+ corridas analizando bien (uno encontró y arregló un hueco real de test coverage en el countdown) pero **ninguno pudo pushear nada** — el GitHub App de las rutinas en la nube no tiene permiso de escritura sobre el repo (403 en cada intento). Bloqueante real, ver Próximos pasos | Runs en claude.ai/code/routines |
 
 ## 6. Próximos pasos
 
@@ -65,4 +67,6 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Repasar la memoria descriptiva una vez más antes del 8/9 y confirmar que las capturas/links estén al día.
 - [ ] Recordar desactivar los 4 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).
-- [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.
+- [x] Maximiliano Lezano aceptó la invitación (@MaxLezano, permiso `write`) — `required_approving_review_count` vuelto a 1 en `main`/`develop`, CODEOWNERS/README actualizados.
+- [ ] **Bloqueante para los agentes horarios:** el GitHub App que usan las rutinas en la nube no tiene permiso de escritura sobre este repo (403 en cada corrida, ver sección 5). Instalar/reautorizar en https://github.com/apps/claude/installations/select_target — sin esto, los 4 agentes analizan pero nunca pueden abrir PR.
+- [ ] Completar el rol de cada integrante en la tabla de Equipo (§4) — no lo sé, hay que preguntarlo.
