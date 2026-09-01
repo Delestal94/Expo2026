@@ -96,4 +96,4 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 
 **Límite conocido:** GitHub no permite restringir por API "a `main` solo le puede llegar un PR desde `develop`" — es una convención de equipo, no algo que la plataforma bloquee técnicamente.
 
-**Pendiente:** una vez que exista un workflow de CI (`.github/workflows/`), agregar sus checks como *required status checks* en ambas ramas — hasta entonces, la revisión humana es el único gate.
+CI corre en `.github/workflows/ci.yml` (lint, type-check, tests, build) en cada PR y en cada push a `develop`/`main`. Su check (`build-and-test`) se suma como *required status check* apenas corra en verde por primera vez sobre `develop` — activarlo antes bloquearía cualquier PR abierto que no tenga el workflow todavía.
