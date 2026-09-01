@@ -57,7 +57,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | Se detectó y corrigió una contradicción propia: "historial lineal obligatorio" en `main` bloqueaba el merge commit que el mismo `CONTRIBUTING.md` reserva para `develop → main`. Se desactivó historial lineal solo en `main` | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 2026-09-01 | Registro de acceso | Puerto `AuthProvider` + adaptador real de Supabase Auth (signUp/signIn/signOut/getSession), con tests sobre el SDK mockeado. Corrige de paso un bug propio en `eslint.config.mjs` que bloqueaba imports cruzados dentro de `lib/` | [PR #28](https://github.com/Delestal94/Expo2026/pull/28) |
 | 2026-09-01 | Decisión | Confirmado con evidencia sólida (cobertura completa del programa 2024): el ingreso general **fue pago con venta online**, no gratuito — se revierte la suposición de "acceso libre" evaluada brevemente antes. Se confirma además que expositores/proveedores se postulan por canales externos (formulario de Google + WhatsApp de la Cámara), no por el sitio | [ADR-0003](adr/0003-modo-de-acceso.md), [ADR-0005](adr/0005-acceso-libre-sin-registro.md) |
-| 2026-09-01 | Landing | Sección de acceso rehecha con precios de referencia 2024 reales, CTA de "comprar entrada" honesto (deshabilitado, próxima etapa) y links reales a la convocatoria de proveedores (Google Form) y WhatsApp de la Cámara | PR pendiente de mergear |
+| 2026-09-01 | Landing | Sección de acceso rehecha con precios de referencia 2024 reales, CTA de "comprar entrada" honesto (deshabilitado, próxima etapa) y links reales a la convocatoria de proveedores (Google Form) y WhatsApp de la Cámara | [PR #29](https://github.com/Delestal94/Expo2026/pull/29) |
 
 ## 6. Próximos pasos
 
