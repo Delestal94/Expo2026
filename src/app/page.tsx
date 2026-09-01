@@ -1,6 +1,7 @@
 import { About, AccessInfo, Ejes, Hero, SiteFooter } from "@/modules/landing";
 import { MapSection } from "@/modules/interactive-map";
 import { PortalSection } from "@/modules/exhibitors";
+import { GalleryPreview } from "@/modules/gallery";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <About />
       <Ejes />
+      <GalleryPreview />
       <MapSection />
       <PortalSection />
       <AccessInfo />
