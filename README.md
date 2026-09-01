@@ -49,4 +49,4 @@ Público, sin licencia declarada — el copyright queda reservado para el equipo
 ## Equipo
 
 - [Delestal94](https://github.com/Delestal94)
-- _(completar segundo integrante)_
+- Maximiliano Lezano — _(completar usuario de GitHub para CODEOWNERS)_

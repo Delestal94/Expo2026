@@ -1,7 +1,7 @@
 # Memoria descriptiva — Sitio oficial ExpoJuy 2026
 
 **Desafío Digital ExpoJuy 2026** · Cámara de Comercio Exterior de Jujuy · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear
-**Equipo:** [Delestal94](https://github.com/Delestal94) · _(segundo integrante — completar)_
+**Equipo:** [Delestal94](https://github.com/Delestal94) · Maximiliano Lezano
 **Repositorio:** [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026)
 
 ---
@@ -62,9 +62,9 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
 | Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | Diseñado, pendiente de implementación |
 
-## 7. Una decisión que dejamos abierta a propósito
+## 7. Una decisión que no bloqueó el avance
 
-No sabemos todavía si el acceso a ExpoJuy 2026 será gratuito o pago — la edición 2024 cobraba entrada, no hay confirmación pública para 2026. En vez de asumir una respuesta, diseñamos el módulo de registro para que el cobro sea un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`), no una decisión enterrada en el código. Cualquiera sea la respuesta de la Cámara, el sitio no necesita rediseñarse — solo configurarse. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
+No hay confirmación pública de que ExpoJuy 2026 cobre entrada como lo hizo la edición 2024. En vez de esperar esa respuesta para seguir construyendo, diseñamos el módulo de registro con el cobro como un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`) y avanzamos con **acceso gratuito** como supuesto de trabajo. Si la Cámara confirma que 2026 es pago, el cambio es una variable de entorno y activar el adaptador de Mercado Pago — no un rediseño. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
 
 ## 8. Uso responsable de IA
 
@@ -105,4 +105,4 @@ También lo aplicamos hacia adentro: usamos herramientas de IA como asistencia d
 | Integrante | Rol |
 |---|---|
 | Delestal94 | _(completar)_ |
-| _(completar)_ | _(completar)_ |
+| Maximiliano Lezano | _(completar)_ |
