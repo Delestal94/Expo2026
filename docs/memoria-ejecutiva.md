@@ -52,10 +52,14 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Mapa interactivo | Plano esquemático de Ciudad Cultural: 4 pabellones por eje, 3 salas con estado de ejemplo, interacción por click/hover/teclado. Verificado con Playwright — se encontró y corrigió un bug real de superposición de etiquetas | [PR #22](https://github.com/Delestal94/Expo2026/pull/22) |
 | 2026-09-01 | Portal de expositores | Directorio filtrable por eje + preview de matching de rondas de negocios (score de compatibilidad, tags compartidos). Verificado con Playwright | [PR #24](https://github.com/Delestal94/Expo2026/pull/24) |
 | 2026-09-01 | Repositorio | **Mockup navegable completo** (landing + mapa + portal, identidad Estratos consistente) — issue #5 cerrado, board actualizado | [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1) |
+| 2026-09-01 | Repositorio | 4 agentes horarios en la nube (QA/regresión, accesibilidad, consistencia de diseño, sync de documentación) — abren PR o Issue, nunca deciden negocio, corren hasta el 30/9 | Routines en claude.ai/code/routines |
+| 2026-09-01 | Infraestructura | **Sitio conectado a Vercel y en vivo**: producción seguía `main` (que todavía no tenía el scaffold) — se promovió `develop → main` por primera vez (PR #26) para destrabarlo | **[expojuy2026.vercel.app](https://expojuy2026.vercel.app)** |
+| 2026-09-01 | Repositorio | Se detectó y corrigió una contradicción propia: "historial lineal obligatorio" en `main` bloqueaba el merge commit que el mismo `CONTRIBUTING.md` reserva para `develop → main`. Se desactivó historial lineal solo en `main` | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 
 ## 6. Próximos pasos
 
 - [ ] Seguir esperando confirmación formal de la Cámara sobre el modo de acceso, aunque ya no bloquea nada ([issue](https://github.com/Delestal94/Expo2026/issues/3)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Repasar la memoria descriptiva una vez más antes del 8/9 y confirmar que las capturas/links estén al día.
+- [ ] Recordar desactivar los 4 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).
 - [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.

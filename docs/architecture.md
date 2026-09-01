@@ -81,11 +81,13 @@ Español (base) · Inglés · Portugués · Chino mandarín · quinto idioma a c
 
 ## Entornos y ramas
 
-| Entorno | Rama | Se actualiza |
-|---|---|---|
-| Preview | `feature/*`, `fix/*`, ... | Automático, uno por Pull Request |
-| Staging | `develop` | Automático en cada merge a `develop` |
-| Producción | `main` | Automático en cada merge `develop → main` (ver [`CONTRIBUTING.md`](../CONTRIBUTING.md)) |
+| Entorno | Rama | URL | Se actualiza |
+|---|---|---|---|
+| Preview | `feature/*`, `fix/*`, ... | uno distinto por PR (link en los checks) | Automático, uno por Pull Request |
+| Staging | `develop` | https://expojuy2026-git-develop-delestalmiguelignacio-5787s-projects.vercel.app | Automático en cada merge a `develop` |
+| Producción | `main` | **https://expojuy2026.vercel.app** | Automático en cada merge `develop → main` (ver [`CONTRIBUTING.md`](../CONTRIBUTING.md)) |
+
+Conectado a Vercel el 2026-09-01 (proyecto `expojuy2026`, team `delestalmiguelignacio-5787s-projects`).
 
 ## Seguridad y cumplimiento
 
