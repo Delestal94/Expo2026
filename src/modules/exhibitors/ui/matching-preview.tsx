@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 const MATCH = {
   a: { name: "Andes Trade Corredor", detail: "Ofrece: bróker de cargas internacional" },
   b: { name: "Corredor Capricornio Logística", detail: "Ofrece: transporte por el paso de Jama" },
@@ -6,6 +10,17 @@ const MATCH = {
 };
 
 export function MatchingPreview() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setPrefersReducedMotion(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <div className="rounded-2xl border border-line bg-[#121022] p-8">
       <span className="font-mono text-xs tracking-[0.2em] text-accent uppercase">
@@ -23,7 +38,9 @@ export function MatchingPreview() {
         <div className="flex flex-col items-center gap-2 py-4 md:py-0">
           <svg width="64" height="24" viewBox="0 0 64 24" aria-hidden="true">
             <line x1="0" y1="12" x2="64" y2="12" stroke="var(--color-accent)" strokeWidth="2" strokeDasharray="4 5">
-              <animate attributeName="stroke-dashoffset" from="18" to="0" dur="0.8s" repeatCount="indefinite" />
+              {!prefersReducedMotion && (
+                <animate attributeName="stroke-dashoffset" from="18" to="0" dur="0.8s" repeatCount="indefinite" />
+              )}
             </line>
           </svg>
           <span className="rounded-full border border-accent px-3 py-1 font-mono text-sm font-semibold text-accent">
