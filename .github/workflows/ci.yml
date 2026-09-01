@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint (incluye límites entre módulos)
+        run: npm run lint
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build

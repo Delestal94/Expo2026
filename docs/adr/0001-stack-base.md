@@ -9,7 +9,7 @@ Equipo de 2-4 personas con experiencia declarada en React/Next.js/TypeScript. Pl
 
 ## Decisión
 
-Next.js 15 (App Router) + TypeScript de punta a punta. PostgreSQL vía Supabase (Auth + Storage + Realtime + pgvector incluidos). Hosting en Vercel. Detalle completo y justificación capa por capa en [`docs/architecture.md`](../architecture.md).
+Next.js 16 (App Router) + TypeScript de punta a punta. PostgreSQL vía Supabase (Auth + Storage + Realtime + pgvector incluidos). Hosting en Vercel. Detalle completo y justificación capa por capa en [`docs/architecture.md`](../architecture.md).
 
 ## Alternativas consideradas
 
