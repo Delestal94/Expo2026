@@ -11,7 +11,7 @@ interface TimeLeft {
   seconds: number;
 }
 
-function getTimeLeft(): TimeLeft {
+export function getTimeLeft(): TimeLeft {
   const diff = Math.max(EVENT_START - Date.now(), 0);
   return {
     days: Math.floor(diff / 86_400_000),
