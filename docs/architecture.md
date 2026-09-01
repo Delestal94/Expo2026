@@ -16,7 +16,7 @@ Principios no negociables:
 
 ```mermaid
 flowchart LR
-    Client["Cliente\nWeb · PWA scanner"] --> NextJS["Next.js 15\nApp Router · Route Handlers (BFF)"]
+    Client["Cliente\nWeb · PWA scanner"] --> NextJS["Next.js 16\nApp Router · Route Handlers (BFF)"]
     NextJS --> DB["Postgres\n+ pgvector"]
     NextJS --> Redis["Redis\ncola · rate-limit"]
     NextJS --> MP["Mercado Pago\ncheckout (si aplica)"]
@@ -33,7 +33,7 @@ Todo lo que no es lógica propia del evento se delega a un servicio administrado
 
 | Capa | Tecnología | Por qué |
 |---|---|---|
-| Frontend | Next.js 15, React 19, Tailwind, shadcn/ui | RSC para SEO/performance; componentes de checkout/formularios ya resueltos |
+| Frontend | Next.js 16, React 19, Tailwind, shadcn/ui | RSC para SEO/performance; componentes de checkout/formularios ya resueltos |
 | Backend/API | Route Handlers | Mismo runtime que el frontend |
 | Base de datos | PostgreSQL + Drizzle ORM | Relacional por naturaleza; tipado extremo a extremo |
 | Plataforma de datos | Supabase | Postgres+Auth+Storage+Realtime+pgvector en un proveedor |
@@ -78,6 +78,14 @@ Español (base) · Inglés · Portugués · Chino mandarín · quinto idioma a c
 | Portal de expositores + rondas de negocios | `exhibitorPortal`, `businessRounds` | Empezar con matching por rubro/país antes que similitud semántica completa |
 | Asistente con IA | `aiAssistant` | RAG acotado al contenido real; deriva a humano fuera de dominio |
 | Mapa interactivo | `interactiveMap` | Estado de sesiones en vivo, no geolocalización indoor (fuera de alcance v1) |
+
+## Entornos y ramas
+
+| Entorno | Rama | Se actualiza |
+|---|---|---|
+| Preview | `feature/*`, `fix/*`, ... | Automático, uno por Pull Request |
+| Staging | `develop` | Automático en cada merge a `develop` |
+| Producción | `main` | Automático en cada merge `develop → main` (ver [`CONTRIBUTING.md`](../CONTRIBUTING.md)) |
 
 ## Seguridad y cumplimiento
 

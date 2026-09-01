@@ -11,15 +11,39 @@ Propuesta y desarrollo del sitio oficial de ExpoJuy 2026 para el **Desafío Digi
 | Decisiones de arquitectura (ADR) | [`docs/adr/`](docs/adr) |
 | Documento ejecutivo (memoria para la presentación) | [`docs/memoria-ejecutiva.md`](docs/memoria-ejecutiva.md) |
 | Cómo contribuir (branches, commits, PRs) | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| Board de tareas (roadmap → issues) | [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1) |
 
 ## Stack
 
-Next.js 15 (App Router) · TypeScript · PostgreSQL (Supabase) · Sanity CMS · next-intl · Vercel.
+Next.js 16 (App Router) · TypeScript · PostgreSQL (Supabase) · Sanity CMS · next-intl · Vercel.
 Ver el detalle y las razones de cada elección en la arquitectura.
+
+## Cómo correr el proyecto
+
+```bash
+npm install
+cp .env.example .env.local   # y completar valores si aplica
+npm run dev                  # http://localhost:3000
+```
+
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Build de producción |
+| `npm run lint` | ESLint, incluye la regla de límites entre módulos |
+| `npm run type-check` | TypeScript sin emitir archivos |
+| `npm test` | Tests con Vitest |
+| `npm run test:watch` | Tests en modo watch |
+
+Antes de mergear se corre todo esto en CI (`.github/workflows/ci.yml`) — correrlo local antes de abrir el PR ahorra una vuelta.
 
 ## Estado del proyecto
 
 Etapa actual: **Fase 0 — mockup + memoria descriptiva para el concurso** (fecha límite 8/9/2026).
+
+## Licencia
+
+Público, sin licencia declarada — el copyright queda reservado para el equipo por defecto (ver [ADR-0004](docs/adr/0004-visibilidad-repositorio.md)).
 
 ## Equipo
 
