@@ -28,7 +28,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | Integrante | Rol |
 |---|---|
 | Delestal94 | _(completar)_ |
-| _(completar)_ | _(completar)_ |
+| Maximiliano Lezano | _(completar)_ |
 
 ## 5. Bitácora de avance
 
@@ -47,10 +47,12 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | Excepción temporal: 0 aprobaciones requeridas hasta sumar al segundo integrante | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 2026-09-01 | Repositorio | Scaffold mergeado a `develop`; primeros PRs de Dependabot: 4 mergeados (actions, @types/node, jsdom), 2 cerrados por incompatibilidad río arriba (TypeScript 7 y ESLint 10 todavía no soportados por `eslint-config-next`/`typescript-eslint`) | [Actions](https://github.com/Delestal94/Expo2026/actions) |
 | 2026-09-01 | Landing | Hero + identidad visual "Estratos": bandas minerales del Cerro de los Siete Colores animadas en canvas, cuenta regresiva real, secciones Qué es/Ejes/Registro. Verificado con Playwright (desktop + mobile, sin errores de consola) | [PR #18](https://github.com/Delestal94/Expo2026/pull/18) |
+| 2026-09-01 | Repositorio | Memoria descriptiva redactada (repo + versión presentable); equipo confirmado (Delestal94 + Maximiliano Lezano) | [docs/memoria-descriptiva.md](memoria-descriptiva.md) |
+| 2026-09-01 | Decisión | Acceso gratuito adoptado como supuesto de trabajo, sin esperar confirmación de la Cámara — evita bloquear el desarrollo | [ADR-0003](adr/0003-modo-de-acceso.md) |
 
 ## 6. Próximos pasos
 
-- [ ] Confirmar con la Cámara de Comercio Exterior si el acceso 2026 es gratuito o pago ([issue](https://github.com/Delestal94/Expo2026/issues/3), [ADR-0003](adr/0003-modo-de-acceso.md)).
+- [ ] Seguir esperando confirmación formal de la Cámara sobre el modo de acceso, aunque ya no bloquea nada ([issue](https://github.com/Delestal94/Expo2026/issues/3)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Resto de pantallas del mockup (portal de expositores, mapa, asistente IA como propuesta visual) y la memoria descriptiva en sí, para el 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
 - [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.

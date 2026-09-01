@@ -108,6 +108,6 @@ Español (base) · Inglés · Portugués · Chino mandarín · quinto idioma a c
 Ver [`docs/adr/`](adr) para las ya resueltas. Pendientes:
 
 - ¿`main` cloud stack administrado (Vercel/Supabase) o infraestructura propia? → Resuelto en [ADR-0001](adr/0001-stack-base.md), a favor del primero.
-- ¿Modo de acceso gratuito o pago? → [ADR-0003](adr/0003-modo-de-acceso.md), pendiente de confirmación externa.
+- ¿Modo de acceso gratuito o pago? → Resuelto en [ADR-0003](adr/0003-modo-de-acceso.md): gratuito por defecto como supuesto de trabajo, revisable si la Cámara confirma lo contrario.
 - ¿Cuál es el quinto idioma (francés vs. una opción más regional)?
 - ¿Sanity o un CMS self-hosted (Payload) por soberanía de datos del organismo público?
