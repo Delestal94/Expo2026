@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ZONES } from "./zones";
 
 const VIEW_W = 960;
@@ -9,6 +9,16 @@ const VIEW_H = 620;
 export function VenueMap() {
   const [activeId, setActiveId] = useState<string>(ZONES[0].id);
   const active = ZONES.find((z) => z.id === activeId) ?? ZONES[0];
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setPrefersReducedMotion(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
@@ -26,7 +36,7 @@ export function VenueMap() {
                 key={zone.id}
                 onMouseEnter={() => setActiveId(zone.id)}
                 onClick={() => setActiveId(zone.id)}
-                className="cursor-pointer outline-none"
+                className="cursor-pointer outline-offset-4 outline-paper focus-visible:outline-2"
                 tabIndex={0}
                 role="button"
                 aria-pressed={isActive}
@@ -69,7 +79,7 @@ export function VenueMap() {
                       r={5}
                       fill={zone.status === "en-ronda" ? "#3bcdbf" : "#b3ab9c"}
                     >
-                      {zone.status === "en-ronda" && (
+                      {zone.status === "en-ronda" && !prefersReducedMotion && (
                         <animate
                           attributeName="opacity"
                           values="1;0.3;1"
