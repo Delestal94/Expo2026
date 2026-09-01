@@ -1,0 +1,23 @@
+import { VenueMap } from "./venue-map";
+
+export function MapSection() {
+  return (
+    <section className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
+      <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+        Mapa interactivo
+      </span>
+      <h2 className="mt-4 max-w-2xl text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
+        Ciudad Cultural, como datos — no como una imagen fija
+      </h2>
+      <p className="mt-4 max-w-2xl text-paper-dim">
+        Plano de referencia para este prototipo: cada pabellón corresponde a
+        uno de los ejes de la edición, y las salas de ronda de negocios
+        muestran su estado en tiempo real durante el evento. Tocá o pasá el
+        mouse por una zona para ver el detalle.
+      </p>
+      <div className="mt-10">
+        <VenueMap />
+      </div>
+    </section>
+  );
+}

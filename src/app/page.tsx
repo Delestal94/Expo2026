@@ -1,4 +1,5 @@
 import { About, AccessNotice, Ejes, Hero, SiteFooter } from "@/modules/landing";
+import { MapSection } from "@/modules/interactive-map";
 
 export default function Home() {
   return (
@@ -6,6 +7,7 @@ export default function Home() {
       <Hero />
       <About />
       <Ejes />
+      <MapSection />
       <AccessNotice />
       <SiteFooter />
     </main>
