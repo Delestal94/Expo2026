@@ -46,10 +46,11 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | Repositorio confirmado público sin licencia (copyright reservado por defecto) | [ADR-0004](adr/0004-visibilidad-repositorio.md) |
 | 2026-09-01 | Repositorio | Excepción temporal: 0 aprobaciones requeridas hasta sumar al segundo integrante | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 2026-09-01 | Repositorio | Scaffold mergeado a `develop`; primeros PRs de Dependabot: 4 mergeados (actions, @types/node, jsdom), 2 cerrados por incompatibilidad río arriba (TypeScript 7 y ESLint 10 todavía no soportados por `eslint-config-next`/`typescript-eslint`) | [Actions](https://github.com/Delestal94/Expo2026/actions) |
+| 2026-09-01 | Landing | Hero + identidad visual "Estratos": bandas minerales del Cerro de los Siete Colores animadas en canvas, cuenta regresiva real, secciones Qué es/Ejes/Registro. Verificado con Playwright (desktop + mobile, sin errores de consola) | [PR #18](https://github.com/Delestal94/Expo2026/pull/18) |
 
 ## 6. Próximos pasos
 
 - [ ] Confirmar con la Cámara de Comercio Exterior si el acceso 2026 es gratuito o pago ([issue](https://github.com/Delestal94/Expo2026/issues/3), [ADR-0003](adr/0003-modo-de-acceso.md)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
-- [ ] Mockup navegable para el 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
+- [ ] Resto de pantallas del mockup (portal de expositores, mapa, asistente IA como propuesta visual) y la memoria descriptiva en sí, para el 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
 - [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.
