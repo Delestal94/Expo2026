@@ -36,3 +36,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+# Local AI runtime state & specs
+.atl/
+openspec/
+
