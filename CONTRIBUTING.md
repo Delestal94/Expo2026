@@ -50,7 +50,7 @@ Ejemplos:
 
 Un commit = un cambio lógico. Si la descripción necesita un "y" para explicar qué hace, probablemente son dos commits.
 
-> Cuando se inicialice el proyecto Next.js se agrega `commitlint` + `husky` para que este formato se valide solo al commitear, no de memoria.
+Se valida solo al commitear: `commitlint` corre en el hook `commit-msg` (`husky`), instalado automáticamente al hacer `npm install` (script `prepare`).
 
 ## Pull Requests
 

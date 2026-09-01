@@ -16,7 +16,7 @@ Principios no negociables:
 
 ```mermaid
 flowchart LR
-    Client["Cliente\nWeb · PWA scanner"] --> NextJS["Next.js 15\nApp Router · Route Handlers (BFF)"]
+    Client["Cliente\nWeb · PWA scanner"] --> NextJS["Next.js 16\nApp Router · Route Handlers (BFF)"]
     NextJS --> DB["Postgres\n+ pgvector"]
     NextJS --> Redis["Redis\ncola · rate-limit"]
     NextJS --> MP["Mercado Pago\ncheckout (si aplica)"]
@@ -33,7 +33,7 @@ Todo lo que no es lógica propia del evento se delega a un servicio administrado
 
 | Capa | Tecnología | Por qué |
 |---|---|---|
-| Frontend | Next.js 15, React 19, Tailwind, shadcn/ui | RSC para SEO/performance; componentes de checkout/formularios ya resueltos |
+| Frontend | Next.js 16, React 19, Tailwind, shadcn/ui | RSC para SEO/performance; componentes de checkout/formularios ya resueltos |
 | Backend/API | Route Handlers | Mismo runtime que el frontend |
 | Base de datos | PostgreSQL + Drizzle ORM | Relacional por naturaleza; tipado extremo a extremo |
 | Plataforma de datos | Supabase | Postgres+Auth+Storage+Realtime+pgvector en un proveedor |
