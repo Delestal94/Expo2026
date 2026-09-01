@@ -1,4 +1,4 @@
-import { About, AccessNotice, Ejes, Hero, SiteFooter } from "@/modules/landing";
+import { About, AccessInfo, Ejes, Hero, SiteFooter } from "@/modules/landing";
 import { MapSection } from "@/modules/interactive-map";
 import { PortalSection } from "@/modules/exhibitors";
 
@@ -10,7 +10,7 @@ export default function Home() {
       <Ejes />
       <MapSection />
       <PortalSection />
-      <AccessNotice />
+      <AccessInfo />
       <SiteFooter />
     </main>
   );

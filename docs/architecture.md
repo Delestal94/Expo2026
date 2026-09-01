@@ -110,6 +110,7 @@ Conectado a Vercel el 2026-09-01 (proyecto `expojuy2026`, team `delestalmiguelig
 Ver [`docs/adr/`](adr) para las ya resueltas. Pendientes:
 
 - ¿`main` cloud stack administrado (Vercel/Supabase) o infraestructura propia? → Resuelto en [ADR-0001](adr/0001-stack-base.md), a favor del primero.
-- ¿Modo de acceso gratuito o pago? → Resuelto en [ADR-0003](adr/0003-modo-de-acceso.md): gratuito por defecto como supuesto de trabajo, revisable si la Cámara confirma lo contrario.
+- ¿Modo de acceso gratuito o pago? → [ADR-0003](adr/0003-modo-de-acceso.md): la edición 2024 fue paga con venta online (dos fuentes lo confirman); no hay confirmación específica para 2026. Default técnico `free` por ahora (para no exponer un checkout sin terminar), pero el antecedente real hace más probable el caso pago — el sitio ya soporta ambos.
+- ¿Cómo se dan de alta los expositores/proveedores? → Resuelto en [ADR-0005](adr/0005-acceso-libre-sin-registro.md): por canales externos al sitio (formulario oficial de la Cámara + WhatsApp), no por un formulario propio.
 - ¿Cuál es el quinto idioma (francés vs. una opción más regional)?
 - ¿Sanity o un CMS self-hosted (Payload) por soberanía de datos del organismo público?

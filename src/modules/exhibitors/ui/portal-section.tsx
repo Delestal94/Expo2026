@@ -23,6 +23,15 @@ export function PortalSection() {
       <div className="mt-10">
         <MatchingPreview />
       </div>
+
+      <p className="mt-8 text-sm text-paper-dim">
+        Estos son perfiles de ejemplo — el alta real de tu empresa se hace por
+        la convocatoria oficial de la Cámara, no desde este portal (
+        <a href="#acceso" className="text-accent hover:underline">
+          ver cómo postularte
+        </a>
+        ).
+      </p>
     </section>
   );
 }
