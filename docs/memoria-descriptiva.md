@@ -60,7 +60,7 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §7) | Diseñado, pendiente de implementación |
 | Portal de expositores + rondas de negocios | Perfil de empresa, matching por rubro/país, agenda de reuniones | Diseñado, pendiente de implementación |
 | Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
-| Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | Diseñado, pendiente de implementación |
+| Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | **Construido** (mockup con datos de ejemplo) — ver sección 10 |
 
 ## 7. Una decisión que no bloqueó el avance
 

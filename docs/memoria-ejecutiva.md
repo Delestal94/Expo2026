@@ -49,10 +49,11 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Landing | Hero + identidad visual "Estratos": bandas minerales del Cerro de los Siete Colores animadas en canvas, cuenta regresiva real, secciones Qué es/Ejes/Registro. Verificado con Playwright (desktop + mobile, sin errores de consola) | [PR #18](https://github.com/Delestal94/Expo2026/pull/18) |
 | 2026-09-01 | Repositorio | Memoria descriptiva redactada (repo + versión presentable); equipo confirmado (Delestal94 + Maximiliano Lezano) | [docs/memoria-descriptiva.md](memoria-descriptiva.md) |
 | 2026-09-01 | Decisión | Acceso gratuito adoptado como supuesto de trabajo, sin esperar confirmación de la Cámara — evita bloquear el desarrollo | [ADR-0003](adr/0003-modo-de-acceso.md) |
+| 2026-09-01 | Mapa interactivo | Plano esquemático de Ciudad Cultural: 4 pabellones por eje, 3 salas con estado de ejemplo, interacción por click/hover/teclado. Verificado con Playwright — se encontró y corrigió un bug real de superposición de etiquetas | [PR #22](https://github.com/Delestal94/Expo2026/pull/22) |
 
 ## 6. Próximos pasos
 
 - [ ] Seguir esperando confirmación formal de la Cámara sobre el modo de acceso, aunque ya no bloquea nada ([issue](https://github.com/Delestal94/Expo2026/issues/3)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
-- [ ] Resto de pantallas del mockup (portal de expositores, mapa, asistente IA como propuesta visual) y la memoria descriptiva en sí, para el 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
+- [ ] Portal de expositores (o su propuesta visual) para completar el mockup navegable antes del 8/9 ([issue](https://github.com/Delestal94/Expo2026/issues/5)).
 - [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.
