@@ -3,6 +3,7 @@
 **Desafío Digital ExpoJuy 2026** · Cámara de Comercio Exterior de Jujuy · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear
 **Equipo:** [Delestal94](https://github.com/Delestal94) · Maximiliano Lezano
 **Repositorio:** [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026)
+**🌐 Prototipo en vivo:** **https://expojuy2026.vercel.app**
 
 ---
 
@@ -86,6 +87,7 @@ También lo aplicamos hacia adentro: usamos herramientas de IA como asistencia d
 
 ## 10. Repositorio y prototipo funcional
 
+- **Sitio en vivo: [expojuy2026.vercel.app](https://expojuy2026.vercel.app)** — no hace falta clonar nada para navegarlo.
 - Repositorio público: [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026) — código real, no solo mockup.
 - CI en verde en cada cambio: [Actions](https://github.com/Delestal94/Expo2026/actions).
 - Board de tareas mapeado al roadmap: [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1).

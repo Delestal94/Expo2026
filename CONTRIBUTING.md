@@ -90,7 +90,8 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 - Require a pull request before merging → 1 aprobación mínima, se invalida si hay commits nuevos.
 - Require conversation resolution before merging.
 - Enforce for administrators (nadie puede saltarla, ni el dueño del repo).
-- Sin force-push, sin borrado de la rama. Historial lineal obligatorio.
+- Sin force-push, sin borrado de la rama.
+- Historial lineal obligatorio **solo en `develop`** (fuerza squash en `feature/* → develop`). En `main` está desactivado a propósito — un merge commit tiene 2 padres y "historial lineal" lo bloquearía, y el merge commit es justo el método reservado para `develop → main` (ver más abajo). Se detectó y corrigió esta contradicción el 2026-09-01, en la primera promoción real.
 - `develop` es la rama por defecto del repositorio (de ahí sale todo PR nuevo).
 - Merge habilitado: **squash** (uso normal, `feature/* → develop`) y **merge commit** (reservado para `develop → main`). Rebase deshabilitado. Borrado automático de rama al mergear.
 
