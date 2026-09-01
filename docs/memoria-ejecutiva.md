@@ -60,6 +60,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Landing | Sección de acceso rehecha con precios de referencia 2024 reales, CTA de "comprar entrada" honesto (deshabilitado, próxima etapa) y links reales a la convocatoria de proveedores (Google Form) y WhatsApp de la Cámara | [PR #29](https://github.com/Delestal94/Expo2026/pull/29) |
 | 2026-09-01 | Accesibilidad | Auditoría empírica con Playwright sobre landing, mapa interactivo y portal de expositores: corregido foco de teclado invisible en el plano interactivo (WCAG 2.4.7) y animaciones que ignoraban `prefers-reduced-motion` en el indicador "en ronda" del mapa y en el preview de matching de expositores. Contraste insuficiente de `text-terracotta`/`text-violet` detectado pero no corregido (decisión de paleta fuera de mandato) — [issue #35](https://github.com/Delestal94/Expo2026/issues/35) | [PR #34](https://github.com/Delestal94/Expo2026/pull/34) |
 | 2026-09-01 | Portal de expositores | Corrección de consistencia con el sistema de diseño: color hardcodeado (`#0b0a12`) reemplazado por el token `var(--color-ink)` en los chips de filtro del directorio | [PR #37](https://github.com/Delestal94/Expo2026/pull/37) |
+| 2026-09-01 | Landing | Tests para `getTimeLeft` (cuenta regresiva): descomposición de tiempo restante, instante exacto de inicio, clamp a cero tras pasado el evento y no desborde entre unidades | [PR #39](https://github.com/Delestal94/Expo2026/pull/39) |
 
 ## 6. Próximos pasos
 
