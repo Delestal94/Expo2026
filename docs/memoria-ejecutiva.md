@@ -76,4 +76,5 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 - [ ] Repasar la memoria descriptiva una vez más antes del 8/9 y confirmar que las capturas/links estén al día.
 - [ ] Recordar desactivar los 4 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).
 - [x] Usuario de GitHub del segundo integrante (`@MaxLezano`) sumado a `.github/CODEOWNERS` ([PR #38](https://github.com/Delestal94/Expo2026/pull/38)).
-- [ ] Volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`) y completar el usuario en `README.md`.
+- [x] `required_approving_review_count` en `develop` ya exige 1 aprobación (verificado empíricamente: GitHub rechazó el merge de este mismo PR sin ella) — `CONTRIBUTING.md` todavía describe la excepción en 0 como vigente, desactualizado.
+- [ ] Confirmar el estado real en `main` y completar el usuario de `@MaxLezano` en `README.md`.
