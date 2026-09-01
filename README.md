@@ -9,7 +9,8 @@ Propuesta y desarrollo del sitio oficial de ExpoJuy 2026 para el **Desafío Digi
 | Arquitectura de software (versión presentable) | [Artifact publicado](https://claude.ai/code/artifact/38abc151-dbcc-4fe5-9861-d5aa012d651f) |
 | Arquitectura de software (versión en repo) | [`docs/architecture.md`](docs/architecture.md) |
 | Decisiones de arquitectura (ADR) | [`docs/adr/`](docs/adr) |
-| Documento ejecutivo (memoria para la presentación) | [`docs/memoria-ejecutiva.md`](docs/memoria-ejecutiva.md) |
+| **Memoria descriptiva (entregable del concurso)** | [`docs/memoria-descriptiva.md`](docs/memoria-descriptiva.md) |
+| Bitácora ejecutiva (documento vivo de avance) | [`docs/memoria-ejecutiva.md`](docs/memoria-ejecutiva.md) |
 | Cómo contribuir (branches, commits, PRs) | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Board de tareas (roadmap → issues) | [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1) |
 
