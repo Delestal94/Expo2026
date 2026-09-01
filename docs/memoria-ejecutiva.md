@@ -67,6 +67,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Repositorio | Segundo integrante (`@MaxLezano`) sumado a `.github/CODEOWNERS`; GitHub le pide review automáticamente en cada PR nuevo | [PR #38](https://github.com/Delestal94/Expo2026/pull/38) |
 | 2026-09-01 | Landing | Módulo `gallery`: preview de 6 fotos en la landing + ruta nueva `/galeria` con grilla de 30 fotos y lightbox — fotos reales de ExpoJuy 2024 (mismo organizador, Cámara de Comercio Exterior de Jujuy) | [PR #45](https://github.com/Delestal94/Expo2026/pull/45) |
 | 2026-09-01 | Registro de acceso | Tests de la fábrica `createAuthProvider`: caso feliz (`supabase`) y adaptadores todavía no implementados (`clerk`, `nextauth`) que deben fallar con error claro — sin cambios de comportamiento | [PR #48](https://github.com/Delestal94/Expo2026/pull/48) |
+| 2026-09-01 | Registro de acceso | Primer paso real del módulo (antes vacío): `AccessForm` (crear cuenta / iniciar sesión) sobre el `AuthProvider` existente, nueva ruta `/cuenta` que respeta el flag `visitorAccess`, link desde la landing. No incluye QR de ingreso ni cobro (ver ADR-0003) | [PR #47](https://github.com/Delestal94/Expo2026/pull/47) |
 
 ## 6. Próximos pasos
 
