@@ -69,11 +69,14 @@ Un PR está listo para mergear cuando:
 - [ ] Probado manualmente en el preview deployment del PR (no solo "corre en mi máquina").
 - [ ] Documentación tocada si el cambio lo amerita: `docs/architecture.md`, un ADR nuevo en `docs/adr/`, o `docs/memoria-ejecutiva.md`.
 
-## Configuración de `main` en GitHub (una sola vez, vía Settings → Branches)
+## Configuración de `main` en GitHub
 
-1. Add branch protection rule → branch name pattern: `main`.
-2. ✅ Require a pull request before merging → Require approvals: **1**.
-3. ✅ Require status checks to pass before merging (una vez que exista el workflow de CI).
-4. ✅ Require branches to be up to date before merging.
-5. ✅ Do not allow bypassing the above settings (incluye a los administradores).
-6. ❌ Dejar desmarcado "Allow force pushes" y "Allow deletions".
+Ya aplicada sobre el repositorio (2026-09-01), vía API:
+
+- Require a pull request before merging → 1 aprobación mínima, se invalida si hay commits nuevos.
+- Require conversation resolution before merging.
+- Enforce for administrators (nadie puede saltarla, ni el dueño del repo).
+- Sin force-push, sin borrado de `main`. Historial lineal obligatorio.
+- Merge: solo squash merge habilitado; la rama se borra sola al mergear.
+
+**Pendiente:** una vez que exista un workflow de CI (`.github/workflows/`), agregar sus checks como *required status checks* — hasta entonces, la revisión humana es el único gate.
