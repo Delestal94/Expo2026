@@ -112,8 +112,8 @@ export async function AccessInfo() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 lg:col-span-5 lg:col-start-8">
-          <div className="h-64 w-full overflow-hidden rounded-2xl border border-line sm:h-72 lg:h-80">
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
+          <div className="h-64 w-full sm:h-72 lg:h-80">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}
@@ -123,7 +123,7 @@ export async function AccessInfo() {
             />
           </div>
 
-          <div className="rounded-2xl border border-line bg-[#121022] p-6 text-left">
+          <div className="flex flex-1 flex-col justify-center border-t border-line bg-[#121022] p-6 text-left">
             <h3 className="font-display text-lg font-medium text-paper">
               {t("providersTitle")}
             </h3>
