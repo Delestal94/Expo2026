@@ -1,5 +1,37 @@
+import type { CSSProperties } from "react";
 import { Countdown } from "./countdown";
 import { StrataCanvas } from "./strata-canvas";
+
+const CORE_SAMPLE = [
+  { color: "var(--color-ocher)", peak: "10px" },
+  { color: "var(--color-terracotta)", peak: "17px" },
+  { color: "var(--color-rose)", peak: "12px" },
+  { color: "var(--color-violet)", peak: "19px" },
+  { color: "var(--color-teal)", peak: "13px" },
+];
+
+/**
+ * Decoración de una columna estratigráfica en miniatura: en reposo no ocupa
+ * espacio, y al hover/focus florece cinta a cinta (con `transition-delay`
+ * escalonado) como un testigo de sondaje saliendo a la vista — en vez de un
+ * cambio plano de brillo/color.
+ */
+function CoreSampleTicks() {
+  return (
+    <span
+      aria-hidden="true"
+      className="flex items-end gap-0 transition-[gap,margin-right] duration-300 ease-out group-hover:mr-2 group-hover:gap-[3px] group-focus-visible:mr-2 group-focus-visible:gap-[3px] motion-reduce:transition-none"
+    >
+      {CORE_SAMPLE.map(({ color, peak }, i) => (
+        <span
+          key={color}
+          style={{ backgroundColor: color, "--peak": peak, transitionDelay: `${i * 45}ms` } as CSSProperties}
+          className="h-0 w-0 rounded-full transition-[width,height] duration-300 ease-out group-hover:h-[var(--peak)] group-hover:w-[3px] group-focus-visible:h-[var(--peak)] group-focus-visible:w-[3px] motion-reduce:transition-none"
+        />
+      ))}
+    </span>
+  );
+}
 
 export function Hero() {
   return (
@@ -36,16 +68,18 @@ export function Hero() {
         <div className="flex flex-wrap gap-3">
           <a
             href="#acceso"
-            className="rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink transition hover:brightness-110"
+            className="group inline-flex items-center rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink outline-offset-4 outline-paper transition-colors focus-visible:outline-2"
           >
+            <CoreSampleTicks />
             Quiero asistir
           </a>
           <a
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
             target="_blank"
             rel="noopener"
-            className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            className="group inline-flex items-center rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper outline-offset-4 outline-paper transition-colors hover:border-paper-dim focus-visible:outline-2"
           >
+            <CoreSampleTicks />
             Sumar mi empresa como proveedora
           </a>
         </div>
