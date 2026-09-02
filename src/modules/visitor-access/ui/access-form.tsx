@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { createAuthProvider } from "@/lib/adapters/auth";
 import type { AuthSession } from "@/lib/ports";
 import { AdmissionTicket } from "./admission-ticket";
+
+/**
+ * Import dinámico: el SDK de Supabase (~140 KB) no debe formar parte del
+ * bundle inicial de /cuenta — solo hace falta una vez que este componente
+ * efectivamente verifica la sesión o el usuario envía el formulario.
+ */
+function loadAuthProvider() {
+  return import("@/lib/adapters/auth").then((mod) => mod.createAuthProvider());
+}
 
 type Mode = "signup" | "signin";
 
@@ -27,8 +35,8 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
 
   useEffect(() => {
     let cancelled = false;
-    createAuthProvider()
-      .getSession()
+    loadAuthProvider()
+      .then((provider) => provider.getSession())
       .then((existing) => {
         if (!cancelled) setSession(existing);
       })
@@ -49,7 +57,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      const provider = createAuthProvider();
+      const provider = await loadAuthProvider();
       const result =
         mode === "signup"
           ? await provider.signUp(email, password)
@@ -67,7 +75,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      await createAuthProvider().signOut();
+      await (await loadAuthProvider()).signOut();
       setSession(null);
     } catch (error) {
       setErrorMessage(errorMessageOf(error, "No se pudo cerrar la sesión. Probá de nuevo."));
