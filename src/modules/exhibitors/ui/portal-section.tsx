@@ -37,7 +37,7 @@ export async function PortalSection() {
       <p className="mt-8 text-sm text-paper-dim">
         Estos son perfiles de ejemplo — el alta real de tu empresa se hace por
         la convocatoria oficial de la Cámara, no desde este portal (
-        <a href="#acceso" className="text-accent hover:underline">
+        <a href="#acceso" className="text-accent underline underline-offset-2 hover:brightness-110">
           ver cómo postularte
         </a>
         ).
