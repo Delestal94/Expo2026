@@ -49,6 +49,7 @@ export function Hero() {
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 motion-reduce:transition-none group-hover:translate-x-1 group-focus-visible:translate-x-1"
               >
+                →
               </span>
             </span>
           </a>
