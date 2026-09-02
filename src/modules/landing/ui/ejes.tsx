@@ -7,10 +7,10 @@ interface Eje {
 }
 
 const EJES: Eje[] = [
-  { n: "01", key: "mineria", color: "var(--color-cyan)" },
-  { n: "02", key: "comercio", color: "var(--color-violet)" },
+  { n: "01", key: "mineria", color: "var(--color-teal)" },
+  { n: "02", key: "comercio", color: "var(--color-blue)" },
   { n: "03", key: "corredor", color: "var(--color-magenta)" },
-  { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
+  { n: "04", key: "conocimiento", color: "var(--color-yellow)" },
 ];
 
 export function Ejes() {

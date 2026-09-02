@@ -4,13 +4,13 @@
   --color-ink: #0b0a12;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
-  /* Paleta de marca ExpoJuy — los 4 colores del isotipo "J", coherente
-     con Instagram (@expojuy). Reemplaza la paleta mineral original. */
-  --color-cyan: #2de3d6;
-  --color-violet: #7c4dff;
-  --color-magenta: #b83fe0;
-  --color-lavender: #b9a6f5;
-  --color-accent: #2de3d6;
+  /* Paleta oficial de marca ExpoJuy — los 4 colores exactos del isotipo "J"
+     (archivo de marca provisto por la Cámara), no una estimación visual. */
+  --color-teal: #6ac6c1;
+  --color-blue: #066db3;
+  --color-magenta: #f62c90;
+  --color-yellow: #f5af18;
+  --color-accent: #6ac6c1;
   --color-line: rgba(245, 241, 232, 0.14);
 
   --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
