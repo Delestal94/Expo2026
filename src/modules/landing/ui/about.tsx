@@ -44,11 +44,19 @@ export function About() {
             centrales.
           </p>
         </div>
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-10 self-start">
-          {STATS.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse gap-1">
-              <dt className="text-sm text-paper-dim">{stat.label}</dt>
-              <dd className="font-mono text-4xl font-semibold text-paper tabular-nums">
+        <dl className="flex flex-col overflow-hidden rounded-2xl lg:col-span-5 lg:col-start-8 lg:-mt-8 lg:self-start">
+          {STATS.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`flex flex-col-reverse ${BAND_WIDTH[i]}`}
+            >
+              <dt className="px-6 pt-2 pb-5 text-right font-mono text-[0.65rem] tracking-[0.16em] text-paper-dim uppercase">
+                {stat.label}
+              </dt>
+              <dd
+                className="flex items-center justify-end px-6 py-5 font-mono text-3xl font-black text-ink tabular-nums sm:py-6 sm:text-4xl"
+                style={{ backgroundColor: stat.color }}
+              >
                 {stat.value}
               </dd>
             </div>
