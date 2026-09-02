@@ -20,7 +20,7 @@ export async function AccessInfo() {
   return (
     <section
       id="acceso"
-      className="border-y border-line px-6 py-24 sm:px-10 lg:px-16"
+      className="scroll-mt-24 border-y border-line px-6 py-24 sm:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-2xl text-center">
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">

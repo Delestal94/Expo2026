@@ -91,6 +91,16 @@
       "cta": "Ver en Google Maps",
       "mapLabel": "Mapa de Ciudad Cultural"
     },
+    "SectionNav": {
+      "ariaLabel": "Navegación rápida por secciones",
+      "items": {
+        "ejes": "Ejes",
+        "mapa": "Mapa",
+        "llegar": "Cómo llegar",
+        "rondas": "Rondas",
+        "acceso": "Acceso"
+      }
+    },
     "Countdown": {
       "days": "días",
       "hours": "hs",

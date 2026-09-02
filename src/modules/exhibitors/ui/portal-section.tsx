@@ -7,7 +7,10 @@ export async function PortalSection() {
   const flags = await getFeatureFlags();
 
   return (
-    <section className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
+    <section
+      id="rondas"
+      className="scroll-mt-24 border-t border-line px-6 py-24 sm:px-10 lg:px-16"
+    >
       <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
         Portal de expositores
       </span>
