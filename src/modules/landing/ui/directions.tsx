@@ -9,7 +9,7 @@ export function Directions() {
   const t = useTranslations("Landing.Directions");
 
   return (
-    <section className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
+    <section id="llegar" className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 rounded-3xl border border-line bg-gradient-to-br from-accent/5 to-accent/15 px-6 py-10 sm:px-12 lg:flex-row lg:justify-between">
         <div className="flex max-w-md flex-col items-start gap-6">
           <div>

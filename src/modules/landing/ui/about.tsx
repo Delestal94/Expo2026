@@ -19,7 +19,7 @@ export function About() {
   const t = useTranslations("Landing.About");
 
   return (
-    <section className="border-b border-line px-6 py-24 sm:px-10 lg:px-16">
+    <section id="sobre" className="border-b border-line px-6 py-24 sm:px-10 lg:px-16">
       <div className="grid gap-y-14 lg:grid-cols-12 lg:gap-x-10">
         <div className="lg:col-span-7">
           <p className="text-balance font-display text-3xl leading-tight font-medium text-paper sm:text-4xl lg:text-5xl">
