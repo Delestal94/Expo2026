@@ -4,5 +4,6 @@ export { Directions } from "./ui/directions";
 export { Ejes } from "./ui/ejes";
 export { Hero } from "./ui/hero";
 export { Partners } from "./ui/partners";
+export { SectionNav } from "./ui/section-nav";
 export { SiteFooter } from "./ui/site-footer";
 export { EventStructuredData } from "./ui/structured-data";

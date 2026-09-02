@@ -6,6 +6,7 @@ import {
   EventStructuredData,
   Hero,
   Partners,
+  SectionNav,
   SiteFooter,
 } from "@/modules/landing";
 import { MapSection } from "@/modules/interactive-map";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <main>
       <EventStructuredData />
+      <SectionNav />
       <Hero />
       <About />
       <Ejes />
