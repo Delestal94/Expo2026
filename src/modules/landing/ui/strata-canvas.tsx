@@ -96,13 +96,24 @@ export function StrataCanvas() {
       }
     }
 
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        cancelAnimationFrame(frame);
+      } else if (!prefersReducedMotion) {
+        raf = requestAnimationFrame(draw);
+      }
+    }
+
     resize();
     window.addEventListener("resize", resize);
-    raf = requestAnimationFrame(draw);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    if (!document.hidden) raf = requestAnimationFrame(draw);
     if (prefersReducedMotion) draw(0);
 
     return () => {
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
     };
