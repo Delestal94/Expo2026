@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
 import type { AuthSession } from "@/lib/ports";
 import { AdmissionTicket } from "./admission-ticket";
@@ -25,6 +26,7 @@ function errorMessageOf(error: unknown, fallback: string): string {
  * storage del browser — moverlo al servidor perdería esa persistencia.
  */
 export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }) {
+  const t = useTranslations("VisitorAccess.AccessForm");
   const [checkingSession, setCheckingSession] = useState(true);
   const [session, setSession] = useState<AuthSession | null>(null);
   const [mode, setMode] = useState<Mode>("signup");
@@ -65,7 +67,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
       setSession(result);
       setPassword("");
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, "No se pudo completar la operación. Probá de nuevo."));
+      setErrorMessage(errorMessageOf(error, t("genericError")));
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +80,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
       await (await loadAuthProvider()).signOut();
       setSession(null);
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, "No se pudo cerrar la sesión. Probá de nuevo."));
+      setErrorMessage(errorMessageOf(error, t("signOutError")));
     } finally {
       setIsSubmitting(false);
     }
@@ -92,8 +94,10 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
     return (
       <div className="rounded-2xl border border-line bg-[#121022] p-6">
         <p className="text-paper">
-          Sesión iniciada como{" "}
-          <strong className="font-mono font-semibold">{session.user.email}</strong>.
+          {t.rich("sessionActive", {
+            email: session.user.email,
+            strong: (chunks) => <strong className="font-mono font-semibold">{chunks}</strong>,
+          })}
         </p>
         <AdmissionTicket session={session} admissionMode={admissionMode} />
         <button
@@ -102,7 +106,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
           disabled={isSubmitting}
           className="mt-5 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Cerrar sesión
+          {t("signOut")}
         </button>
         {errorMessage && (
           <p role="alert" className="mt-3 text-sm text-terracotta">
@@ -125,7 +129,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
             mode === "signup" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
           }`}
         >
-          Crear cuenta
+          {t("tabSignup")}
         </button>
         <button
           type="button"
@@ -136,14 +140,14 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
             mode === "signin" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
           }`}
         >
-          Ya tengo cuenta
+          {t("tabSignin")}
         </button>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="visitor-email" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
-            Email
+            {t("emailLabel")}
           </label>
           <input
             id="visitor-email"
@@ -158,7 +162,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="visitor-password" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
-            Contraseña
+            {t("passwordLabel")}
           </label>
           <input
             id="visitor-password"
@@ -178,10 +182,10 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
           className="mt-2 rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting
-            ? "Un momento..."
+            ? t("submitLoading")
             : mode === "signup"
-              ? "Crear cuenta"
-              : "Iniciar sesión"}
+              ? t("tabSignup")
+              : t("submitSignin")}
         </button>
 
         <p role="status" aria-live="polite" className="min-h-5 text-sm text-terracotta">
@@ -189,10 +193,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
         </p>
       </form>
 
-      <p className="text-sm text-paper-dim">
-        Esto crea tu cuenta de visitante. La compra de la entrada todavía no
-        está disponible — se habilita en la próxima etapa.
-      </p>
+      <p className="text-sm text-paper-dim">{t("footerNote")}</p>
     </div>
   );
 }
