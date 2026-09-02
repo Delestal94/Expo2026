@@ -71,6 +71,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Registro de acceso | QR de ingreso (`EXPOJUY26-XXXXXXXX`, derivado del id de Supabase) emitido al completar el registro en modo de acceso gratuito, sin pasar por checkout; en modo pago se avisa que el QR se habilita recién tras pagar (Mercado Pago sigue bloqueado) | [PR #50](https://github.com/Delestal94/Expo2026/pull/50) |
 | 2026-09-01 | Accesibilidad | Auditoría empírica con Playwright sobre la UI nueva desde la última corrida (`visitor-access`, galería, `/cuenta`): corregido el lightbox de la galería (`/galeria`), que no atrapaba el foco de teclado, dejaba `Tab` escapar a miniaturas ocultas detrás del overlay y no cerraba con `Escape` (WCAG 2.4.3 y 2.1.1) | [PR #51](https://github.com/Delestal94/Expo2026/pull/51) |
 | 2026-09-01 | Registro de acceso | Auditoría de performance (Lighthouse sobre build de producción): el SDK de Supabase (143 KB, 89.8% código sin usar en `/cuenta`) pasa de import estático a `import()` dinámico en `AccessForm`, sacándolo del bundle inicial de la página | [PR #52](https://github.com/Delestal94/Expo2026/pull/52) |
+| 2026-09-01 | Portal de expositores | Tests de `Directory` (filtrado por eje: estado por defecto, click en cada filtro, vuelta a "Todos", `aria-pressed`), lógica que no tenía cobertura directa ni indirecta — sin cambios de comportamiento | [PR #54](https://github.com/Delestal94/Expo2026/pull/54) |
 
 ## 6. Próximos pasos
 
