@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const bands = ["#d98b3f", "#b4432e", "#7c5a9e", "#2e8f86", "#c24d6b"];
+const bands = ["#2de3d6", "#7c4dff", "#b83fe0", "#b9a6f5"];
 
 export default function OpengraphImage() {
   return new ImageResponse(
