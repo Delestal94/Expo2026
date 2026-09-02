@@ -68,13 +68,14 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Landing | Módulo `gallery`: preview de 6 fotos en la landing + ruta nueva `/galeria` con grilla de 30 fotos y lightbox — fotos reales de ExpoJuy 2024 (mismo organizador, Cámara de Comercio Exterior de Jujuy) | [PR #45](https://github.com/Delestal94/Expo2026/pull/45) |
 | 2026-09-01 | Registro de acceso | Tests de la fábrica `createAuthProvider`: caso feliz (`supabase`) y adaptadores todavía no implementados (`clerk`, `nextauth`) que deben fallar con error claro — sin cambios de comportamiento | [PR #48](https://github.com/Delestal94/Expo2026/pull/48) |
 | 2026-09-01 | Registro de acceso | Primer paso real del módulo (antes vacío): `AccessForm` (crear cuenta / iniciar sesión) sobre el `AuthProvider` existente, nueva ruta `/cuenta` que respeta el flag `visitorAccess`, link desde la landing. No incluye QR de ingreso ni cobro (ver ADR-0003) | [PR #47](https://github.com/Delestal94/Expo2026/pull/47) |
+| 2026-09-01 | Repositorio | 4 agentes horarios más: seguridad/dependencias, performance, SEO/metadata, y desarrollo de funcionalidades (registro de acceso, i18n, rondas de negocios reales — todo lo desbloqueado de la Fase 2). Total: 8 agentes corriendo | Routines en claude.ai/code/routines |
+| 2026-09-01 | Repositorio | Limpieza de PRs: cerrados 5 sin mergear (2 vacíos/redundantes, 1 con un bug real de CODEOWNERS — dos líneas `*` en vez de una se pisan entre sí en vez de sumarse —, 2 con conflictos de bitácora ya cubiertos por filas nuevas) | PRs #30, #31, #33, #44, #46 |
 
 ## 6. Próximos pasos
 
 - [ ] Seguir esperando confirmación formal de la Cámara sobre si 2026 mantiene el esquema pago de 2024, aunque ya no bloquea nada ([issue](https://github.com/Delestal94/Expo2026/issues/3)).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Repasar la memoria descriptiva una vez más antes del 8/9 y confirmar que las capturas/links estén al día.
-- [ ] Recordar desactivar los 4 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).
-- [x] Usuario de GitHub del segundo integrante (`@MaxLezano`) sumado a `.github/CODEOWNERS` ([PR #38](https://github.com/Delestal94/Expo2026/pull/38)).
-- [x] `required_approving_review_count` en `develop` ya exige 1 aprobación (verificado empíricamente: GitHub rechazó el merge de este mismo PR sin ella) — `CONTRIBUTING.md` todavía describe la excepción en 0 como vigente, desactualizado.
-- [ ] Confirmar el estado real en `main` y completar el usuario de `@MaxLezano` en `README.md`.
+- [ ] Corregir contraste insuficiente de terracotta/violet sobre fondo oscuro ([issue #35](https://github.com/Delestal94/Expo2026/issues/35)).
+- [ ] Optimizar la animación del hero (`StrataCanvas`), satura el hilo principal (TBT 940ms) ([issue #36](https://github.com/Delestal94/Expo2026/issues/36)).
+- [ ] Recordar desactivar los 8 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).

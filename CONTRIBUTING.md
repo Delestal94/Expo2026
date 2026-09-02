@@ -99,9 +99,4 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 
 CI corre en `.github/workflows/ci.yml` (lint, type-check, tests, build) en cada PR y en cada push a `develop`/`main`. Su check (`build-and-test`) es *required status check* en ambas ramas desde 2026-09-01 — un PR no se puede mergear si el CI está en rojo.
 
-> **⚠️ Excepción temporal (desde 2026-09-01):** `required_approving_review_count` está en **0** en ambas ramas porque todavía hay un solo integrante con acceso al repo — no hay quién apruebe un PR ajeno. Todo lo demás de la regla de oro sigue vigente: nadie pushea directo, CI tiene que estar en verde, conversaciones sin resolver bloquean el merge. **En cuanto el segundo integrante acepte la invitación, volver a 1** (comando abajo) y borrar este aviso.
->
-> ```bash
-> gh api -X PATCH repos/Delestal94/Expo2026/branches/develop/protection/required_pull_request_reviews -F required_approving_review_count=1
-> gh api -X PATCH repos/Delestal94/Expo2026/branches/main/protection/required_pull_request_reviews -F required_approving_review_count=1
-> ```
+`required_approving_review_count` está en **1** en ambas ramas desde que `@MaxLezano` aceptó la invitación al repositorio (2026-09-01) — ya no hay excepción vigente.
