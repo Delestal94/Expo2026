@@ -92,6 +92,8 @@
     },
     "SiteFooter": {
       "brand": "ExpoJuy 2026",
+      "organizes": "Organiza",
+      "organizerAlt": "Cámara de Comercio Exterior de Jujuy",
       "institutions": "Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.",
       "badge": "Prototipo — Desafío Digital 2026"
     }
