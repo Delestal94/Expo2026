@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ZONES } from "./zones";
 
@@ -7,6 +8,7 @@ const VIEW_W = 960;
 const VIEW_H = 620;
 
 export function VenueMap() {
+  const t = useTranslations("InteractiveMap");
   const [activeId, setActiveId] = useState<string>(ZONES[0].id);
   const active = ZONES.find((z) => z.id === activeId) ?? ZONES[0];
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(
@@ -26,7 +28,7 @@ export function VenueMap() {
         <svg
           viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
           role="img"
-          aria-label="Plano esquemático de referencia de Ciudad Cultural"
+          aria-label={t("svgLabel")}
           className="h-auto w-full"
         >
           {ZONES.map((zone) => {
@@ -96,7 +98,9 @@ export function VenueMap() {
                       fontSize={11}
                       style={{ transition: "fill 200ms ease" }}
                     >
-                      {zone.status === "en-ronda" ? "EN RONDA" : "DISPONIBLE"}
+                      {zone.status === "en-ronda"
+                        ? t("status.enRonda")
+                        : t("status.disponible")}
                     </text>
                   </>
                 )}
@@ -114,18 +118,18 @@ export function VenueMap() {
           className="w-fit rounded-full px-3 py-1 font-mono text-[0.68rem] tracking-[0.1em] uppercase"
           style={{ backgroundColor: `color-mix(in srgb, ${active.color} 20%, transparent)`, color: active.color }}
         >
-          {active.kind === "pabellon"
-            ? "Pabellón de exposición"
-            : active.kind === "sala"
-              ? "Sala de rondas de negocios"
-              : "Acceso"}
+          {t(`kind.${active.kind}`)}
         </span>
         <h3 className="font-display text-xl font-medium text-paper">{active.label}</h3>
         <p className="text-paper-dim">{active.description}</p>
         {active.status && (
           <p className="font-mono text-xs text-paper-dim">
-            Estado de ejemplo para este prototipo —{" "}
-            {active.status === "en-ronda" ? "en ronda de negocios ahora" : "disponible"}.
+            {t("exampleStatus", {
+              detail:
+                active.status === "en-ronda"
+                  ? t("statusDetail.enRonda")
+                  : t("statusDetail.disponible"),
+            })}
           </p>
         )}
       </div>
