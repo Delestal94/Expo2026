@@ -90,7 +90,8 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 - Require a pull request before merging → 1 aprobación mínima, se invalida si hay commits nuevos.
 - Require conversation resolution before merging.
 - Enforce for administrators (nadie puede saltarla, ni el dueño del repo).
-- Sin force-push, sin borrado de la rama. Historial lineal obligatorio.
+- Sin force-push, sin borrado de la rama.
+- Historial lineal obligatorio **solo en `develop`** (fuerza squash en `feature/* → develop`). En `main` está desactivado a propósito — un merge commit tiene 2 padres y "historial lineal" lo bloquearía, y el merge commit es justo el método reservado para `develop → main` (ver más abajo). Se detectó y corrigió esta contradicción el 2026-09-01, en la primera promoción real.
 - `develop` es la rama por defecto del repositorio (de ahí sale todo PR nuevo).
 - Merge habilitado: **squash** (uso normal, `feature/* → develop`) y **merge commit** (reservado para `develop → main`). Rebase deshabilitado. Borrado automático de rama al mergear.
 
@@ -98,9 +99,4 @@ Ya aplicada sobre el repositorio (2026-09-01), vía API, **igual en `main` y en 
 
 CI corre en `.github/workflows/ci.yml` (lint, type-check, tests, build) en cada PR y en cada push a `develop`/`main`. Su check (`build-and-test`) es *required status check* en ambas ramas desde 2026-09-01 — un PR no se puede mergear si el CI está en rojo.
 
-> **⚠️ Excepción temporal (desde 2026-09-01):** `required_approving_review_count` está en **0** en ambas ramas porque todavía hay un solo integrante con acceso al repo — no hay quién apruebe un PR ajeno. Todo lo demás de la regla de oro sigue vigente: nadie pushea directo, CI tiene que estar en verde, conversaciones sin resolver bloquean el merge. **En cuanto el segundo integrante acepte la invitación, volver a 1** (comando abajo) y borrar este aviso.
->
-> ```bash
-> gh api -X PATCH repos/Delestal94/Expo2026/branches/develop/protection/required_pull_request_reviews -F required_approving_review_count=1
-> gh api -X PATCH repos/Delestal94/Expo2026/branches/main/protection/required_pull_request_reviews -F required_approving_review_count=1
-> ```
+`required_approving_review_count` está en **1** en ambas ramas desde que `@MaxLezano` aceptó la invitación al repositorio (2026-09-01) — ya no hay excepción vigente.

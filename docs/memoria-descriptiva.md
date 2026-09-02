@@ -3,6 +3,7 @@
 **Desafío Digital ExpoJuy 2026** · Cámara de Comercio Exterior de Jujuy · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear
 **Equipo:** [Delestal94](https://github.com/Delestal94) · Maximiliano Lezano
 **Repositorio:** [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026)
+**🌐 Prototipo en vivo:** **https://expojuy2026.vercel.app**
 
 ---
 
@@ -12,7 +13,7 @@ No presentamos una landing institucional. Presentamos la infraestructura digital
 
 Nuestra propuesta se apoya en tres decisiones que atraviesan todo el proyecto:
 
-1. **Una identidad visual propia**, no una plantilla — "Estratos", inspirada en las bandas minerales del Cerro de los Siete Colores.
+1. **Una identidad visual propia**, no una plantilla — "Estratos", un lenguaje de bandas de color en capas que ahora usa la paleta oficial de marca de ExpoJuy (coherente con Instagram), no una paleta genérica de landing corporativa.
 2. **Una arquitectura configurable de punta a punta** — cada módulo se activa o desactiva sin deploy, y ningún proveedor externo queda escrito a mano en el código.
 3. **Un prototipo funcional real**, no solo un mockup estático — el repositorio público, con CI corriendo en cada cambio, es en sí mismo evidencia de factibilidad técnica.
 
@@ -26,13 +27,13 @@ Ese cambio de formato exige del sitio web cosas que una landing tradicional no r
 
 El nombre y el lenguaje visual vienen de un hecho concreto: Jujuy es, literalmente, capas. La Quebrada de Humahuaca expone en el paisaje millones de años de estratos minerales de colores — y la provincia hoy vive otra clase de estratificación, la del litio bajo tierra que sostiene buena parte de la conversación económica de esta edición.
 
-Elegimos que esa imagen fuera el sitio, no una ilustración de portada: el fondo del hero es un canvas animado con las bandas de color reales de esa paleta geológica, fluyendo en vez de estar quietas — porque el evento tampoco está quieto este año.
+Elegimos que esa imagen fuera el sitio, no una ilustración de portada: el fondo del hero es un canvas animado con bandas de color fluyendo en vez de estar quietas — porque el evento tampoco está quieto este año. Los cuatro colores de esas bandas son los mismos del isotipo oficial de ExpoJuy en Instagram (@expojuy), para que la web y las redes se lean como una sola marca.
 
 ## 4. Identidad visual
 
 | Elemento | Elección | Motivo |
 |---|---|---|
-| Paleta | Fondo casi negro (cielo de altura) + ocre, terracota, violeta, verde-azulado, rosa (bandas minerales) + teal digital como acento de acción | Ancla el sitio en el paisaje real de la Quebrada, no en una paleta corporativa genérica |
+| Paleta | Fondo casi negro (cielo de altura) + cian, violeta, magenta y lavanda — los 4 colores del isotipo "J" de ExpoJuy — con el cian también como acento de acción | Coherencia de marca real entre el sitio y el Instagram oficial del evento, no una paleta inventada |
 | Tipografía display | `Unbounded` | Geométrica, con peso y carácter propio — no una fuente "segura" de plantilla |
 | Tipografía de texto | `Manrope` | Alta legibilidad sin perder calidez |
 | Tipografía de datos | `JetBrains Mono` | Cifras, fechas y etiquetas con precisión técnica |
@@ -57,14 +58,16 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Módulo | Qué hace | Estado en este prototipo |
 |---|---|---|
 | Landing | Identidad, agenda, ejes del evento | **Construido** — ver sección 10 |
-| Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §7) | Diseñado, pendiente de implementación |
+| Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §7) | **Construido** (alta de cuenta, login y QR de ingreso en modo gratuito); cobro en modo pago (Mercado Pago), pendiente |
 | Portal de expositores + rondas de negocios | Perfil de empresa, matching por rubro/país, agenda de reuniones | **Construido** (mockup con datos de ejemplo) — ver sección 10 |
 | Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
 | Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | **Construido** (mockup con datos de ejemplo) — ver sección 10 |
 
-## 7. Una decisión que no bloqueó el avance
+## 7. Dos decisiones que no bloquearon el avance
 
-No hay confirmación pública de que ExpoJuy 2026 cobre entrada como lo hizo la edición 2024. En vez de esperar esa respuesta para seguir construyendo, diseñamos el módulo de registro con el cobro como un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`) y avanzamos con **acceso gratuito** como supuesto de trabajo. Si la Cámara confirma que 2026 es pago, el cambio es una variable de entorno y activar el adaptador de Mercado Pago — no un rediseño. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
+**Acceso general.** La edición 2024 fue paga, con venta de entradas online ($4.000 menores/jubilados, $6.000 adultos, sin cargo menores de 5). No hay confirmación pública de que 2026 mantenga ese esquema. En vez de esperar esa respuesta para seguir construyendo, diseñamos el registro de acceso con el cobro como un interruptor de configuración (`ADMISSION_MODE: gratuita | paga`) — el sitio muestra los valores de referencia 2024 y ya está preparado para cobrar por Mercado Pago apenas se confirme el esquema 2026, sin rediseño. Detalle en [ADR-0003](adr/0003-modo-de-acceso.md).
+
+**Alta de expositores.** Los proveedores no se registran en el sitio: se postulan por la convocatoria oficial de la Cámara (formulario de Google) y por WhatsApp. El portal de expositores deriva a esos canales reales en vez de duplicar un formulario propio. Detalle en [ADR-0005](adr/0005-acceso-libre-sin-registro.md).
 
 ## 8. Uso responsable de IA
 
@@ -86,6 +89,7 @@ También lo aplicamos hacia adentro: usamos herramientas de IA como asistencia d
 
 ## 10. Repositorio y prototipo funcional
 
+- **Sitio en vivo: [expojuy2026.vercel.app](https://expojuy2026.vercel.app)** — no hace falta clonar nada para navegarlo.
 - Repositorio público: [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026) — código real, no solo mockup.
 - CI en verde en cada cambio: [Actions](https://github.com/Delestal94/Expo2026/actions).
 - Board de tareas mapeado al roadmap: [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1).

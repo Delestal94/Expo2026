@@ -13,7 +13,7 @@ interface Band {
   glow: number;
 }
 
-const PALETTE = ["#d98b3f", "#b4432e", "#c24d6b", "#7c5a9e", "#2e8f86", "#3bcdbf"];
+const PALETTE = ["#6AC6C1", "#066DB3", "#F62C90", "#F5AF18"];
 
 function createBands(height: number): Band[] {
   return PALETTE.map((color, i) => ({
@@ -29,10 +29,10 @@ function createBands(height: number): Band[] {
 }
 
 /**
- * Fondo animado que evoca las bandas minerales del Cerro de los Siete
- * Colores (Quebrada de Humahuaca) — cinta a cinta, no un gradiente
- * estático. Se congela en el primer cuadro si el visitante prefiere
- * movimiento reducido.
+ * Fondo animado con la paleta oficial de marca (coherente con el
+ * isotipo de Instagram) en bandas tipo estrato — cinta a cinta, no un
+ * gradiente estático. Se congela en el primer cuadro si el visitante
+ * prefiere movimiento reducido.
  */
 export function StrataCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -96,13 +96,39 @@ export function StrataCanvas() {
       }
     }
 
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        cancelAnimationFrame(frame);
+      } else if (!prefersReducedMotion) {
+        raf = requestAnimationFrame(draw);
+      }
+    }
+
     resize();
     window.addEventListener("resize", resize);
-    raf = requestAnimationFrame(draw);
-    if (prefersReducedMotion) draw(0);
+
+    if (prefersReducedMotion) {
+      draw(0);
+      return () => window.removeEventListener("resize", resize);
+    }
+
+    // El canvas sigue montado (y su rAF seguiría corriendo) mucho después
+    // de que el visitante scrollea más allá del hero — sin esto anima
+    // para siempre fuera de pantalla, quemando CPU sin que nadie lo vea.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        raf = requestAnimationFrame(draw);
+      } else {
+        cancelAnimationFrame(raf);
+        cancelAnimationFrame(frame);
+      }
+    });
+    observer.observe(canvas);
 
     return () => {
       window.removeEventListener("resize", resize);
+      observer.disconnect();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
     };

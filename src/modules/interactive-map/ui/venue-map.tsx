@@ -1,14 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { ZONES } from "./zones";
 
 const VIEW_W = 960;
 const VIEW_H = 620;
 
 export function VenueMap() {
+  const t = useTranslations("InteractiveMap");
   const [activeId, setActiveId] = useState<string>(ZONES[0].id);
   const active = ZONES.find((z) => z.id === activeId) ?? ZONES[0];
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setPrefersReducedMotion(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
@@ -16,7 +28,7 @@ export function VenueMap() {
         <svg
           viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
           role="img"
-          aria-label="Plano esquemático de referencia de Ciudad Cultural"
+          aria-label={t("svgLabel")}
           className="h-auto w-full"
         >
           {ZONES.map((zone) => {
@@ -26,7 +38,7 @@ export function VenueMap() {
                 key={zone.id}
                 onMouseEnter={() => setActiveId(zone.id)}
                 onClick={() => setActiveId(zone.id)}
-                className="cursor-pointer outline-none"
+                className="cursor-pointer outline-offset-4 outline-paper focus-visible:outline-2"
                 tabIndex={0}
                 role="button"
                 aria-pressed={isActive}
@@ -53,7 +65,7 @@ export function VenueMap() {
                 <text
                   x={zone.x + 18}
                   y={zone.y + 30}
-                  fill={isActive ? "#0b0a12" : "#f5f1e8"}
+                  fill={isActive ? "var(--color-ink)" : "var(--color-paper)"}
                   fontFamily="var(--font-body)"
                   fontWeight={600}
                   fontSize={zone.kind === "pabellon" ? 17 : 13}
@@ -67,9 +79,9 @@ export function VenueMap() {
                       cx={zone.x + 18}
                       cy={zone.y + zone.height - 20}
                       r={5}
-                      fill={zone.status === "en-ronda" ? "#3bcdbf" : "#b3ab9c"}
+                      fill={zone.status === "en-ronda" ? "var(--color-accent)" : "var(--color-paper-dim)"}
                     >
-                      {zone.status === "en-ronda" && (
+                      {zone.status === "en-ronda" && !prefersReducedMotion && (
                         <animate
                           attributeName="opacity"
                           values="1;0.3;1"
@@ -81,12 +93,14 @@ export function VenueMap() {
                     <text
                       x={zone.x + 32}
                       y={zone.y + zone.height - 15}
-                      fill={isActive ? "#0b0a12" : "#b3ab9c"}
+                      fill={isActive ? "var(--color-ink)" : "var(--color-paper-dim)"}
                       fontFamily="var(--font-mono)"
                       fontSize={11}
                       style={{ transition: "fill 200ms ease" }}
                     >
-                      {zone.status === "en-ronda" ? "EN RONDA" : "DISPONIBLE"}
+                      {zone.status === "en-ronda"
+                        ? t("status.enRonda")
+                        : t("status.disponible")}
                     </text>
                   </>
                 )}
@@ -104,18 +118,18 @@ export function VenueMap() {
           className="w-fit rounded-full px-3 py-1 font-mono text-[0.68rem] tracking-[0.1em] uppercase"
           style={{ backgroundColor: `color-mix(in srgb, ${active.color} 20%, transparent)`, color: active.color }}
         >
-          {active.kind === "pabellon"
-            ? "Pabellón de exposición"
-            : active.kind === "sala"
-              ? "Sala de rondas de negocios"
-              : "Acceso"}
+          {t(`kind.${active.kind}`)}
         </span>
         <h3 className="font-display text-xl font-medium text-paper">{active.label}</h3>
         <p className="text-paper-dim">{active.description}</p>
         {active.status && (
           <p className="font-mono text-xs text-paper-dim">
-            Estado de ejemplo para este prototipo —{" "}
-            {active.status === "en-ronda" ? "en ronda de negocios ahora" : "disponible"}.
+            {t("exampleStatus", {
+              detail:
+                active.status === "en-ronda"
+                  ? t("statusDetail.enRonda")
+                  : t("statusDetail.disponible"),
+            })}
           </p>
         )}
       </div>

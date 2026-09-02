@@ -2,6 +2,15 @@
 
 Propuesta y desarrollo del sitio oficial de ExpoJuy 2026 para el **Desafío Digital ExpoJuy 2026** (Cámara de Comercio Exterior de Jujuy · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear).
 
+## 🌐 Sitio en vivo
+
+| Entorno | Rama | URL |
+|---|---|---|
+| Producción | `main` | **https://expojuy2026.vercel.app** |
+| Staging | `develop` | https://expojuy2026-git-develop-delestalmiguelignacio-5787s-projects.vercel.app |
+
+Cada Pull Request genera además su propio preview automático (link en los checks del PR).
+
 ## Documentación
 
 | Documento | Dónde |
@@ -49,4 +58,4 @@ Público, sin licencia declarada — el copyright queda reservado para el equipo
 ## Equipo
 
 - [Delestal94](https://github.com/Delestal94)
-- Maximiliano Lezano — _(completar usuario de GitHub para CODEOWNERS)_
+- [Maximiliano Lezano (MaxLezano)](https://github.com/MaxLezano)
