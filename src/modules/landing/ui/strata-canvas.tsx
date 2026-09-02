@@ -96,6 +96,15 @@ export function StrataCanvas() {
       }
     }
 
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        cancelAnimationFrame(frame);
+      } else if (!prefersReducedMotion) {
+        raf = requestAnimationFrame(draw);
+      }
+    }
+
     resize();
     window.addEventListener("resize", resize);
 
