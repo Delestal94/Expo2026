@@ -98,11 +98,28 @@ export function StrataCanvas() {
 
     resize();
     window.addEventListener("resize", resize);
-    raf = requestAnimationFrame(draw);
-    if (prefersReducedMotion) draw(0);
+
+    if (prefersReducedMotion) {
+      draw(0);
+      return () => window.removeEventListener("resize", resize);
+    }
+
+    // El canvas sigue montado (y su rAF seguiría corriendo) mucho después
+    // de que el visitante scrollea más allá del hero — sin esto anima
+    // para siempre fuera de pantalla, quemando CPU sin que nadie lo vea.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        raf = requestAnimationFrame(draw);
+      } else {
+        cancelAnimationFrame(raf);
+        cancelAnimationFrame(frame);
+      }
+    });
+    observer.observe(canvas);
 
     return () => {
       window.removeEventListener("resize", resize);
+      observer.disconnect();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
     };

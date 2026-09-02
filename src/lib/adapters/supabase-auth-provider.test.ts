@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { env } from "@/lib/config/env";
 import { SupabaseAuthProvider } from "./supabase-auth-provider";
 
 const mockAuth = {
@@ -19,6 +20,8 @@ vi.mock("@/lib/config/env", () => ({
   },
 }));
 
+const REAL_ENV = { ...env };
+
 const FAKE_SESSION = {
   access_token: "token-123",
   user: { id: "user-1", email: "visitante@example.com" },
@@ -27,6 +30,7 @@ const FAKE_SESSION = {
 describe("SupabaseAuthProvider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.assign(env, REAL_ENV);
   });
 
   it("mapea una sesión exitosa de signIn al formato del puerto AuthProvider", async () => {
@@ -63,5 +67,33 @@ describe("SupabaseAuthProvider", () => {
     mockAuth.getSession.mockResolvedValue({ data: { session: null }, error: null });
 
     await expect(new SupabaseAuthProvider().getSession()).resolves.toBeNull();
+  });
+
+  it("getSession mapea una sesión activa al formato del puerto AuthProvider", async () => {
+    mockAuth.getSession.mockResolvedValue({ data: { session: FAKE_SESSION }, error: null });
+
+    await expect(new SupabaseAuthProvider().getSession()).resolves.toEqual({
+      user: { id: "user-1", email: "visitante@example.com" },
+      accessToken: "token-123",
+    });
+  });
+
+  it("lanza un error claro si faltan las credenciales de Supabase", async () => {
+    (env as { NEXT_PUBLIC_SUPABASE_URL?: string }).NEXT_PUBLIC_SUPABASE_URL = undefined;
+
+    await expect(
+      new SupabaseAuthProvider().signIn("visitante@example.com", "secreto123"),
+    ).rejects.toThrow(/NEXT_PUBLIC_SUPABASE_URL/);
+  });
+
+  it("lanza un error si Supabase devuelve una sesión sin email", async () => {
+    mockAuth.signInWithPassword.mockResolvedValue({
+      data: { session: { ...FAKE_SESSION, user: { id: "user-1", email: "" } } },
+      error: null,
+    });
+
+    await expect(
+      new SupabaseAuthProvider().signIn("visitante@example.com", "secreto123"),
+    ).rejects.toThrow(/no tiene email/);
   });
 });
