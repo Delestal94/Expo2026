@@ -10,19 +10,19 @@ interface SectionLink {
 }
 
 const SECTIONS: SectionLink[] = [
-  { id: "sobre", label: "Sobre el evento", shortLabel: "Sobre", color: "var(--color-ocher)" },
-  { id: "ejes", label: "Ejes", shortLabel: "Ejes", color: "var(--color-terracotta)" },
-  { id: "galeria", label: "Galería", shortLabel: "Galería", color: "var(--color-violet)" },
-  { id: "mapa", label: "Mapa", shortLabel: "Mapa", color: "var(--color-teal)" },
-  { id: "llegar", label: "Cómo llegar", shortLabel: "Llegar", color: "var(--color-rose)" },
-  { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-ocher)" },
-  { id: "acceso", label: "Acceso", shortLabel: "Acceso", color: "var(--color-terracotta)" },
+  { id: "sobre", label: "Sobre el evento", shortLabel: "Sobre", color: "var(--color-cyan)" },
+  { id: "ejes", label: "Ejes", shortLabel: "Ejes", color: "var(--color-violet)" },
+  { id: "galeria", label: "Galería", shortLabel: "Galería", color: "var(--color-magenta)" },
+  { id: "mapa", label: "Mapa", shortLabel: "Mapa", color: "var(--color-lavender)" },
+  { id: "llegar", label: "Cómo llegar", shortLabel: "Llegar", color: "var(--color-cyan)" },
+  { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-violet)" },
+  { id: "acceso", label: "Acceso", shortLabel: "Acceso", color: "var(--color-magenta)" },
 ];
 
 /**
  * Índice de anclas con forma de columna estratigráfica: cada sección es una
- * banda mineral, igual a las de About/Ejes. Solo aparece una vez que el
- * visitante deja el Hero, para no competir con la primera impresión.
+ * banda de color de marca, igual a las de About/Ejes. Solo aparece una vez
+ * que el visitante deja el Hero, para no competir con la primera impresión.
  */
 export function SectionNav() {
   const [visible, setVisible] = useState(false);

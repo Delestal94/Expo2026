@@ -13,7 +13,7 @@ interface Band {
   glow: number;
 }
 
-const PALETTE = ["#d98b3f", "#b4432e", "#c24d6b", "#7c5a9e", "#2e8f86", "#3bcdbf"];
+const PALETTE = ["#2de3d6", "#7c4dff", "#b83fe0", "#b9a6f5"];
 
 function createBands(height: number): Band[] {
   return PALETTE.map((color, i) => ({
@@ -29,10 +29,10 @@ function createBands(height: number): Band[] {
 }
 
 /**
- * Fondo animado que evoca las bandas minerales del Cerro de los Siete
- * Colores (Quebrada de Humahuaca) — cinta a cinta, no un gradiente
- * estático. Se congela en el primer cuadro si el visitante prefiere
- * movimiento reducido.
+ * Fondo animado con la paleta oficial de marca (coherente con el
+ * isotipo de Instagram) en bandas tipo estrato — cinta a cinta, no un
+ * gradiente estático. Se congela en el primer cuadro si el visitante
+ * prefiere movimiento reducido.
  */
 export function StrataCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

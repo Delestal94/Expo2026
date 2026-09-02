@@ -1,10 +1,10 @@
 import { useTranslations } from "next-intl";
 
 const STATS = [
-  { key: "edition", value: "17ª", color: "var(--color-ocher)" },
-  { key: "days", value: "4", color: "var(--color-terracotta)" },
-  { key: "stands", value: "+200", color: "var(--color-violet)" },
-  { key: "dates", value: "9–12", color: "var(--color-teal)" },
+  { key: "edition", value: "17ª", color: "var(--color-cyan)" },
+  { key: "days", value: "4", color: "var(--color-violet)" },
+  { key: "stands", value: "+200", color: "var(--color-magenta)" },
+  { key: "dates", value: "9–12", color: "var(--color-lavender)" },
 ] as const;
 
 /** Cada banda corta distinto, como un afloramiento real — no una grilla prolija. */
