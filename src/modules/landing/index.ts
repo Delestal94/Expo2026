@@ -1,5 +1,6 @@
 export { About } from "./ui/about";
 export { AccessInfo } from "./ui/access-info";
+export { Directions } from "./ui/directions";
 export { Ejes } from "./ui/ejes";
 export { Hero } from "./ui/hero";
 export { Partners } from "./ui/partners";

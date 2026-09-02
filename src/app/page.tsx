@@ -1,6 +1,7 @@
 import {
   About,
   AccessInfo,
+  Directions,
   Ejes,
   EventStructuredData,
   Hero,
@@ -20,6 +21,7 @@ export default function Home() {
       <Ejes />
       <GalleryPreview />
       <MapSection />
+      <Directions />
       <PortalSection />
       <AccessInfo />
       <Partners />
