@@ -1,46 +1,25 @@
+import { useTranslations } from "next-intl";
+
 interface Eje {
   n: string;
-  title: string;
-  description: string;
+  key: "mineria" | "comercio" | "corredor" | "conocimiento";
   color: string;
 }
 
 const EJES: Eje[] = [
-  {
-    n: "01",
-    title: "Minería y litio",
-    description:
-      "El RIGI aprobado para Exar duplicará la producción de litio a 45.000 toneladas. ExpoJuy conecta a proveedores jujeños con esa demanda creciente.",
-    color: "var(--color-ocher)",
-  },
-  {
-    n: "02",
-    title: "Comercio exterior",
-    description:
-      "Rondas de negocios organizadas por la Cámara de Comercio Exterior de Jujuy, con delegaciones que ya mostraron interés desde otras provincias y países.",
-    color: "var(--color-terracotta)",
-  },
-  {
-    n: "03",
-    title: "Corredor Bioceánico",
-    description:
-      "Chile y Paraguay como socios estratégicos del Corredor de Capricornio — el formato de 4 días facilita el traslado y la estadía de delegaciones extranjeras.",
-    color: "var(--color-violet)",
-  },
-  {
-    n: "04",
-    title: "Economía del conocimiento",
-    description:
-      "El mismo sector que impulsa este Desafío Digital: software, agtech y servicios basados en el conocimiento, en el Plan Estratégico 2026-2030 de la provincia.",
-    color: "var(--color-teal)",
-  },
+  { n: "01", key: "mineria", color: "var(--color-ocher)" },
+  { n: "02", key: "comercio", color: "var(--color-terracotta)" },
+  { n: "03", key: "corredor", color: "var(--color-violet)" },
+  { n: "04", key: "conocimiento", color: "var(--color-teal)" },
 ];
 
 export function Ejes() {
+  const t = useTranslations("Landing.Ejes");
+
   return (
     <section className="px-6 py-24 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
-        Ejes de la edición 2026
+        {t("eyebrow")}
       </span>
 
       <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
@@ -65,10 +44,10 @@ export function Ejes() {
               {eje.n}
             </span>
             <h3 className="relative font-display text-2xl font-medium text-paper">
-              {eje.title}
+              {t(`items.${eje.key}.title`)}
             </h3>
             <p className="relative text-balance text-paper-dim">
-              {eje.description}
+              {t(`items.${eje.key}.description`)}
             </p>
           </article>
         ))}
