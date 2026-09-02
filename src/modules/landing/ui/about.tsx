@@ -18,12 +18,11 @@ export function About() {
 
         <dl className="grid grid-cols-2 gap-x-8 gap-y-10 self-start">
           {STATS.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1">
-              <dt className="sr-only">{stat.label}</dt>
+            <div key={stat.label} className="flex flex-col-reverse gap-1">
+              <dt className="text-sm text-paper-dim">{stat.label}</dt>
               <dd className="font-mono text-4xl font-semibold text-paper tabular-nums">
                 {stat.value}
               </dd>
-              <span className="text-sm text-paper-dim">{stat.label}</span>
             </div>
           ))}
         </dl>
