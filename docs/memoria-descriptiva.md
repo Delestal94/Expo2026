@@ -58,7 +58,7 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Módulo | Qué hace | Estado en este prototipo |
 |---|---|---|
 | Landing | Identidad, agenda, ejes del evento | **Construido** — ver sección 10 |
-| Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §7) | Diseñado, pendiente de implementación |
+| Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §7) | **Construido** (alta de cuenta y login); QR de ingreso y cobro, pendientes |
 | Portal de expositores + rondas de negocios | Perfil de empresa, matching por rubro/país, agenda de reuniones | **Construido** (mockup con datos de ejemplo) — ver sección 10 |
 | Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
 | Mapa interactivo | Plano de Ciudad Cultural como datos, con estado de sesiones en vivo | **Construido** (mockup con datos de ejemplo) — ver sección 10 |

@@ -61,6 +61,13 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Accesibilidad | Auditoría empírica con Playwright sobre landing, mapa interactivo y portal de expositores: corregido foco de teclado invisible en el plano interactivo (WCAG 2.4.7) y animaciones que ignoraban `prefers-reduced-motion` en el indicador "en ronda" del mapa y en el preview de matching de expositores. Contraste insuficiente de `text-terracotta`/`text-violet` detectado pero no corregido (decisión de paleta fuera de mandato) — [issue #35](https://github.com/Delestal94/Expo2026/issues/35) | [PR #34](https://github.com/Delestal94/Expo2026/pull/34) |
 | 2026-09-01 | Portal de expositores | Corrección de consistencia con el sistema de diseño: color hardcodeado (`#0b0a12`) reemplazado por el token `var(--color-ink)` en los chips de filtro del directorio | [PR #37](https://github.com/Delestal94/Expo2026/pull/37) |
 | 2026-09-01 | Landing | Tests para `getTimeLeft` (cuenta regresiva): descomposición de tiempo restante, instante exacto de inicio, clamp a cero tras pasado el evento y no desborde entre unidades | [PR #39](https://github.com/Delestal94/Expo2026/pull/39) |
+| 2026-09-01 | Configuración | Metadata completa de compartibilidad: Open Graph, Twitter Card, favicon e imagen de Open Graph generados con `ImageResponse`, `metadataBase` apuntando a la URL real de producción | [PR #41](https://github.com/Delestal94/Expo2026/pull/41) |
+| 2026-09-01 | Configuración | `sitemap.xml` y `robots.txt` (convenciones App Router), sin rutas inventadas — solo la única ruta real del sitio en ese momento | [PR #42](https://github.com/Delestal94/Expo2026/pull/42) |
+| 2026-09-01 | Landing | Datos estructurados JSON-LD (schema.org `Event`) en la landing, con datos ya confirmados en el repo (fechas, ubicación, organizador) — sin inventar información nueva | [PR #43](https://github.com/Delestal94/Expo2026/pull/43) |
+| 2026-09-01 | Repositorio | Segundo integrante (`@MaxLezano`) sumado a `.github/CODEOWNERS`; GitHub le pide review automáticamente en cada PR nuevo | [PR #38](https://github.com/Delestal94/Expo2026/pull/38) |
+| 2026-09-01 | Landing | Módulo `gallery`: preview de 6 fotos en la landing + ruta nueva `/galeria` con grilla de 30 fotos y lightbox — fotos reales de ExpoJuy 2024 (mismo organizador, Cámara de Comercio Exterior de Jujuy) | [PR #45](https://github.com/Delestal94/Expo2026/pull/45) |
+| 2026-09-01 | Registro de acceso | Tests de la fábrica `createAuthProvider`: caso feliz (`supabase`) y adaptadores todavía no implementados (`clerk`, `nextauth`) que deben fallar con error claro — sin cambios de comportamiento | [PR #48](https://github.com/Delestal94/Expo2026/pull/48) |
+| 2026-09-01 | Registro de acceso | Primer paso real del módulo (antes vacío): `AccessForm` (crear cuenta / iniciar sesión) sobre el `AuthProvider` existente, nueva ruta `/cuenta` que respeta el flag `visitorAccess`, link desde la landing. No incluye QR de ingreso ni cobro (ver ADR-0003) | [PR #47](https://github.com/Delestal94/Expo2026/pull/47) |
 
 ## 6. Próximos pasos
 
@@ -68,4 +75,6 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 - [ ] Definir el quinto idioma ([issue](https://github.com/Delestal94/Expo2026/issues/4)).
 - [ ] Repasar la memoria descriptiva una vez más antes del 8/9 y confirmar que las capturas/links estén al día.
 - [ ] Recordar desactivar los 4 agentes horarios cerca del 30/9 (la API no soporta auto-apagado) — [claude.ai/code/routines](https://claude.ai/code/routines).
-- [ ] **En cuanto el segundo integrante acepte la invitación:** volver `required_approving_review_count` a 1 en `main` y `develop` (comando en `CONTRIBUTING.md`), y completar su usuario en `.github/CODEOWNERS`, `README.md` y este documento.
+- [x] Usuario de GitHub del segundo integrante (`@MaxLezano`) sumado a `.github/CODEOWNERS` ([PR #38](https://github.com/Delestal94/Expo2026/pull/38)).
+- [x] `required_approving_review_count` en `develop` ya exige 1 aprobación (verificado empíricamente: GitHub rechazó el merge de este mismo PR sin ella) — `CONTRIBUTING.md` todavía describe la excepción en 0 como vigente, desactualizado.
+- [ ] Confirmar el estado real en `main` y completar el usuario de `@MaxLezano` en `README.md`.
