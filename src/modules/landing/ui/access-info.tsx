@@ -16,6 +16,16 @@ const REFERENCE_PRICING = [
   { key: "under5", price: "Sin cargo" },
 ] as const;
 
+/** Fondo con la paleta de marca, apagado — evita que la sección se sienta vacía sin competir con el texto. */
+const BRAND_WASH = {
+  background: [
+    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-violet) 12%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 800px 600px at 92% 100%, color-mix(in srgb, var(--color-magenta) 12%, transparent), transparent 62%)",
+    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-lavender) 10%, transparent), transparent 58%)",
+  ].join(", "),
+};
+
 export async function AccessInfo() {
   const [flags, t, tDirections] = await Promise.all([
     getFeatureFlags(),
@@ -24,117 +34,126 @@ export async function AccessInfo() {
   ]);
 
   return (
-    <section className="border-y border-line px-6 py-24 sm:px-10 lg:px-16">
-      {/* Cómo llegar — mismo bloque que Acceso, dos formas de decir "vení al evento". */}
-      <div
-        id="llegar"
-        className="mx-auto mb-16 flex max-w-5xl scroll-mt-24 flex-col items-center gap-8 rounded-3xl border border-line bg-gradient-to-br from-accent/5 to-accent/15 px-6 py-8 sm:px-10 lg:flex-row lg:justify-between"
-      >
-        <div className="flex max-w-md flex-col items-start gap-4">
-          <div>
-            <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
-              {tDirections("eyebrow")}
-            </span>
-            <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
-              {tDirections("title")}
-            </h3>
+    <section className="relative overflow-hidden border-y border-line px-6 py-24 sm:px-10 lg:px-16">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={BRAND_WASH} />
+
+      <div className="relative">
+        {/* Cómo llegar — mismo bloque que Acceso, dos formas de decir "vení al evento". */}
+        <div
+          id="llegar"
+          className="mx-auto mb-16 flex max-w-6xl scroll-mt-24 flex-col items-center gap-8 rounded-3xl border border-line bg-ink/40 px-6 py-8 backdrop-blur-sm sm:px-10 lg:flex-row lg:justify-between"
+        >
+          <div className="flex max-w-md flex-col items-start gap-4">
+            <div>
+              <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
+                {tDirections("eyebrow")}
+              </span>
+              <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
+                {tDirections("title")}
+              </h3>
+            </div>
+            <p className="text-balance text-sm text-paper-dim">
+              {tDirections.rich("description", {
+                strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
+              })}
+            </p>
+            <a
+              href={MAPS_LINK}
+              target="_blank"
+              rel="noopener"
+              className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            >
+              {tDirections("cta")}
+            </a>
           </div>
-          <p className="text-balance text-sm text-paper-dim">
-            {tDirections.rich("description", {
-              strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
+
+          <div className="h-56 w-full overflow-hidden rounded-2xl lg:h-64 lg:w-96">
+            <iframe
+              src={MAPS_EMBED_URL}
+              title={tDirections("mapLabel")}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+            />
+          </div>
+        </div>
+
+        <div id="acceso" className="mx-auto max-w-2xl scroll-mt-24 text-center">
+          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+            {t("eyebrow")}
+          </span>
+          <h2 className="mx-auto mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
+            {t("title")}
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-paper-dim">
+            {t.rich("description", {
+              code: (chunks) => <span className="font-mono">{chunks}</span>,
             })}
           </p>
-          <a
-            href={MAPS_LINK}
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-          >
-            {tDirections("cta")}
-          </a>
         </div>
 
-        <div className="h-56 w-full overflow-hidden rounded-2xl lg:h-64 lg:w-80">
-          <iframe
-            src={MAPS_EMBED_URL}
-            title={tDirections("mapLabel")}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="h-full w-full border-0"
-          />
-        </div>
-      </div>
-
-      <div id="acceso" className="mx-auto max-w-2xl scroll-mt-24 text-center">
-        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-          {t("eyebrow")}
-        </span>
-        <h2 className="mx-auto mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-          {t("title")}
-        </h2>
-        <p className="mx-auto mt-4 max-w-lg text-paper-dim">
-          {t.rich("description", {
-            code: (chunks) => <span className="font-mono">{chunks}</span>,
-          })}
-        </p>
-      </div>
-
-      <div className="mx-auto mt-10 grid max-w-xl gap-3 sm:grid-cols-3">
-        {REFERENCE_PRICING.map((tier) => (
-          <div
-            key={tier.key}
-            className="rounded-2xl border border-line bg-[#121022] p-5 text-center"
-          >
-            <div className="font-mono text-2xl font-semibold text-paper tabular-nums">
-              {tier.price}
+        {/* Precios/CTA (principal) y proveedores (secundario) lado a lado — usan el ancho real de la sección. */}
+        <div className="mx-auto mt-12 grid max-w-5xl gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+          <div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {REFERENCE_PRICING.map((tier) => (
+                <div
+                  key={tier.key}
+                  className="rounded-2xl border border-line bg-[#121022] p-5 text-center"
+                >
+                  <div className="font-mono text-2xl font-semibold text-paper tabular-nums">
+                    {tier.price}
+                  </div>
+                  <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
+                </div>
+              ))}
             </div>
-            <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
+
+            <div className="mt-6 text-center">
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
+                  {t("buyDisabled")}
+                </span>
+                {flags.visitorAccess && (
+                  <Link
+                    href="/cuenta"
+                    className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
+                  >
+                    {t("createAccount")}
+                  </Link>
+                )}
+              </div>
+              <p className="mt-2 font-mono text-xs text-paper-dim">
+                {flags.visitorAccess && t("accountNote")}
+                {t("pricingNote")}
+              </p>
+            </div>
           </div>
-        ))}
-      </div>
 
-      <div className="mx-auto mt-6 max-w-xl text-center">
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
-            {t("buyDisabled")}
-          </span>
-          {flags.visitorAccess && (
-            <Link
-              href="/cuenta"
-              className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-            >
-              {t("createAccount")}
-            </Link>
-          )}
-        </div>
-        <p className="mt-2 font-mono text-xs text-paper-dim">
-          {flags.visitorAccess && t("accountNote")}
-          {t("pricingNote")}
-        </p>
-      </div>
-
-      <div className="mx-auto mt-14 max-w-md rounded-2xl border border-line bg-[#121022] p-6 text-left">
-        <h3 className="font-display text-lg font-medium text-paper">
-          {t("providersTitle")}
-        </h3>
-        <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <a
-            href={PROVIDERS_FORM_URL}
-            target="_blank"
-            rel="noopener"
-            className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-          >
-            {t("providersFormCta")}
-          </a>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-          >
-            {t("whatsappCta")}
-          </a>
+          <div className="h-full rounded-2xl border border-line bg-[#121022] p-6 text-left">
+            <h3 className="font-display text-lg font-medium text-paper">
+              {t("providersTitle")}
+            </h3>
+            <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a
+                href={PROVIDERS_FORM_URL}
+                target="_blank"
+                rel="noopener"
+                className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
+              >
+                {t("providersFormCta")}
+              </a>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener"
+                className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+              >
+                {t("whatsappCta")}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
