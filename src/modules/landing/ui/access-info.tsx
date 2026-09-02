@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { getFeatureFlags } from "@/lib/config/flags";
+import { CtaLink } from "./cta-link";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 const WHATSAPP_URL = "https://wa.me/5493884212955";
@@ -19,10 +19,10 @@ const REFERENCE_PRICING = [
 /** Fondo con la paleta de marca, apagado — evita que la sección se sienta vacía sin competir con el texto. */
 const BRAND_WASH = {
   background: [
-    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 60%)",
-    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-violet) 12%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-teal) 14%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-blue) 12%, transparent), transparent 60%)",
     "radial-gradient(ellipse 800px 600px at 92% 100%, color-mix(in srgb, var(--color-magenta) 12%, transparent), transparent 62%)",
-    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-lavender) 10%, transparent), transparent 58%)",
+    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-yellow) 10%, transparent), transparent 58%)",
   ].join(", "),
 };
 
@@ -96,12 +96,9 @@ export async function AccessInfo() {
                   {t("buyDisabled")}
                 </span>
                 {flags.visitorAccess && (
-                  <Link
-                    href="/cuenta"
-                    className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-                  >
+                  <CtaLink href="/cuenta" size="sm">
                     {t("createAccount")}
-                  </Link>
+                  </CtaLink>
                 )}
               </div>
               <p className="mt-2 font-mono text-xs text-paper-dim">
@@ -129,22 +126,12 @@ export async function AccessInfo() {
             </h3>
             <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href={PROVIDERS_FORM_URL}
-                target="_blank"
-                rel="noopener"
-                className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-              >
+              <CtaLink href={PROVIDERS_FORM_URL} size="sm" external>
                 {t("providersFormCta")}
-              </a>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener"
-                className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-              >
+              </CtaLink>
+              <CtaLink href={WHATSAPP_URL} variant="outline" size="sm" external>
                 {t("whatsappCta")}
-              </a>
+              </CtaLink>
             </div>
           </div>
         </div>

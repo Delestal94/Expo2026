@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
+import { CtaLink } from "./cta-link";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
@@ -17,7 +19,16 @@ export function Hero() {
       />
 
       <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
-        <span>{t("eyebrow")}</span>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/images/logos/expojuy-mark.svg"
+            alt=""
+            width={20}
+            height={28}
+            className="h-7 w-auto"
+          />
+          <span>{t("eyebrow")}</span>
+        </div>
         <span>{t("edition")}</span>
       </nav>
 
@@ -44,7 +55,7 @@ export function Hero() {
           >
             <span
               aria-hidden="true"
-              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet),var(--color-magenta),var(--color-lavender))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
+              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-teal),var(--color-blue),var(--color-magenta),var(--color-yellow))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
             />
             <span className="relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink">
               {t("ctaAttend")}
@@ -56,14 +67,13 @@ export function Hero() {
               </span>
             </span>
           </a>
-          <a
+          <CtaLink
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            variant="outline"
+            external
           >
             {t("ctaProviders")}
-          </a>
+          </CtaLink>
         </div>
       </div>
     </section>

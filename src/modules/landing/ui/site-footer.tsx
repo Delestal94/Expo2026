@@ -69,8 +69,14 @@ export function SiteFooter() {
       </div>
 
       <div className="mt-10 flex flex-col gap-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-        <div className="font-display text-lg font-semibold text-paper">
-          {t("brand")}
+        <div className="inline-flex items-center self-center rounded-xl bg-paper p-3 sm:self-auto">
+          <Image
+            src="/images/logos/expojuy-lockup.svg"
+            alt={t("brand")}
+            width={198}
+            height={114}
+            className="h-14 w-auto"
+          />
         </div>
         <p className="max-w-md text-sm text-paper-dim">{t("institutions")}</p>
         <span className="font-mono text-xs text-paper-dim">{t("badge")}</span>
