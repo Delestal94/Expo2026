@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
+import { CtaLink } from "./cta-link";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
@@ -56,14 +57,13 @@ export function Hero() {
               </span>
             </span>
           </a>
-          <a
+          <CtaLink
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            variant="outline"
+            external
           >
             {t("ctaProviders")}
-          </a>
+          </CtaLink>
         </div>
       </div>
     </section>

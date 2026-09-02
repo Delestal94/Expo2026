@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { getFeatureFlags } from "@/lib/config/flags";
+import { CtaLink } from "./cta-link";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 const WHATSAPP_URL = "https://wa.me/5493884212955";
@@ -96,12 +96,9 @@ export async function AccessInfo() {
                   {t("buyDisabled")}
                 </span>
                 {flags.visitorAccess && (
-                  <Link
-                    href="/cuenta"
-                    className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-                  >
+                  <CtaLink href="/cuenta" size="sm">
                     {t("createAccount")}
-                  </Link>
+                  </CtaLink>
                 )}
               </div>
               <p className="mt-2 font-mono text-xs text-paper-dim">
@@ -129,22 +126,12 @@ export async function AccessInfo() {
             </h3>
             <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <a
-                href={PROVIDERS_FORM_URL}
-                target="_blank"
-                rel="noopener"
-                className="rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-              >
+              <CtaLink href={PROVIDERS_FORM_URL} size="sm" external>
                 {t("providersFormCta")}
-              </a>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener"
-                className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-              >
+              </CtaLink>
+              <CtaLink href={WHATSAPP_URL} variant="outline" size="sm" external>
                 {t("whatsappCta")}
-              </a>
+              </CtaLink>
             </div>
           </div>
         </div>
