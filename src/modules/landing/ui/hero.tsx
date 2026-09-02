@@ -1,4 +1,5 @@
 import { Countdown } from "./countdown";
+import { CtaLink } from "./cta-link";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
@@ -34,20 +35,14 @@ export function Hero() {
       <div className="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <Countdown />
         <div className="flex flex-wrap gap-3">
-          <a
-            href="#acceso"
-            className="rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink transition hover:brightness-110"
-          >
-            Quiero asistir
-          </a>
-          <a
+          <CtaLink href="#acceso">Quiero asistir</CtaLink>
+          <CtaLink
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            variant="outline"
+            external
           >
             Sumar mi empresa como proveedora
-          </a>
+          </CtaLink>
         </div>
       </div>
     </section>
