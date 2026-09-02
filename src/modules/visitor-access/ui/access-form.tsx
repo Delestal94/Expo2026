@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { createAuthProvider } from "@/lib/adapters/auth";
 import type { AuthSession } from "@/lib/ports";
+import { AdmissionTicket } from "./admission-ticket";
 
 type Mode = "signup" | "signin";
 
@@ -15,7 +16,7 @@ function errorMessageOf(error: unknown, fallback: string): string {
  * server action) porque el adaptador de Supabase persiste la sesión en el
  * storage del browser — moverlo al servidor perdería esa persistencia.
  */
-export function AccessForm() {
+export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }) {
   const [checkingSession, setCheckingSession] = useState(true);
   const [session, setSession] = useState<AuthSession | null>(null);
   const [mode, setMode] = useState<Mode>("signup");
@@ -86,10 +87,7 @@ export function AccessForm() {
           Sesión iniciada como{" "}
           <strong className="font-mono font-semibold">{session.user.email}</strong>.
         </p>
-        <p className="mt-2 text-sm text-paper-dim">
-          Tu cuenta de visitante ya está creada. La compra de la entrada
-          todavía no está disponible — se habilita en la próxima etapa.
-        </p>
+        <AdmissionTicket session={session} admissionMode={admissionMode} />
         <button
           type="button"
           onClick={handleSignOut}
