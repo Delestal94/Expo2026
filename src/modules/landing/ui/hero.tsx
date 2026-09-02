@@ -6,7 +6,10 @@ export function Hero() {
   const t = useTranslations("Landing.Hero");
 
   return (
-    <section className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16">
+    <section
+      id="inicio"
+      className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16"
+    >
       <StrataCanvas />
       <div
         aria-hidden="true"

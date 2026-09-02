@@ -6,7 +6,7 @@ export function GalleryPreview() {
   const photos = GALLERY_PHOTOS.slice(0, GALLERY_PREVIEW_COUNT);
 
   return (
-    <section className="px-6 py-24 sm:px-10 lg:px-16">
+    <section id="galeria" className="px-6 py-24 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         Edición anterior
       </span>
