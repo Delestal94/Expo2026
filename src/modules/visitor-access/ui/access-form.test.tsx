@@ -28,7 +28,7 @@ describe("AccessForm", () => {
   it("crea una cuenta nueva con el formulario de registro por defecto", async () => {
     const user = userEvent.setup();
     mockProvider.signUp.mockResolvedValue(SESSION);
-    render(<AccessForm />);
+    render(<AccessForm admissionMode="free" />);
 
     await screen.findByRole("tab", { name: "Crear cuenta" });
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -45,7 +45,7 @@ describe("AccessForm", () => {
   it("permite pasar a iniciar sesión con una cuenta existente", async () => {
     const user = userEvent.setup();
     mockProvider.signIn.mockResolvedValue(SESSION);
-    render(<AccessForm />);
+    render(<AccessForm admissionMode="free" />);
 
     await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -60,7 +60,7 @@ describe("AccessForm", () => {
   it("muestra el error del proveedor sin romper el formulario", async () => {
     const user = userEvent.setup();
     mockProvider.signIn.mockRejectedValue(new Error("Credenciales inválidas"));
-    render(<AccessForm />);
+    render(<AccessForm admissionMode="free" />);
 
     await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -74,12 +74,26 @@ describe("AccessForm", () => {
     const user = userEvent.setup();
     mockProvider.getSession.mockResolvedValue(SESSION);
     mockProvider.signOut.mockResolvedValue(undefined);
-    render(<AccessForm />);
+    render(<AccessForm admissionMode="free" />);
 
     expect(await screen.findByText(/Sesión iniciada como/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Cerrar sesión" }));
 
     await waitFor(() => expect(mockProvider.signOut).toHaveBeenCalled());
     expect(await screen.findByRole("tab", { name: "Crear cuenta" })).toBeInTheDocument();
+  });
+
+  it("emite el QR de ingreso cuando el modo de acceso es gratuito", async () => {
+    mockProvider.getSession.mockResolvedValue(SESSION);
+    render(<AccessForm admissionMode="free" />);
+
+    expect(await screen.findByText("EXPOJUY26-USER1")).toBeInTheDocument();
+  });
+
+  it("avisa que el QR todavía no está disponible cuando el modo de acceso es pago", async () => {
+    mockProvider.getSession.mockResolvedValue(SESSION);
+    render(<AccessForm admissionMode="paid" />);
+
+    expect(await screen.findByText(/el QR se emite después de pagar la entrada/)).toBeInTheDocument();
   });
 });
