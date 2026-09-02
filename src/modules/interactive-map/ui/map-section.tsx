@@ -5,7 +5,7 @@ export async function MapSection() {
   const t = await getTranslations("InteractiveMap");
 
   return (
-    <section id="mapa" className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
+    <section id="mapa" className="border-t border-line px-6 py-20 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
         {t("eyebrow")}
       </span>
