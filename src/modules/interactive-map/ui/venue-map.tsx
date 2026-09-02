@@ -112,7 +112,13 @@ export function VenueMap() {
       >
         <span
           className="w-fit rounded-full px-3 py-1 font-mono text-[0.68rem] tracking-[0.1em] uppercase"
-          style={{ backgroundColor: `color-mix(in srgb, ${active.color} 20%, transparent)`, color: active.color }}
+          style={{
+            backgroundColor: `color-mix(in srgb, ${active.color} 20%, transparent)`,
+            // Terracotta, violeta y rose no llegan a 4.5:1 sobre este fondo
+            // oscuro usados tal cual como color de texto — se aclaran para
+            // cumplir WCAG AA sin tocar el token de marca compartido.
+            color: `color-mix(in srgb, ${active.color} 80%, white)`,
+          }}
         >
           {active.kind === "pabellon"
             ? "Pabellón de exposición"
