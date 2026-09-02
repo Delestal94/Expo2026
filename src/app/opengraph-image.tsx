@@ -1,9 +1,8 @@
 import { ImageResponse } from "next/og";
+import { BrandMark } from "./brand-mark";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-const bands = ["#d98b3f", "#b4432e", "#7c5a9e", "#2e8f86", "#c24d6b"];
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -14,22 +13,19 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 32,
           background: "#0b0a12",
           color: "#f5f1e8",
         }}
       >
-        <div style={{ display: "flex", height: 16 }}>
-          {bands.map((color) => (
-            <div key={color} style={{ flex: 1, display: "flex", background: color }} />
-          ))}
-        </div>
+        <BrandMark height={140} />
         <div
           style={{
-            flex: 1,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
             gap: 24,
           }}
         >

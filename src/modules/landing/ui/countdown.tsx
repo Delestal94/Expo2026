@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const EVENT_START = new Date("2026-10-09T09:00:00-03:00").getTime();
@@ -21,15 +22,11 @@ export function getTimeLeft(): TimeLeft {
   };
 }
 
-const UNITS: Array<{ key: keyof TimeLeft; label: string }> = [
-  { key: "days", label: "días" },
-  { key: "hours", label: "hs" },
-  { key: "minutes", label: "min" },
-  { key: "seconds", label: "seg" },
-];
+const UNITS: Array<keyof TimeLeft> = ["days", "hours", "minutes", "seconds"];
 
 /** Cuenta regresiva real al inicio de ExpoJuy 2026 (9/10, 09:00 ART). */
 export function Countdown() {
+  const t = useTranslations("Landing.Countdown");
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
@@ -44,13 +41,13 @@ export function Countdown() {
 
   return (
     <div className="flex gap-5 font-mono" role="timer" aria-live="off">
-      {UNITS.map(({ key, label }) => (
+      {UNITS.map((key) => (
         <div key={key} className="flex flex-col items-center">
           <span className="text-3xl font-semibold tabular-nums text-paper sm:text-4xl">
             {timeLeft ? String(timeLeft[key]).padStart(2, "0") : "--"}
           </span>
           <span className="mt-1 text-[0.65rem] tracking-[0.15em] text-paper-dim uppercase">
-            {label}
+            {t(key)}
           </span>
         </div>
       ))}
