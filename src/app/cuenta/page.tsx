@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { env } from "@/lib/config/env";
 import { getFeatureFlags } from "@/lib/config/flags";
 import { AccessForm } from "@/modules/visitor-access";
 
@@ -25,7 +26,7 @@ export default async function CuentaPage() {
         disponible — se habilita en la próxima etapa.
       </p>
       <div className="mt-10">
-        <AccessForm />
+        <AccessForm admissionMode={env.ADMISSION_MODE} />
       </div>
     </main>
   );
