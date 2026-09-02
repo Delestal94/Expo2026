@@ -52,7 +52,7 @@ export function Hero() {
               </span>
             </span>
           </a>
-          <a
+          <CtaLink
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
             variant="outline"
             external
