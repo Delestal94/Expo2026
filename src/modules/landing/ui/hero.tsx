@@ -37,9 +37,21 @@ export function Hero() {
         <div className="flex flex-wrap gap-3">
           <a
             href="#acceso"
-            className="rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink transition hover:brightness-110"
+            className="group relative isolate inline-flex rounded-full transition-transform duration-300 motion-reduce:transition-none motion-safe:hover:scale-[1.03] motion-safe:focus-visible:scale-[1.03]"
           >
-            {t("ctaAttend")}
+            <span
+              aria-hidden="true"
+              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-ocher),var(--color-terracotta),var(--color-rose),var(--color-violet),var(--color-teal))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
+            />
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink">
+              {t("ctaAttend")}
+              <span
+                aria-hidden="true"
+                className="inline-block transition-transform duration-300 motion-reduce:transition-none group-hover:translate-x-1 group-focus-visible:translate-x-1"
+              >
+                →
+              </span>
+            </span>
           </a>
           <a
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
