@@ -18,8 +18,8 @@ function LogoGrid({
           key={logo.src}
           className={
             tone === "dark"
-              ? "flex h-20 w-36 items-center justify-center rounded-xl border border-line bg-[#121022] p-4"
-              : "flex h-20 w-36 items-center justify-center rounded-xl bg-paper p-4 shadow-sm"
+              ? "flex h-40 w-72 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
+              : "flex h-40 w-72 items-center justify-center rounded-xl bg-paper p-6 shadow-sm"
           }
         >
           <div className="relative h-full w-full">
@@ -27,7 +27,7 @@ function LogoGrid({
               src={logo.src}
               alt={logo.alt}
               fill
-              sizes={logoSizes ?? "144px"}
+              sizes={logoSizes ?? "288px"}
               className="object-contain"
             />
           </div>
