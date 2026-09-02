@@ -17,7 +17,7 @@ export function Ejes() {
   const t = useTranslations("Landing.Ejes");
 
   return (
-    <section id="ejes" className="px-6 py-24 sm:px-10 lg:px-16">
+    <section id="ejes" className="px-6 py-16 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         {t("eyebrow")}
       </span>
