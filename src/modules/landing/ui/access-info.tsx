@@ -19,10 +19,10 @@ const REFERENCE_PRICING = [
 /** Fondo con la paleta de marca, apagado — evita que la sección se sienta vacía sin competir con el texto. */
 const BRAND_WASH = {
   background: [
-    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 60%)",
-    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-violet) 12%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-teal) 14%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-blue) 12%, transparent), transparent 60%)",
     "radial-gradient(ellipse 800px 600px at 92% 100%, color-mix(in srgb, var(--color-magenta) 12%, transparent), transparent 62%)",
-    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-lavender) 10%, transparent), transparent 58%)",
+    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-yellow) 10%, transparent), transparent 58%)",
   ].join(", "),
 };
 
@@ -109,8 +109,8 @@ export async function AccessInfo() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 lg:col-span-5 lg:col-start-8">
-          <div className="h-64 w-full overflow-hidden rounded-2xl border border-line sm:h-72 lg:h-80">
+        <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
+          <div className="h-64 w-full sm:h-72 lg:h-80">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}
@@ -120,7 +120,7 @@ export async function AccessInfo() {
             />
           </div>
 
-          <div className="rounded-2xl border border-line bg-[#121022] p-6 text-left">
+          <div className="flex flex-1 flex-col justify-center border-t border-line bg-[#121022] p-6 text-left">
             <h3 className="font-display text-lg font-medium text-paper">
               {t("providersTitle")}
             </h3>
