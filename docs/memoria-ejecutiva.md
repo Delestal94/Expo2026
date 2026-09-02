@@ -76,6 +76,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Portal de expositores | Tests de `Directory` (filtrado por eje: estado por defecto, click en cada filtro, vuelta a "Todos", `aria-pressed`), lógica que no tenía cobertura directa ni indirecta — sin cambios de comportamiento | [PR #54](https://github.com/Delestal94/Expo2026/pull/54) |
 | 2026-09-01 | Configuración | `sitemap.xml` actualizado con las rutas nuevas `/galeria` y `/cuenta` (se habían agregado sin tocar el sitemap) | [PR #56](https://github.com/Delestal94/Expo2026/pull/56) |
 | 2026-09-02 | Landing | Los números "01-04" de la sección Ejes pasan de texto mono chico a numeral display (Unbounded) gigante, en el color de cada eje, bleedeando fuera del borde de la card y que se intensifica al hover — deja de ser texto de relleno genérico y se conecta con la identidad de bandas minerales de "Estratos". Verificado con Playwright (desktop + mobile) | [PR #58](https://github.com/Delestal94/Expo2026/pull/58) |
+| 2026-09-01 | i18n | Scaffolding de `next-intl`: config que hoy siempre resuelve `es-AR` (sin ruteo por idioma todavía), diccionario `es-AR.json`, types de claves de traducción, y primer caso de uso real (título/descripción de metadata migrados desde constantes hardcodeadas). No traduce ni agrega idiomas — deja lista la infraestructura para cuando se sume el resto | [PR #60](https://github.com/Delestal94/Expo2026/pull/60), [ADR-0006](adr/0006-scaffolding-i18n.md) |
 
 ## 6. Próximos pasos
 
