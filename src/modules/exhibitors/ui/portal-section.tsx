@@ -1,7 +1,11 @@
+import { getFeatureFlags } from "@/lib/config/flags";
+import { AgendaPreview } from "@/modules/business-rounds";
 import { Directory } from "./directory";
 import { MatchingPreview } from "./matching-preview";
 
-export function PortalSection() {
+export async function PortalSection() {
+  const flags = await getFeatureFlags();
+
   return (
     <section className="border-t border-line px-6 py-24 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
@@ -23,6 +27,12 @@ export function PortalSection() {
       <div className="mt-10">
         <MatchingPreview />
       </div>
+
+      {flags.businessRounds && (
+        <div className="mt-10">
+          <AgendaPreview />
+        </div>
+      )}
 
       <p className="mt-8 text-sm text-paper-dim">
         Estos son perfiles de ejemplo — el alta real de tu empresa se hace por
