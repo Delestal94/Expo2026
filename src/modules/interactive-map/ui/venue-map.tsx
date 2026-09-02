@@ -63,7 +63,7 @@ export function VenueMap() {
                 <text
                   x={zone.x + 18}
                   y={zone.y + 30}
-                  fill={isActive ? "#0b0a12" : "#f5f1e8"}
+                  fill={isActive ? "var(--color-ink)" : "var(--color-paper)"}
                   fontFamily="var(--font-body)"
                   fontWeight={600}
                   fontSize={zone.kind === "pabellon" ? 17 : 13}
@@ -77,7 +77,7 @@ export function VenueMap() {
                       cx={zone.x + 18}
                       cy={zone.y + zone.height - 20}
                       r={5}
-                      fill={zone.status === "en-ronda" ? "#3bcdbf" : "#b3ab9c"}
+                      fill={zone.status === "en-ronda" ? "var(--color-accent)" : "var(--color-paper-dim)"}
                     >
                       {zone.status === "en-ronda" && !prefersReducedMotion && (
                         <animate
@@ -91,7 +91,7 @@ export function VenueMap() {
                     <text
                       x={zone.x + 32}
                       y={zone.y + zone.height - 15}
-                      fill={isActive ? "#0b0a12" : "#b3ab9c"}
+                      fill={isActive ? "var(--color-ink)" : "var(--color-paper-dim)"}
                       fontFamily="var(--font-mono)"
                       fontSize={11}
                       style={{ transition: "fill 200ms ease" }}
