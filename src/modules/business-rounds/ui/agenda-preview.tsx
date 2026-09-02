@@ -8,8 +8,8 @@ const STATUS_LABEL: Record<MeetingSlotStatus, string> = {
 
 const STATUS_COLOR: Record<MeetingSlotStatus, string> = {
   disponible: "var(--color-line)",
-  sugerido: "var(--color-ocher)",
-  confirmado: "var(--color-teal)",
+  sugerido: "var(--color-cyan)",
+  confirmado: "var(--color-lavender)",
 };
 
 function SlotCard({ slot }: { slot: MeetingSlot }) {

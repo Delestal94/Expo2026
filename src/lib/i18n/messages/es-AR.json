@@ -3,6 +3,26 @@
     "title": "ExpoJuy 2026",
     "description": "Sitio oficial de ExpoJuy 2026 — 9 al 12 de octubre, Ciudad Cultural, Jujuy."
   },
+  "InteractiveMap": {
+    "eyebrow": "Mapa interactivo",
+    "title": "Ciudad Cultural, como datos — no como una imagen fija",
+    "description": "Plano de referencia para este prototipo: cada pabellón corresponde a uno de los ejes de la edición, y las salas de ronda de negocios muestran su estado en tiempo real durante el evento. Tocá o pasá el mouse por una zona para ver el detalle.",
+    "svgLabel": "Plano esquemático de referencia de Ciudad Cultural",
+    "kind": {
+      "pabellon": "Pabellón de exposición",
+      "sala": "Sala de rondas de negocios",
+      "acceso": "Acceso"
+    },
+    "status": {
+      "enRonda": "EN RONDA",
+      "disponible": "DISPONIBLE"
+    },
+    "statusDetail": {
+      "enRonda": "en ronda de negocios ahora",
+      "disponible": "disponible"
+    },
+    "exampleStatus": "Estado de ejemplo para este prototipo — {detail}."
+  },
   "Landing": {
     "Hero": {
       "eyebrow": "ExpoJuy · Jujuy, Argentina",
@@ -64,6 +84,13 @@
       "providersFormCta": "Formulario de proveedores",
       "whatsappCta": "WhatsApp: 388 421-2955"
     },
+    "Directions": {
+      "eyebrow": "Te esperamos",
+      "title": "En el Corazón de Jujuy",
+      "description": "La ciudad cultural se encuentra a pocos minutos del centro de <strong>San Salvador de Jujuy</strong> y cuenta con rápido acceso a los puntos más importantes de la ciudad.",
+      "cta": "Ver en Google Maps",
+      "mapLabel": "Mapa de Ciudad Cultural"
+    },
     "Countdown": {
       "days": "días",
       "hours": "hs",
@@ -72,6 +99,8 @@
     },
     "SiteFooter": {
       "brand": "ExpoJuy 2026",
+      "organizes": "Organiza",
+      "organizerAlt": "Cámara de Comercio Exterior de Jujuy",
       "institutions": "Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.",
       "badge": "Prototipo — Desafío Digital 2026"
     }

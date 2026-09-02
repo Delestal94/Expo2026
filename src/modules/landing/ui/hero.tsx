@@ -7,7 +7,10 @@ export function Hero() {
   const t = useTranslations("Landing.Hero");
 
   return (
-    <section className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16">
+    <section
+      id="inicio"
+      className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16"
+    >
       <StrataCanvas />
       <div
         aria-hidden="true"
@@ -42,7 +45,7 @@ export function Hero() {
           >
             <span
               aria-hidden="true"
-              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-ocher),var(--color-terracotta),var(--color-rose),var(--color-violet),var(--color-teal))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
+              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet),var(--color-magenta),var(--color-lavender))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
             />
             <span className="relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink">
               {t("ctaAttend")}
