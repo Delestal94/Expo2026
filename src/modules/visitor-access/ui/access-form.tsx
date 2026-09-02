@@ -105,7 +105,12 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
           Cerrar sesión
         </button>
         {errorMessage && (
-          <p role="alert" className="mt-3 text-sm text-terracotta">
+          // --color-terracotta tal cual da 3.37:1 sobre este fondo (falla AA
+          // 4.5:1) — se aclara solo para este texto, no para el token de marca.
+          <p
+            role="alert"
+            className="mt-3 text-sm text-[color-mix(in_srgb,var(--color-terracotta)_80%,white)]"
+          >
             {errorMessage}
           </p>
         )}
@@ -184,7 +189,11 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
               : "Iniciar sesión"}
         </button>
 
-        <p role="status" aria-live="polite" className="min-h-5 text-sm text-terracotta">
+        <p
+          role="status"
+          aria-live="polite"
+          className="min-h-5 text-sm text-[color-mix(in_srgb,var(--color-terracotta)_80%,white)]"
+        >
           {errorMessage}
         </p>
       </form>
