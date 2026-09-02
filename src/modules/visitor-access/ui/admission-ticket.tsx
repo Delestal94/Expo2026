@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
 import type { AuthSession } from "@/lib/ports";
 import { admissionTicketCode } from "../ticket-code";
@@ -18,23 +19,17 @@ export function AdmissionTicket({
   session: AuthSession;
   admissionMode: "free" | "paid";
 }) {
+  const t = useTranslations("VisitorAccess.AdmissionTicket");
+
   if (admissionMode === "paid") {
-    return (
-      <p className="mt-5 text-sm text-paper-dim">
-        Tu cuenta de visitante ya está creada. El ingreso de esta edición es
-        pago — el QR se emite después de pagar la entrada, todavía no
-        disponible.
-      </p>
-    );
+    return <p className="mt-5 text-sm text-paper-dim">{t("paidNotice")}</p>;
   }
 
   const code = admissionTicketCode(session.user.id);
 
   return (
     <div className="mt-5 flex flex-col items-center gap-4 rounded-xl border border-line bg-ink p-5 text-center">
-      <p className="text-sm text-paper-dim">
-        Ingreso gratuito — mostrá este QR en el acceso.
-      </p>
+      <p className="text-sm text-paper-dim">{t("freeNotice")}</p>
       <div className="rounded-lg bg-paper p-3">
         <QRCodeSVG value={code} size={160} />
       </div>

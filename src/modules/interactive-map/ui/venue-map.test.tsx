@@ -1,7 +1,17 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it } from "vitest";
+import esAR from "@/lib/i18n/messages/es-AR.json";
 import { VenueMap } from "./venue-map";
+
+function renderVenueMap() {
+  return render(
+    <NextIntlClientProvider locale="es-AR" messages={esAR}>
+      <VenueMap />
+    </NextIntlClientProvider>,
+  );
+}
 
 beforeEach(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -17,14 +27,14 @@ beforeEach(() => {
 
 describe("VenueMap", () => {
   it("activa el primer pabellón por defecto", () => {
-    render(<VenueMap />);
+    renderVenueMap();
 
     expect(screen.getByRole("heading", { level: 3, name: "Pabellón Minería y Litio" })).toBeInTheDocument();
   });
 
   it("cambia el panel de detalle al hacer click en otra zona", async () => {
     const user = userEvent.setup();
-    render(<VenueMap />);
+    renderVenueMap();
 
     await user.click(screen.getByRole("button", { name: "Sala de Ronda de Negocios A" }));
 
@@ -37,7 +47,7 @@ describe("VenueMap", () => {
   });
 
   it("ignora teclas que no son Enter o espacio", () => {
-    render(<VenueMap />);
+    renderVenueMap();
     const otherZone = screen.getByRole("button", { name: "Sala de Ronda de Negocios B" });
 
     fireEvent.keyDown(otherZone, { key: "a" });
@@ -46,7 +56,7 @@ describe("VenueMap", () => {
   });
 
   it("activa una zona con Enter desde el teclado", () => {
-    render(<VenueMap />);
+    renderVenueMap();
     const otherZone = screen.getByRole("button", { name: "Sala de Ronda de Negocios B" });
 
     fireEvent.keyDown(otherZone, { key: "Enter" });

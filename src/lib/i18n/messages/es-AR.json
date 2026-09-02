@@ -2,5 +2,126 @@
   "Metadata": {
     "title": "ExpoJuy 2026",
     "description": "Sitio oficial de ExpoJuy 2026 — 9 al 12 de octubre, Ciudad Cultural, Jujuy."
+  },
+  "InteractiveMap": {
+    "eyebrow": "Mapa interactivo",
+    "title": "Ciudad Cultural, como datos — no como una imagen fija",
+    "description": "Plano de referencia para este prototipo: cada pabellón corresponde a uno de los ejes de la edición, y las salas de ronda de negocios muestran su estado en tiempo real durante el evento. Tocá o pasá el mouse por una zona para ver el detalle.",
+    "svgLabel": "Plano esquemático de referencia de Ciudad Cultural",
+    "kind": {
+      "pabellon": "Pabellón de exposición",
+      "sala": "Sala de rondas de negocios",
+      "acceso": "Acceso"
+    },
+    "status": {
+      "enRonda": "EN RONDA",
+      "disponible": "DISPONIBLE"
+    },
+    "statusDetail": {
+      "enRonda": "en ronda de negocios ahora",
+      "disponible": "disponible"
+    },
+    "exampleStatus": "Estado de ejemplo para este prototipo — {detail}."
+  },
+  "Landing": {
+    "Hero": {
+      "eyebrow": "ExpoJuy · Jujuy, Argentina",
+      "edition": "17ª edición",
+      "tagline": "Desafío Digital ExpoJuy 2026 · Propuesta",
+      "titleLine1": "EXPOJUY",
+      "titleLine2": "2026",
+      "description": "Donde la Quebrada se conecta con el mundo: cuatro días de rondas de negocios, comercio exterior y economía del conocimiento en el corazón del Corredor Bioceánico.",
+      "ctaAttend": "Quiero asistir",
+      "ctaProviders": "Sumar mi empresa como proveedora"
+    },
+    "About": {
+      "descriptionIntro": "Después de dos semanas de formato clásico, ExpoJuy se reinventa:",
+      "descriptionEmphasis": "cuatro días",
+      "descriptionOutro": "de rondas de negocios por la mañana y exposición por la tarde, con la minería del litio y el comercio internacional como ejes centrales.",
+      "stats": {
+        "edition": "Edición de ExpoJuy",
+        "days": "Días, el doble de intensidad",
+        "stands": "Stands esperados",
+        "dates": "Octubre, Ciudad Cultural"
+      }
+    },
+    "Ejes": {
+      "eyebrow": "Ejes de la edición 2026",
+      "items": {
+        "mineria": {
+          "title": "Minería y litio",
+          "description": "El RIGI aprobado para Exar duplicará la producción de litio a 45.000 toneladas. ExpoJuy conecta a proveedores jujeños con esa demanda creciente."
+        },
+        "comercio": {
+          "title": "Comercio exterior",
+          "description": "Rondas de negocios organizadas por la Cámara de Comercio Exterior de Jujuy, con delegaciones que ya mostraron interés desde otras provincias y países."
+        },
+        "corredor": {
+          "title": "Corredor Bioceánico",
+          "description": "Chile y Paraguay como socios estratégicos del Corredor de Capricornio — el formato de 4 días facilita el traslado y la estadía de delegaciones extranjeras."
+        },
+        "conocimiento": {
+          "title": "Economía del conocimiento",
+          "description": "El mismo sector que impulsa este Desafío Digital: software, agtech y servicios basados en el conocimiento, en el Plan Estratégico 2026-2030 de la provincia."
+        }
+      }
+    },
+    "AccessInfo": {
+      "eyebrow": "Acceso e ingreso",
+      "title": "El ingreso general fue pago en las últimas ediciones — 2026 se confirma pronto.",
+      "description": "En 2024 la entrada se vendía online con estos valores de referencia. El registro de acceso (QR + Mercado Pago) ya está preparado para funcionar igual, gratuito o pago, apenas la Cámara confirme el esquema 2026 — ver <code>ADR-0003</code>.",
+      "pricing": {
+        "kids": "Menores (6 a 12 años) y jubilados",
+        "adults": "Adultos",
+        "under5": "Menores de 5 años"
+      },
+      "buyDisabled": "Comprar entrada — disponible en la próxima etapa",
+      "createAccount": "Crear tu cuenta de visitante",
+      "accountNote": "Podés crear tu cuenta ahora — la compra de la entrada se habilita en la próxima etapa. ",
+      "pricingNote": "Precios de referencia, edición 2024. Sujeto a confirmación 2026.",
+      "providersTitle": "¿Tu empresa quiere participar como proveedora?",
+      "providersDescription": "Los expositores se postulan por la convocatoria oficial de la Cámara, no desde este sitio.",
+      "providersFormCta": "Formulario de proveedores",
+      "whatsappCta": "WhatsApp: 388 421-2955"
+    },
+    "Directions": {
+      "eyebrow": "Te esperamos",
+      "title": "En el Corazón de Jujuy",
+      "description": "La ciudad cultural se encuentra a pocos minutos del centro de <strong>San Salvador de Jujuy</strong> y cuenta con rápido acceso a los puntos más importantes de la ciudad.",
+      "cta": "Ver en Google Maps",
+      "mapLabel": "Mapa de Ciudad Cultural"
+    },
+    "Countdown": {
+      "days": "días",
+      "hours": "hs",
+      "minutes": "min",
+      "seconds": "seg"
+    },
+    "SiteFooter": {
+      "brand": "ExpoJuy 2026",
+      "organizes": "Organiza",
+      "organizerAlt": "Cámara de Comercio Exterior de Jujuy",
+      "institutions": "Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.",
+      "badge": "Prototipo — Desafío Digital 2026"
+    }
+  },
+  "VisitorAccess": {
+    "AccessForm": {
+      "tabSignup": "Crear cuenta",
+      "tabSignin": "Ya tengo cuenta",
+      "emailLabel": "Email",
+      "passwordLabel": "Contraseña",
+      "submitLoading": "Un momento...",
+      "submitSignin": "Iniciar sesión",
+      "signOut": "Cerrar sesión",
+      "sessionActive": "Sesión iniciada como <strong>{email}</strong>.",
+      "genericError": "No se pudo completar la operación. Probá de nuevo.",
+      "signOutError": "No se pudo cerrar la sesión. Probá de nuevo.",
+      "footerNote": "Esto crea tu cuenta de visitante. La compra de la entrada todavía no está disponible — se habilita en la próxima etapa."
+    },
+    "AdmissionTicket": {
+      "paidNotice": "Tu cuenta de visitante ya está creada. El ingreso de esta edición es pago — el QR se emite después de pagar la entrada, todavía no disponible.",
+      "freeNotice": "Ingreso gratuito — mostrá este QR en el acceso."
+    }
   }
 }

@@ -1,9 +1,17 @@
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
+import { CtaLink } from "./cta-link";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
+  const t = useTranslations("Landing.Hero");
+
   return (
-    <section className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16">
+    <section
+      id="inicio"
+      className="relative flex min-h-svh flex-col justify-between overflow-hidden border-b border-line px-6 pt-8 pb-10 sm:px-10 lg:px-16"
+    >
       <StrataCanvas />
       <div
         aria-hidden="true"
@@ -11,23 +19,30 @@ export function Hero() {
       />
 
       <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
-        <span>ExpoJuy · Jujuy, Argentina</span>
-        <span>17ª edición</span>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/images/logos/expojuy-mark.svg"
+            alt=""
+            width={20}
+            height={28}
+            className="h-7 w-auto"
+          />
+          <span>{t("eyebrow")}</span>
+        </div>
+        <span>{t("edition")}</span>
       </nav>
 
       <div className="relative z-10 flex flex-col gap-8">
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-          Desafío Digital ExpoJuy 2026 · Propuesta
+          {t("tagline")}
         </span>
         <h1 className="text-balance font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.92] font-black text-paper">
-          EXPOJUY
+          {t("titleLine1")}
           <br />
-          2026
+          {t("titleLine2")}
         </h1>
         <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl">
-          Donde la Quebrada se conecta con el mundo: cuatro días de rondas de
-          negocios, comercio exterior y economía del conocimiento en el
-          corazón del Corredor Bioceánico.
+          {t("description")}
         </p>
       </div>
 
@@ -40,10 +55,10 @@ export function Hero() {
           >
             <span
               aria-hidden="true"
-              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-ocher),var(--color-terracotta),var(--color-rose),var(--color-violet),var(--color-teal))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
+              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-teal),var(--color-blue),var(--color-magenta),var(--color-yellow))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
             />
             <span className="relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink">
-              Quiero asistir
+              {t("ctaAttend")}
               <span
                 aria-hidden="true"
                 className="inline-block transition-transform duration-300 motion-reduce:transition-none group-hover:translate-x-1 group-focus-visible:translate-x-1"
@@ -52,14 +67,13 @@ export function Hero() {
               </span>
             </span>
           </a>
-          <a
+          <CtaLink
             href="https://forms.gle/ChErBuBgp3QfuxRr7"
-            target="_blank"
-            rel="noopener"
-            className="rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+            variant="outline"
+            external
           >
-            Sumar mi empresa como proveedora
-          </a>
+            {t("ctaProviders")}
+          </CtaLink>
         </div>
       </div>
     </section>
