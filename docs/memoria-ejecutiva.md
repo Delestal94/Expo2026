@@ -75,6 +75,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-01 | Registro de acceso | Auditoría de performance (Lighthouse sobre build de producción): el SDK de Supabase (143 KB, 89.8% código sin usar en `/cuenta`) pasa de import estático a `import()` dinámico en `AccessForm`, sacándolo del bundle inicial de la página | [PR #52](https://github.com/Delestal94/Expo2026/pull/52) |
 | 2026-09-01 | Portal de expositores | Tests de `Directory` (filtrado por eje: estado por defecto, click en cada filtro, vuelta a "Todos", `aria-pressed`), lógica que no tenía cobertura directa ni indirecta — sin cambios de comportamiento | [PR #54](https://github.com/Delestal94/Expo2026/pull/54) |
 | 2026-09-01 | Configuración | `sitemap.xml` actualizado con las rutas nuevas `/galeria` y `/cuenta` (se habían agregado sin tocar el sitemap) | [PR #56](https://github.com/Delestal94/Expo2026/pull/56) |
+| 2026-09-02 | Landing | Los números "01-04" de la sección Ejes pasan de texto mono chico a numeral display (Unbounded) gigante, en el color de cada eje, bleedeando fuera del borde de la card y que se intensifica al hover — deja de ser texto de relleno genérico y se conecta con la identidad de bandas minerales de "Estratos". Verificado con Playwright (desktop + mobile) | [PR #58](https://github.com/Delestal94/Expo2026/pull/58) |
 
 ## 6. Próximos pasos
 

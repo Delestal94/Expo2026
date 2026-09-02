@@ -47,18 +47,29 @@ export function Ejes() {
         {EJES.map((eje) => (
           <article
             key={eje.n}
-            className="group relative flex flex-col gap-4 bg-ink px-8 py-10 transition-colors hover:bg-[#121022]"
+            className="group relative flex flex-col gap-4 overflow-hidden bg-ink px-8 py-10 transition-colors hover:bg-[#121022]"
           >
             <div
               aria-hidden="true"
               className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
               style={{ backgroundColor: eje.color }}
             />
-            <span className="font-mono text-sm text-paper-dim">{eje.n}</span>
-            <h3 className="font-display text-2xl font-medium text-paper">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-8 -right-3 font-display text-[7rem] leading-none font-bold tracking-tighter opacity-[0.07] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-30 sm:text-[9rem]"
+              style={{ color: eje.color }}
+            >
+              {eje.n}
+            </span>
+            <span className="relative font-mono text-sm text-paper-dim">
+              {eje.n}
+            </span>
+            <h3 className="relative font-display text-2xl font-medium text-paper">
               {eje.title}
             </h3>
-            <p className="text-balance text-paper-dim">{eje.description}</p>
+            <p className="relative text-balance text-paper-dim">
+              {eje.description}
+            </p>
           </article>
         ))}
       </div>
