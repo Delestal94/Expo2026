@@ -37,22 +37,18 @@ export async function AccessInfo() {
     <section className="relative overflow-hidden border-y border-line px-6 py-24 sm:px-10 lg:px-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={BRAND_WASH} />
 
-      <div className="relative">
-        {/* Cómo llegar — mismo bloque que Acceso, dos formas de decir "vení al evento". */}
-        <div
-          id="llegar"
-          className="mx-auto mb-16 flex max-w-6xl scroll-mt-24 flex-col items-center gap-8 rounded-3xl border border-line bg-ink/40 px-6 py-8 backdrop-blur-sm sm:px-10 lg:flex-row lg:justify-between"
-        >
-          <div className="flex max-w-md flex-col items-start gap-4">
-            <div>
-              <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
-                {tDirections("eyebrow")}
-              </span>
-              <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
-                {tDirections("title")}
-              </h3>
-            </div>
-            <p className="text-balance text-sm text-paper-dim">
+      {/* Mismo ritmo de grilla que About/Ejes: 12 columnas a todo el ancho de la sección, sin
+          tarjetas angostas flotando en el centro. */}
+      <div className="relative grid gap-y-16 lg:grid-cols-12 lg:gap-x-12">
+        <div className="lg:col-span-7">
+          <div id="llegar" className="scroll-mt-24">
+            <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
+              {tDirections("eyebrow")}
+            </span>
+            <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
+              {tDirections("title")}
+            </h3>
+            <p className="mt-4 max-w-lg text-balance text-sm text-paper-dim">
               {tDirections.rich("description", {
                 strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
               })}
@@ -61,41 +57,26 @@ export async function AccessInfo() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener"
-              className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+              className="mt-5 inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
             >
               {tDirections("cta")}
             </a>
           </div>
 
-          <div className="h-56 w-full overflow-hidden rounded-2xl lg:h-64 lg:w-96">
-            <iframe
-              src={MAPS_EMBED_URL}
-              title={tDirections("mapLabel")}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="h-full w-full border-0"
-            />
-          </div>
-        </div>
+          <div id="acceso" className="mt-16 scroll-mt-24">
+            <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+              {t("eyebrow")}
+            </span>
+            <h2 className="mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
+              {t("title")}
+            </h2>
+            <p className="mt-4 max-w-lg text-paper-dim">
+              {t.rich("description", {
+                code: (chunks) => <span className="font-mono">{chunks}</span>,
+              })}
+            </p>
 
-        <div id="acceso" className="mx-auto max-w-2xl scroll-mt-24 text-center">
-          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-            {t("eyebrow")}
-          </span>
-          <h2 className="mx-auto mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-            {t("title")}
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-paper-dim">
-            {t.rich("description", {
-              code: (chunks) => <span className="font-mono">{chunks}</span>,
-            })}
-          </p>
-        </div>
-
-        {/* Precios/CTA (principal) y proveedores (secundario) lado a lado — usan el ancho real de la sección. */}
-        <div className="mx-auto mt-12 grid max-w-5xl gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-start">
-          <div>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
               {REFERENCE_PRICING.map((tier) => (
                 <div
                   key={tier.key}
@@ -109,8 +90,8 @@ export async function AccessInfo() {
               ))}
             </div>
 
-            <div className="mt-6 text-center">
-              <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-6">
+              <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
                   {t("buyDisabled")}
                 </span>
@@ -129,8 +110,20 @@ export async function AccessInfo() {
               </p>
             </div>
           </div>
+        </div>
 
-          <div className="h-full rounded-2xl border border-line bg-[#121022] p-6 text-left">
+        <div className="flex flex-col gap-8 lg:col-span-5 lg:col-start-8">
+          <div className="h-64 w-full overflow-hidden rounded-2xl border border-line sm:h-72 lg:h-80">
+            <iframe
+              src={MAPS_EMBED_URL}
+              title={tDirections("mapLabel")}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+            />
+          </div>
+
+          <div className="rounded-2xl border border-line bg-[#121022] p-6 text-left">
             <h3 className="font-display text-lg font-medium text-paper">
               {t("providersTitle")}
             </h3>
