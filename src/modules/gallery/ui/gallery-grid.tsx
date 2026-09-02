@@ -1,12 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { GALLERY_PHOTOS } from "./gallery-data";
 
 export function GalleryGrid() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const open = openIndex !== null ? GALLERY_PHOTOS[openIndex] : null;
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (openIndex === null) return;
+
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpenIndex(null);
+      } else if (event.key === "Tab") {
+        // Único elemento enfocable dentro del diálogo: mantiene el foco
+        // adentro en vez de dejarlo escapar al contenido de atrás.
+        event.preventDefault();
+        closeButtonRef.current?.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previouslyFocusedRef.current?.focus();
+    };
+  }, [openIndex]);
 
   return (
     <div>
@@ -39,10 +65,11 @@ export function GalleryGrid() {
           onClick={() => setOpenIndex(null)}
         >
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={() => setOpenIndex(null)}
             aria-label="Cerrar"
-            className="absolute top-6 right-6 font-mono text-sm text-paper-dim transition hover:text-paper"
+            className="absolute top-6 right-6 font-mono text-sm text-paper-dim outline-paper outline-offset-4 transition hover:text-paper focus-visible:text-paper focus-visible:outline-2"
           >
             Cerrar ✕
           </button>
