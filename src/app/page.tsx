@@ -4,6 +4,7 @@ import {
   Ejes,
   EventStructuredData,
   Hero,
+  Partners,
   SiteFooter,
 } from "@/modules/landing";
 import { MapSection } from "@/modules/interactive-map";
@@ -21,6 +22,7 @@ export default function Home() {
       <MapSection />
       <PortalSection />
       <AccessInfo />
+      <Partners />
       <SiteFooter />
     </main>
   );
