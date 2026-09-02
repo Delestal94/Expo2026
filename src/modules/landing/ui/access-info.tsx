@@ -5,6 +5,11 @@ import { getFeatureFlags } from "@/lib/config/flags";
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 const WHATSAPP_URL = "https://wa.me/5493884212955";
 
+const MAPS_EMBED_URL =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3639.6668824201447!2d-65.33387282359566!3d-24.18341278474179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0ee2033f07f3%3A0xc77a811c6a4b0561!2sCiudad%20Cultural!5e0!3m2!1ses-419!2sar!4v1726026179941!5m2!1ses-419!2sar&zoom=14&maptype=roadmap&disableDefaultUI=true&zoomControl=false&streetViewControl=false&fullscreenControl=false";
+
+const MAPS_LINK = "https://maps.app.goo.gl/nqbHeuuaThDJd9b5A";
+
 const REFERENCE_PRICING = [
   { key: "kids", price: "$4.000" },
   { key: "adults", price: "$6.000" },
@@ -12,17 +17,55 @@ const REFERENCE_PRICING = [
 ] as const;
 
 export async function AccessInfo() {
-  const [flags, t] = await Promise.all([
+  const [flags, t, tDirections] = await Promise.all([
     getFeatureFlags(),
     getTranslations("Landing.AccessInfo"),
+    getTranslations("Landing.Directions"),
   ]);
 
   return (
-    <section
-      id="acceso"
-      className="border-y border-line px-6 py-24 sm:px-10 lg:px-16"
-    >
-      <div className="mx-auto max-w-2xl text-center">
+    <section className="border-y border-line px-6 py-24 sm:px-10 lg:px-16">
+      {/* Cómo llegar — mismo bloque que Acceso, dos formas de decir "vení al evento". */}
+      <div
+        id="llegar"
+        className="mx-auto mb-16 flex max-w-5xl scroll-mt-24 flex-col items-center gap-8 rounded-3xl border border-line bg-gradient-to-br from-accent/5 to-accent/15 px-6 py-8 sm:px-10 lg:flex-row lg:justify-between"
+      >
+        <div className="flex max-w-md flex-col items-start gap-4">
+          <div>
+            <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
+              {tDirections("eyebrow")}
+            </span>
+            <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
+              {tDirections("title")}
+            </h3>
+          </div>
+          <p className="text-balance text-sm text-paper-dim">
+            {tDirections.rich("description", {
+              strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
+            })}
+          </p>
+          <a
+            href={MAPS_LINK}
+            target="_blank"
+            rel="noopener"
+            className="rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+          >
+            {tDirections("cta")}
+          </a>
+        </div>
+
+        <div className="h-56 w-full overflow-hidden rounded-2xl lg:h-64 lg:w-80">
+          <iframe
+            src={MAPS_EMBED_URL}
+            title={tDirections("mapLabel")}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="h-full w-full border-0"
+          />
+        </div>
+      </div>
+
+      <div id="acceso" className="mx-auto max-w-2xl scroll-mt-24 text-center">
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
           {t("eyebrow")}
         </span>

@@ -14,9 +14,8 @@ const SECTIONS: SectionLink[] = [
   { id: "ejes", label: "Ejes", shortLabel: "Ejes", color: "var(--color-violet)" },
   { id: "galeria", label: "Galería", shortLabel: "Galería", color: "var(--color-magenta)" },
   { id: "mapa", label: "Mapa", shortLabel: "Mapa", color: "var(--color-lavender)" },
-  { id: "llegar", label: "Cómo llegar", shortLabel: "Llegar", color: "var(--color-cyan)" },
-  { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-violet)" },
-  { id: "acceso", label: "Acceso", shortLabel: "Acceso", color: "var(--color-magenta)" },
+  { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-cyan)" },
+  { id: "acceso", label: "Acceso y cómo llegar", shortLabel: "Acceso", color: "var(--color-violet)" },
 ];
 
 /**

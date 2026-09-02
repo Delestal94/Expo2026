@@ -1,11 +1,9 @@
 import {
   About,
   AccessInfo,
-  Directions,
   Ejes,
   EventStructuredData,
   Hero,
-  Partners,
   SectionNav,
   SiteFooter,
 } from "@/modules/landing";
@@ -23,10 +21,8 @@ export default function Home() {
       <Ejes />
       <GalleryPreview />
       <MapSection />
-      <Directions />
       <PortalSection />
       <AccessInfo />
-      <Partners />
       <SiteFooter />
     </main>
   );
