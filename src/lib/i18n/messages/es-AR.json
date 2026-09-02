@@ -84,6 +84,13 @@
       "providersFormCta": "Formulario de proveedores",
       "whatsappCta": "WhatsApp: 388 421-2955"
     },
+    "Directions": {
+      "eyebrow": "Te esperamos",
+      "title": "En el Corazón de Jujuy",
+      "description": "La ciudad cultural se encuentra a pocos minutos del centro de <strong>San Salvador de Jujuy</strong> y cuenta con rápido acceso a los puntos más importantes de la ciudad.",
+      "cta": "Ver en Google Maps",
+      "mapLabel": "Mapa de Ciudad Cultural"
+    },
     "Countdown": {
       "days": "días",
       "hours": "hs",
