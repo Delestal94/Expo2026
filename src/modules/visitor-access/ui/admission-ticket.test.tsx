@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
+import esAR from "@/lib/i18n/messages/es-AR.json";
 import { AdmissionTicket } from "./admission-ticket";
 import { admissionTicketCode } from "../ticket-code";
 
@@ -8,16 +10,24 @@ const session = {
   accessToken: "token",
 };
 
+function renderAdmissionTicket(props: Parameters<typeof AdmissionTicket>[0]) {
+  return render(
+    <NextIntlClientProvider locale="es-AR" messages={esAR}>
+      <AdmissionTicket {...props} />
+    </NextIntlClientProvider>,
+  );
+}
+
 describe("AdmissionTicket", () => {
   it("en modo pago no emite el QR y avisa que el ingreso todavía no está disponible", () => {
-    render(<AdmissionTicket session={session} admissionMode="paid" />);
+    renderAdmissionTicket({ session, admissionMode: "paid" });
 
     expect(screen.queryByText(/ingreso gratuito/i)).not.toBeInTheDocument();
     expect(screen.getByText(/el ingreso de esta edición es\s*pago/i)).toBeInTheDocument();
   });
 
   it("en modo gratuito emite el QR con el código de admisión del visitante", () => {
-    render(<AdmissionTicket session={session} admissionMode="free" />);
+    renderAdmissionTicket({ session, admissionMode: "free" });
 
     const expectedCode = admissionTicketCode(session.user.id);
     expect(screen.getByText(expectedCode)).toBeInTheDocument();
@@ -30,9 +40,9 @@ describe("AdmissionTicket", () => {
       accessToken: "token",
     };
 
-    const { unmount } = render(<AdmissionTicket session={session} admissionMode="free" />);
+    const { unmount } = renderAdmissionTicket({ session, admissionMode: "free" });
     unmount();
-    render(<AdmissionTicket session={otherSession} admissionMode="free" />);
+    renderAdmissionTicket({ session: otherSession, admissionMode: "free" });
 
     expect(screen.getByText(admissionTicketCode(otherSession.user.id))).toBeInTheDocument();
     expect(admissionTicketCode(session.user.id)).not.toBe(admissionTicketCode(otherSession.user.id));
