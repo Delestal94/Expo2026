@@ -36,3 +36,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Local Claude Code tooling state
+.claude/
