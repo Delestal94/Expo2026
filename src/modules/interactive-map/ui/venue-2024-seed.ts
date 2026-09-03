@@ -150,10 +150,10 @@ const eZones: EditorZone[] = [
     id: "E1",
     label: "E1 — Bomberos/Policía/Ejército",
     category: "infraestructura",
-    x: 780,
+    x: 810,
     y: 390,
-    width: 150,
-    height: 110,
+    width: 140,
+    height: 100,
     areaM2: 450,
     notes: "Educación vial",
   }),
@@ -162,8 +162,8 @@ const eZones: EditorZone[] = [
     label: "E2 — Juegos Infantiles",
     category: "juego",
     shape: "circle",
-    x: 950,
-    y: 430,
+    x: 970,
+    y: 420,
     width: 170,
     height: 170,
     areaM2: 700,
@@ -190,24 +190,38 @@ const acceso = zone({
   height: 40,
 });
 
-// Serie F — patio de comidas, en arco suave siguiendo la curva real del predio (12 stands).
-const F_COUNT: number = 12;
-const fSeries: EditorZone[] = Array.from({ length: F_COUNT }, (_, i) => {
-  const n = i + 1;
-  const t = F_COUNT === 1 ? 0 : i / (F_COUNT - 1);
-  const startX = 220;
-  const endX = 800;
+// Serie F — patio de comidas (13 stands), en 3 grupos como en el plano real:
+// F01/F02 pegados a la entrada (apilados verticalmente), F03-F10 en el arco
+// central, y F11/F12 sueltos cerca del escenario — no es una fila pareja.
+const fEntrance: EditorZone[] = [
+  zone({ id: "F1", label: "F01", category: "gastronomico", x: 220, y: 605, width: 50, height: 34 }),
+  zone({ id: "F2", label: "F02", category: "gastronomico", x: 220, y: 645, width: 50, height: 34 }),
+];
+
+const F_ARC_COUNT = 8;
+const fArc: EditorZone[] = Array.from({ length: F_ARC_COUNT }, (_, i) => {
+  const n = i + 3;
+  const t = i / (F_ARC_COUNT - 1);
+  const startX = 310;
+  const endX = 660;
   return zone({
     id: `F${n}`,
     label: `F${String(n).padStart(2, "0")}`,
     category: "gastronomico",
     x: startX + t * (endX - startX),
-    y: 660 - Math.sin(t * Math.PI) * 25,
-    width: 46,
-    height: 34,
-    rotation: Math.round((t - 0.5) * 20),
+    y: 665 - Math.sin(t * Math.PI) * 22,
+    width: 42,
+    height: 32,
+    rotation: Math.round((t - 0.5) * 16),
   });
 });
+
+const fEscenario: EditorZone[] = [
+  zone({ id: "F11", label: "F11", category: "gastronomico", x: 780, y: 645, width: 40, height: 30 }),
+  zone({ id: "F12", label: "F12", category: "gastronomico", x: 824, y: 645, width: 40, height: 30 }),
+];
+
+const fSeries: EditorZone[] = [...fEntrance, ...fArc, ...fEscenario];
 
 export const VENUE_2024_SEED: EditorZone[] = [
   ...institucional,
