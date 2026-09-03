@@ -36,19 +36,21 @@ export function Hero() {
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
           {t("tagline")}
         </span>
-        <h1 className="text-balance font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.92] font-black text-paper">
-          <span className="block motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
-            {t("titleLine1")}
-          </span>
-          <span className="block motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.26s_backwards]">
-            {t("titleLine2")}
-          </span>
+        {/* Lockup oficial real (EXPOJUY · De Jujuy al mundo), recortado sin el
+            isotipo — ya está en la esquina de arriba — y recoloreado del gris
+            oscuro original a paper para leerse sobre el fondo navy del Hero.
+            El "2026" del título tipográfico anterior no forma parte del
+            lockup real; sigue presente en "17ª EDICIÓN" y en el countdown. */}
+        <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
+          <Image
+            src="/images/logos/expojuy-wordmark-dark.svg"
+            alt={t("titleAlt")}
+            width={1000}
+            height={305}
+            priority
+            className="h-auto w-full max-w-205"
+          />
         </h1>
-        {/* Bajada del lockup oficial ("EXPOJUY · De Jujuy al mundo") — se agrega
-            sin sacar el año del título grande, que es información real del evento. */}
-        <span className="-mt-4 block font-mono text-xs tracking-[0.35em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.32s_backwards] sm:text-sm">
-          {t("worldTagline")}
-        </span>
         <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}
         </p>
