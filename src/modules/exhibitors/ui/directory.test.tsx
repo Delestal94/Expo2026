@@ -68,6 +68,41 @@ describe("Directory", () => {
     expect(screen.getAllByRole("article")).toHaveLength(INITIAL_VISIBLE_COUNT);
   });
 
+  it("filtra por texto libre buscando en nombre, rubro y descripción", async () => {
+    const user = userEvent.setup();
+    render(<Directory />);
+
+    await user.type(screen.getByPlaceholderText(/Buscar por empresa/), "litio");
+
+    const articles = screen.getAllByRole("article");
+    const expected = EXHIBITORS.filter((e) =>
+      `${e.name} ${e.ejeLabel} ${e.pitch} ${e.busca}`.toLowerCase().includes("litio"),
+    );
+    expect(articles).toHaveLength(expected.length);
+  });
+
+  it("combina la búsqueda de texto con el filtro de eje activo", async () => {
+    const user = userEvent.setup();
+    render(<Directory />);
+
+    const mineria = EJE_FILTERS.find((eje) => eje.id === "mineria")!;
+    await user.click(screen.getByRole("button", { name: mineria.label }));
+    await user.type(screen.getByPlaceholderText(/Buscar por empresa/), "insumos");
+
+    expect(screen.getAllByRole("article")).toHaveLength(1);
+    expect(screen.getByText("Quebrada Litio Insumos")).toBeInTheDocument();
+  });
+
+  it("muestra un mensaje cuando la búsqueda no encuentra ningún expositor", async () => {
+    const user = userEvent.setup();
+    render(<Directory />);
+
+    await user.type(screen.getByPlaceholderText(/Buscar por empresa/), "zzz-inexistente");
+
+    expect(screen.queryAllByRole("article")).toHaveLength(0);
+    expect(screen.getByText(/Ningún expositor coincide/)).toBeInTheDocument();
+  });
+
   it("cada filtro de eje muestra únicamente los expositores de ese eje", async () => {
     const user = userEvent.setup();
 

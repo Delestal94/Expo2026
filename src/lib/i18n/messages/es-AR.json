@@ -112,6 +112,60 @@
       "minutes": "min",
       "seconds": "seg"
     },
+    "SocialLinks": {
+      "instagram": "Instagram de ExpoJuy",
+      "facebook": "Facebook de la Cámara de Comercio Exterior de Jujuy",
+      "linkedin": "LinkedIn de la Cámara de Comercio Exterior de Jujuy"
+    },
+    "Contact": {
+      "eyebrow": "Contacto",
+      "title": "¿Necesitás algo puntual?",
+      "description": "Escribinos por el canal que prefieras — te contesta el mismo equipo de la Cámara de Comercio Exterior de Jujuy que organiza ExpoJuy.",
+      "emailLabel": "Email",
+      "phoneLabel": "Teléfono",
+      "addressLabel": "Dirección",
+      "whatsappCta": "Escribir por WhatsApp",
+      "socialTitle": "Seguí las novedades",
+      "socialDescription": "Anuncios, fechas y avances de la edición 2026, en tiempo real."
+    },
+    "Faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Antes de que preguntes",
+      "items": {
+        "dates": {
+          "question": "¿Cuándo y dónde es ExpoJuy 2026?",
+          "answer": "Del 9 al 12 de octubre, en Ciudad Cultural, San Salvador de Jujuy."
+        },
+        "tickets": {
+          "question": "¿Necesito entrada para visitar la expo?",
+          "answer": "En la edición 2024 la entrada era paga (valores de referencia en la sección Acceso). Todavía no hay confirmación pública del esquema para 2026."
+        },
+        "exhibitors": {
+          "question": "¿Cómo postulo mi empresa como expositora?",
+          "answer": "Por la convocatoria oficial de la Cámara de Comercio Exterior de Jujuy — no hay alta de expositores desde este sitio. Vas a encontrar el formulario y el WhatsApp en la sección Acceso."
+        },
+        "businessRounds": {
+          "question": "¿Qué son las rondas de negocios?",
+          "answer": "Reuniones matutinas entre empresas jujeñas y delegaciones del Corredor Bioceánico, organizadas por rubro e interés en común. Mirá el directorio en la sección Expositores."
+        },
+        "accessibility": {
+          "question": "¿El predio es accesible para personas con movilidad reducida?",
+          "answer": "Escribinos por WhatsApp o email contándonos qué necesitás y te confirmamos los detalles antes de tu visita."
+        },
+        "parking": {
+          "question": "¿Hay estacionamiento?",
+          "answer": "La disponibilidad la confirma la organización más cerca de la fecha — consultanos por nuestros canales de contacto."
+        },
+        "languages": {
+          "question": "¿En qué idiomas está disponible el sitio?",
+          "answer": "Por ahora el sitio está en español. Sumar inglés, portugués y mandarín es parte del roadmap del proyecto."
+        },
+        "updates": {
+          "question": "¿Cómo me entero de las novedades?",
+          "answer": "Seguinos en Instagram (@expojuy) o revisá la sección Noticias de este sitio."
+        }
+      }
+    },
     "SiteFooter": {
       "brand": "ExpoJuy 2026",
       "organizes": "Organiza",

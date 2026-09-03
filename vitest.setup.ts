@@ -1,17 +1,23 @@
 import "@testing-library/jest-dom/vitest";
 
 /**
- * jsdom no implementa IntersectionObserver. `EntranceVein` (usado por
- * `AdmissionTicket` y varias secciones de la landing) lo instancia en un
- * `useEffect`, así que sin este stub cualquier test que monte uno de esos
- * componentes revienta con un ReferenceError antes de llegar a las
- * aserciones.
+ * jsdom no implementa IntersectionObserver. EntranceVein (usado por casi
+ * todas las secciones de la landing) lo necesita solo para animar la
+ * entrada en scroll — un stub que no observa nada alcanza para que los
+ * componentes monten en los tests sin simular scroll real.
  */
-class IntersectionObserverStub {
+class IntersectionObserverStub implements IntersectionObserver {
+  readonly root = null;
+  readonly rootMargin = "";
+  readonly thresholds: ReadonlyArray<number> = [];
   observe() {}
   unobserve() {}
   disconnect() {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
 }
 
-// @ts-expect-error -- stub mínimo, no implementa la interfaz completa del DOM.
-globalThis.IntersectionObserver = IntersectionObserverStub;
+if (typeof globalThis.IntersectionObserver === "undefined") {
+  globalThis.IntersectionObserver = IntersectionObserverStub;
+}

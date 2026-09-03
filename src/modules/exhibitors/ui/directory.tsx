@@ -6,8 +6,14 @@ import { ExhibitorCard } from "./exhibitor-card";
 
 export const INITIAL_VISIBLE_COUNT = 4;
 
+function matchesQuery(exhibitor: Exhibitor, query: string) {
+  const haystack = `${exhibitor.name} ${exhibitor.ejeLabel} ${exhibitor.pitch} ${exhibitor.busca}`.toLowerCase();
+  return haystack.includes(query.toLowerCase());
+}
+
 export function Directory() {
   const [filter, setFilter] = useState<Exhibitor["eje"] | "todos">("todos");
+  const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
 
   const selectFilter = (next: Exhibitor["eje"] | "todos") => {
@@ -15,14 +21,28 @@ export function Directory() {
     setExpanded(false);
   };
 
-  const matching =
-    filter === "todos" ? EXHIBITORS : EXHIBITORS.filter((e) => e.eje === filter);
+  const byEje = filter === "todos" ? EXHIBITORS : EXHIBITORS.filter((e) => e.eje === filter);
+  const matching = query.trim() ? byEje.filter((e) => matchesQuery(e, query.trim())) : byEje;
   const visible = expanded ? matching : matching.slice(0, INITIAL_VISIBLE_COUNT);
   const hidden = matching.length - visible.length;
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por eje">
+      <label className="block">
+        <span className="sr-only">Buscar expositor</span>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setExpanded(false);
+          }}
+          placeholder="Buscar por empresa, rubro o qué ofrece..."
+          className="w-full rounded-full border border-line bg-transparent px-5 py-2.5 text-sm text-paper placeholder:text-paper-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        />
+      </label>
+
+      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filtrar por eje">
         <button
           type="button"
           onClick={() => selectFilter("todos")}
@@ -56,11 +76,17 @@ export function Directory() {
         })}
       </div>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((exhibitor, i) => (
-          <ExhibitorCard key={exhibitor.id} exhibitor={exhibitor} index={i} />
-        ))}
-      </div>
+      {matching.length === 0 ? (
+        <p className="mt-8 text-sm text-paper-dim">
+          Ningún expositor coincide con &ldquo;{query}&rdquo;. Probá con otro término o rubro.
+        </p>
+      ) : (
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((exhibitor, i) => (
+            <ExhibitorCard key={exhibitor.id} exhibitor={exhibitor} index={i} />
+          ))}
+        </div>
+      )}
 
       {hidden > 0 && (
         <div className="mt-8 flex flex-col items-center gap-3">
