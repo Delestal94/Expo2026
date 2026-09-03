@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getFeatureFlags } from "@/lib/config/flags";
 import { CtaLink } from "./cta-link";
+import { ShareLocationButton } from "./share-location-button";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 const WHATSAPP_URL = "https://wa.me/5493884212955";
@@ -53,14 +54,22 @@ export async function AccessInfo() {
                 strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
               })}
             </p>
-            <a
-              href={MAPS_LINK}
-              target="_blank"
-              rel="noopener"
-              className="mt-5 inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-            >
-              {tDirections("cta")}
-            </a>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href={MAPS_LINK}
+                target="_blank"
+                rel="noopener"
+                className="inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+              >
+                {tDirections("cta")}
+              </a>
+              <ShareLocationButton
+                url={MAPS_LINK}
+                title={tDirections("shareTitle")}
+                text={tDirections("shareText")}
+                label={tDirections("shareLabel")}
+              />
+            </div>
           </div>
 
           <div id="acceso" className="mt-16 scroll-mt-24">
