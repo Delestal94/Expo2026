@@ -1,33 +1,16 @@
 import type { EditorZone } from "./zone-editor";
 
 /**
- * Calco editable del plano CAD de EXPOJUY 2024 (Ciudad Cultural).
+ * Calco del plano simplificado de EXPOJUY 2024 (Ciudad Cultural).
  *
- * Las coordenadas se obtuvieron midiendo posiciones sobre la imagen del plano
- * y escalándolas al lienzo de 1200x750 (el CAD original ronda 1650x1200, de ahí
- * los factores de abajo). Es un calco hecho a ojo sobre una imagen rasterizada,
- * no una conversión vectorial: sirve como punto de partida para ajustar con el
- * mouse, no como plano de obra.
+ * La fuente es la versión limpia del plano (1200x850), no el CAD original con
+ * cotas y capas de fondo: al tener las mismas dimensiones que el lienzo del
+ * editor, las coordenadas se leen 1:1 y no hay reescalado que deforme nada.
  *
- * Referencias del informe oficial de la Cámara: 167 stands — 95 cubiertos,
- * 25 artesanos, 32 descubiertos, 13 gastronómicos, 2 juegos.
+ * Sigue siendo un calco hecho a ojo sobre una imagen: es el punto de partida
+ * para ajustar con el mouse (con el plano de fondo activado se calza exacto),
+ * no un plano de obra.
  */
-
-const CAD_W = 1650;
-const VIEW_W = 1200;
-
-/**
- * Escala única para los dos ejes: el lienzo del editor tiene la misma
- * proporción que el plano CAD (1650x1200 -> 1200x873), así que usar un solo
- * factor evita deformar las zonas. Antes se escalaba cada eje por separado y
- * todo el plano quedaba ~14% más chato de lo real.
- */
-const SCALE = VIEW_W / CAD_W;
-
-/** Pasa una medida del plano CAD al lienzo del editor. */
-const s = (cad: number) => Math.round(cad * SCALE);
-const sx = s;
-const sy = s;
 
 type ZoneInput = Omit<EditorZone, "shape" | "rotation" | "areaM2" | "notes"> & Partial<EditorZone>;
 
@@ -35,116 +18,87 @@ function zone(input: ZoneInput): EditorZone {
   return { shape: "rect", rotation: 0, areaM2: null, notes: "", ...input };
 }
 
-/** Zona definida directamente con coordenadas del plano CAD (x1,y1)-(x2,y2). */
-function cadZone(
-  input: Omit<ZoneInput, "x" | "y" | "width" | "height"> & {
-    cad: [number, number, number, number];
-  },
+/** Zona definida por su caja (x1,y1)-(x2,y2) en coordenadas del plano. */
+function box(
+  input: Omit<ZoneInput, "x" | "y" | "width" | "height"> & { at: [number, number, number, number] },
 ): EditorZone {
-  const { cad, ...rest } = input;
-  const [x1, y1, x2, y2] = cad;
-  return zone({
-    ...rest,
-    x: sx(x1),
-    y: sy(y1),
-    width: Math.max(8, sx(x2) - sx(x1)),
-    height: Math.max(8, sy(y2) - sy(y1)),
-  });
+  const { at, ...rest } = input;
+  const [x1, y1, x2, y2] = at;
+  return zone({ ...rest, x: x1, y: y1, width: Math.max(8, x2 - x1), height: Math.max(8, y2 - y1) });
 }
 
-// ── Estructura del predio ───────────────────────────────────────────────────
-// Van primero en el array para que queden por debajo de los stands al dibujar.
-const estructura: EditorZone[] = [
-  cadZone({
-    id: "pabellon",
-    label: "Pabellón cubierto",
-    category: "infraestructura",
-    cad: [505, 62, 1372, 498],
-    notes: "Salón techado que contiene las series A, B y C",
-  }),
-  cadZone({
-    id: "camino-diagonal",
-    label: "Camino interno",
-    category: "infraestructura",
-    shape: "polygon",
-    // Franja diagonal que cruza el predio, la que hace que D11..D15 vayan
-    // rotados y que separa el pabellón de los stands descubiertos.
-    points: [
-      [0, 0.22],
-      [1, 0],
-      [1, 0.16],
-      [0, 0.38],
-    ],
-    cad: [300, 520, 1180, 700],
-  }),
-  cadZone({
-    id: "estacionamiento",
-    label: "Estacionamiento",
-    category: "infraestructura",
-    shape: "polygon",
-    points: [
-      [0.12, 0],
-      [1, 0],
-      [1, 1],
-      [0, 1],
-    ],
-    cad: [1420, 30, 1640, 300],
-  }),
-];
+// ── Pabellón cubierto ───────────────────────────────────────────────────────
+// Va primero para dibujarse por debajo de las series A, B y C que contiene.
+const pabellon = box({
+  id: "pabellon",
+  label: "Pabellón cubierto",
+  category: "infraestructura",
+  at: [380, 17, 1040, 370],
+  notes: "Salón techado con las series A, B y C",
+});
 
-// ── Bloque institucional (esquina superior izquierda) ────────────────────────
+// ── Bloque institucional (la L de la esquina superior izquierda) ────────────
 const institucional: EditorZone[] = [
-  cadZone({ id: "inst-eventos", label: "Eventos CCE", category: "institucional", cad: [155, 60, 330, 145] }),
-  cadZone({ id: "inst-emergencia", label: "Emergencia", category: "institucional", cad: [332, 60, 437, 145] }),
-  cadZone({ id: "inst-fne", label: "FNE", category: "institucional", cad: [155, 148, 330, 262] }),
-  cadZone({
+  box({ id: "inst-eventos", label: "Eventos CCE", category: "institucional", at: [110, 27, 250, 88] }),
+  box({ id: "inst-emergencia", label: "Emergencia", category: "institucional", at: [250, 27, 332, 88] }),
+  box({ id: "inst-fne", label: "FNE", category: "institucional", at: [110, 88, 250, 190] }),
+  box({
     id: "inst-ministerio",
     label: "Ministerio de la Producción",
     category: "institucional",
-    cad: [155, 264, 330, 392],
+    at: [110, 190, 250, 296],
   }),
 ];
 
-// ── Serie A — fila recta contra el borde superior del pabellón ───────────────
-// El plano numera A01..A16, después intercala A21, y sigue con A17, A18, A19.
+// ── Serie A — fila superior del pabellón ────────────────────────────────────
+// La numeración del plano intercala A21 entre A16 y A17.
 const A_LABELS = [
   "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A21", "A17", "A18", "A19",
 ];
-const aSeries: EditorZone[] = A_LABELS.map((label, i) => {
-  const cadX = 515 + i * 45;
-  return cadZone({ id: label, label, category: "cubierto", cad: [cadX, 88, cadX + 42, 126] });
-});
+const A_START = 383;
+const A_STEP = (1035 - A_START) / A_LABELS.length;
+const aSeries: EditorZone[] = A_LABELS.map((label, i) =>
+  box({
+    id: label,
+    label,
+    category: "cubierto",
+    at: [
+      Math.round(A_START + i * A_STEP),
+      20,
+      Math.round(A_START + (i + 1) * A_STEP) - 1,
+      72,
+    ],
+  }),
+);
 
-// A20 y A22 van aparte, sobre el borde inferior izquierdo del pabellón.
+// A20 y A22 van aparte, en el borde inferior izquierdo del pabellón.
 const aExtra: EditorZone[] = [
-  cadZone({ id: "A20", label: "A20", category: "cubierto", cad: [520, 425, 592, 470] }),
-  cadZone({ id: "A22", label: "A22", category: "cubierto", cad: [543, 470, 610, 500] }),
+  box({ id: "A20", label: "A20", category: "cubierto", at: [385, 310, 435, 338] }),
+  box({ id: "A22", label: "A22", category: "cubierto", at: [400, 338, 450, 365] }),
 ];
 
-// ── Serie B — espina de pescado (117 stands cubiertos) ───────────────────────
-// Rombos en retícula diagonal con pasillos: en la mitad superior los pasillos
-// corren en un sentido y en la inferior en el otro, que es lo que arma el
-// patrón de espina/chevrón del plano en vez de una grilla pareja.
+// ── Serie B — 117 stands en espina de pescado ───────────────────────────────
+// Retícula de rombos con pasillos diagonales en el mismo sentido que el plano
+// (bajan hacia la derecha), lo que separa los bloques en bandas.
 const bSeries: EditorZone[] = (() => {
   const out: EditorZone[] = [];
-  const rows = 10;
+  const left = 425;
+  const top = 92;
+  const right = 950;
+  const bottom = 345;
   const cols = 16;
-  const stepX = (sx(1240) - sx(580)) / cols;
-  const stepY = (sy(468) - sy(155)) / rows;
-  const originX = sx(592);
-  const originY = sy(168);
-  // Los rombos se tocan por las puntas sin encimarse: al estar rotados 45°, su
-  // diagonal mide lado*1.41, así que el lado tiene que quedar en ~0.66 del paso
-  // horizontal (las filas van intercaladas media celda, como en el plano).
+  const rows = 11;
+  const stepX = (right - left) / cols;
+  const stepY = (bottom - top) / rows;
+  // Los rombos están rotados 45°: su diagonal mide lado*1.41, así que el lado
+  // ronda dos tercios del paso para que se toquen por las puntas sin encimarse.
   const size = Math.round(stepX * 0.66);
-  const midRow = Math.floor(rows / 2);
 
   let n = 1;
   for (let r = 0; r < rows && n <= 117; r++) {
     for (let c = 0; c < cols && n <= 117; c++) {
-      const isAisle = r < midRow ? (c + r) % 4 === 3 : (c - r + 40) % 4 === 3;
-      if (isAisle) continue;
+      if ((c - r + 40) % 4 === 3) continue; // pasillo
       const offset = r % 2 === 0 ? 0 : stepX / 2;
       out.push(
         zone({
@@ -152,8 +106,8 @@ const bSeries: EditorZone[] = (() => {
           label: `B${n}`,
           category: "cubierto",
           rotation: 45,
-          x: Math.round(originX + c * stepX + offset - size / 2),
-          y: Math.round(originY + r * stepY - size / 2),
+          x: Math.round(left + c * stepX + offset - size / 2),
+          y: Math.round(top + r * stepY - size / 2),
           width: size,
           height: size,
         }),
@@ -164,172 +118,164 @@ const bSeries: EditorZone[] = (() => {
   return out;
 })();
 
-// ── Serie C — 28 stands de artesanos, en los dos bloques del lateral derecho ─
+// ── Serie C — 28 stands de artesanos, sobre el lateral derecho del pabellón ─
 const cSeries: EditorZone[] = (() => {
   const out: EditorZone[] = [];
-  const add = (label: string, cad: [number, number, number, number]) =>
-    out.push(cadZone({ id: label, label, category: "artesano", cad }));
+  const add = (label: string, at: [number, number, number, number]) =>
+    out.push(box({ id: label, label, category: "artesano", at }));
 
-  // Columna angosta pegada al borde derecho (C1..C9, de abajo hacia arriba).
-  for (let i = 0; i < 9; i++) {
-    const cadY = 232 + i * 30;
-    add(`C${9 - i}`, [1316, cadY, 1352, cadY + 26]);
+  // Columna angosta pegada al borde derecho del pabellón.
+  for (let i = 0; i < 5; i++) {
+    const y = 150 + i * 15;
+    add(`C${i + 1}`, [1010, y, 1032, y + 13]);
   }
-  // Bloque superior de 3x3 (C10..C18).
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      const cadX = 1245 + c * 34;
-      const cadY = 305 + r * 32;
-      add(`C${10 + r * 3 + c}`, [cadX, cadY, cadX + 30, cadY + 27]);
-    }
+  // Bloque de 2x2 en el medio.
+  for (let i = 0; i < 4; i++) {
+    const r = Math.floor(i / 2);
+    const c = i % 2;
+    add(`C${6 + i}`, [968 + c * 20, 215 + r * 16, 986 + c * 20, 229 + r * 16]);
   }
-  // Bloque inferior (C19..C28): tres filas de 3 más uno.
-  for (let i = 0; i < 10; i++) {
+  // Bloque inferior, tres columnas.
+  for (let i = 0; i < 19; i++) {
     const r = Math.floor(i / 3);
     const c = i % 3;
-    const cadX = 1192 + c * 34;
-    const cadY = 402 + r * 30;
-    add(`C${19 + i}`, [cadX, cadY, cadX + 30, cadY + 25]);
+    add(`C${10 + i}`, [960 + c * 25, 288 + r * 16, 982 + c * 25, 302 + r * 16]);
   }
   return out;
 })();
 
-// ── Serie D — 32 stands descubiertos, con sus m² reales del plano ────────────
-// La banda del medio (D11..D15) sigue el camino diagonal que cruza el predio,
-// por eso va rotada; los bloques de los extremos están alineados a los ejes.
+// ── Serie D — stands descubiertos, con las cotas que trae el plano ──────────
 const dSeries: EditorZone[] = [
-  cadZone({ id: "D1", label: "D1", category: "descubierto", cad: [165, 435, 237, 488], areaM2: 80 }),
-  cadZone({ id: "D2", label: "D2", category: "descubierto", cad: [165, 490, 250, 562], areaM2: 100 }),
-  cadZone({ id: "D3", label: "D3", category: "descubierto", cad: [165, 565, 250, 660], areaM2: 100 }),
-  cadZone({ id: "D4", label: "D4", category: "descubierto", cad: [175, 680, 250, 733], areaM2: 55, rotation: -8 }),
-  cadZone({ id: "D5", label: "D5", category: "descubierto", cad: [405, 190, 452, 243], areaM2: 50 }),
-  cadZone({ id: "D6b", label: "D6b", category: "descubierto", cad: [295, 460, 357, 505], areaM2: 40 }),
-  cadZone({ id: "D6", label: "D6", category: "descubierto", cad: [295, 508, 357, 552], areaM2: 40 }),
-  cadZone({ id: "D7", label: "D7", category: "descubierto", cad: [400, 440, 452, 492], areaM2: 50 }),
-  cadZone({ id: "D8", label: "D8", category: "descubierto", cad: [400, 520, 452, 572], areaM2: 50 }),
-  cadZone({ id: "D9", label: "D9", category: "descubierto", cad: [400, 608, 452, 655], areaM2: 25 }),
-  cadZone({ id: "D10", label: "D10", category: "descubierto", cad: [463, 592, 515, 640], areaM2: 25 }),
-  cadZone({ id: "D11", label: "D11", category: "descubierto", cad: [512, 552, 566, 606], areaM2: 25, rotation: -16 }),
-  cadZone({ id: "D12", label: "D12", category: "descubierto", cad: [550, 560, 604, 616], areaM2: 25, rotation: -16 }),
-  cadZone({ id: "D13", label: "D13", category: "descubierto", cad: [612, 578, 666, 632], areaM2: 25, rotation: -16 }),
-  cadZone({ id: "D14", label: "D14", category: "descubierto", cad: [742, 568, 832, 638], areaM2: 70, rotation: -12 }),
-  cadZone({ id: "D14b", label: "D14*", category: "descubierto", cad: [834, 568, 882, 622], areaM2: 30, rotation: -12 }),
-  cadZone({ id: "D15", label: "D15", category: "descubierto", cad: [884, 553, 976, 617], areaM2: 75, rotation: -12 }),
-  cadZone({ id: "D16", label: "D16", category: "descubierto", cad: [1185, 543, 1237, 592], areaM2: 25 }),
-  cadZone({ id: "D17", label: "D17", category: "descubierto", cad: [500, 678, 542, 732], areaM2: 25 }),
-  cadZone({ id: "D24", label: "D24", category: "descubierto", cad: [543, 678, 583, 732], areaM2: 25 }),
-  cadZone({ id: "D18", label: "D18", category: "descubierto", cad: [584, 678, 624, 732], areaM2: 25 }),
-  cadZone({ id: "D19", label: "D19", category: "descubierto", cad: [625, 678, 667, 732], areaM2: 25 }),
-  cadZone({ id: "D20", label: "D20", category: "descubierto", cad: [748, 678, 832, 737], areaM2: 50 }),
-  cadZone({ id: "D21", label: "D21", category: "descubierto", cad: [836, 678, 920, 737], areaM2: 50 }),
-  cadZone({ id: "D22", label: "D22", category: "descubierto", cad: [972, 672, 1018, 727], areaM2: 25 }),
-  cadZone({ id: "D23", label: "D23", category: "descubierto", cad: [1020, 672, 1062, 727], areaM2: 25 }),
-  cadZone({ id: "D25", label: "D25", category: "descubierto", cad: [1064, 672, 1108, 727], areaM2: 25 }),
-  cadZone({ id: "D26", label: "D26", category: "descubierto", cad: [330, 752, 416, 832], areaM2: 80 }),
-  cadZone({ id: "D27", label: "D27", category: "descubierto", cad: [420, 752, 502, 832], areaM2: 80 }),
-  cadZone({ id: "D28", label: "D28", category: "descubierto", cad: [540, 748, 672, 832], areaM2: 120 }),
-  cadZone({ id: "D29", label: "D29", category: "descubierto", cad: [745, 752, 842, 832], areaM2: 80 }),
-  cadZone({ id: "D30", label: "D30", category: "descubierto", cad: [190, 855, 250, 928], areaM2: 75 }),
-  cadZone({ id: "D31", label: "D31", category: "descubierto", cad: [252, 855, 312, 928], areaM2: 75 }),
-  cadZone({ id: "D32", label: "D32", category: "descubierto", cad: [330, 878, 367, 917], areaM2: 18 }),
+  box({ id: "D1", label: "D1", category: "descubierto", at: [120, 318, 180, 365], areaM2: 80 }),
+  box({ id: "D2", label: "D2", category: "descubierto", at: [120, 365, 180, 425], areaM2: 100 }),
+  box({ id: "D3", label: "D3", category: "descubierto", at: [120, 425, 180, 480], areaM2: 100 }),
+  box({ id: "D4", label: "D4", category: "descubierto", at: [95, 508, 180, 548], areaM2: 55, rotation: -12 }),
+  box({ id: "D5", label: "D5", category: "descubierto", at: [296, 104, 345, 176], areaM2: 50 }),
+  box({ id: "DB6", label: "DB6", category: "descubierto", at: [215, 335, 265, 375], areaM2: 40 }),
+  box({ id: "D8-40", label: "D8", category: "descubierto", at: [215, 375, 265, 410], areaM2: 40 }),
+  box({ id: "D7", label: "D7", category: "descubierto", at: [296, 318, 345, 370], areaM2: 50 }),
+  box({ id: "D8-50", label: "D8", category: "descubierto", at: [296, 370, 345, 425], areaM2: 50 }),
+  box({ id: "D9", label: "D9", category: "descubierto", at: [300, 455, 345, 495], areaM2: 25 }),
+  box({ id: "D10", label: "D10", category: "descubierto", at: [345, 445, 390, 485], areaM2: 25 }),
+  box({ id: "D11", label: "D11", category: "descubierto", at: [380, 395, 425, 440], areaM2: 25, rotation: -12 }),
+  box({ id: "D12", label: "D12", category: "descubierto", at: [420, 405, 462, 450], areaM2: 25, rotation: -12 }),
+  box({ id: "D13", label: "D13", category: "descubierto", at: [458, 425, 503, 470], areaM2: 25, rotation: -12 }),
+  box({ id: "D14-a", label: "D14", category: "descubierto", at: [558, 420, 630, 470], areaM2: 70, rotation: -10 }),
+  box({ id: "D14-b", label: "D14", category: "descubierto", at: [630, 412, 690, 460], areaM2: 70, rotation: -10 }),
+  box({ id: "D15", label: "D15", category: "descubierto", at: [660, 405, 730, 455], areaM2: 75, rotation: -10 }),
+  box({ id: "D7-b", label: "D7", category: "descubierto", at: [733, 402, 766, 447], rotation: -10 }),
+  box({ id: "D16", label: "D16", category: "descubierto", at: [895, 400, 940, 442], areaM2: 25 }),
+  box({ id: "D42", label: "D42", category: "descubierto", at: [370, 508, 405, 550], areaM2: 25 }),
+  box({ id: "D24", label: "D24", category: "descubierto", at: [405, 508, 440, 550], areaM2: 25 }),
+  box({ id: "D18", label: "D18", category: "descubierto", at: [440, 508, 475, 550], areaM2: 96 }),
+  box({ id: "D19", label: "D19", category: "descubierto", at: [475, 508, 510, 550], areaM2: 25 }),
+  box({ id: "D20", label: "D20", category: "descubierto", at: [565, 512, 635, 552], areaM2: 80 }),
+  box({ id: "D21", label: "D21", category: "descubierto", at: [635, 512, 690, 552], areaM2: 50 }),
+  box({ id: "D22", label: "D22", category: "descubierto", at: [738, 508, 773, 550], areaM2: 25 }),
+  box({ id: "D23", label: "D23", category: "descubierto", at: [773, 508, 805, 550], areaM2: 25 }),
+  box({ id: "D25", label: "D25", category: "descubierto", at: [805, 508, 840, 550], areaM2: 25 }),
+  box({ id: "D26", label: "D26", category: "descubierto", at: [245, 573, 310, 630], areaM2: 80 }),
+  box({ id: "D27", label: "D27", category: "descubierto", at: [310, 573, 375, 630], areaM2: 80 }),
+  box({ id: "D28", label: "D28", category: "descubierto", at: [400, 573, 495, 630], areaM2: 120 }),
+  box({ id: "D29", label: "D29", category: "descubierto", at: [565, 573, 635, 630], areaM2: 80 }),
+  box({ id: "D31", label: "D31", category: "descubierto", at: [130, 715, 185, 770] }),
+  box({ id: "D32", label: "D32", category: "descubierto", at: [185, 715, 235, 770] }),
 ];
 
-// ── Zonas E — servicios y juegos: polígonos en ángulo, como en el CAD ────────
+// ── Zonas E — polígonos rojos del sector de servicios y juegos ──────────────
 const eZones: EditorZone[] = [
-  cadZone({
+  box({
     id: "E1",
-    label: "E1 — Bomberos/Policía/Ejército",
+    label: "E1 — Bomberos",
     category: "infraestructura",
     shape: "polygon",
     points: [
-      [0.02, 0.12],
-      [0.92, 0],
-      [1, 0.82],
-      [0.1, 1],
+      [0.025, 0.22],
+      [0.975, 0],
+      [1, 0.78],
+      [0.05, 1],
     ],
-    cad: [1185, 518, 1428, 662],
+    at: [890, 375, 1090, 465],
     areaM2: 450,
-    notes: "Bomberos, Policía, Ejército, Educación vial",
   }),
-  cadZone({
+  box({
+    id: "E-medio",
+    label: "Servicios",
+    category: "infraestructura",
+    shape: "polygon",
+    points: [
+      [0.03, 0.15],
+      [1, 0],
+      [1, 0.7],
+      [0, 1],
+    ],
+    at: [905, 480, 1090, 545],
+  }),
+  box({
     id: "E2",
-    label: "E2 — Juegos Infantiles",
+    label: "E2 — Juegos infantiles",
     category: "juego",
     shape: "polygon",
     points: [
-      [0.02, 0.2],
-      [0.78, 0],
-      [1, 0.28],
-      [0.9, 0.9],
-      [0.36, 1],
-      [0, 0.68],
+      [0, 0.07],
+      [0.8, 0],
+      [1, 0.54],
+      [0.75, 1],
+      [0.29, 1],
+      [0, 0.54],
     ],
-    cad: [1180, 655, 1522, 882],
+    at: [900, 545, 1155, 685],
     areaM2: 700,
-  }),
-  cadZone({
-    id: "E2-pista",
-    label: "Juegos — pista",
-    category: "juego",
-    shape: "circle",
-    cad: [1345, 705, 1495, 855],
-    notes: "Pista circular dentro de E2",
   }),
 ];
 
-// ── Escenario, patio de comidas y accesos ───────────────────────────────────
-const escenario = cadZone({
+// ── Escenario, patio de comidas y acceso ────────────────────────────────────
+const escenario = box({
   id: "escenario",
   label: "Escenario",
   category: "infraestructura",
-  cad: [1072, 752, 1122, 832],
+  at: [800, 573, 850, 630],
 });
 
-const patioComidas = cadZone({
+const patioComidas = box({
   id: "patio-comidas",
   label: "Área patio de comidas",
   category: "gastronomico",
   shape: "polygon",
   points: [
-    [0, 0],
-    [1, 0],
-    [0.97, 1],
-    [0.03, 1],
+    [0.01, 0],
+    [0.95, 0],
+    [1, 1],
+    [0, 1],
   ],
-  cad: [505, 875, 955, 1015],
-  notes: "Sector de mesas del patio de comidas",
+  at: [355, 670, 750, 790],
 });
 
-const acceso = cadZone({
+const acceso = box({
   id: "acceso",
-  label: "Acceso principal",
+  label: "Acceso",
   category: "infraestructura",
-  cad: [10, 762, 130, 800],
+  at: [10, 578, 80, 606],
 });
 
-const gates: EditorZone[] = [
-  cadZone({ id: "cce-1", label: "CCE", category: "infraestructura", cad: [88, 838, 133, 862] }),
-  cadZone({ id: "cce-2", label: "CCE", category: "infraestructura", cad: [136, 838, 180, 862] }),
-];
-
-// ── Serie F — 13 stands gastronómicos en 3 grupos, como en el plano ─────────
+// ── Serie F — gastronómicos: dos pares sueltos y la fila F03..F10 ───────────
 const fSeries: EditorZone[] = [
-  cadZone({ id: "F1", label: "F01", category: "gastronomico", cad: [365, 928, 412, 985] }),
-  cadZone({ id: "F2", label: "F02", category: "gastronomico", cad: [365, 987, 412, 1042] }),
-  cadZone({ id: "F3", label: "F03", category: "gastronomico", cad: [410, 1058, 482, 1105], rotation: -4 }),
-  cadZone({ id: "F4", label: "F04", category: "gastronomico", cad: [490, 1053, 556, 1100], rotation: -4 }),
-  cadZone({ id: "F5", label: "F05", category: "gastronomico", cad: [558, 1048, 622, 1095], rotation: -5 }),
-  cadZone({ id: "F6", label: "F06", category: "gastronomico", cad: [624, 1046, 690, 1092], rotation: -6 }),
-  cadZone({ id: "F7", label: "F07", category: "gastronomico", cad: [700, 1038, 766, 1085], rotation: -8 }),
-  cadZone({ id: "F8", label: "F08", category: "gastronomico", cad: [774, 1028, 840, 1078], rotation: -9 }),
-  cadZone({ id: "F9", label: "F09", category: "gastronomico", cad: [845, 1018, 911, 1070], rotation: -10 }),
-  cadZone({ id: "F10", label: "F10", category: "gastronomico", cad: [918, 1008, 990, 1060], rotation: -11 }),
-  cadZone({ id: "F11", label: "F11", category: "gastronomico", cad: [984, 938, 1044, 986] }),
-  cadZone({ id: "F12", label: "F12", category: "gastronomico", cad: [1046, 938, 1106, 986] }),
+  box({ id: "F1-a", label: "F01", category: "gastronomico", at: [130, 663, 185, 715] }),
+  box({ id: "F2-a", label: "F02", category: "gastronomico", at: [185, 663, 235, 715] }),
+  box({ id: "F1-b", label: "F01", category: "gastronomico", at: [770, 690, 818, 745] }),
+  box({ id: "F2-b", label: "F02", category: "gastronomico", at: [820, 690, 870, 745] }),
+  box({ id: "F3", label: "F03", category: "gastronomico", at: [296, 795, 351, 845] }),
+  box({ id: "F4", label: "F04", category: "gastronomico", at: [355, 795, 410, 845] }),
+  box({ id: "F5", label: "F05", category: "gastronomico", at: [410, 795, 465, 845] }),
+  box({ id: "F6", label: "F06", category: "gastronomico", at: [465, 795, 520, 845] }),
+  box({ id: "F7", label: "F07", category: "gastronomico", at: [520, 795, 578, 845] }),
+  box({ id: "F8", label: "F08", category: "gastronomico", at: [580, 795, 636, 845] }),
+  box({ id: "F9", label: "F09", category: "gastronomico", at: [638, 795, 694, 845] }),
+  box({ id: "F10", label: "F10", category: "gastronomico", at: [696, 795, 751, 845] }),
 ];
 
 export const VENUE_2024_SEED: EditorZone[] = [
-  ...estructura,
+  pabellon,
   ...institucional,
   ...aSeries,
   ...aExtra,
@@ -340,6 +286,5 @@ export const VENUE_2024_SEED: EditorZone[] = [
   escenario,
   patioComidas,
   acceso,
-  ...gates,
   ...fSeries,
 ];
