@@ -43,12 +43,20 @@
       Trazado de evolución productiva e innovación digital rumbo al hito de integración industrial más convocante del Norte Argentino y el Corredor Bioceánico.
     </p>
 
-    <!-- Countdown Timer -->
-    <div style="display: inline-flex; align-items: baseline; gap: 16px; padding: 14px 24px; background: rgba(18, 16, 34, 0.7); border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 24px;">
-      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--color-accent); letter-spacing: 0.15em; text-transform: uppercase;">APERTURA EN:</span>
-      <span id="countdown" style="font-family: var(--font-mono); font-size: 1.45rem; font-weight: 700; letter-spacing: 0.1em; color: var(--color-paper);">
-        382d : 14h : 45m : 29s
-      </span>
+    <!-- Live Editorial Countdown (Idéntico a develop Countdown) -->
+    <div style="display: flex; align-items: flex-end; gap: 24px; margin-bottom: 28px;" role="timer" aria-label="Cuenta regresiva oficial">
+      <div style="display: flex; flex-direction: column;">
+        <span id="countdown-days" style="font-family: var(--font-display); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900; line-height: 0.85; color: var(--color-paper);">--</span>
+        <span style="height: 3px; width: 44px; border-radius: 9999px; background: linear-gradient(90deg, var(--color-cyan), var(--color-violet), var(--color-magenta), var(--color-lavender)); margin-top: 8px;"></span>
+        <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; color: var(--color-paper-dim); text-transform: uppercase; margin-top: 6px;">DÍAS PARA LA APERTURA</span>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 4px; padding-bottom: 6px; font-family: var(--font-mono); font-size: 1.4rem; color: var(--color-paper-dim);">
+        <span id="countdown-hours" style="color: var(--color-paper); font-weight: 700;">--</span>
+        <span style="opacity: 0.4;">:</span>
+        <span id="countdown-minutes" style="color: var(--color-paper); font-weight: 700;">--</span>
+        <span style="opacity: 0.4;">:</span>
+        <span id="countdown-seconds" style="color: var(--color-accent); font-weight: 700;">--</span>
+      </div>
     </div>
   </header>
 
@@ -151,5 +159,32 @@
   </footer>
 
   <script src="./shader.js"></script>
+  <script>
+    (function () {
+      const EVENT_START = new Date("2026-10-09T09:00:00-03:00").getTime();
+      const pad = (n) => String(n).padStart(2, "0");
+
+      function updateCountdown() {
+        const diff = Math.max(EVENT_START - Date.now(), 0);
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff / 3600000) % 24);
+        const minutes = Math.floor((diff / 60000) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        const dEl = document.getElementById("countdown-days");
+        const hEl = document.getElementById("countdown-hours");
+        const mEl = document.getElementById("countdown-minutes");
+        const sEl = document.getElementById("countdown-seconds");
+
+        if (dEl) dEl.textContent = pad(days);
+        if (hEl) hEl.textContent = pad(hours);
+        if (mEl) mEl.textContent = pad(minutes);
+        if (sEl) sEl.textContent = pad(seconds);
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
 </body>
 </html>
