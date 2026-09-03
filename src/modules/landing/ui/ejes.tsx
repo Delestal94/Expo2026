@@ -27,7 +27,10 @@ export function Ejes() {
         {t("eyebrow")}
       </span>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+      {/* items-start: sin esto el grid estira las tarjetas para alinear sus
+          bases, y el desfase de arriba se convierte en hueco vacío abajo en vez
+          del escalonado que se busca. */}
+      <div className="mt-10 grid items-start gap-6 sm:grid-cols-2">
         {EJES.map((eje, i) => (
           <article
             key={eje.n}
@@ -40,7 +43,9 @@ export function Ejes() {
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -top-8 -right-3 font-display text-[7rem] leading-none font-bold tracking-tighter opacity-[0.07] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-30 sm:text-[9rem]"
+              // Entra completo dentro de la tarjeta: antes salía por arriba y a
+              // la derecha, y el overflow-hidden lo cortaba al medio del trazo.
+              className="pointer-events-none absolute top-2 right-5 font-display text-[5.5rem] leading-none font-bold tracking-tighter opacity-[0.07] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-30 sm:text-[7rem]"
               style={{ color: eje.color }}
             >
               {eje.n}
