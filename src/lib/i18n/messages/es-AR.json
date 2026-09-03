@@ -107,6 +107,7 @@
   },
   "VisitorAccess": {
     "AccessForm": {
+      "checkingSession": "Verificando tu sesión…",
       "tabSignup": "Crear cuenta",
       "tabSignin": "Ya tengo cuenta",
       "emailLabel": "Email",

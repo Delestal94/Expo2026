@@ -43,3 +43,36 @@ body {
 .text-balance {
   text-wrap: balance;
 }
+
+/* Skeleton de carga que usa la misma veta mineral que el resto del sitio
+   (ver el glow del CTA del Hero) en vez de un gris genérico — barrido lento
+   para no leerse como error de contraste. */
+.skeleton-strata {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-line) 0%,
+    color-mix(in srgb, var(--color-cyan) 45%, var(--color-line)) 25%,
+    color-mix(in srgb, var(--color-violet) 45%, var(--color-line)) 50%,
+    color-mix(in srgb, var(--color-magenta) 45%, var(--color-line)) 75%,
+    var(--color-line) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%,
+  100% {
+    background-position: 150% 0;
+  }
+  50% {
+    background-position: -50% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-strata {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
