@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { EntranceVein } from "@/lib/ui/entrance-vein";
 
 interface Eje {
   n: string;
@@ -17,7 +18,8 @@ export function Ejes() {
   const t = useTranslations("Landing.Ejes");
 
   return (
-    <section id="ejes" className="px-6 py-16 sm:px-10 lg:px-16">
+    <section id="ejes" className="relative px-6 py-16 sm:px-10 lg:px-16">
+      <EntranceVein color="var(--color-violet)" />
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         {t("eyebrow")}
       </span>

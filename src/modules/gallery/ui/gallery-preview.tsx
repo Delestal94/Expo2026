@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { GALLERY_PHOTOS, GALLERY_PREVIEW_COUNT } from "./gallery-data";
 
 /**
@@ -21,7 +22,8 @@ export function GalleryPreview() {
   const photos = GALLERY_PHOTOS.slice(0, GALLERY_PREVIEW_COUNT);
 
   return (
-    <section id="galeria" className="px-6 py-16 sm:px-10 lg:px-16">
+    <section id="galeria" className="relative px-6 py-16 sm:px-10 lg:px-16">
+      <EntranceVein color="var(--color-magenta)" />
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         Edición anterior
       </span>
