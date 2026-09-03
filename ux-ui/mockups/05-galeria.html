@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memoria Visual — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .gallery-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+    }
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245, 241, 232, 0.3);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    }
+    .gallery-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .gallery-card:hover .gallery-img {
+      transform: scale(1.06);
+    }
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(11,10,18,0.1) 0%, rgba(11,10,18,0.5) 60%, rgba(11,10,18,0.95) 100%);
+      pointer-events: none;
+    }
+    .gallery-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Quick Demo Nav Switcher -->
+  <nav class="demo-nav-bar">
+    <span class="demo-nav-title">Vistas</span>
+    <a href="./01-roadmap.html" class="demo-nav-link">01. Roadmap</a>
+    <a href="./02-acceso.html" class="demo-nav-link">02. Acceso & QR</a>
+    <a href="./03-rondas-b2b.html" class="demo-nav-link">03. Rondas B2B</a>
+    <a href="./04-asistente.html" class="demo-nav-link">04. Concierge IA</a>
+    <a href="./05-galeria.html" class="demo-nav-link active">05. Galería</a>
+    <a href="./06-mapa.html" class="demo-nav-link">06. Plano Ciudad Cultural</a>
+    <a href="./index.html" class="demo-nav-link" style="color: var(--color-accent); font-weight: 700;">✦ Hub</a>
+  </nav>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div class="logo-group">
+      <img src="./images/logos/expojuy-mark.svg" alt="" style="height: 22px; width: auto;">
+      <span>EXPOJUY · JUJUY, ARGENTINA</span>
+    </div>
+    <div>17ª EDICIÓN</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="category-pill">ANTECEDENTES HISTÓRICOS · EDICIÓN 2024</div>
+    <h1 class="headline-title">MEMORIA<br>VISUAL</h1>
+    <p class="headline-subtitle">
+      Registro fotográfico y audiovisual del encuentro productivo y multisectorial más convocante del Norte Argentino. 18.000 m² de desarrollo, potencia y futuro.
+    </p>
+
+    <!-- Filter Pills -->
+    <div class="filter-pills-bar">
+      <button class="pill-btn active">Actos Oficiales</button>
+      <button class="pill-btn">Stands y Maquinaria</button>
+      <button class="pill-btn">Rondas de Negocios</button>
+      <button class="pill-btn">Noches de ExpoJuy</button>
+    </div>
+  </header>
+
+  <!-- Main Content: Bento Photo Grid -->
+  <main class="main-container">
+    <div class="bento-grid-12">
+
+      <!-- Card 1 (8 cols, Large Feature): Inauguración Oficial -->
+      <article class="gallery-card col-8 stripe-cyan" style="height: 480px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-01.jpg" alt="Inauguración Oficial ExpoJuy" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <span class="badge-tag cyan" style="margin-bottom: 8px;">OCTUBRE 2024</span>
+          <h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--color-paper); margin-bottom: 6px;">
+            Inauguración Oficial
+          </h2>
+          <p style="font-size: 13px; color: var(--color-paper-dim); max-width: 600px;">
+            Autoridades provinciales, ministros y directivos de la Cámara de Comercio Exterior en la apertura formal de ExpoJuy 2024.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 2 (4 cols): Pabellón Agroindustrial & Minería -->
+      <article class="gallery-card col-4 stripe-violet" style="height: 480px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-02.jpg" alt="Pabellón Agroindustrial & Minería" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <span class="badge-tag violet" style="margin-bottom: 8px;">INDUSTRIA & CAMPO</span>
+          <h2 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--color-paper); margin-bottom: 4px;">
+            Pabellón Agroindustrial & Minería
+          </h2>
+          <p style="font-size: 12px; color: var(--color-paper-dim);">
+            Exposición de maquinaria pesada, tractores e insumos de extracción minera.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 3 (4 cols): Tecnología Pesada & Logística -->
+      <article class="gallery-card col-4 stripe-magenta" style="height: 380px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-03.jpg" alt="Tecnología Pesada & Logística" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <h2 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--color-paper); margin-bottom: 4px;">
+            Tecnología Pesada & Logística
+          </h2>
+          <p style="font-size: 12px; color: var(--color-paper-dim);">
+            Flotas de camiones y transporte de carga internacional del Corredor Bioceánico.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 4 (4 cols): Rondas Comerciales Internacionales -->
+      <article class="gallery-card col-4 stripe-lavender" style="height: 380px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-04.jpg" alt="Rondas Comerciales Internacionales" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <h2 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--color-paper); margin-bottom: 4px;">
+            Rondas Comerciales
+          </h2>
+          <p style="font-size: 12px; color: var(--color-paper-dim);">
+            Mesas de negociación directa entre exportadores e importadores regionales.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 5 (4 cols): Innovación Joven & Robótica -->
+      <article class="gallery-card col-4 stripe-cyan" style="height: 380px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-05.jpg" alt="Innovación Joven & Robótica" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <h2 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--color-paper); margin-bottom: 4px;">
+            Innovación Joven & Robótica
+          </h2>
+          <p style="font-size: 12px; color: var(--color-paper-dim);">
+            Proyectos de robótica y tecnología educativa de escuelas técnicas de Jujuy.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 6 (12 cols, Panoramic Feature): Noches de ExpoJuy & Escenario Cultural -->
+      <article class="gallery-card col-12 stripe-violet" style="height: 420px;">
+        <div class="gallery-img-wrap">
+          <img src="./images/galeria-2024/foto-06.jpg" alt="Noches de ExpoJuy & Escenario Cultural" class="gallery-img">
+          <div class="gallery-overlay"></div>
+        </div>
+        <div class="gallery-content">
+          <span class="badge-tag violet" style="margin-bottom: 8px;">CULTURA & ESPECTÁCULOS</span>
+          <h2 style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--color-paper); margin-bottom: 6px;">
+            Noches de ExpoJuy & Escenario Cultural
+          </h2>
+          <p style="font-size: 13px; color: var(--color-paper-dim); max-width: 700px;">
+            Shows en vivo, artistas centrales, ballets tradicionales y degustaciones gastronómicas al cierre de cada jornada.
+          </p>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-lockup">
+        <img src="./images/logos/expojuy-lockup.svg" alt="ExpoJuy 2026">
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+</body>
+</html>

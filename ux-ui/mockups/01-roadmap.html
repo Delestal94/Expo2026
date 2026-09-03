@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap 2026 — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Quick Demo Nav Switcher (Allows switching between all 6 views) -->
+  <nav class="demo-nav-bar">
+    <span class="demo-nav-title">Vistas</span>
+    <a href="./01-roadmap.html" class="demo-nav-link active">01. Roadmap</a>
+    <a href="./02-acceso.html" class="demo-nav-link">02. Acceso & QR</a>
+    <a href="./03-rondas-b2b.html" class="demo-nav-link">03. Rondas B2B</a>
+    <a href="./04-asistente.html" class="demo-nav-link">04. Concierge IA</a>
+    <a href="./05-galeria.html" class="demo-nav-link">05. Galería</a>
+    <a href="./06-mapa.html" class="demo-nav-link">06. Plano Ciudad Cultural</a>
+    <a href="./index.html" class="demo-nav-link" style="color: var(--color-accent); font-weight: 700;">✦ Hub</a>
+  </nav>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div class="logo-group">
+      <img src="./images/logos/expojuy-mark.svg" alt="" style="height: 22px; width: auto;">
+      <span>EXPOJUY · JUJUY, ARGENTINA</span>
+    </div>
+    <div>17ª EDICIÓN</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="category-pill">HOJA DE RUTA ESTRATÉGICA · 2026</div>
+    <h1 class="headline-title">ROADMAP<br>2026</h1>
+    <p class="headline-subtitle">
+      Trazado de evolución productiva e innovación digital rumbo al hito de integración industrial más convocante del Norte Argentino y el Corredor Bioceánico.
+    </p>
+
+    <!-- Live Editorial Countdown (Idéntico a develop Countdown) -->
+    <div style="display: flex; align-items: flex-end; gap: 24px; margin-bottom: 28px;" role="timer" aria-label="Cuenta regresiva oficial">
+      <div style="display: flex; flex-direction: column;">
+        <span id="countdown-days" style="font-family: var(--font-display); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900; line-height: 0.85; color: var(--color-paper);">--</span>
+        <span style="height: 3px; width: 44px; border-radius: 9999px; background: linear-gradient(90deg, var(--color-cyan), var(--color-violet), var(--color-magenta), var(--color-lavender)); margin-top: 8px;"></span>
+        <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; color: var(--color-paper-dim); text-transform: uppercase; margin-top: 6px;">DÍAS PARA LA APERTURA</span>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 4px; padding-bottom: 6px; font-family: var(--font-mono); font-size: 1.4rem; color: var(--color-paper-dim);">
+        <span id="countdown-hours" style="color: var(--color-paper); font-weight: 700;">--</span>
+        <span style="opacity: 0.4;">:</span>
+        <span id="countdown-minutes" style="color: var(--color-paper); font-weight: 700;">--</span>
+        <span style="opacity: 0.4;">:</span>
+        <span id="countdown-seconds" style="color: var(--color-accent); font-weight: 700;">--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content: 4 Phase Bento Grid -->
+  <main class="main-container">
+    <div class="bento-grid-12">
+
+      <!-- Phase 00: Fase Estructural -->
+      <article class="bento-card col-6 stripe-cyan" style="min-height: 250px;">
+        <span class="card-watermark" style="color: var(--color-cyan);">00</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <span class="badge-tag cyan">FASE 00 · SEP 2026</span>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--color-cyan);">● COMPLETADA</span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; margin-bottom: 10px;">Fase Estructural</h2>
+        <p style="font-size: 13px; color: var(--color-paper-dim); line-height: 1.6; margin-bottom: 16px;">
+          Definición del sistema de diseño “Estratos”, arquitectura Next.js modular y tokens del Corredor Bioceánico.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
+          <span class="badge-tag">Design System</span>
+          <span class="badge-tag">Tokens CSS</span>
+          <span class="badge-tag">Clean Architecture</span>
+        </div>
+      </article>
+
+      <!-- Phase 01: Demo Day & Convocatoria (ACTIVE GLOW) -->
+      <article class="bento-card col-6 stripe-violet" style="min-height: 250px; border-color: rgba(124, 58, 237, 0.4); box-shadow: 0 0 30px rgba(124, 58, 237, 0.1);">
+        <span class="card-watermark" style="color: var(--color-violet);">01</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <span class="badge-tag violet">FASE 01 · SEP 2026 (EN CURSO)</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--color-violet);">
+            <span class="live-dot" style="background: var(--color-violet); box-shadow: 0 0 8px var(--color-violet);"></span> ETAPA ACTUAL
+          </span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; margin-bottom: 10px; color: var(--color-paper);">
+          Demo Day & Convocatoria
+        </h2>
+        <p style="font-size: 13px; color: var(--color-paper-dim); line-height: 1.6; margin-bottom: 16px;">
+          Presentación del prototipo navegable, Memoria Descriptiva oficial y validación ante el Ministerio de la Producción y la Cámara de Comercio Exterior.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
+          <span class="badge-tag violet">Pitch Concurso</span>
+          <span class="badge-tag violet">Memoria Técnica</span>
+          <span class="badge-tag violet">Prototipo 6 Vistas</span>
+        </div>
+      </article>
+
+      <!-- Phase 02: Fase Producción -->
+      <article class="bento-card col-6 stripe-magenta" style="min-height: 250px;">
+        <span class="card-watermark" style="color: var(--color-magenta);">02</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <span class="badge-tag magenta">FASE 02 · OCT 2026</span>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-muted);">○ PRÓXIMA</span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; margin-bottom: 10px;">Fase Producción</h2>
+        <p style="font-size: 13px; color: var(--color-paper-dim); line-height: 1.6; margin-bottom: 16px;">
+          Desarrollo del motor de Matchmaking B2B real, sincronización de agenda en tiempo real y credenciales offline PWA.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
+          <span class="badge-tag">PWA Offline</span>
+          <span class="badge-tag">Rondas B2B</span>
+          <span class="badge-tag">Integración QR</span>
+        </div>
+      </article>
+
+      <!-- Phase 03: ExpoJuy 2026 -->
+      <article class="bento-card col-6 stripe-lavender" style="min-height: 250px;">
+        <span class="card-watermark" style="color: var(--color-lavender);">03</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <span class="badge-tag">FASE 03 · 9–12 OCT 2026</span>
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-muted);">○ EVENTO EN VIVO</span>
+        </div>
+        <h2 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; margin-bottom: 10px;">ExpoJuy 2026</h2>
+        <p style="font-size: 13px; color: var(--color-paper-dim); line-height: 1.6; margin-bottom: 16px;">
+          Despliegue in situ en Ciudad Cultural: control de acceso en molinetes, mapas en vivo e interacción de expositores internacionales.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto;">
+          <span class="badge-tag">Ciudad Cultural</span>
+          <span class="badge-tag">18.000 m²</span>
+          <span class="badge-tag">Streaming & Live</span>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-lockup">
+        <img src="./images/logos/expojuy-lockup.svg" alt="ExpoJuy 2026">
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+  <script>
+    (function () {
+      const EVENT_START = new Date("2026-10-09T09:00:00-03:00").getTime();
+      const pad = (n) => String(n).padStart(2, "0");
+
+      function updateCountdown() {
+        const diff = Math.max(EVENT_START - Date.now(), 0);
+        const days = Math.floor(diff / 86400000);
+        const hours = Math.floor((diff / 3600000) % 24);
+        const minutes = Math.floor((diff / 60000) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        const dEl = document.getElementById("countdown-days");
+        const hEl = document.getElementById("countdown-hours");
+        const mEl = document.getElementById("countdown-minutes");
+        const sEl = document.getElementById("countdown-seconds");
+
+        if (dEl) dEl.textContent = pad(days);
+        if (hEl) hEl.textContent = pad(hours);
+        if (mEl) mEl.textContent = pad(minutes);
+        if (sEl) sEl.textContent = pad(seconds);
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
+</body>
+</html>

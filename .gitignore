@@ -36,6 +36,10 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+# Local AI runtime state & specs
+.atl/
+openspec/
 
 # Local Claude Code tooling state
 .claude/
+
