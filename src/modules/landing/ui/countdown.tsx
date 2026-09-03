@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const EVENT_START = new Date("2026-10-09T09:00:00-03:00").getTime();
@@ -21,15 +22,11 @@ export function getTimeLeft(): TimeLeft {
   };
 }
 
-const UNITS: Array<{ key: keyof TimeLeft; label: string }> = [
-  { key: "days", label: "días" },
-  { key: "hours", label: "hs" },
-  { key: "minutes", label: "min" },
-  { key: "seconds", label: "seg" },
-];
+const pad = (value: number) => String(value).padStart(2, "0");
 
 /** Cuenta regresiva real al inicio de ExpoJuy 2026 (9/10, 09:00 ART). */
 export function Countdown() {
+  const t = useTranslations("Landing.Countdown");
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
@@ -42,18 +39,37 @@ export function Countdown() {
     return () => clearInterval(interval);
   }, []);
 
+  const clockLabel = timeLeft
+    ? `${pad(timeLeft.hours)} ${t("hours")}, ${pad(timeLeft.minutes)} ${t("minutes")} y ${pad(timeLeft.seconds)} ${t("seconds")}`
+    : undefined;
+
   return (
-    <div className="flex gap-5 font-mono" role="timer" aria-live="off">
-      {UNITS.map(({ key, label }) => (
-        <div key={key} className="flex flex-col items-center">
-          <span className="text-3xl font-semibold tabular-nums text-paper sm:text-4xl">
-            {timeLeft ? String(timeLeft[key]).padStart(2, "0") : "--"}
-          </span>
-          <span className="mt-1 text-[0.65rem] tracking-[0.15em] text-paper-dim uppercase">
-            {label}
-          </span>
-        </div>
-      ))}
+    <div className="flex items-end gap-6" role="timer" aria-live="off">
+      <div className="flex flex-col">
+        <span className="font-display text-[3.25rem] leading-[0.85] font-black tabular-nums text-paper sm:text-[4.75rem]">
+          {timeLeft ? pad(timeLeft.days) : "--"}
+        </span>
+        <span
+          aria-hidden="true"
+          className="mt-2 h-[3px] w-10 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet),var(--color-magenta),var(--color-lavender))]"
+        />
+        <span className="mt-1.5 font-mono text-[0.65rem] tracking-[0.3em] text-paper-dim uppercase">
+          {t("days")}
+        </span>
+      </div>
+
+      <div className="flex items-baseline gap-[2px] pb-2 font-mono text-lg text-paper-dim tabular-nums sm:text-xl">
+        <span className="sr-only">{clockLabel}</span>
+        <span aria-hidden="true">{timeLeft ? pad(timeLeft.hours) : "--"}</span>
+        <span aria-hidden="true" className="text-paper-dim/50">
+          :
+        </span>
+        <span aria-hidden="true">{timeLeft ? pad(timeLeft.minutes) : "--"}</span>
+        <span aria-hidden="true" className="text-paper-dim/50">
+          :
+        </span>
+        <span aria-hidden="true">{timeLeft ? pad(timeLeft.seconds) : "--"}</span>
+      </div>
     </div>
   );
 }

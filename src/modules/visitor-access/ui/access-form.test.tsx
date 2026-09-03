@@ -1,7 +1,17 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import esAR from "@/lib/i18n/messages/es-AR.json";
 import { AccessForm } from "./access-form";
+
+function renderAccessForm(admissionMode: "free" | "paid") {
+  return render(
+    <NextIntlClientProvider locale="es-AR" messages={esAR}>
+      <AccessForm admissionMode={admissionMode} />
+    </NextIntlClientProvider>,
+  );
+}
 
 const mockProvider = {
   signUp: vi.fn(),
@@ -25,10 +35,26 @@ describe("AccessForm", () => {
     mockProvider.getSession.mockResolvedValue(null);
   });
 
+  it("muestra un placeholder en vez de una tarjeta vacía mientras verifica la sesión", async () => {
+    let resolveSession: (value: null) => void = () => {};
+    mockProvider.getSession.mockReturnValue(
+      new Promise((resolve) => {
+        resolveSession = resolve;
+      }),
+    );
+    renderAccessForm("free");
+
+    expect(screen.getByText("Verificando tu sesión…")).toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Crear cuenta" })).not.toBeInTheDocument();
+
+    resolveSession(null);
+    await screen.findByRole("tab", { name: "Crear cuenta" });
+  });
+
   it("crea una cuenta nueva con el formulario de registro por defecto", async () => {
     const user = userEvent.setup();
     mockProvider.signUp.mockResolvedValue(SESSION);
-    render(<AccessForm />);
+    renderAccessForm("free");
 
     await screen.findByRole("tab", { name: "Crear cuenta" });
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -45,7 +71,7 @@ describe("AccessForm", () => {
   it("permite pasar a iniciar sesión con una cuenta existente", async () => {
     const user = userEvent.setup();
     mockProvider.signIn.mockResolvedValue(SESSION);
-    render(<AccessForm />);
+    renderAccessForm("free");
 
     await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -60,7 +86,7 @@ describe("AccessForm", () => {
   it("muestra el error del proveedor sin romper el formulario", async () => {
     const user = userEvent.setup();
     mockProvider.signIn.mockRejectedValue(new Error("Credenciales inválidas"));
-    render(<AccessForm />);
+    renderAccessForm("free");
 
     await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
     await user.type(screen.getByLabelText("Email"), "visitante@example.com");
@@ -74,12 +100,26 @@ describe("AccessForm", () => {
     const user = userEvent.setup();
     mockProvider.getSession.mockResolvedValue(SESSION);
     mockProvider.signOut.mockResolvedValue(undefined);
-    render(<AccessForm />);
+    renderAccessForm("free");
 
     expect(await screen.findByText(/Sesión iniciada como/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Cerrar sesión" }));
 
     await waitFor(() => expect(mockProvider.signOut).toHaveBeenCalled());
     expect(await screen.findByRole("tab", { name: "Crear cuenta" })).toBeInTheDocument();
+  });
+
+  it("emite el QR de ingreso cuando el modo de acceso es gratuito", async () => {
+    mockProvider.getSession.mockResolvedValue(SESSION);
+    renderAccessForm("free");
+
+    expect(await screen.findByText("EXPOJUY26-USER1")).toBeInTheDocument();
+  });
+
+  it("avisa que el QR todavía no está disponible cuando el modo de acceso es pago", async () => {
+    mockProvider.getSession.mockResolvedValue(SESSION);
+    renderAccessForm("paid");
+
+    expect(await screen.findByText(/el QR se emite después de pagar la entrada/)).toBeInTheDocument();
   });
 });

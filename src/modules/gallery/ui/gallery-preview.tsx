@@ -2,39 +2,65 @@ import Image from "next/image";
 import Link from "next/link";
 import { GALLERY_PHOTOS, GALLERY_PREVIEW_COUNT } from "./gallery-data";
 
+/**
+ * Desktop: mosaico editorial en vez de grilla de contactos 3x2 pareja — la
+ * primera foto ancla como tapa de revista (2x2) y las otras cinco completan
+ * el rectángulo alrededor. Mobile no toca esto: sigue siendo la tira con
+ * scroll y snap, que ya es su propio tratamiento.
+ */
+const MOSAIC_CELLS = [
+  { span: "sm:col-start-1 sm:col-span-2 sm:row-start-1 sm:row-span-2", sizes: "(min-width: 1024px) 44vw, 50vw" },
+  { span: "sm:col-start-3 sm:row-start-1", sizes: "(min-width: 1024px) 22vw, 25vw" },
+  { span: "sm:col-start-3 sm:row-start-2", sizes: "(min-width: 1024px) 22vw, 25vw" },
+  { span: "sm:col-start-1 sm:row-start-3", sizes: "(min-width: 1024px) 22vw, 25vw" },
+  { span: "sm:col-start-2 sm:row-start-3", sizes: "(min-width: 1024px) 22vw, 25vw" },
+  { span: "sm:col-start-3 sm:row-start-3", sizes: "(min-width: 1024px) 22vw, 25vw" },
+] as const;
+
 export function GalleryPreview() {
   const photos = GALLERY_PHOTOS.slice(0, GALLERY_PREVIEW_COUNT);
 
   return (
-    <section className="px-6 py-24 sm:px-10 lg:px-16">
+    <section id="galeria" className="px-6 py-16 sm:px-10 lg:px-16">
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         Edición anterior
       </span>
-      <h2 className="mt-4 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
+      <h2 className="mt-3 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
         Explorá la 16ª edición
       </h2>
 
-      <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {photos.map((photo, i) => (
-          <div
-            key={photo.src}
-            className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line"
-          >
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              sizes="(min-width: 640px) 33vw, 50vw"
-              className="object-cover transition duration-500 hover:scale-105"
-              priority={i === 0}
-            />
-          </div>
-        ))}
+      {/* Mobile: tira con scroll horizontal y snap — un gesto de "hojear" que no
+          tiene sentido replicar en desktop, donde vuelve a ser un mosaico estático. */}
+      <div className="relative -mx-6 mt-8 sm:mx-0">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-1 [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:auto-rows-[8.5rem] sm:overflow-visible sm:px-0 sm:pb-0 lg:auto-rows-[10.5rem] [&::-webkit-scrollbar]:hidden">
+          {photos.map((photo, i) => {
+            const cell = MOSAIC_CELLS[i];
+            return (
+              <div
+                key={photo.src}
+                className={`relative aspect-[4/3] w-[68vw] shrink-0 snap-start overflow-hidden rounded-xl border border-line sm:aspect-auto sm:h-full sm:w-auto sm:shrink ${cell?.span ?? ""}`}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes={cell ? `${cell.sizes}, 68vw` : "(min-width: 640px) 33vw, 68vw"}
+                  className="object-cover transition duration-500 hover:scale-105"
+                  priority={i === 0}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-ink to-transparent sm:hidden"
+        />
       </div>
 
       <Link
         href="/galeria"
-        className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+        className="mt-6 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
       >
         Ver galería completa
         <span aria-hidden="true">→</span>

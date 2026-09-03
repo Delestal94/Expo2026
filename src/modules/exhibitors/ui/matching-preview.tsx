@@ -22,11 +22,8 @@ export function MatchingPreview() {
   }, []);
 
   return (
-    <div className="rounded-2xl border border-line bg-[#121022] p-8">
-      <span className="font-mono text-xs tracking-[0.2em] text-accent uppercase">
-        Cómo sugiere reuniones el sistema
-      </span>
-      <div className="mt-6 grid items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
+    <div>
+      <div className="grid items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         <div className="rounded-xl border border-line bg-ink p-5">
           <span className="font-mono text-[0.65rem] tracking-[0.1em] text-violet uppercase">
             Expositor

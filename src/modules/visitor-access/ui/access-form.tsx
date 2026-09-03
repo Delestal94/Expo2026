@@ -1,8 +1,18 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
-import { createAuthProvider } from "@/lib/adapters/auth";
 import type { AuthSession } from "@/lib/ports";
+import { AdmissionTicket } from "./admission-ticket";
+
+/**
+ * Import dinámico: el SDK de Supabase (~140 KB) no debe formar parte del
+ * bundle inicial de /cuenta — solo hace falta una vez que este componente
+ * efectivamente verifica la sesión o el usuario envía el formulario.
+ */
+function loadAuthProvider() {
+  return import("@/lib/adapters/auth").then((mod) => mod.createAuthProvider());
+}
 
 type Mode = "signup" | "signin";
 
@@ -11,11 +21,43 @@ function errorMessageOf(error: unknown, fallback: string): string {
 }
 
 /**
+ * Antes esto era un `return null` mientras se resolvía el import dinámico
+ * del SDK de auth: la tarjeta desaparecía y volvía a aparecer un instante
+ * después, como si el formulario "temblara". Este placeholder ocupa el
+ * mismo alto que el formulario real para no correr el layout, y usa el
+ * mismo barrido mineral que el glow del CTA del Hero en vez de un gris
+ * genérico de skeleton.
+ */
+function AccessFormSkeleton({ label }: { label: string }) {
+  return (
+    <div role="status" className="rounded-2xl border border-line bg-[#121022] p-6">
+      <span className="sr-only">{label}</span>
+      <div className="flex gap-2 rounded-full border border-line p-1" aria-hidden="true">
+        <div className="skeleton-strata h-9 flex-1 rounded-full" />
+        <div className="skeleton-strata h-9 flex-1 rounded-full" />
+      </div>
+      <div className="mt-6 flex flex-col gap-4" aria-hidden="true">
+        <div className="flex flex-col gap-1.5">
+          <div className="skeleton-strata h-3 w-16 rounded-full" />
+          <div className="skeleton-strata h-11 w-full rounded-xl" />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <div className="skeleton-strata h-3 w-24 rounded-full" />
+          <div className="skeleton-strata h-11 w-full rounded-xl" />
+        </div>
+        <div className="skeleton-strata mt-2 h-11 w-full rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Formulario de registro/login de visitantes. Corre client-side (no como
  * server action) porque el adaptador de Supabase persiste la sesión en el
  * storage del browser — moverlo al servidor perdería esa persistencia.
  */
-export function AccessForm() {
+export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }) {
+  const t = useTranslations("VisitorAccess.AccessForm");
   const [checkingSession, setCheckingSession] = useState(true);
   const [session, setSession] = useState<AuthSession | null>(null);
   const [mode, setMode] = useState<Mode>("signup");
@@ -26,8 +68,8 @@ export function AccessForm() {
 
   useEffect(() => {
     let cancelled = false;
-    createAuthProvider()
-      .getSession()
+    loadAuthProvider()
+      .then((provider) => provider.getSession())
       .then((existing) => {
         if (!cancelled) setSession(existing);
       })
@@ -48,7 +90,7 @@ export function AccessForm() {
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      const provider = createAuthProvider();
+      const provider = await loadAuthProvider();
       const result =
         mode === "signup"
           ? await provider.signUp(email, password)
@@ -56,7 +98,7 @@ export function AccessForm() {
       setSession(result);
       setPassword("");
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, "No se pudo completar la operación. Probá de nuevo."));
+      setErrorMessage(errorMessageOf(error, t("genericError")));
     } finally {
       setIsSubmitting(false);
     }
@@ -66,37 +108,36 @@ export function AccessForm() {
     setIsSubmitting(true);
     setErrorMessage(null);
     try {
-      await createAuthProvider().signOut();
+      await (await loadAuthProvider()).signOut();
       setSession(null);
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, "No se pudo cerrar la sesión. Probá de nuevo."));
+      setErrorMessage(errorMessageOf(error, t("signOutError")));
     } finally {
       setIsSubmitting(false);
     }
   }
 
   if (checkingSession) {
-    return null;
+    return <AccessFormSkeleton label={t("checkingSession")} />;
   }
 
   if (session) {
     return (
       <div className="rounded-2xl border border-line bg-[#121022] p-6">
         <p className="text-paper">
-          Sesión iniciada como{" "}
-          <strong className="font-mono font-semibold">{session.user.email}</strong>.
+          {t.rich("sessionActive", {
+            email: session.user.email,
+            strong: (chunks) => <strong className="font-mono font-semibold">{chunks}</strong>,
+          })}
         </p>
-        <p className="mt-2 text-sm text-paper-dim">
-          Tu cuenta de visitante ya está creada. La compra de la entrada
-          todavía no está disponible — se habilita en la próxima etapa.
-        </p>
+        <AdmissionTicket session={session} admissionMode={admissionMode} />
         <button
           type="button"
           onClick={handleSignOut}
           disabled={isSubmitting}
           className="mt-5 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Cerrar sesión
+          {t("signOut")}
         </button>
         {errorMessage && (
           <p role="alert" className="mt-3 text-sm text-terracotta">
@@ -119,7 +160,7 @@ export function AccessForm() {
             mode === "signup" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
           }`}
         >
-          Crear cuenta
+          {t("tabSignup")}
         </button>
         <button
           type="button"
@@ -130,14 +171,14 @@ export function AccessForm() {
             mode === "signin" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
           }`}
         >
-          Ya tengo cuenta
+          {t("tabSignin")}
         </button>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="visitor-email" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
-            Email
+            {t("emailLabel")}
           </label>
           <input
             id="visitor-email"
@@ -152,7 +193,7 @@ export function AccessForm() {
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="visitor-password" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
-            Contraseña
+            {t("passwordLabel")}
           </label>
           <input
             id="visitor-password"
@@ -172,10 +213,10 @@ export function AccessForm() {
           className="mt-2 rounded-full bg-accent px-5 py-2.5 font-body text-sm font-semibold text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting
-            ? "Un momento..."
+            ? t("submitLoading")
             : mode === "signup"
-              ? "Crear cuenta"
-              : "Iniciar sesión"}
+              ? t("tabSignup")
+              : t("submitSignin")}
         </button>
 
         <p role="status" aria-live="polite" className="min-h-5 text-sm text-terracotta">
@@ -183,10 +224,7 @@ export function AccessForm() {
         </p>
       </form>
 
-      <p className="text-sm text-paper-dim">
-        Esto crea tu cuenta de visitante. La compra de la entrada todavía no
-        está disponible — se habilita en la próxima etapa.
-      </p>
+      <p className="text-sm text-paper-dim">{t("footerNote")}</p>
     </div>
   );
 }
