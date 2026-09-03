@@ -93,14 +93,35 @@ describe("Directory", () => {
     expect(screen.getByText("Quebrada Litio Insumos")).toBeInTheDocument();
   });
 
-  it("muestra un mensaje cuando la búsqueda no encuentra ningún expositor", async () => {
+  it("muestra un mensaje cuando la búsqueda no encuentra ningún expositor, con botón para borrarla", async () => {
     const user = userEvent.setup();
     render(<Directory />);
 
     await user.type(screen.getByPlaceholderText(/Buscar por empresa/), "zzz-inexistente");
 
     expect(screen.queryAllByRole("article")).toHaveLength(0);
-    expect(screen.getByText(/Ningún expositor coincide/)).toBeInTheDocument();
+    expect(screen.getByText(/Ninguna veta coincide/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Borrar búsqueda" }));
+
+    expect(screen.getByPlaceholderText(/Buscar por empresa/)).toHaveValue("");
+    expect(screen.getAllByRole("article")).toHaveLength(INITIAL_VISIBLE_COUNT);
+  });
+
+  it("nombra el eje activo en el mensaje vacío cuando la búsqueda se combina con un filtro", async () => {
+    const user = userEvent.setup();
+    render(<Directory />);
+
+    const mineria = EJE_FILTERS.find((eje) => eje.id === "mineria")!;
+    await user.click(screen.getByRole("button", { name: mineria.label }));
+    await user.type(screen.getByPlaceholderText(/Buscar por empresa/), "zzz-inexistente");
+
+    expect(
+      screen.getByText((_, element) =>
+        element?.tagName === "P" &&
+        (element.textContent ?? "").includes(`Ninguna veta de ${mineria.label} coincide`),
+      ),
+    ).toBeInTheDocument();
   });
 
   it("cada filtro de eje muestra únicamente los expositores de ese eje", async () => {

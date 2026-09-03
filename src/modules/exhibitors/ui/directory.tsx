@@ -11,6 +11,62 @@ function matchesQuery(exhibitor: Exhibitor, query: string) {
   return haystack.includes(query.toLowerCase());
 }
 
+/**
+ * Sin resultados no es "nada" — es la única veta que sí calzaba con el
+ * filtro pero no con el texto: se muestra erosionada (el mismo trazo
+ * dashed que ya usa el estrato faltante de /not-found) en vez de un
+ * párrafo genérico. Si el filtro es "todos", se erosionan las 4 vetas
+ * porque ninguna respondió.
+ */
+function EmptyDirectory({
+  query,
+  activeEje,
+  onClearQuery,
+}: {
+  query: string;
+  activeEje: { label: string; color: string } | null;
+  onClearQuery: () => void;
+}) {
+  const bands = activeEje ? [activeEje.color] : EJE_FILTERS.map((eje) => eje.color);
+
+  return (
+    <div className="mt-8 flex flex-col items-center gap-5 rounded-2xl border border-dashed border-line px-6 py-10 text-center">
+      <div
+        aria-hidden="true"
+        className="flex h-10 w-full max-w-xs overflow-hidden rounded-lg border border-line"
+      >
+        {bands.map((color, i) => (
+          <div
+            key={i}
+            className="flex-1 border-line first:border-l-0 last:border-r-0 [&:not(:last-child)]:border-r"
+            style={{
+              backgroundImage: `repeating-linear-gradient(135deg, transparent, transparent 5px, color-mix(in srgb, ${color} 35%, transparent) 5px, color-mix(in srgb, ${color} 35%, transparent) 6px)`,
+            }}
+          />
+        ))}
+      </div>
+      <p className="max-w-sm text-sm text-paper-dim">
+        {activeEje ? (
+          <>
+            Ninguna veta de{" "}
+            <span style={{ color: activeEje.color }}>{activeEje.label}</span> coincide con
+            &ldquo;{query}&rdquo;.
+          </>
+        ) : (
+          <>Ninguna veta coincide con &ldquo;{query}&rdquo;.</>
+        )}
+      </p>
+      <button
+        type="button"
+        onClick={onClearQuery}
+        className="rounded-full border border-line px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper-dim transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        Borrar búsqueda
+      </button>
+    </div>
+  );
+}
+
 export function Directory() {
   const [filter, setFilter] = useState<Exhibitor["eje"] | "todos">("todos");
   const [query, setQuery] = useState("");
@@ -77,9 +133,11 @@ export function Directory() {
       </div>
 
       {matching.length === 0 ? (
-        <p className="mt-8 text-sm text-paper-dim">
-          Ningún expositor coincide con &ldquo;{query}&rdquo;. Probá con otro término o rubro.
-        </p>
+        <EmptyDirectory
+          query={query.trim()}
+          activeEje={filter === "todos" ? null : EJE_FILTERS.find((eje) => eje.id === filter)!}
+          onClearQuery={() => setQuery("")}
+        />
       ) : (
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((exhibitor, i) => (
