@@ -44,11 +44,8 @@ function SlotCard({ slot }: { slot: MeetingSlot }) {
  */
 export function AgendaPreview() {
   return (
-    <div className="rounded-2xl border border-line bg-[#121022] p-8">
-      <span className="font-mono text-xs tracking-[0.2em] text-accent uppercase">
-        Agenda de reuniones (ejemplo)
-      </span>
-      <div className="mt-6 flex flex-col gap-8">
+    <div>
+      <div className="flex flex-col gap-8">
         {EVENT_DAYS.map((day) => {
           const slots = AGENDA_SLOTS.filter((slot) => slot.day === day.date);
           if (slots.length === 0) return null;
