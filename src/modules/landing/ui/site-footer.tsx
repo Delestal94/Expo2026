@@ -46,8 +46,8 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-line px-6 py-16 sm:px-10 lg:px-16">
-      {/* Organiza, acompañan y sponsors — mismo trato visual para las tres, nadie se pierde. */}
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 border-b border-line pb-12 sm:grid-cols-3">
+      {/* Organiza, acompañan y sponsors — cada grupo a todo el ancho, en fila horizontal. */}
+      <div className="mx-auto flex max-w-5xl flex-col gap-10 border-b border-line pb-12">
         <div className="text-center">
           <span className="font-mono text-xs font-semibold tracking-[0.25em] text-accent uppercase">
             {t("organizes")}
