@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from "react";
+import { VENUE_2024_SEED } from "./venue-2024-seed";
 
 const VIEW_W = 1200;
 const VIEW_H = 750;
@@ -9,7 +10,7 @@ const MIN_SIZE = 20;
 const CREATE_THRESHOLD = 8;
 const STORAGE_KEY = "expojuy:mapa-editor:zones:v1";
 
-type Category =
+export type Category =
   | "cubierto"
   | "artesano"
   | "descubierto"
@@ -18,10 +19,15 @@ type Category =
   | "institucional"
   | "infraestructura";
 
-interface EditorZone {
+export type ZoneShape = "rect" | "circle";
+
+export interface EditorZone {
   id: string;
   label: string;
   category: Category;
+  shape: ZoneShape;
+  /** Grados, sentido horario. Ignorado para shape:"circle". */
+  rotation: number;
   x: number;
   y: number;
   width: number;
@@ -67,23 +73,40 @@ function handlePoint(z: EditorZone, handle: Handle) {
   return map[handle];
 }
 
+/** Proyecta un punto del lienzo al espacio local (sin rotación) de la zona,
+ * rotando alrededor de su centro — así el resize funciona igual estén o no
+ * rotadas (necesario para el patrón de espina de pescado, rotado 45°). */
+function toLocalPoint(zone: EditorZone, px: number, py: number) {
+  if (!zone.rotation) return { x: px, y: py };
+  const cx = zone.x + zone.width / 2;
+  const cy = zone.y + zone.height / 2;
+  const rad = (-zone.rotation * Math.PI) / 180;
+  const dx = px - cx;
+  const dy = py - cy;
+  return {
+    x: cx + dx * Math.cos(rad) - dy * Math.sin(rad),
+    y: cy + dx * Math.sin(rad) + dy * Math.cos(rad),
+  };
+}
+
 function computeResize(handle: Handle, origin: EditorZone, px: number, py: number) {
+  const { x: lx, y: ly } = toLocalPoint(origin, px, py);
   let { x, y, width, height } = origin;
   const right = origin.x + origin.width;
   const bottom = origin.y + origin.height;
   if (handle.includes("w")) {
-    x = Math.min(px, right - MIN_SIZE);
+    x = Math.min(lx, right - MIN_SIZE);
     width = right - x;
   }
   if (handle.includes("e")) {
-    width = Math.max(MIN_SIZE, px - origin.x);
+    width = Math.max(MIN_SIZE, lx - origin.x);
   }
   if (handle.includes("n")) {
-    y = Math.min(py, bottom - MIN_SIZE);
+    y = Math.min(ly, bottom - MIN_SIZE);
     height = bottom - y;
   }
   if (handle.includes("s")) {
-    height = Math.max(MIN_SIZE, py - origin.y);
+    height = Math.max(MIN_SIZE, ly - origin.y);
   }
   return { x, y, width, height };
 }
@@ -106,12 +129,12 @@ export function ZoneEditor() {
   const createStart = useRef<{ x: number; y: number } | null>(null);
 
   const [zones, setZones] = useState<EditorZone[]>(() => {
-    if (typeof window === "undefined") return [];
+    if (typeof window === "undefined") return VENUE_2024_SEED;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
+      return raw ? JSON.parse(raw) : VENUE_2024_SEED;
     } catch {
-      return [];
+      return VENUE_2024_SEED;
     }
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -161,6 +184,8 @@ export function ZoneEditor() {
       id: makeId(),
       label: `Nuevo ${meta.label.toLowerCase()}`,
       category,
+      shape: "rect",
+      rotation: 0,
       x: Math.round(x),
       y: Math.round(y),
       width: Math.round(Math.max(MIN_SIZE, width)),
@@ -279,9 +304,16 @@ export function ZoneEditor() {
       });
   };
 
-  const handleReset = () => {
+  const handleRestoreBase = () => {
+    if (window.confirm("Esto descarta tus cambios y vuelve al plano base 2024. ¿Continuar?")) {
+      setZones(VENUE_2024_SEED.map((z) => ({ ...z })));
+      setSelectedId(null);
+    }
+  };
+
+  const handleClearAll = () => {
     if (zones.length === 0) return;
-    if (window.confirm(`Esto borra las ${zones.length} zonas actuales. ¿Continuar?`)) {
+    if (window.confirm(`Esto borra las ${zones.length} zonas actuales (sin restaurar el plano base). ¿Continuar?`)) {
       setZones([]);
       setSelectedId(null);
     }
@@ -323,10 +355,17 @@ export function ZoneEditor() {
         </label>
         <button
           type="button"
-          onClick={handleReset}
+          onClick={handleRestoreBase}
           className="rounded-full border border-line px-3 py-1.5 font-mono text-xs text-paper-dim hover:border-paper-dim"
         >
-          Reiniciar
+          Restaurar plano base 2024
+        </button>
+        <button
+          type="button"
+          onClick={handleClearAll}
+          className="rounded-full border border-line px-3 py-1.5 font-mono text-xs text-paper-dim hover:border-paper-dim"
+        >
+          Vaciar todo
         </button>
         <span className="ml-auto font-mono text-xs text-paper-dim">{zones.length} zonas</span>
       </div>
@@ -353,21 +392,28 @@ export function ZoneEditor() {
             {zones.map((zone) => {
               const meta = categoryMeta(zone.category);
               const isSelected = zone.id === selectedId;
+              const cx = zone.x + zone.width / 2;
+              const cy = zone.y + zone.height / 2;
+              const rotate =
+                zone.shape === "rect" && zone.rotation ? `rotate(${zone.rotation} ${cx} ${cy})` : undefined;
+              const shapeStyle = {
+                fill: isSelected ? meta.color : "rgba(255,255,255,0.06)",
+                stroke: meta.color,
+                strokeWidth: isSelected ? 2.5 : 1.5,
+                opacity: isSelected ? 0.85 : 0.6,
+              };
               return (
-                <g key={zone.id} onPointerDown={(e) => handleZonePointerDown(e, zone)} style={{ cursor: "move" }}>
-                  <rect
-                    x={zone.x}
-                    y={zone.y}
-                    width={zone.width}
-                    height={zone.height}
-                    rx={6}
-                    style={{
-                      fill: isSelected ? meta.color : "rgba(255,255,255,0.06)",
-                      stroke: meta.color,
-                      strokeWidth: isSelected ? 2.5 : 1.5,
-                      opacity: isSelected ? 0.85 : 0.6,
-                    }}
-                  />
+                <g
+                  key={zone.id}
+                  transform={rotate}
+                  onPointerDown={(e) => handleZonePointerDown(e, zone)}
+                  style={{ cursor: "move" }}
+                >
+                  {zone.shape === "circle" ? (
+                    <ellipse cx={cx} cy={cy} rx={zone.width / 2} ry={zone.height / 2} style={shapeStyle} />
+                  ) : (
+                    <rect x={zone.x} y={zone.y} width={zone.width} height={zone.height} rx={6} style={shapeStyle} />
+                  )}
                   <text
                     x={zone.x + 6}
                     y={zone.y + 16}
@@ -525,6 +571,36 @@ function ZoneForm({
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass} htmlFor="zone-shape">
+            Forma
+          </label>
+          <select
+            id="zone-shape"
+            value={zone.shape}
+            onChange={(e) => onChange({ shape: e.target.value as ZoneShape })}
+            className={`${inputClass} mt-1`}
+          >
+            <option value="rect">Rectángulo</option>
+            <option value="circle">Círculo / óvalo</option>
+          </select>
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="zone-rotation">
+            Rotación (°)
+          </label>
+          <input
+            id="zone-rotation"
+            type="number"
+            disabled={zone.shape === "circle"}
+            value={zone.rotation}
+            onChange={(e) => onChange({ rotation: Number(e.target.value) })}
+            className={`${inputClass} mt-1 disabled:opacity-40`}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
