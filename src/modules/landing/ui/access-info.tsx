@@ -139,7 +139,11 @@ export async function AccessInfo() {
         </div>
 
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
-          <div className="h-64 w-full sm:h-72 lg:h-80">
+          {/* El mapa ocupa el alto real de la tarjeta (que lo define el texto de
+              precios de la columna izquierda, no el mapa) — a la altura vieja le
+              sobraba mucho contenedor vacío antes de llegar a la tarjeta de
+              proveedores. */}
+          <div className="h-80 w-full sm:h-104 lg:h-120">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}
