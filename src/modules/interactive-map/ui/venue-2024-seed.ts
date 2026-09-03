@@ -46,6 +46,46 @@ function cadZone(
   });
 }
 
+// ── Estructura del predio ───────────────────────────────────────────────────
+// Van primero en el array para que queden por debajo de los stands al dibujar.
+const estructura: EditorZone[] = [
+  cadZone({
+    id: "pabellon",
+    label: "Pabellón cubierto",
+    category: "infraestructura",
+    cad: [505, 62, 1372, 498],
+    notes: "Salón techado que contiene las series A, B y C",
+  }),
+  cadZone({
+    id: "camino-diagonal",
+    label: "Camino interno",
+    category: "infraestructura",
+    shape: "polygon",
+    // Franja diagonal que cruza el predio, la que hace que D11..D15 vayan
+    // rotados y que separa el pabellón de los stands descubiertos.
+    points: [
+      [0, 0.22],
+      [1, 0],
+      [1, 0.16],
+      [0, 0.38],
+    ],
+    cad: [300, 520, 1180, 700],
+  }),
+  cadZone({
+    id: "estacionamiento",
+    label: "Estacionamiento",
+    category: "infraestructura",
+    shape: "polygon",
+    points: [
+      [0.12, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+    ],
+    cad: [1420, 30, 1640, 300],
+  }),
+];
+
 // ── Bloque institucional (esquina superior izquierda) ────────────────────────
 const institucional: EditorZone[] = [
   cadZone({ id: "inst-eventos", label: "Eventos CCE", category: "institucional", cad: [155, 60, 330, 145] }),
@@ -283,6 +323,7 @@ const fSeries: EditorZone[] = [
 ];
 
 export const VENUE_2024_SEED: EditorZone[] = [
+  ...estructura,
   ...institucional,
   ...aSeries,
   ...aExtra,

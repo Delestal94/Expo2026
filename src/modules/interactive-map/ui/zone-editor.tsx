@@ -433,16 +433,40 @@ export function ZoneEditor() {
                   ) : (
                     <rect x={zone.x} y={zone.y} width={zone.width} height={zone.height} rx={6} style={shapeStyle} />
                   )}
-                  <text
-                    x={zone.x + 6}
-                    y={zone.y + 16}
-                    fill={isSelected ? "var(--color-ink)" : "var(--color-paper)"}
-                    fontFamily="var(--font-mono)"
-                    fontSize={11}
-                    style={{ pointerEvents: "none" }}
-                  >
-                    {zone.label.length > 18 ? `${zone.label.slice(0, 17)}…` : zone.label}
-                  </text>
+                  {(() => {
+                    // En el plano conviven stands de 20px con sectores de 300px.
+                    // Los stands llevan el código centrado; los sectores grandes
+                    // (pabellón, camino, patio) lo llevan arriba a la izquierda,
+                    // como un título, para no taparse con lo que contienen.
+                    if (zone.width < 14 || zone.height < 10) return null;
+                    const isContainer = zone.width > 120 || zone.height > 90;
+                    const fontSize = isContainer
+                      ? 11
+                      : Math.max(6, Math.min(11, Math.round(zone.width / 3.4)));
+                    const usableWidth = isContainer ? zone.width - 12 : zone.width;
+                    const maxChars = Math.max(2, Math.floor(usableWidth / (fontSize * 0.62)));
+                    const text =
+                      zone.label.length > maxChars ? `${zone.label.slice(0, maxChars - 1)}…` : zone.label;
+                    const tx = isContainer ? zone.x + 6 : cx;
+                    const ty = isContainer ? zone.y + 14 : cy;
+                    return (
+                      <text
+                        x={tx}
+                        y={ty}
+                        // Contrarrota la etiqueta para que se lea horizontal aunque
+                        // el stand esté rotado, como los códigos del plano.
+                        transform={zone.rotation ? `rotate(${-zone.rotation} ${cx} ${cy})` : undefined}
+                        textAnchor={isContainer ? "start" : "middle"}
+                        dominantBaseline={isContainer ? "auto" : "central"}
+                        fill={isSelected ? "var(--color-ink)" : "var(--color-paper)"}
+                        fontFamily="var(--font-mono)"
+                        fontSize={fontSize}
+                        style={{ pointerEvents: "none" }}
+                      >
+                        {text}
+                      </text>
+                    );
+                  })()}
                   {isSelected &&
                     HANDLES.map((handle) => {
                       const p = handlePoint(zone, handle);
