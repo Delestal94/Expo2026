@@ -89,7 +89,10 @@
       "title": "En el Corazón de Jujuy",
       "description": "La ciudad cultural se encuentra a pocos minutos del centro de <strong>San Salvador de Jujuy</strong> y cuenta con rápido acceso a los puntos más importantes de la ciudad.",
       "cta": "Ver en Google Maps",
-      "mapLabel": "Mapa de Ciudad Cultural"
+      "mapLabel": "Mapa de Ciudad Cultural",
+      "shareLabel": "Compartir ubicación",
+      "shareTitle": "ExpoJuy 2026 — Ciudad Cultural",
+      "shareText": "Así se llega a Ciudad Cultural, sede de ExpoJuy 2026:"
     },
     "Countdown": {
       "days": "días",
