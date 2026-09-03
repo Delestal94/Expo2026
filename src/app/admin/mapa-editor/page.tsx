@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ZoneEditor } from "@/modules/interactive-map";
+import { ZoneEditorClient } from "@/modules/interactive-map";
 
 export const metadata: Metadata = {
   title: "Editor de mapa — ExpoJuy",
@@ -17,7 +17,7 @@ export default function MapaEditorPage() {
           JSON&quot; para llevarlos al código cuando el layout esté listo para publicarse.
         </p>
         <div className="mt-8">
-          <ZoneEditor />
+          <ZoneEditorClient />
         </div>
       </div>
     </main>
