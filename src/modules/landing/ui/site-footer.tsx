@@ -2,6 +2,14 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { INSTITUTIONAL_PARTNERS, SPONSORS, type Logo } from "./partners-data";
 
+/** Mismas 4 vetas que About/Ejes/SectionNav usan para el resto del sitio. */
+const VEIN_COLORS = [
+  "var(--color-cyan)",
+  "var(--color-violet)",
+  "var(--color-magenta)",
+  "var(--color-lavender)",
+];
+
 function LogoGrid({
   logos,
   logoSizes,
@@ -13,26 +21,43 @@ function LogoGrid({
 }) {
   return (
     <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-      {logos.map((logo) => (
-        <div
-          key={logo.src}
-          className={
-            tone === "dark"
-              ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
-              : "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl bg-paper p-6 shadow-sm"
-          }
-        >
-          <div className="relative h-full w-full">
-            <Image
-              src={logo.src}
-              alt={logo.alt}
-              fill
-              sizes={logoSizes ?? "288px"}
-              className="object-contain"
-            />
+      {logos.map((logo, i) => {
+        const vein = VEIN_COLORS[i % VEIN_COLORS.length];
+        return (
+          <div
+            key={logo.src}
+            className={
+              tone === "dark"
+                ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
+                : "group relative flex h-40 w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper p-6 shadow-sm"
+            }
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                fill
+                sizes={logoSizes ?? "288px"}
+                className={
+                  tone === "dark"
+                    ? "object-contain"
+                    : // El estado "dormido" (gris, apagado) solo aplica en dispositivos con
+                      // hover real — en touch nunca se dispara el hover que lo despierta, así
+                      // que los logos quedarían apagados para siempre en mobile.
+                      "object-contain [@media(hover:hover)]:grayscale-[85%] [@media(hover:hover)]:opacity-70 [@media(hover:hover)]:transition-[filter,opacity] [@media(hover:hover)]:duration-500 motion-reduce:[@media(hover:hover)]:transition-none [@media(hover:hover)]:group-hover:grayscale-0 [@media(hover:hover)]:group-hover:opacity-100"
+                }
+              />
+            </div>
+            {tone === "light" && (
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 ease-out motion-reduce:transition-none group-hover:scale-x-100"
+                style={{ backgroundColor: vein }}
+              />
+            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
