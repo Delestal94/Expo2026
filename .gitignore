@@ -38,3 +38,4 @@ Thumbs.db
 .idea/
 # Local AI runtime state & specs
 .atl/
+openspec/

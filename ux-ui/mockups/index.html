@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Presentación — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    .hub-card {
+      position: relative;
+      background: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition-smooth);
+      overflow: hidden;
+    }
+    .hub-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--color-accent);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.6), 0 0 20px var(--color-accent-glow);
+    }
+    .hub-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .hub-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--color-paper);
+      margin-bottom: 8px;
+    }
+    .hub-desc {
+      font-size: 13px;
+      color: var(--color-paper-dim);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .hub-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-accent);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div>EXPOJUY · JUJUY, ARGENTINA</div>
+    <div>17ª EDICIÓN · CONCURSO DIGITAL</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section" style="text-align: center; max-width: 900px; margin: 0 auto;">
+    <div class="category-pill" style="margin: 0 auto 20px;">DESAFÍO DIGITAL 2026 · SUITE DE PRESENTACIÓN</div>
+    <h1 class="headline-title" style="font-size: clamp(2.4rem, 6vw, 4rem);">
+      EXPOJUY 2026
+    </h1>
+    <p class="headline-subtitle" style="margin: 0 auto 36px; max-width: 720px;">
+      Prototipo visual navegable de alta fidelidad basado en el sistema de diseño “Estratos”. Seleccioná cualquiera de las 6 vistas maestras para inspeccionar la experiencia en pantalla completa.
+    </p>
+  </header>
+
+  <!-- Main Content: 6 Hub Views Grid -->
+  <main class="main-container">
+    <div class="bento-grid-12">
+
+      <!-- View 01 -->
+      <a href="./01-roadmap.html" class="hub-card col-4 stripe-accent">
+        <span class="hub-num">VISTA 01 · ESTRATEGIA</span>
+        <h2 class="hub-title">Roadmap 2026</h2>
+        <p class="hub-desc">
+          Contador en vivo hacia el 9 de Octubre de 2026 y bento grid de las 4 fases evolutivas hacia la apertura de la feria.
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+      <!-- View 02 -->
+      <a href="./02-acceso.html" class="hub-card col-4 stripe-violet">
+        <span class="hub-num">VISTA 02 · ACREDITACIÓN</span>
+        <h2 class="hub-title">Acceso & QR</h2>
+        <p class="hub-desc">
+          Formulario de registro, credencial holográfica con código QR y simulador interactivo de escaneo en molinetes.
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+      <!-- View 03 -->
+      <a href="./03-rondas-b2b.html" class="hub-card col-4 stripe-ocher">
+        <span class="hub-num">VISTA 03 · NEGOCIOS</span>
+        <h2 class="hub-title">Rondas B2B</h2>
+        <p class="hub-desc">
+          Plataforma de matchmaking inteligente para empresas del Corredor Bioceánico y selector de slots de 20 minutos.
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+      <!-- View 04 -->
+      <a href="./04-asistente.html" class="hub-card col-4 stripe-teal">
+        <span class="hub-num">VISTA 04 · INTELIGENCIA ARTIFICIAL</span>
+        <h2 class="hub-title">Concierge IA</h2>
+        <p class="hub-desc">
+          Asistente virtual en 4 idiomas (ES, EN, PT, ZH) con respuestas enriquecidas de stands, auditorios y servicios.
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+      <!-- View 05 -->
+      <a href="./05-galeria.html" class="hub-card col-4 stripe-terracotta">
+        <span class="hub-num">VISTA 05 · MEMORIA HISTÓRICA</span>
+        <h2 class="hub-title">Memoria Visual</h2>
+        <p class="hub-desc">
+          Bento grid asimétrico con la memoria fotográfica de ExpoJuy 2024 (actos oficiales, maquinaria pesada y shows).
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+      <!-- View 06 -->
+      <a href="./06-mapa.html" class="hub-card col-4 stripe-accent">
+        <span class="hub-num">VISTA 06 · GEOMETRÍA ESPACIAL</span>
+        <h2 class="hub-title">Plano Ciudad Cultural</h2>
+        <p class="hub-desc">
+          Plano vectorial interactivo de 18.000 m² con la zonificación oficial de la Cámara, inspector de stands y telemetría.
+        </p>
+        <span class="hub-action">Explorar Pantalla →</span>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        ExpoJuy
+        <span>2026</span>
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+</body>
+</html>

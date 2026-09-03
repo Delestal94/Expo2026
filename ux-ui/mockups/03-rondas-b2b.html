@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rondas de Negocios B2B — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Quick Demo Nav Switcher -->
+  <nav class="demo-nav-bar">
+    <span class="demo-nav-title">Vistas</span>
+    <a href="./01-roadmap.html" class="demo-nav-link">01. Roadmap</a>
+    <a href="./02-acceso.html" class="demo-nav-link">02. Acceso & QR</a>
+    <a href="./03-rondas-b2b.html" class="demo-nav-link active">03. Rondas B2B</a>
+    <a href="./04-asistente.html" class="demo-nav-link">04. Concierge IA</a>
+    <a href="./05-galeria.html" class="demo-nav-link">05. Galería</a>
+    <a href="./06-mapa.html" class="demo-nav-link">06. Plano Ciudad Cultural</a>
+    <a href="./index.html" class="demo-nav-link" style="color: var(--color-accent); font-weight: 700;">✦ Hub</a>
+  </nav>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div>EXPOJUY · JUJUY, ARGENTINA</div>
+    <div>17ª EDICIÓN</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="category-pill">MATCHMAKING & AGENDA COMERCIAL · CORREDOR BIOCEÁNICO</div>
+    <h1 class="headline-title">RONDAS DE<br>NEGOCIOS B2B</h1>
+    <p class="headline-subtitle">
+      Conectá con más de 116 empresas del Cono Sur (Argentina, Chile, Bolivia, Paraguay, Brasil) con agendas coordinadas de 20 minutos y matchmaking asistido por algoritmos de demanda.
+    </p>
+
+    <!-- Sector Filter Pills -->
+    <div class="filter-pills-bar">
+      <button class="pill-btn active">Todos los Sectores</button>
+      <button class="pill-btn">Minería & Litio</button>
+      <button class="pill-btn">Logística & Corredor Bioceánico</button>
+      <button class="pill-btn">Comercio Exterior</button>
+      <button class="pill-btn">Servicios Basados en el Conocimiento</button>
+    </div>
+  </header>
+
+  <!-- Main Content: Matchmaking Explorer + My Schedule -->
+  <main class="main-container">
+    <div class="bento-grid-12">
+
+      <!-- Left Column (8 cols): Matchmaking Feed -->
+      <section class="col-8" style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Search Bar -->
+        <div style="display: flex; gap: 12px; margin-bottom: 4px;">
+          <input type="text" class="input-glass" placeholder="Buscar por empresa, insumo o país (ej: Litio, Antofagasta, Equipamiento)...">
+          <button class="btn-solid-accent" style="white-space: nowrap; padding: 0 24px;">Filtrar</button>
+        </div>
+
+        <!-- Company Card 01: LithiumCorp Int. -->
+        <article class="bento-card stripe-accent">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <span class="badge-tag cyan">98% Compatibilidad</span>
+                <span class="badge-tag">🇦🇷 Argentina / 🇨🇱 Chile</span>
+              </div>
+              <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--color-paper);">
+                LithiumCorp Int.
+              </h3>
+              <p style="font-size: 13px; color: var(--color-paper-dim); margin-top: 4px;">
+                Demanda de proveedores de reactivos químicos, transporte de salmuera y repuestos para plantas de extracción en Cauchari-Olaroz.
+              </p>
+            </div>
+            <span class="badge-tag live"><span class="live-dot"></span> Mesa 08</span>
+          </div>
+
+          <!-- Time Slots -->
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-border);">
+            <span style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); margin-bottom: 10px; text-transform: uppercase;">
+              Slots Disponibles para Hoy (20 min):
+            </span>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn-solid-accent" style="padding: 6px 16px; font-size: 12px;">14:00 hs · Solicitar</button>
+              <button class="btn-outline-glass" style="padding: 6px 16px; font-size: 12px;">14:30 hs · Solicitar</button>
+              <button class="btn-outline-glass" style="padding: 6px 16px; font-size: 12px; opacity: 0.4; cursor: not-allowed;">15:00 hs · Ocupado</button>
+              <button class="btn-outline-glass" style="padding: 6px 16px; font-size: 12px;">15:30 hs · Solicitar</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Company Card 02: Andean Logistics Group -->
+        <article class="bento-card stripe-violet">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <span class="badge-tag" style="color: #e6c9ff; border-color: rgba(124, 90, 158, 0.4);">94% Compatibilidad</span>
+                <span class="badge-tag">🇨🇱 Puerto de Mejillones / 🇧🇷 Brasil</span>
+              </div>
+              <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--color-paper);">
+                Andean Logistics Group
+              </h3>
+              <p style="font-size: 13px; color: var(--color-paper-dim); margin-top: 4px;">
+                Servicios de transporte multimodal de carga pesada a través del Paso de Jama conectando el puerto de Antofagasta con el sur de Brasil.
+              </p>
+            </div>
+            <span class="badge-tag"><span class="live-dot" style="background: var(--color-violet);"></span> Mesa 14</span>
+          </div>
+
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-border);">
+            <span style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); margin-bottom: 10px; text-transform: uppercase;">
+              Slots Disponibles para Hoy (20 min):
+            </span>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn-outline-glass" style="padding: 6px 16px; font-size: 12px;">16:00 hs · Solicitar</button>
+              <button class="btn-solid-accent" style="padding: 6px 16px; font-size: 12px;">16:30 hs · Solicitar</button>
+              <button class="btn-outline-glass" style="padding: 6px 16px; font-size: 12px;">17:00 hs · Solicitar</button>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- Right Column (4 cols): Agenda & Live Stats -->
+      <aside class="col-4" style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Card: Mi Agenda -->
+        <div class="bento-card stripe-teal" style="background: var(--color-surface-elevated);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700;">Mi Agenda B2B</h3>
+            <span class="badge-tag cyan">3 Confirmadas</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="padding: 12px; border-radius: var(--radius-sm); background: rgba(245, 241, 232, 0.03); border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--color-accent); margin-bottom: 4px;">
+                <span>14:00 - 14:20 hs</span>
+                <span>MESA 08</span>
+              </div>
+              <p style="font-size: 13px; font-weight: 600;">Reunión con LithiumCorp Int.</p>
+            </div>
+
+            <div style="padding: 12px; border-radius: var(--radius-sm); background: rgba(245, 241, 232, 0.03); border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); margin-bottom: 4px;">
+                <span>15:00 - 15:20 hs</span>
+                <span>MESA 02</span>
+              </div>
+              <p style="font-size: 13px; font-weight: 600;">Cámara de Comercio Exterior</p>
+            </div>
+
+            <div style="padding: 12px; border-radius: var(--radius-sm); background: rgba(245, 241, 232, 0.03); border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); margin-bottom: 4px;">
+                <span>16:30 - 16:50 hs</span>
+                <span>MESA 14</span>
+              </div>
+              <p style="font-size: 13px; font-weight: 600;">Andean Logistics Group</p>
+            </div>
+          </div>
+
+          <button class="btn-outline-glass" style="width: 100%; margin-top: 16px; font-size: 12px;">
+            Descargar Agenda (ICS / Wallet) ↓
+          </button>
+        </div>
+
+        <!-- Card: Telemetría de Rondas -->
+        <div class="bento-card stripe-ocher">
+          <h3 style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; margin-bottom: 14px;">
+            Métricas de la Ronda
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Empresas Participantes</span>
+              <p style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--color-paper); margin-top: 2px;">116</p>
+            </div>
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Reuniones Programadas</span>
+              <p style="font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--color-accent); margin-top: 2px;">330</p>
+            </div>
+            <div>
+              <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Volumen Proyectado</span>
+              <p style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--color-ocher); margin-top: 2px;">$4.2M USD</p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        ExpoJuy
+        <span>2026</span>
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+</body>
+</html>

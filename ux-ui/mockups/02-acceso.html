@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso & Pase Digital QR — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    @keyframes scan-laser {
+      0%, 100% { top: 10%; opacity: 0.8; }
+      50% { top: 85%; opacity: 1; }
+    }
+    .laser-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--color-accent);
+      box-shadow: 0 0 15px var(--color-accent), 0 0 30px var(--color-accent);
+      animation: scan-laser 2.2s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Quick Demo Nav Switcher -->
+  <nav class="demo-nav-bar">
+    <span class="demo-nav-title">Vistas</span>
+    <a href="./01-roadmap.html" class="demo-nav-link">01. Roadmap</a>
+    <a href="./02-acceso.html" class="demo-nav-link active">02. Acceso & QR</a>
+    <a href="./03-rondas-b2b.html" class="demo-nav-link">03. Rondas B2B</a>
+    <a href="./04-asistente.html" class="demo-nav-link">04. Concierge IA</a>
+    <a href="./05-galeria.html" class="demo-nav-link">05. Galería</a>
+    <a href="./06-mapa.html" class="demo-nav-link">06. Plano Ciudad Cultural</a>
+    <a href="./index.html" class="demo-nav-link" style="color: var(--color-accent); font-weight: 700;">✦ Hub</a>
+  </nav>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div>EXPOJUY · JUJUY, ARGENTINA</div>
+    <div>17ª EDICIÓN</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="category-pill">ACREDITACIÓN & CREDENCIAL DIGITAL INTELIGENTE</div>
+    <h1 class="headline-title">ACREDITACIÓN &<br>PASE DIGITAL QR</h1>
+    <p class="headline-subtitle">
+      Sistema de registro ágil, generación de credencial criptográfica offline y telemetría de acceso en molinetes para los 4 días de exposición.
+    </p>
+
+    <!-- Profile Filter Tabs -->
+    <div class="filter-pills-bar">
+      <button class="pill-btn active">Visitante General</button>
+      <button class="pill-btn">Empresa / Profesional</button>
+      <button class="pill-btn">Prensa Oficial</button>
+      <button class="pill-btn">Delegación Internacional</button>
+    </div>
+  </header>
+
+  <!-- Main Content: Registration Form + Digital Pass + Turnstile Simulator -->
+  <main class="main-container">
+    <div class="bento-grid-12">
+
+      <!-- Column Left (7 cols): Registration Form -->
+      <section class="bento-card col-8 stripe-accent">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;">Formulario de Acreditación</h2>
+          <div style="display: flex; gap: 8px;">
+            <span class="badge-tag cyan">⚡ Validación Inmediata</span>
+            <span class="badge-tag">📱 Wallet Ready</span>
+          </div>
+        </div>
+
+        <form style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;" onsubmit="event.preventDefault();">
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">Nombre Completo</label>
+            <input type="text" class="input-glass" value="Juan Pérez" placeholder="Ej. Juan Pérez">
+          </div>
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">DNI / Pasaporte</label>
+            <input type="text" class="input-glass" value="38.924.110" placeholder="00.000.000">
+          </div>
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">País / Delegación</label>
+            <select class="input-glass">
+              <option>Argentina (Jujuy)</option>
+              <option>Chile (Antofagasta / Mejillones)</option>
+              <option>Paraguay (Asunción / Chaco)</option>
+              <option>Brasil (Mato Grosso do Sul)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">Empresa / Entidad</label>
+            <input type="text" class="input-glass" value="Lithium Corp S.A." placeholder="Empresa S.A.">
+          </div>
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">Cargo / Función</label>
+            <input type="text" class="input-glass" value="Director de Operaciones" placeholder="Cargo">
+          </div>
+          <div>
+            <label style="display: block; font-family: var(--font-mono); font-size: 11px; color: var(--color-paper-dim); text-transform: uppercase; margin-bottom: 6px;">Sector Productivo</label>
+            <select class="input-glass">
+              <option>Minería & Litio</option>
+              <option>Comercio Exterior & Logística</option>
+              <option>Economía del Conocimiento</option>
+              <option>Agroindustria & Maquinaria</option>
+            </select>
+          </div>
+
+          <div style="grid-column: span 2; margin-top: 10px;">
+            <button type="button" class="btn-solid-accent" style="width: 100%;">
+              Generar Credencial Digital & Pase QR →
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Column Right (4 cols): Holographic Pass Badge -->
+      <aside class="bento-card col-4 stripe-violet" style="background: var(--color-surface-elevated); align-items: center; text-align: center;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 12px; letter-spacing: 0.05em;">EXPOJUY 2026</span>
+          <span class="badge-tag" style="color: #e6c9ff; border-color: rgba(124, 90, 158, 0.4);">PASE VIP / B2B</span>
+        </div>
+
+        <!-- QR Code Container -->
+        <div style="background: #ffffff; padding: 14px; border-radius: var(--radius-md); box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 18px; max-width: 180px;">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoTvwbL5woPziT4jK0Khm42Ld0hurlYxvL21utFrfUXlZcTsPJYwToaS6yNa9c3f83Jr229D6lru7HeJRSOA0ulC0lQuakECfnRGF1_zTpiF34JTXX58F8JJJHeedSgOONkxjpByAiYQXJJIHu28uLYpXAB_fOrN7raE1yXQBUWM3Jtlib4MdSPdd_faEIKkh803aO4dobWmOvuWXZwWfbscaWYudQ83g1RVzXr1HdVaoHS6NkU6ZAamHuVayaVOP1wQ" alt="QR Credencial" style="width: 100%; height: auto; display: block;">
+        </div>
+
+        <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 4px;">Juan Pérez</h3>
+        <p style="font-size: 13px; color: var(--color-paper-dim); margin-bottom: 14px;">Lithium Corp S.A. · Director</p>
+
+        <div class="badge-tag cyan" style="margin-bottom: 16px; padding: 6px 14px;">
+          <span class="live-dot" style="background: var(--color-accent); width: 6px; height: 6px;"></span>
+          ACCESO HABILITADO · 9–12 OCT
+        </div>
+
+        <div style="width: 100%; padding-top: 12px; border-top: 1px solid var(--color-border); font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); letter-spacing: 0.15em;">
+          ID: EXJ-8942-B · PUERTA 01 · ZONAS A+B
+        </div>
+      </aside>
+
+      <!-- Bottom Card (12 cols): Turnstile Scanner Simulator -->
+      <section class="bento-card col-12 stripe-terracotta">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;">
+          
+          <!-- Scanner Area -->
+          <div style="position: relative; height: 200px; border: 2px dashed rgba(245, 241, 232, 0.2); border-radius: var(--radius-md); background: rgba(11, 10, 18, 0.6); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-paper-muted); letter-spacing: 0.1em;">
+              [ ESCÁNER ÓPTICO DE MOLINETE ]
+            </div>
+            <!-- Laser beam animation -->
+            <div class="laser-line"></div>
+          </div>
+
+          <!-- Telemetry info -->
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+              <span style="display: inline-flex; width: 10px; height: 10px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent);"></span>
+              <h3 style="font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--color-accent); text-transform: uppercase;">
+                INGRESO VALIDADO
+              </h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Torniquete</span>
+                <p style="font-size: 13px; font-weight: 600; color: var(--color-paper); margin-top: 4px;">Molinete 04 — Acceso Sur</p>
+              </div>
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Acreditado</span>
+                <p style="font-size: 13px; font-weight: 600; color: var(--color-paper); margin-top: 4px;">Juan Pérez (Expositor)</p>
+              </div>
+              <div>
+                <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-paper-muted); text-transform: uppercase;">Latencia Sync</span>
+                <p style="font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--color-accent); margin-top: 4px;">42 ms (PWA Local)</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        ExpoJuy
+        <span>2026</span>
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+</body>
+</html>
