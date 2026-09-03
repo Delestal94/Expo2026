@@ -9,10 +9,10 @@ export interface Exhibitor {
 }
 
 export const EJE_FILTERS: Array<{ id: Exhibitor["eje"]; label: string; color: string }> = [
-  { id: "mineria", label: "Minería y litio", color: "var(--color-teal)" },
-  { id: "comercio", label: "Comercio exterior", color: "var(--color-blue)" },
+  { id: "mineria", label: "Minería y litio", color: "var(--color-cyan)" },
+  { id: "comercio", label: "Comercio exterior", color: "var(--color-violet)" },
   { id: "corredor", label: "Corredor bioceánico", color: "var(--color-magenta)" },
-  { id: "conocimiento", label: "Economía del conocimiento", color: "var(--color-yellow)" },
+  { id: "conocimiento", label: "Economía del conocimiento", color: "var(--color-lavender)" },
 ];
 
 /** Perfiles de ejemplo para el mockup — no son expositores confirmados. */
@@ -22,7 +22,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Altiplano Servicios Mineros",
     eje: "mineria",
     ejeLabel: "Minería y litio",
-    color: "var(--color-teal)",
+    color: "var(--color-cyan)",
     pitch: "Logística y mantenimiento de equipos para operaciones de litio en el altiplano jujeño.",
     busca: "Contratos con operadoras mineras",
   },
@@ -31,7 +31,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Quebrada Litio Insumos",
     eje: "mineria",
     ejeLabel: "Minería y litio",
-    color: "var(--color-teal)",
+    color: "var(--color-cyan)",
     pitch: "Provisión de insumos químicos certificados para plantas de procesamiento de litio.",
     busca: "Distribuidores regionales",
   },
@@ -40,7 +40,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Jujuy Exporta SRL",
     eje: "comercio",
     ejeLabel: "Comercio exterior",
-    color: "var(--color-blue)",
+    color: "var(--color-violet)",
     pitch: "Consultora de comercio exterior especializada en trámites de exportación agroindustrial.",
     busca: "Compradores en Chile y Paraguay",
   },
@@ -49,7 +49,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Andes Trade Corredor",
     eje: "comercio",
     ejeLabel: "Comercio exterior",
-    color: "var(--color-blue)",
+    color: "var(--color-violet)",
     pitch: "Bróker de cargas para el Corredor Bioceánico, con operación en tres pasos fronterizos.",
     busca: "Socios logísticos internacionales",
   },
@@ -76,7 +76,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Jujuy Software Cluster",
     eje: "conocimiento",
     ejeLabel: "Economía del conocimiento",
-    color: "var(--color-yellow)",
+    color: "var(--color-lavender)",
     pitch: "Agrupación de estudios de desarrollo de software y agtech de la provincia.",
     busca: "Clientes B2B e inversión ángel",
   },
@@ -85,7 +85,7 @@ export const EXHIBITORS: Exhibitor[] = [
     name: "Clustear Innovación",
     eje: "conocimiento",
     ejeLabel: "Economía del conocimiento",
-    color: "var(--color-yellow)",
+    color: "var(--color-lavender)",
     pitch: "Incubadora de proyectos de economía del conocimiento del ecosistema jujeño.",
     busca: "Mentores y fondos de inversión",
   },

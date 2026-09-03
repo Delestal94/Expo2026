@@ -13,7 +13,7 @@ interface Band {
   glow: number;
 }
 
-const PALETTE = ["#6AC6C1", "#066DB3", "#F62C90", "#F5AF18"];
+const PALETTE = ["#2de3d6", "#7c4dff", "#b83fe0", "#b9a6f5"];
 
 function createBands(height: number): Band[] {
   return PALETTE.map((color, i) => ({
