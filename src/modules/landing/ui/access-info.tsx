@@ -5,7 +5,8 @@ import { CtaLink } from "./cta-link";
 import { ShareLocationButton } from "./share-location-button";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
-const WHATSAPP_URL = "https://wa.me/5493884212955";
+/** Reutilizado por Contacto — un solo número de WhatsApp para todo el sitio. */
+export const WHATSAPP_URL = "https://wa.me/5493884212955";
 
 const MAPS_EMBED_URL =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3639.6668824201447!2d-65.33387282359566!3d-24.18341278474179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0ee2033f07f3%3A0xc77a811c6a4b0561!2sCiudad%20Cultural!5e0!3m2!1ses-419!2sar!4v1726026179941!5m2!1ses-419!2sar&zoom=14&maptype=roadmap&disableDefaultUI=true&zoomControl=false&streetViewControl=false&fullscreenControl=false";

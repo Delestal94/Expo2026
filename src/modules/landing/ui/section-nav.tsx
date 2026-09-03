@@ -12,10 +12,14 @@ interface SectionLink {
 const SECTIONS: SectionLink[] = [
   { id: "sobre", label: "Sobre el evento", shortLabel: "Sobre", color: "var(--color-cyan)" },
   { id: "ejes", label: "Ejes", shortLabel: "Ejes", color: "var(--color-violet)" },
+  { id: "noticias", label: "Noticias", shortLabel: "Noticias", color: "var(--color-cyan)" },
   { id: "galeria", label: "Galería", shortLabel: "Galería", color: "var(--color-magenta)" },
   { id: "mapa", label: "Mapa", shortLabel: "Mapa", color: "var(--color-lavender)" },
+  { id: "agenda", label: "Agenda", shortLabel: "Agenda", color: "var(--color-violet)" },
   { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-cyan)" },
   { id: "acceso", label: "Acceso y cómo llegar", shortLabel: "Acceso", color: "var(--color-violet)" },
+  { id: "contacto", label: "Contacto", shortLabel: "Contacto", color: "var(--color-magenta)" },
+  { id: "faq", label: "Preguntas frecuentes", shortLabel: "FAQ", color: "var(--color-lavender)" },
 ];
 
 /**
