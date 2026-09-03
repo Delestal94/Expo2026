@@ -18,7 +18,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/10 via-transparent to-ink"
       />
 
-      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
+      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]">
         <div className="flex items-center gap-3">
           <Image
             src="/images/logos/expojuy-mark.svg"
@@ -33,20 +33,23 @@ export function Hero() {
       </nav>
 
       <div className="relative z-10 flex flex-col gap-8">
-        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
           {t("tagline")}
         </span>
         <h1 className="text-balance font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.92] font-black text-paper">
-          {t("titleLine1")}
-          <br />
-          {t("titleLine2")}
+          <span className="block motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
+            {t("titleLine1")}
+          </span>
+          <span className="block motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.26s_backwards]">
+            {t("titleLine2")}
+          </span>
         </h1>
-        <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl">
+        <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+      <div className="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.48s_backwards]">
         <Countdown />
         <div className="flex flex-wrap gap-3">
           <a

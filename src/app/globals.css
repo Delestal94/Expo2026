@@ -76,3 +76,20 @@ body {
     background-position: 50% 0;
   }
 }
+
+/* Entrada del Hero: cada bloque se asienta como un estrato que decanta,
+   con leve compresión vertical en vez de un fade genérico. Gateado por
+   motion-safe: en el markup, así que acá no hace falta repetir la
+   media query de prefers-reduced-motion. */
+@keyframes strata-settle {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scaleY(0.94);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    transform-origin: bottom;
+  }
+}
