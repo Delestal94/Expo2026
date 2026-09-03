@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from "react";
 import { VENUE_2024_SEED } from "./venue-2024-seed";
 
-// El lienzo respeta la proporción del plano CAD original (1650x1200): si no,
-// las zonas quedan deformadas al escalar cada eje por separado.
+// El lienzo usa las mismas dimensiones que el plano simplificado 2024
+// (1200x850), así las coordenadas del calco se leen 1:1 y nada se deforma.
 const VIEW_W = 1200;
-const VIEW_H = 873;
+const VIEW_H = 850;
 const MIN_SIZE = 20;
 const CREATE_THRESHOLD = 8;
 const STORAGE_KEY = "expojuy:mapa-editor:zones:v1";
