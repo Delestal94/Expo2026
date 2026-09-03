@@ -14,22 +14,30 @@ export function GalleryPreview() {
         Explorá la 16ª edición
       </h2>
 
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {photos.map((photo, i) => (
-          <div
-            key={photo.src}
-            className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line"
-          >
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              sizes="(min-width: 640px) 33vw, 50vw"
-              className="object-cover transition duration-500 hover:scale-105"
-              priority={i === 0}
-            />
-          </div>
-        ))}
+      {/* Mobile: tira con scroll horizontal y snap — un gesto de "hojear" que no
+          tiene sentido replicar en desktop, donde vuelve a ser una grilla estática. */}
+      <div className="relative -mx-6 mt-8 sm:mx-0">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-1 [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden">
+          {photos.map((photo, i) => (
+            <div
+              key={photo.src}
+              className="relative aspect-[4/3] w-[68vw] shrink-0 snap-start overflow-hidden rounded-xl border border-line sm:w-auto sm:shrink"
+            >
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                fill
+                sizes="(min-width: 640px) 33vw, 68vw"
+                className="object-cover transition duration-500 hover:scale-105"
+                priority={i === 0}
+              />
+            </div>
+          ))}
+        </div>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-ink to-transparent sm:hidden"
+        />
       </div>
 
       <Link
