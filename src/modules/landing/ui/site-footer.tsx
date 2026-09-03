@@ -18,8 +18,8 @@ function LogoGrid({
           key={logo.src}
           className={
             tone === "dark"
-              ? "flex h-40 w-72 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
-              : "flex h-40 w-72 items-center justify-center rounded-xl bg-paper p-6 shadow-sm"
+              ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
+              : "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl bg-paper p-6 shadow-sm"
           }
         >
           <div className="relative h-full w-full">
@@ -46,14 +46,8 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-line px-6 py-16 sm:px-10 lg:px-16">
-      {/* Organiza, acompañan y sponsors — cada grupo a todo el ancho, en fila horizontal. */}
-      <div className="mx-auto flex max-w-5xl flex-col gap-10 border-b border-line pb-12">
-        <div className="text-center">
-          <span className="font-mono text-xs font-semibold tracking-[0.25em] text-accent uppercase">
-            {t("organizes")}
-          </span>
-          <LogoGrid logos={[organizer]} tone="dark" />
-        </div>
+      {/* Acompañan, sponsors y organiza — cada grupo a todo el ancho, en una sola fila. */}
+      <div className="mx-auto flex max-w-380 flex-col gap-10 border-b border-line pb-12">
         <div className="text-center">
           <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
             Acompañan
@@ -65,6 +59,12 @@ export function SiteFooter() {
             Nuestros sponsors
           </span>
           <LogoGrid logos={SPONSORS} />
+        </div>
+        <div className="text-center">
+          <span className="font-mono text-xs font-semibold tracking-[0.25em] text-accent uppercase">
+            {t("organizes")}
+          </span>
+          <LogoGrid logos={[organizer]} tone="dark" />
         </div>
       </div>
 
