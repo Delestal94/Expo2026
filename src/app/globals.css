@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0b0a12;
+  /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
+     fondo del sitio lea como el navy saturado de la referencia, no como un
+     gris-negro neutro. */
+  --color-ink: #0d0b2e;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
   /* Paleta de marca ExpoJuy — los 4 colores del isotipo "J", coherente
