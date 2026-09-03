@@ -1,10 +1,11 @@
 import { useTranslations } from "next-intl";
+import { EntranceVein } from "@/lib/ui/entrance-vein";
 
 const STATS = [
   { key: "edition", value: "17ª", color: "var(--color-cyan)" },
   { key: "days", value: "4", color: "var(--color-violet)" },
   { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9–12", color: "var(--color-lavender)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
 ] as const;
 
 /** Cada banda corta distinto, como un afloramiento real — no una grilla prolija. */
@@ -19,7 +20,8 @@ export function About() {
   const t = useTranslations("Landing.About");
 
   return (
-    <section id="sobre" className="border-b border-line px-6 py-24 sm:px-10 lg:px-16">
+    <section id="sobre" className="relative border-b border-line px-6 py-24 sm:px-10 lg:px-16">
+      <EntranceVein color="var(--color-cyan)" />
       <div className="grid gap-y-14 lg:grid-cols-12 lg:gap-x-10">
         <div className="lg:col-span-7">
           <p className="text-balance font-display text-3xl leading-tight font-medium text-paper sm:text-4xl lg:text-5xl">

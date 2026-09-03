@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getFeatureFlags } from "@/lib/config/flags";
+import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { CtaLink } from "./cta-link";
 import { ShareLocationButton } from "./share-location-button";
 
@@ -37,6 +38,7 @@ export async function AccessInfo() {
   return (
     <section className="relative overflow-hidden border-y border-line px-6 py-24 sm:px-10 lg:px-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={BRAND_WASH} />
+      <EntranceVein color="var(--color-violet)" />
 
       {/* Mismo ritmo de grilla que About/Ejes: 12 columnas a todo el ancho de la sección, sin
           tarjetas angostas flotando en el centro. */}
@@ -137,7 +139,11 @@ export async function AccessInfo() {
         </div>
 
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
-          <div className="h-64 w-full sm:h-72 lg:h-80">
+          {/* El mapa ocupa el alto real de la tarjeta (que lo define el texto de
+              precios de la columna izquierda, no el mapa) — a la altura vieja le
+              sobraba mucho contenedor vacío antes de llegar a la tarjeta de
+              proveedores. */}
+          <div className="h-80 w-full sm:h-104 lg:h-120">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}

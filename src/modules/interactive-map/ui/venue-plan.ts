@@ -1,4 +1,59 @@
-import type { EditorZone } from "./zone-editor";
+export type Category =
+  | "cubierto"
+  | "artesano"
+  | "descubierto"
+  | "gastronomico"
+  | "juego"
+  | "institucional"
+  | "infraestructura";
+
+export type ZoneShape = "rect" | "circle" | "polygon";
+
+export interface VenueZone {
+  id: string;
+  label: string;
+  category: Category;
+  shape: ZoneShape;
+  /** Grados, sentido horario. Ignorado para shape:"circle". */
+  rotation: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /**
+   * Solo para shape:"polygon" — vértices normalizados (0..1) relativos al
+   * bounding box de la zona. Al guardarlos relativos, mover y redimensionar
+   * siguen funcionando con la misma lógica que un rectángulo: solo cambian
+   * x/y/width/height y el polígono se reescala solo.
+   */
+  points?: [number, number][];
+  areaM2: number | null;
+  notes: string;
+}
+
+/** Convierte los vértices normalizados de un polígono a coordenadas del lienzo. */
+export function polygonPoints(zone: VenueZone) {
+  if (!zone.points?.length) return "";
+  return zone.points
+    .map(([px, py]) => `${zone.x + px * zone.width},${zone.y + py * zone.height}`)
+    .join(" ");
+}
+
+export const CATEGORIES: { id: Category; label: string; color: string }[] = [
+  { id: "cubierto", label: "Cubierto", color: "var(--color-cyan)" },
+  { id: "artesano", label: "Artesano", color: "var(--color-magenta)" },
+  { id: "descubierto", label: "Descubierto", color: "var(--color-violet)" },
+  { id: "gastronomico", label: "Gastronómico", color: "var(--color-lavender)" },
+  { id: "juego", label: "Juegos", color: "var(--color-accent)" },
+  { id: "institucional", label: "Institucional", color: "#9a94ad" },
+  { id: "infraestructura", label: "Infraestructura", color: "#5c5a6b" },
+];
+
+export function categoryMeta(id: Category) {
+  return CATEGORIES.find((c) => c.id === id) ?? CATEGORIES[0];
+}
+
+
 
 /**
  * Calco del plano simplificado de EXPOJUY 2024 (Ciudad Cultural).
@@ -12,16 +67,16 @@ import type { EditorZone } from "./zone-editor";
  * no un plano de obra.
  */
 
-type ZoneInput = Omit<EditorZone, "shape" | "rotation" | "areaM2" | "notes"> & Partial<EditorZone>;
+type ZoneInput = Omit<VenueZone, "shape" | "rotation" | "areaM2" | "notes"> & Partial<VenueZone>;
 
-function zone(input: ZoneInput): EditorZone {
+function zone(input: ZoneInput): VenueZone {
   return { shape: "rect", rotation: 0, areaM2: null, notes: "", ...input };
 }
 
 /** Zona definida por su caja (x1,y1)-(x2,y2) en coordenadas del plano. */
 function box(
   input: Omit<ZoneInput, "x" | "y" | "width" | "height"> & { at: [number, number, number, number] },
-): EditorZone {
+): VenueZone {
   const { at, ...rest } = input;
   const [x1, y1, x2, y2] = at;
   return zone({ ...rest, x: x1, y: y1, width: Math.max(8, x2 - x1), height: Math.max(8, y2 - y1) });
@@ -38,7 +93,7 @@ const pabellon = box({
 });
 
 // ── Bloque institucional (la L de la esquina superior izquierda) ────────────
-const institucional: EditorZone[] = [
+const institucional: VenueZone[] = [
   box({ id: "inst-eventos", label: "Eventos CCE", category: "institucional", at: [110, 27, 250, 88] }),
   box({ id: "inst-emergencia", label: "Emergencia", category: "institucional", at: [250, 27, 332, 88] }),
   box({ id: "inst-fne", label: "FNE", category: "institucional", at: [110, 88, 250, 190] }),
@@ -58,7 +113,7 @@ const A_LABELS = [
 ];
 const A_START = 383;
 const A_STEP = (1035 - A_START) / A_LABELS.length;
-const aSeries: EditorZone[] = A_LABELS.map((label, i) =>
+const aSeries: VenueZone[] = A_LABELS.map((label, i) =>
   box({
     id: label,
     label,
@@ -73,7 +128,7 @@ const aSeries: EditorZone[] = A_LABELS.map((label, i) =>
 );
 
 // A20 y A22 van aparte, en el borde inferior izquierdo del pabellón.
-const aExtra: EditorZone[] = [
+const aExtra: VenueZone[] = [
   box({ id: "A20", label: "A20", category: "cubierto", at: [385, 310, 435, 338] }),
   box({ id: "A22", label: "A22", category: "cubierto", at: [400, 338, 450, 365] }),
 ];
@@ -81,8 +136,8 @@ const aExtra: EditorZone[] = [
 // ── Serie B — 117 stands en espina de pescado ───────────────────────────────
 // Retícula de rombos con pasillos diagonales en el mismo sentido que el plano
 // (bajan hacia la derecha), lo que separa los bloques en bandas.
-const bSeries: EditorZone[] = (() => {
-  const out: EditorZone[] = [];
+const bSeries: VenueZone[] = (() => {
+  const out: VenueZone[] = [];
   const left = 425;
   const top = 92;
   const right = 950;
@@ -119,8 +174,8 @@ const bSeries: EditorZone[] = (() => {
 })();
 
 // ── Serie C — 28 stands de artesanos, sobre el lateral derecho del pabellón ─
-const cSeries: EditorZone[] = (() => {
-  const out: EditorZone[] = [];
+const cSeries: VenueZone[] = (() => {
+  const out: VenueZone[] = [];
   const add = (label: string, at: [number, number, number, number]) =>
     out.push(box({ id: label, label, category: "artesano", at }));
 
@@ -145,7 +200,7 @@ const cSeries: EditorZone[] = (() => {
 })();
 
 // ── Serie D — stands descubiertos, con las cotas que trae el plano ──────────
-const dSeries: EditorZone[] = [
+const dSeries: VenueZone[] = [
   box({ id: "D1", label: "D1", category: "descubierto", at: [120, 318, 180, 365], areaM2: 80 }),
   box({ id: "D2", label: "D2", category: "descubierto", at: [120, 365, 180, 425], areaM2: 100 }),
   box({ id: "D3", label: "D3", category: "descubierto", at: [120, 425, 180, 480], areaM2: 100 }),
@@ -157,12 +212,12 @@ const dSeries: EditorZone[] = [
   box({ id: "D8-50", label: "D8", category: "descubierto", at: [296, 370, 345, 425], areaM2: 50 }),
   box({ id: "D9", label: "D9", category: "descubierto", at: [300, 455, 345, 495], areaM2: 25 }),
   box({ id: "D10", label: "D10", category: "descubierto", at: [345, 445, 390, 485], areaM2: 25 }),
-  box({ id: "D11", label: "D11", category: "descubierto", at: [380, 395, 425, 440], areaM2: 25, rotation: -12 }),
-  box({ id: "D12", label: "D12", category: "descubierto", at: [420, 405, 462, 450], areaM2: 25, rotation: -12 }),
-  box({ id: "D13", label: "D13", category: "descubierto", at: [458, 425, 503, 470], areaM2: 25, rotation: -12 }),
+  box({ id: "D11", label: "D11", category: "descubierto", at: [375, 390, 420, 435], areaM2: 25, rotation: -12 }),
+  box({ id: "D12", label: "D12", category: "descubierto", at: [425, 412, 462, 450], areaM2: 25, rotation: -12 }),
+  box({ id: "D13", label: "D13", category: "descubierto", at: [469, 429, 514, 474], areaM2: 25, rotation: -12 }),
   box({ id: "D14-a", label: "D14", category: "descubierto", at: [558, 420, 630, 470], areaM2: 70, rotation: -10 }),
-  box({ id: "D14-b", label: "D14", category: "descubierto", at: [630, 412, 690, 460], areaM2: 70, rotation: -10 }),
-  box({ id: "D15", label: "D15", category: "descubierto", at: [660, 405, 730, 455], areaM2: 75, rotation: -10 }),
+  box({ id: "D14-b", label: "D14", category: "descubierto", at: [630, 412, 680, 460], areaM2: 70, rotation: -10 }),
+  box({ id: "D15", label: "D15", category: "descubierto", at: [678, 405, 730, 455], areaM2: 75, rotation: -10 }),
   box({ id: "D7-b", label: "D7", category: "descubierto", at: [733, 402, 766, 447], rotation: -10 }),
   box({ id: "D16", label: "D16", category: "descubierto", at: [895, 400, 940, 442], areaM2: 25 }),
   box({ id: "D42", label: "D42", category: "descubierto", at: [370, 508, 405, 550], areaM2: 25 }),
@@ -183,7 +238,7 @@ const dSeries: EditorZone[] = [
 ];
 
 // ── Zonas E — polígonos rojos del sector de servicios y juegos ──────────────
-const eZones: EditorZone[] = [
+const eZones: VenueZone[] = [
   box({
     id: "E1",
     label: "E1 — Bomberos",
@@ -234,7 +289,7 @@ const escenario = box({
   id: "escenario",
   label: "Escenario",
   category: "infraestructura",
-  at: [800, 573, 850, 630],
+  at: [800, 572, 890, 627],
 });
 
 const patioComidas = box({
@@ -255,11 +310,11 @@ const acceso = box({
   id: "acceso",
   label: "Acceso",
   category: "infraestructura",
-  at: [10, 578, 80, 606],
+  at: [11, 570, 119, 647],
 });
 
 // ── Serie F — gastronómicos: dos pares sueltos y la fila F03..F10 ───────────
-const fSeries: EditorZone[] = [
+const fSeries: VenueZone[] = [
   box({ id: "F1-a", label: "F01", category: "gastronomico", at: [130, 663, 185, 715] }),
   box({ id: "F2-a", label: "F02", category: "gastronomico", at: [185, 663, 235, 715] }),
   box({ id: "F1-b", label: "F01", category: "gastronomico", at: [770, 690, 818, 745] }),
@@ -274,7 +329,7 @@ const fSeries: EditorZone[] = [
   box({ id: "F10", label: "F10", category: "gastronomico", at: [696, 795, 751, 845] }),
 ];
 
-export const VENUE_2024_SEED: EditorZone[] = [
+export const VENUE_PLAN: VenueZone[] = [
   pabellon,
   ...institucional,
   ...aSeries,

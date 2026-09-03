@@ -27,7 +27,7 @@ export function Directory() {
           type="button"
           onClick={() => selectFilter("todos")}
           aria-pressed={filter === "todos"}
-          className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition ${
+          className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100 ${
             filter === "todos"
               ? "border-paper bg-paper text-ink"
               : "border-line text-paper-dim hover:border-paper-dim"
@@ -43,7 +43,7 @@ export function Directory() {
               type="button"
               onClick={() => selectFilter(eje.id)}
               aria-pressed={isActive}
-              className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition"
+              className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100"
               style={
                 isActive
                   ? { backgroundColor: eje.color, borderColor: eje.color, color: "var(--color-ink)" }
@@ -57,8 +57,8 @@ export function Directory() {
       </div>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((exhibitor) => (
-          <ExhibitorCard key={exhibitor.id} exhibitor={exhibitor} />
+        {visible.map((exhibitor, i) => (
+          <ExhibitorCard key={exhibitor.id} exhibitor={exhibitor} index={i} />
         ))}
       </div>
 

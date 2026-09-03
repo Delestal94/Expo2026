@@ -14,31 +14,33 @@
   },
   "InteractiveMap": {
     "eyebrow": "Mapa interactivo",
-    "title": "Ciudad Cultural, como datos — no como una imagen fija",
-    "description": "Plano de referencia para este prototipo: cada pabellón corresponde a uno de los ejes de la edición, y las salas de ronda de negocios muestran su estado en tiempo real durante el evento. Tocá o pasá el mouse por una zona para ver el detalle.",
-    "svgLabel": "Plano esquemático de referencia de Ciudad Cultural",
-    "kind": {
-      "pabellon": "Pabellón de exposición",
-      "sala": "Sala de rondas de negocios",
-      "acceso": "Acceso"
+    "title": "El plano del predio, como datos — no como una imagen fija",
+    "description": "Calco del plano de la edición 2024 en Ciudad Cultural: el pabellón cubierto, los stands descubiertos, el patio gastronómico y los sectores de servicios. Filtrá por tipo o tocá un stand para ver su código y superficie. Las cantidades por categoría son las del calco; el layout definitivo de 2026 se confirma con la Cámara.",
+    "svgLabel": "Plano del predio de Ciudad Cultural con los stands de la edición 2024",
+    "legend": "Referencias",
+    "area": "{m2} m² de superficie",
+    "standHint": "Los stands se asignan por la convocatoria oficial de la Cámara, no desde este sitio.",
+    "emptyTitle": "Recorré el plano",
+    "emptyHint": "Pasá el mouse o tocá cualquier stand para ver su código, tipo y superficie.",
+    "filter": {
+      "all": "Todos ({count})"
     },
-    "status": {
-      "enRonda": "EN RONDA",
-      "disponible": "DISPONIBLE"
-    },
-    "statusDetail": {
-      "enRonda": "en ronda de negocios ahora",
-      "disponible": "disponible"
-    },
-    "exampleStatus": "Estado de ejemplo para este prototipo — {detail}."
+    "category": {
+      "cubierto": "Cubiertos",
+      "artesano": "Artesanos",
+      "descubierto": "Descubiertos",
+      "gastronomico": "Gastronómicos",
+      "juego": "Juegos",
+      "institucional": "Institucional",
+      "infraestructura": "Infraestructura"
+    }
   },
   "Landing": {
     "Hero": {
       "eyebrow": "ExpoJuy · Jujuy, Argentina",
       "edition": "17ª edición",
       "tagline": "Desafío Digital ExpoJuy 2026 · Propuesta",
-      "titleLine1": "EXPOJUY",
-      "titleLine2": "2026",
+      "titleAlt": "EXPOJUY 2026 · De Jujuy al mundo",
       "description": "Donde la Quebrada se conecta con el mundo: cuatro días de rondas de negocios, comercio exterior y economía del conocimiento en el corazón del Corredor Bioceánico.",
       "ctaAttend": "Quiero asistir",
       "ctaProviders": "Sumar mi empresa como proveedora"
@@ -51,7 +53,7 @@
         "edition": "Edición de ExpoJuy",
         "days": "Días, el doble de intensidad",
         "stands": "Stands esperados",
-        "dates": "Octubre, Ciudad Cultural"
+        "dates": "Días de octubre, Ciudad Cultural"
       }
     },
     "Ejes": {
