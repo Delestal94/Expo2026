@@ -1,10 +1,7 @@
 /**
- * EXPOJUY 2026 — FLUID STRATA SHADER ENGINE (WEBGL)
- * 4 Glowing Brand Mineral Strata Ribbons calibrated behind the Header Title:
- * 1. Cyan (#2de3d6)
- * 2. Violet (#7c3aed)
- * 3. Magenta (#d946ef)
- * 4. Lavender (#c4b5fd)
+ * EXPOJUY 2026 — MASTER WEBGL STRATA SHADER ENGINE
+ * Restaurado al algoritmo original de estratos geológicos (Cerro de los Siete Colores)
+ * con ondas orgánicas y la nueva paleta oficial de marca (Cyan, Violeta, Magenta, Lavanda).
  */
 
 (function () {
@@ -12,18 +9,18 @@
     const canvas = document.getElementById('strata-canvas');
     if (!canvas) return;
 
-    const gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false }) || 
-               canvas.getContext('experimental-webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
+    const gl = canvas.getContext('webgl', { alpha: true, antialias: true }) || 
+               canvas.getContext('experimental-webgl', { alpha: true, antialias: true });
 
     if (!gl) {
-      console.warn('[ExpoJuy 2026] WebGL not supported.');
+      console.warn('[ExpoJuy 2026] WebGL not supported, falling back to CSS background.');
       return;
     }
 
     function syncSize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const width = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
-      const height = canvas.parentElement ? canvas.parentElement.clientHeight : 560;
+      const height = canvas.parentElement ? canvas.parentElement.clientHeight : 520;
       
       if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
         canvas.width = width * dpr;
@@ -49,65 +46,64 @@
       uniform float u_time;
       uniform vec2 u_resolution;
 
-      // Official Brand Colors from develop
+      // Paleta oficial de marca ExpoJuy (satinada/estrato mineral)
       const vec3 colorCyan      = vec3(0.176, 0.890, 0.839); // #2de3d6
       const vec3 colorViolet    = vec3(0.486, 0.227, 0.929); // #7c3aed
       const vec3 colorMagenta   = vec3(0.851, 0.275, 0.937); // #d946ef
       const vec3 colorLavender  = vec3(0.769, 0.710, 0.992); // #c4b5fd
+      const vec3 colorInk       = vec3(0.043, 0.039, 0.071); // #0b0a12
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+                   mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+      }
 
       void main() {
         vec2 uv = v_texCoord;
-        float t = u_time * 0.18;
+        float t = u_time * 0.15;
 
-        // Smooth flowing harmonic waves
-        float w1 = sin(uv.x * 2.2 + t * 0.75) * 0.070;
-        float w2 = cos(uv.x * 3.6 - t * 0.55 + 1.2) * 0.038;
-        float w3 = sin(uv.x * 5.2 + t * 0.35 + 2.1) * 0.022;
-        float displacement = w1 + w2 + w3;
+        // Ondulaciones orgánicas suaves (metáfora geológica de montaña y agua)
+        float wave1 = sin(uv.x * 2.8 + t * 0.8) * 0.06;
+        float wave2 = cos(uv.x * 3.6 - t * 0.6) * 0.04;
+        float n = (noise(vec2(uv.x * 3.0 + t * 0.2, uv.y * 1.5)) - 0.5) * 0.05;
 
-        // Position ribbons right behind the "EXPOJUY 2026" title (framing the letters)
-        float y = uv.y + displacement;
+        float yBase = uv.y + wave1 + wave2 + n;
+        
+        // Posicionamiento de las bandas en el corte superior
+        float bandCenter = 0.52;
+        float bandThickness = 0.026;
+        float spacing = 0.052;
 
-        // 4 Ribbon Centerlines calibrated to frame EXPOJUY 2026
-        float c1 = 0.76; // Cyan (top of title)
-        float c2 = 0.69; // Violet (upper-mid title)
-        float c3 = 0.62; // Magenta (lower-mid title)
-        float c4 = 0.55; // Lavender (baseline of title, above subtitle)
+        // 4 Estratos minerales correspondientes a los 4 colores de marca
+        float r1 = smoothstep(bandCenter + spacing * 1.5 - bandThickness, bandCenter + spacing * 1.5, yBase) *
+                   (1.0 - smoothstep(bandCenter + spacing * 1.5, bandCenter + spacing * 1.5 + bandThickness, yBase));
 
-        float thickness = 0.024;
+        float r2 = smoothstep(bandCenter + spacing * 0.5 - bandThickness, bandCenter + spacing * 0.5, yBase) *
+                   (1.0 - smoothstep(bandCenter + spacing * 0.5, bandCenter + spacing * 0.5 + bandThickness, yBase));
 
-        float d1 = abs(y - c1);
-        float d2 = abs(y - c2);
-        float d3 = abs(y - c3);
-        float d4 = abs(y - c4);
+        float r3 = smoothstep(bandCenter - spacing * 0.5 - bandThickness, bandCenter - spacing * 0.5, yBase) *
+                   (1.0 - smoothstep(bandCenter - spacing * 0.5, bandCenter - spacing * 0.5 + bandThickness, yBase));
 
-        // Core ribbon intensities
-        float core1 = smoothstep(thickness, 0.0, d1);
-        float core2 = smoothstep(thickness, 0.0, d2);
-        float core3 = smoothstep(thickness, 0.0, d3);
-        float core4 = smoothstep(thickness, 0.0, d4);
+        float r4 = smoothstep(bandCenter - spacing * 1.5 - bandThickness, bandCenter - spacing * 1.5, yBase) *
+                   (1.0 - smoothstep(bandCenter - spacing * 1.5, bandCenter - spacing * 1.5 + bandThickness, yBase));
 
-        // Luminous glowing falloffs
-        float glow1 = exp(-d1 * 22.0) * 0.75;
-        float glow2 = exp(-d2 * 20.0) * 0.75;
-        float glow3 = exp(-d3 * 20.0) * 0.75;
-        float glow4 = exp(-d4 * 22.0) * 0.70;
+        vec3 color = colorInk;
+        color = mix(color, colorCyan, r1 * 0.85);
+        color = mix(color, colorViolet, r2 * 0.85);
+        color = mix(color, colorMagenta, r3 * 0.85);
+        color = mix(color, colorLavender, r4 * 0.85);
 
-        // Additive glowing colors
-        vec3 ribbonColor = vec3(0.0);
-        ribbonColor += colorCyan * (core1 * 0.95 + glow1 * 0.70);
-        ribbonColor += colorViolet * (core2 * 0.95 + glow2 * 0.70);
-        ribbonColor += colorMagenta * (core3 * 0.95 + glow3 * 0.70);
-        ribbonColor += colorLavender * (core4 * 0.90 + glow4 * 0.65);
-
-        // Vertical fade so it gracefully vanishes near top and bottom
-        float bottomFade = smoothstep(0.18, 0.38, uv.y);
-        float topFade = smoothstep(0.98, 0.88, uv.y);
-        float mask = bottomFade * topFade;
-
-        float alpha = clamp((core1 + core2 + core3 + core4 + glow1 + glow2 + glow3 + glow4) * 1.15, 0.0, 1.0) * mask;
-
-        gl_FragColor = vec4(ribbonColor * mask, alpha);
+        // Desvanecimiento suave natural
+        float alpha = clamp(r1 + r2 + r3 + r4, 0.0, 1.0) * 0.95;
+        
+        gl_FragColor = vec4(color, alpha);
       }
     `;
 
@@ -116,7 +112,7 @@
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
       if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('[Shader Error]', gl.getShaderInfoLog(shader));
+        console.error('[Shader Compile Error]', gl.getShaderInfoLog(shader));
         gl.deleteShader(shader);
         return null;
       }
@@ -163,7 +159,7 @@
       syncSize();
       const elapsed = (performance.now() - startTime) * 0.001;
       
-      gl.clearColor(0.0, 0.0, 0.0, 0.0);
+      gl.clearColor(0.043, 0.039, 0.071, 0.0);
       gl.clear(gl.COLOR_BUFFER_BIT);
 
       if (uTime) gl.uniform1f(uTime, elapsed);
