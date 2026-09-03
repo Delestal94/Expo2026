@@ -21,6 +21,37 @@ function errorMessageOf(error: unknown, fallback: string): string {
 }
 
 /**
+ * Antes esto era un `return null` mientras se resolvía el import dinámico
+ * del SDK de auth: la tarjeta desaparecía y volvía a aparecer un instante
+ * después, como si el formulario "temblara". Este placeholder ocupa el
+ * mismo alto que el formulario real para no correr el layout, y usa el
+ * mismo barrido mineral que el glow del CTA del Hero en vez de un gris
+ * genérico de skeleton.
+ */
+function AccessFormSkeleton({ label }: { label: string }) {
+  return (
+    <div role="status" className="rounded-2xl border border-line bg-[#121022] p-6">
+      <span className="sr-only">{label}</span>
+      <div className="flex gap-2 rounded-full border border-line p-1" aria-hidden="true">
+        <div className="skeleton-strata h-9 flex-1 rounded-full" />
+        <div className="skeleton-strata h-9 flex-1 rounded-full" />
+      </div>
+      <div className="mt-6 flex flex-col gap-4" aria-hidden="true">
+        <div className="flex flex-col gap-1.5">
+          <div className="skeleton-strata h-3 w-16 rounded-full" />
+          <div className="skeleton-strata h-11 w-full rounded-xl" />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <div className="skeleton-strata h-3 w-24 rounded-full" />
+          <div className="skeleton-strata h-11 w-full rounded-xl" />
+        </div>
+        <div className="skeleton-strata mt-2 h-11 w-full rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Formulario de registro/login de visitantes. Corre client-side (no como
  * server action) porque el adaptador de Supabase persiste la sesión en el
  * storage del browser — moverlo al servidor perdería esa persistencia.
@@ -87,7 +118,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
   }
 
   if (checkingSession) {
-    return null;
+    return <AccessFormSkeleton label={t("checkingSession")} />;
   }
 
   if (session) {
