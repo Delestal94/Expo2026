@@ -30,7 +30,6 @@
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let bands = createBands(canvas.clientHeight || 520);
-    let frame = 0;
 
     function resize() {
       if (!canvas || !ctx) return;
@@ -77,7 +76,7 @@
       ctx.shadowBlur = 0;
 
       if (!prefersReducedMotion) {
-        frame = requestAnimationFrame(draw);
+        requestAnimationFrame(draw);
       }
     }
 
@@ -89,7 +88,7 @@
       return;
     }
 
-    frame = requestAnimationFrame(draw);
+    requestAnimationFrame(draw);
   }
 
   if (document.readyState === 'loading') {
