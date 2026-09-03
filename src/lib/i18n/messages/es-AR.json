@@ -3,6 +3,15 @@
     "title": "ExpoJuy 2026",
     "description": "Sitio oficial de ExpoJuy 2026 — 9 al 12 de octubre, Ciudad Cultural, Jujuy."
   },
+  "NotFound": {
+    "eyebrow": "Error 404",
+    "introLine": "Se ve que este",
+    "emphasisLine": "estrato",
+    "outroLine": "no está en el corte.",
+    "description": "La página que buscabas se erosionó o nunca existió en este recorrido. Volvé al inicio o saltá directo a cómo llegar y acceder.",
+    "ctaHome": "Volver al inicio",
+    "ctaAccess": "Cómo llegar y acceder"
+  },
   "InteractiveMap": {
     "eyebrow": "Mapa interactivo",
     "title": "Ciudad Cultural, como datos — no como una imagen fija",
