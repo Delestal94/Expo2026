@@ -85,18 +85,36 @@ export async function AccessInfo() {
               })}
             </p>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {REFERENCE_PRICING.map((tier) => (
-                <div
-                  key={tier.key}
-                  className="rounded-2xl border border-line bg-[#121022] p-5 text-center"
-                >
-                  <div className="font-mono text-2xl font-semibold text-paper tabular-nums">
-                    {tier.price}
+            {/* Tira de entrada en vez de tres tarjetas idénticas: los precios se leen
+                como un ticket perforado, y el tramo sin cargo se destaca con un sello
+                en vez de competir como una cuarta cifra igual a las otras. */}
+            <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
+              {REFERENCE_PRICING.map((tier) => {
+                const isFree = tier.key === "under5";
+                return (
+                  <div
+                    key={tier.key}
+                    className={`relative flex-1 p-5 text-center ${isFree ? "bg-accent/10" : "bg-[#121022]"}`}
+                  >
+                    {isFree && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-accent px-2.5 py-1 font-mono text-[0.6rem] tracking-[0.15em] text-accent uppercase"
+                      >
+                        {t("pricing.freeBadge")}
+                      </span>
+                    )}
+                    <div
+                      className={`font-display font-black tabular-nums ${
+                        isFree ? "text-xl text-accent sm:text-2xl" : "text-2xl text-paper sm:text-3xl"
+                      }`}
+                    >
+                      {tier.price}
+                    </div>
+                    <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
                   </div>
-                  <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="mt-6">
