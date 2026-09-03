@@ -19,7 +19,7 @@ export type Category =
   | "institucional"
   | "infraestructura";
 
-export type ZoneShape = "rect" | "circle";
+export type ZoneShape = "rect" | "circle" | "polygon";
 
 export interface EditorZone {
   id: string;
@@ -32,8 +32,23 @@ export interface EditorZone {
   y: number;
   width: number;
   height: number;
+  /**
+   * Solo para shape:"polygon" — vértices normalizados (0..1) relativos al
+   * bounding box de la zona. Al guardarlos relativos, mover y redimensionar
+   * siguen funcionando con la misma lógica que un rectángulo: solo cambian
+   * x/y/width/height y el polígono se reescala solo.
+   */
+  points?: [number, number][];
   areaM2: number | null;
   notes: string;
+}
+
+/** Convierte los vértices normalizados de un polígono a coordenadas del lienzo. */
+function polygonPoints(zone: EditorZone) {
+  if (!zone.points?.length) return "";
+  return zone.points
+    .map(([px, py]) => `${zone.x + px * zone.width},${zone.y + py * zone.height}`)
+    .join(" ");
 }
 
 const CATEGORIES: { id: Category; label: string; color: string }[] = [
@@ -395,7 +410,9 @@ export function ZoneEditor() {
               const cx = zone.x + zone.width / 2;
               const cy = zone.y + zone.height / 2;
               const rotate =
-                zone.shape === "rect" && zone.rotation ? `rotate(${zone.rotation} ${cx} ${cy})` : undefined;
+                zone.shape !== "circle" && zone.rotation
+                  ? `rotate(${zone.rotation} ${cx} ${cy})`
+                  : undefined;
               const shapeStyle = {
                 fill: isSelected ? meta.color : "rgba(255,255,255,0.06)",
                 stroke: meta.color,
@@ -411,6 +428,8 @@ export function ZoneEditor() {
                 >
                   {zone.shape === "circle" ? (
                     <ellipse cx={cx} cy={cy} rx={zone.width / 2} ry={zone.height / 2} style={shapeStyle} />
+                  ) : zone.shape === "polygon" && zone.points?.length ? (
+                    <polygon points={polygonPoints(zone)} style={shapeStyle} />
                   ) : (
                     <rect x={zone.x} y={zone.y} width={zone.width} height={zone.height} rx={6} style={shapeStyle} />
                   )}
@@ -586,6 +605,7 @@ function ZoneForm({
           >
             <option value="rect">Rectángulo</option>
             <option value="circle">Círculo / óvalo</option>
+            <option value="polygon">Polígono</option>
           </select>
         </div>
         <div>
