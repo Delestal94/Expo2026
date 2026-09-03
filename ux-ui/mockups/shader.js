@@ -1,7 +1,7 @@
 /**
- * EXPOJUY 2026 — MASTER WEBGL STRATA SHADER ENGINE
- * 5 Mineral Wave Ribbons (Ochre, Terracotta, Rose, Violet, Teal)
- * Metáfora geológica del Cerro de los Siete Colores y salmuera de litio.
+ * EXPOJUY 2026 — WEBGL STRATA SHADER ENGINE (SINCRONIZADO CON DEVELOP)
+ * 4 Brand Mineral Wave Ribbons:
+ * Cyan (#2de3d6), Violet (#7c3aed), Magenta (#d946ef), Lavender (#c4b5fd)
  */
 
 (function () {
@@ -45,14 +45,12 @@
       varying vec2 v_texCoord;
       uniform float u_time;
       uniform vec2 u_resolution;
-      uniform vec2 u_mouse;
 
-      // Mineral strata colors (Cerro de los Siete Colores & Litio)
-      const vec3 colorOchre      = vec3(0.851, 0.545, 0.247); // #d98b3f
-      const vec3 colorTerracotta = vec3(0.706, 0.263, 0.180); // #b4432e
-      const vec3 colorRose       = vec3(0.761, 0.302, 0.420); // #c24d6b
-      const vec3 colorViolet     = vec3(0.486, 0.353, 0.620); // #7c5a9e
-      const vec3 colorTeal       = vec3(0.180, 0.561, 0.525); // #2e8f86
+      // Brand palette from develop (Isotipo ExpoJuy & 4 Ejes)
+      const vec3 colorCyan      = vec3(0.176, 0.890, 0.839); // #2de3d6
+      const vec3 colorViolet    = vec3(0.486, 0.227, 0.929); // #7c3aed
+      const vec3 colorMagenta   = vec3(0.851, 0.275, 0.937); // #d946ef
+      const vec3 colorLavender  = vec3(0.769, 0.710, 0.992); // #c4b5fd
       const vec3 colorInk        = vec3(0.043, 0.039, 0.071); // #0b0a12
 
       float hash(vec2 p) {
@@ -69,45 +67,39 @@
 
       void main() {
         vec2 uv = v_texCoord;
-        float t = u_time * 0.15;
+        float t = u_time * 0.14;
 
-        // Smooth wave undulating curves
-        float wave1 = sin(uv.x * 2.8 + t * 0.8) * 0.06;
-        float wave2 = cos(uv.x * 3.6 - t * 0.6) * 0.04;
-        float n = (noise(vec2(uv.x * 3.0 + t * 0.2, uv.y * 1.5)) - 0.5) * 0.05;
+        // Undulating organic curves
+        float wave1 = sin(uv.x * 2.6 + t * 0.7) * 0.06;
+        float wave2 = cos(uv.x * 3.4 - t * 0.5) * 0.04;
+        float n = (noise(vec2(uv.x * 3.0 + t * 0.2, uv.y * 1.5)) - 0.5) * 0.04;
 
         float yBase = uv.y + wave1 + wave2 + n;
         
-        // Vertical positioning of ribbons across upper header
-        float bandCenter = 0.50;
-        float bandThickness = 0.026;
-        float spacing = 0.052;
+        float bandCenter = 0.52;
+        float bandThickness = 0.028;
+        float spacing = 0.055;
 
-        // 5 Ribbons
-        float r1 = smoothstep(bandCenter + spacing * 2.0 - bandThickness, bandCenter + spacing * 2.0, yBase) *
-                   (1.0 - smoothstep(bandCenter + spacing * 2.0, bandCenter + spacing * 2.0 + bandThickness, yBase));
+        // 4 Brand Ribbons
+        float r1 = smoothstep(bandCenter + spacing * 1.5 - bandThickness, bandCenter + spacing * 1.5, yBase) *
+                   (1.0 - smoothstep(bandCenter + spacing * 1.5, bandCenter + spacing * 1.5 + bandThickness, yBase));
 
-        float r2 = smoothstep(bandCenter + spacing * 1.0 - bandThickness, bandCenter + spacing * 1.0, yBase) *
-                   (1.0 - smoothstep(bandCenter + spacing * 1.0, bandCenter + spacing * 1.0 + bandThickness, yBase));
+        float r2 = smoothstep(bandCenter + spacing * 0.5 - bandThickness, bandCenter + spacing * 0.5, yBase) *
+                   (1.0 - smoothstep(bandCenter + spacing * 0.5, bandCenter + spacing * 0.5 + bandThickness, yBase));
 
-        float r3 = smoothstep(bandCenter - bandThickness, bandCenter, yBase) *
-                   (1.0 - smoothstep(bandCenter, bandCenter + bandThickness, yBase));
+        float r3 = smoothstep(bandCenter - spacing * 0.5 - bandThickness, bandCenter - spacing * 0.5, yBase) *
+                   (1.0 - smoothstep(bandCenter - spacing * 0.5, bandCenter - spacing * 0.5 + bandThickness, yBase));
 
-        float r4 = smoothstep(bandCenter - spacing * 1.0 - bandThickness, bandCenter - spacing * 1.0, yBase) *
-                   (1.0 - smoothstep(bandCenter - spacing * 1.0, bandCenter - spacing * 1.0 + bandThickness, yBase));
-
-        float r5 = smoothstep(bandCenter - spacing * 2.0 - bandThickness, bandCenter - spacing * 2.0, yBase) *
-                   (1.0 - smoothstep(bandCenter - spacing * 2.0, bandCenter - spacing * 2.0 + bandThickness, yBase));
+        float r4 = smoothstep(bandCenter - spacing * 1.5 - bandThickness, bandCenter - spacing * 1.5, yBase) *
+                   (1.0 - smoothstep(bandCenter - spacing * 1.5, bandCenter - spacing * 1.5 + bandThickness, yBase));
 
         vec3 color = colorInk;
-        color = mix(color, colorTeal, r1 * 0.85);
-        color = mix(color, colorViolet, r2 * 0.85);
-        color = mix(color, colorRose, r3 * 0.85);
-        color = mix(color, colorTerracotta, r4 * 0.85);
-        color = mix(color, colorOchre, r5 * 0.85);
+        color = mix(color, colorCyan, r1 * 0.9);
+        color = mix(color, colorViolet, r2 * 0.9);
+        color = mix(color, colorMagenta, r3 * 0.9);
+        color = mix(color, colorLavender, r4 * 0.85);
 
-        // Soft vertical fade into page content
-        float alpha = clamp(r1 + r2 + r3 + r4 + r5, 0.0, 1.0) * 0.95;
+        float alpha = clamp(r1 + r2 + r3 + r4, 0.0, 1.0) * 0.95;
         
         gl_FragColor = vec4(color, alpha);
       }
@@ -158,7 +150,6 @@
 
     const uTime = gl.getUniformLocation(program, 'u_time');
     const uRes = gl.getUniformLocation(program, 'u_resolution');
-    const uMouse = gl.getUniformLocation(program, 'u_mouse');
 
     let startTime = performance.now();
 

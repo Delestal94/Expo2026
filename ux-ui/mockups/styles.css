@@ -1,52 +1,52 @@
 /* ==========================================================================
-   EXPOJUY 2026 — MASTER DESIGN SYSTEM STYLESHEET (UNIFIED CSS)
-   Metáfora: "Estratos" — Mineral Luxury Tech & Glassmorphism
+   EXPOJUY 2026 — MASTER DESIGN SYSTEM STYLESHEET (SINCRONIZADO CON DEVELOP)
+   Paleta oficial de marca: Cyan (#2de3d6), Violeta (#7c3aed), Magenta (#d946ef), Lavanda (#c4b5fd)
+   Superficie: Obsidiana (#0b0a12) & Tarjetas (#121022) con Líneas vítreas (rgba(245, 241, 232, 0.14))
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  /* Core Palette */
+  /* Core Brand Colors (Sincronizado con src/app/globals.css @theme) */
   --color-ink: #0b0a12;
-  --color-surface: #121022;
-  --color-surface-elevated: #1a182e;
-  --color-surface-card: #0e0d18;
-  
-  /* Text & Accents */
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
   --color-paper-muted: #746e63;
-  --color-accent: #3bcdbf; /* Lithium Cyan */
-  --color-accent-glow: rgba(59, 205, 191, 0.25);
-  
-  /* Geological Strata Mineral Accents (Cerro de los Siete Colores) */
-  --color-ocher: #d98b3f;       /* Minería & RIGI (Eje 01) */
-  --color-terracotta: #b4432e;  /* Comercio Exterior (Eje 02) */
-  --color-violet: #7c5a9e;      /* Corredor Bioceánico (Eje 03) */
-  --color-teal: #2e8f86;        /* Economía del Conocimiento (Eje 04) */
-  --color-rose: #c24d6b;        /* Strata ribbon accent */
 
-  /* Glassmorphism & Lines */
+  /* Paleta de Marca ExpoJuy — 4 colores del isotipo "J" y los 4 Ejes Temáticos */
+  --color-cyan: #2de3d6;       /* Eje 01: Minería & Litio / Accent principal */
+  --color-violet: #7c3aed;     /* Eje 02: Comercio Exterior */
+  --color-magenta: #d946ef;    /* Eje 03: Corredor Bioceánico */
+  --color-lavender: #c4b5fd;   /* Eje 04: Economía del Conocimiento */
+  
+  --color-accent: #2de3d6;
+  --color-accent-glow: rgba(45, 227, 214, 0.28);
+  --color-line: rgba(245, 241, 232, 0.14);
   --color-border: rgba(245, 241, 232, 0.14);
-  --color-border-hover: rgba(59, 205, 191, 0.4);
-  --glass-bg: rgba(18, 16, 34, 0.75);
-  --glass-blur: blur(16px);
-  
-  /* Fonts */
-  --font-display: 'Unbounded', sans-serif;
-  --font-body: 'Manrope', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
 
-  /* Layout */
+  /* Superficies sincronizadas con develop (bg-ink + bg-[#121022]) */
+  --color-surface: #121022;
+  --color-surface-card: #121022;
+  --color-surface-elevated: #1a182e;
+  --glass-bg: rgba(18, 16, 34, 0.85);
+  --glass-blur: blur(16px);
+
+  /* Tipografías de develop */
+  --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Layout & Radios oficiales (rounded-2xl = 16px, rounded-xl = 12px) */
   --max-width: 1280px;
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --radius-sm: 8px;
+  --radius-2xl: 16px;
+  --radius-xl: 12px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
   --radius-full: 9999px;
   --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Base Reset */
+/* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -71,6 +71,24 @@ body {
   overflow-x: hidden;
 }
 
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* Brand Wash (Fondo sutil de luz ambiental presente en develop) */
+.brand-wash-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-cyan) 12%, transparent), transparent 60%),
+    radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-violet) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 92% 100%, color-mix(in srgb, var(--color-magenta) 10%, transparent), transparent 62%),
+    radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-lavender) 8%, transparent), transparent 58%);
+  z-index: 0;
+}
+
 /* Background WebGL Shader Canvas */
 .strata-canvas-container {
   position: absolute;
@@ -92,11 +110,25 @@ body {
 .strata-canvas-gradient-mask {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 10, 18, 0.15) 0%, rgba(11, 10, 18, 0.85) 75%, var(--color-ink) 100%);
+  background: linear-gradient(180deg, rgba(11, 10, 18, 0.1) 0%, rgba(11, 10, 18, 0.8) 75%, var(--color-ink) 100%);
   pointer-events: none;
 }
 
-/* Presentation Demo Switcher Bar (Quick Navigation Between Views) */
+/* Animación de entrada strata-settle de develop */
+@keyframes strata-settle {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scaleY(0.94);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+/* Demo Switcher Bar */
 .demo-nav-bar {
   position: fixed;
   top: 12px;
@@ -107,9 +139,9 @@ body {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(14, 13, 24, 0.88);
+  background: rgba(14, 13, 24, 0.9);
   backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-full);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
@@ -120,7 +152,7 @@ body {
   font-weight: 700;
   color: var(--color-accent);
   padding: 4px 10px;
-  border-right: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-line);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -148,22 +180,28 @@ body {
   font-weight: 700;
 }
 
-/* Top Meta Bar */
+/* Top Meta Bar (Exacta a develop) */
 .top-meta-nav {
   position: relative;
   z-index: 20;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 56px 24px 16px;
+  padding: 58px 24px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--color-paper-dim);
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   width: 100%;
+}
+
+.top-meta-nav .logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* Header Section */
@@ -174,21 +212,22 @@ body {
   margin: 0 auto;
   padding: 20px 24px 28px;
   width: 100%;
+  animation: strata-settle 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .category-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
+  padding: 5px 14px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(59, 205, 191, 0.4);
-  background: rgba(59, 205, 191, 0.08);
+  border: 1px solid rgba(45, 227, 214, 0.35);
+  background: rgba(45, 227, 214, 0.08);
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
@@ -204,10 +243,10 @@ body {
 
 .headline-title {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-size: clamp(2.25rem, 5.5vw, 3.8rem);
   font-weight: 800;
   color: var(--color-paper);
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   text-transform: uppercase;
   margin-bottom: 14px;
@@ -215,10 +254,10 @@ body {
 
 .headline-subtitle {
   font-family: var(--font-body);
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
   color: var(--color-paper-dim);
   line-height: 1.6;
-  max-width: 700px;
+  max-width: 680px;
   margin-bottom: 26px;
 }
 
@@ -226,19 +265,19 @@ body {
 .filter-pills-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 32px;
 }
 
 .pill-btn {
-  padding: 8px 18px;
+  padding: 7px 16px;
   border-radius: var(--radius-full);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  border: 1px solid var(--color-border);
-  background: rgba(18, 16, 34, 0.6);
+  border: 1px solid var(--color-line);
+  background: rgba(18, 16, 34, 0.7);
   color: var(--color-paper-dim);
   transition: var(--transition-smooth);
   display: inline-flex;
@@ -248,9 +287,8 @@ body {
 }
 
 .pill-btn:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-paper-dim);
   color: var(--color-paper);
-  background: rgba(245, 241, 232, 0.05);
 }
 
 .pill-btn.active {
@@ -288,13 +326,13 @@ body {
   .col-8, .col-4, .col-6 { grid-column: span 12; }
 }
 
-/* Bento Card */
+/* Bento Card (Alineado con Ejes y Directory de develop) */
 .bento-card {
   position: relative;
-  background: var(--color-surface-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
+  background: var(--color-surface-card); /* #121022 */
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-2xl); /* 16px */
+  padding: 28px;
   overflow: hidden;
   transition: var(--transition-smooth);
   display: flex;
@@ -302,40 +340,60 @@ body {
 }
 
 .bento-card:hover {
-  border-color: rgba(245, 241, 232, 0.25);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(245, 241, 232, 0.28);
+  background: #16142a;
 }
 
-/* Mineral Stripes */
+/* Top Mineral Stripes con los 4 colores de marca */
 .stripe-accent::before,
-.stripe-ocher::before,
-.stripe-terracotta::before,
+.stripe-cyan::before,
 .stripe-violet::before,
-.stripe-teal::before,
-.stripe-rose::before {
+.stripe-magenta::before,
+.stripe-lavender::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 2.5px;
+  height: 3px;
   z-index: 10;
 }
 
 .stripe-accent::before { background: var(--color-accent); }
-.stripe-ocher::before { background: var(--color-ocher); }
-.stripe-terracotta::before { background: var(--color-terracotta); }
+.stripe-cyan::before { background: var(--color-cyan); }
 .stripe-violet::before { background: var(--color-violet); }
-.stripe-teal::before { background: var(--color-teal); }
-.stripe-rose::before { background: var(--color-rose); }
+.stripe-magenta::before { background: var(--color-magenta); }
+.stripe-lavender::before { background: var(--color-lavender); }
 
-/* Buttons */
+/* Watermark de números de tarjeta (estilo Ejes de develop) */
+.card-watermark {
+  position: absolute;
+  top: -24px;
+  right: -10px;
+  font-family: var(--font-display);
+  font-size: 7.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  transition: var(--transition-smooth);
+}
+
+.bento-card:hover .card-watermark {
+  opacity: 0.22;
+  transform: translateY(4px);
+}
+
+/* Buttons (Con el efecto glow mineral exacto de develop) */
 .btn-solid-accent {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 26px;
+  gap: 8px;
+  padding: 12px 24px;
   border-radius: var(--radius-full);
   background: var(--color-accent);
   color: var(--color-ink);
@@ -345,14 +403,28 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: var(--transition-smooth);
-  box-shadow: 0 0 20px var(--color-accent-glow);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: isolate;
+}
+
+.btn-solid-accent::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-violet), var(--color-magenta), var(--color-lavender));
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.5s ease;
 }
 
 .btn-solid-accent:hover {
-  background: #5fe9db;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 25px rgba(59, 205, 191, 0.4);
+  transform: scale(1.03);
+}
+
+.btn-solid-accent:hover::before {
+  opacity: 0.75;
 }
 
 .btn-outline-glass {
@@ -368,15 +440,14 @@ body {
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   cursor: pointer;
   transition: var(--transition-smooth);
 }
 
 .btn-outline-glass:hover {
-  border-color: var(--color-accent);
-  background: rgba(59, 205, 191, 0.08);
-  color: var(--color-accent);
+  border-color: var(--color-paper-dim);
+  background: rgba(245, 241, 232, 0.08);
 }
 
 /* Badges */
@@ -385,48 +456,60 @@ body {
   align-items: center;
   gap: 6px;
   padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
   background: rgba(245, 241, 232, 0.06);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-line);
   color: var(--color-paper-dim);
 }
 
 .badge-tag.cyan {
-  background: rgba(59, 205, 191, 0.1);
-  border-color: rgba(59, 205, 191, 0.3);
-  color: var(--color-accent);
+  background: rgba(45, 227, 214, 0.1);
+  border-color: rgba(45, 227, 214, 0.35);
+  color: var(--color-cyan);
+}
+
+.badge-tag.violet {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.35);
+  color: #c4b5fd;
+}
+
+.badge-tag.magenta {
+  background: rgba(217, 70, 239, 0.15);
+  border-color: rgba(217, 70, 239, 0.35);
+  color: #f0abfc;
 }
 
 .badge-tag.live {
-  background: rgba(180, 67, 46, 0.15);
-  border-color: rgba(180, 67, 46, 0.4);
-  color: #ff6b52;
+  background: rgba(217, 70, 239, 0.15);
+  border-color: rgba(217, 70, 239, 0.4);
+  color: #f0abfc;
 }
 
 .live-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #ff4733;
+  background: var(--color-magenta);
   animation: pulse-live 1.6s infinite ease-in-out;
 }
 
 @keyframes pulse-live {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.3); }
+  50% { opacity: 0.3; transform: scale(1.3); }
 }
 
 /* Form Controls */
 .input-glass {
   width: 100%;
   padding: 12px 18px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: rgba(18, 16, 34, 0.7);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-line);
+  background: rgba(11, 10, 18, 0.7);
   color: var(--color-paper);
   font-family: var(--font-body);
   font-size: 14px;
@@ -436,19 +519,19 @@ body {
 
 .input-glass:focus {
   border-color: var(--color-accent);
-  box-shadow: 0 0 12px var(--color-accent-glow);
+  box-shadow: 0 0 14px var(--color-accent-glow);
 }
 
 .input-glass::placeholder {
   color: var(--color-paper-muted);
 }
 
-/* Master Institutional Footer */
+/* Master Institutional Footer (Sincronizado con SiteFooter de develop) */
 .site-footer {
   position: relative;
   z-index: 20;
   width: 100%;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-line);
   background: var(--color-ink);
   padding: 48px 24px;
   margin-top: auto;
@@ -459,7 +542,7 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 @media (min-width: 768px) {
@@ -470,26 +553,26 @@ body {
   }
 }
 
-.footer-brand {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.35rem;
-  color: var(--color-paper);
-  line-height: 1.15;
+.footer-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-paper);
+  padding: 10px 18px;
+  border-radius: var(--radius-xl);
 }
 
-.footer-brand span {
+.footer-brand-lockup img {
+  height: 38px;
+  width: auto;
   display: block;
-  font-size: 1.15rem;
-  color: var(--color-accent);
 }
 
 .footer-entities {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-paper-dim);
   line-height: 1.6;
-  max-width: 620px;
+  max-width: 580px;
   text-align: left;
 }
 
@@ -501,9 +584,8 @@ body {
 
 .footer-watermark {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-paper-muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--color-paper-dim);
   text-align: right;
 }
