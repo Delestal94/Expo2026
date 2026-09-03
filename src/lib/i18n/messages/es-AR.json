@@ -73,7 +73,8 @@
       "pricing": {
         "kids": "Menores (6 a 12 años) y jubilados",
         "adults": "Adultos",
-        "under5": "Menores de 5 años"
+        "under5": "Menores de 5 años",
+        "freeBadge": "¡Gratis!"
       },
       "buyDisabled": "Comprar entrada — disponible en la próxima etapa",
       "createAccount": "Crear tu cuenta de visitante",
