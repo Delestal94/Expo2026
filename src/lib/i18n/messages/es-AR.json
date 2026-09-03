@@ -191,7 +191,14 @@
     },
     "AdmissionTicket": {
       "paidNotice": "Tu cuenta de visitante ya está creada. El ingreso de esta edición es pago — el QR se emite después de pagar la entrada, todavía no disponible.",
-      "freeNotice": "Ingreso gratuito — mostrá este QR en el acceso."
+      "freeNotice": "Ingreso gratuito — mostrá este QR en el acceso.",
+      "admitOne": "Entrada",
+      "brand": "ExpoJuy 2026",
+      "month": "Oct",
+      "venue": "Ciudad Cultural · Jujuy",
+      "dateRangeLabel": "9 al 12 de octubre de 2026",
+      "scanLabel": "Escaneo en acceso",
+      "pendingLabel": "Entrada pendiente"
     }
   }
 }
