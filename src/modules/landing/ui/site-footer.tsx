@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { INSTITUTIONAL_PARTNERS, SPONSORS, type Logo } from "./partners-data";
+import { SocialLinks } from "./social-links";
 
 /** Mismas 4 vetas que About/Ejes/SectionNav usan para el resto del sitio. */
 const VEIN_COLORS = [
@@ -104,7 +105,10 @@ export function SiteFooter() {
           />
         </div>
         <p className="max-w-md text-sm text-paper-dim">{t("institutions")}</p>
-        <span className="font-mono text-xs text-paper-dim">{t("badge")}</span>
+        <div className="flex flex-col items-center gap-2 sm:items-end">
+          <SocialLinks />
+          <span className="font-mono text-xs text-paper-dim">{t("badge")}</span>
+        </div>
       </div>
     </footer>
   );
