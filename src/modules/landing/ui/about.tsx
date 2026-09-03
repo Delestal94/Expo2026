@@ -5,7 +5,7 @@ const STATS = [
   { key: "edition", value: "17ª", color: "var(--color-cyan)" },
   { key: "days", value: "4", color: "var(--color-violet)" },
   { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9–12", color: "var(--color-lavender)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
 ] as const;
 
 /** Cada banda corta distinto, como un afloramiento real — no una grilla prolija. */
