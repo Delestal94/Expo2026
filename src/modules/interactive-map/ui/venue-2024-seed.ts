@@ -14,14 +14,20 @@ import type { EditorZone } from "./zone-editor";
  */
 
 const CAD_W = 1650;
-const CAD_H = 1200;
 const VIEW_W = 1200;
-const VIEW_H = 750;
 
-/** Pasa una medida horizontal del plano CAD al lienzo del editor. */
-const sx = (cadX: number) => Math.round((cadX / CAD_W) * VIEW_W);
-/** Pasa una medida vertical del plano CAD al lienzo del editor. */
-const sy = (cadY: number) => Math.round((cadY / CAD_H) * VIEW_H);
+/**
+ * Escala única para los dos ejes: el lienzo del editor tiene la misma
+ * proporción que el plano CAD (1650x1200 -> 1200x873), así que usar un solo
+ * factor evita deformar las zonas. Antes se escalaba cada eje por separado y
+ * todo el plano quedaba ~14% más chato de lo real.
+ */
+const SCALE = VIEW_W / CAD_W;
+
+/** Pasa una medida del plano CAD al lienzo del editor. */
+const s = (cad: number) => Math.round(cad * SCALE);
+const sx = s;
+const sy = s;
 
 type ZoneInput = Omit<EditorZone, "shape" | "rotation" | "areaM2" | "notes"> & Partial<EditorZone>;
 

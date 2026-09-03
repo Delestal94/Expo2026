@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from "react";
 import { VENUE_2024_SEED } from "./venue-2024-seed";
 
+// El lienzo respeta la proporción del plano CAD original (1650x1200): si no,
+// las zonas quedan deformadas al escalar cada eje por separado.
 const VIEW_W = 1200;
-const VIEW_H = 750;
+const VIEW_H = 873;
 const MIN_SIZE = 20;
 const CREATE_THRESHOLD = 8;
 const STORAGE_KEY = "expojuy:mapa-editor:zones:v1";
+const REFERENCE_KEY = "expojuy:mapa-editor:referencia:v1";
 
 export type Category =
   | "cubierto"
@@ -155,6 +158,17 @@ export function ZoneEditor() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<Category>("descubierto");
   const [draft, setDraft] = useState<DraftRect | null>(null);
+  // Imagen del plano CAD para calcar encima. Se guarda aparte de las zonas
+  // porque pesa mucho más y conviene poder borrarla sin tocar el layout.
+  const [reference, setReference] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      return localStorage.getItem(REFERENCE_KEY);
+    } catch {
+      return null;
+    }
+  });
+  const [referenceOpacity, setReferenceOpacity] = useState(45);
 
   useEffect(() => {
     try {
@@ -319,6 +333,36 @@ export function ZoneEditor() {
       });
   };
 
+  const handleReferenceUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result);
+      setReference(dataUrl);
+      try {
+        localStorage.setItem(REFERENCE_KEY, dataUrl);
+      } catch {
+        // Una imagen grande puede no entrar en localStorage: se sigue viendo
+        // en esta sesión, pero no sobrevive al recargar.
+        window.alert(
+          "La imagen se cargó, pero es muy grande para guardarla en este navegador: al recargar la página vas a tener que volver a subirla.",
+        );
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleReferenceRemove = () => {
+    setReference(null);
+    try {
+      localStorage.removeItem(REFERENCE_KEY);
+    } catch {
+      // nada que hacer: igual queda fuera del estado en memoria.
+    }
+  };
+
   const handleRestoreBase = () => {
     if (window.confirm("Esto descarta tus cambios y vuelve al plano base 2024. ¿Continuar?")) {
       setZones(VENUE_2024_SEED.map((z) => ({ ...z })));
@@ -382,6 +426,39 @@ export function ZoneEditor() {
         >
           Vaciar todo
         </button>
+        <span className="mx-2 h-5 w-px bg-line" aria-hidden="true" />
+        {reference ? (
+          <>
+            <label className="flex items-center gap-2 font-mono text-xs text-paper-dim">
+              Plano de fondo
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={referenceOpacity}
+                onChange={(e) => setReferenceOpacity(Number(e.target.value))}
+                className="w-24"
+                aria-label="Opacidad del plano de referencia"
+              />
+              <span className="tabular-nums">{referenceOpacity}%</span>
+            </label>
+            <button
+              type="button"
+              onClick={handleReferenceRemove}
+              className="rounded-full border border-line px-3 py-1.5 font-mono text-xs text-paper-dim hover:border-paper-dim"
+            >
+              Quitar plano
+            </button>
+          </>
+        ) : (
+          <label
+            className="cursor-pointer rounded-full border border-line px-3 py-1.5 font-mono text-xs text-paper hover:border-paper-dim"
+            title="Subí la imagen del plano CAD para calcar las zonas encima"
+          >
+            Plano de fondo
+            <input type="file" accept="image/*" onChange={handleReferenceUpload} className="hidden" />
+          </label>
+        )}
         <span className="ml-auto font-mono text-xs text-paper-dim">{zones.length} zonas</span>
       </div>
 
@@ -404,6 +481,20 @@ export function ZoneEditor() {
               fill="rgba(255,255,255,0.02)"
               style={{ pointerEvents: "none" }}
             />
+            {reference && (
+              // El plano de referencia va detrás de todo y no recibe clics, así
+              // que se puede calcar encima sin que interfiera con la edición.
+              <image
+                href={reference}
+                x={0}
+                y={0}
+                width={VIEW_W}
+                height={VIEW_H}
+                preserveAspectRatio="xMidYMid meet"
+                opacity={referenceOpacity / 100}
+                style={{ pointerEvents: "none" }}
+              />
+            )}
             {zones.map((zone) => {
               const meta = categoryMeta(zone.category);
               const isSelected = zone.id === selectedId;
