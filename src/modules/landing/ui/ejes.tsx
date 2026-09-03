@@ -14,6 +14,9 @@ const EJES: Eje[] = [
   { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
 ];
 
+/** Cada tarjeta se asienta a su propia altura, como un corte real de estratos inclinados — no una grilla de catálogo. */
+const OFFSET = ["", "sm:mt-6 lg:mt-8", "sm:mt-2 lg:mt-3", "sm:mt-10 lg:mt-12"];
+
 export function Ejes() {
   const t = useTranslations("Landing.Ejes");
 
@@ -24,11 +27,11 @@ export function Ejes() {
         {t("eyebrow")}
       </span>
 
-      <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
-        {EJES.map((eje) => (
+      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        {EJES.map((eje, i) => (
           <article
             key={eje.n}
-            className="group relative flex flex-col gap-4 overflow-hidden bg-ink px-8 py-10 transition-colors hover:bg-[#121022]"
+            className={`group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-ink px-8 py-10 transition-colors hover:bg-[#121022] ${OFFSET[i]}`}
           >
             <div
               aria-hidden="true"
