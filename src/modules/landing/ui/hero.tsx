@@ -44,6 +44,11 @@ export function Hero() {
             {t("titleLine2")}
           </span>
         </h1>
+        {/* Bajada del lockup oficial ("EXPOJUY · De Jujuy al mundo") — se agrega
+            sin sacar el año del título grande, que es información real del evento. */}
+        <span className="-mt-4 block font-mono text-xs tracking-[0.35em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.32s_backwards] sm:text-sm">
+          {t("worldTagline")}
+        </span>
         <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}
         </p>
