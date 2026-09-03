@@ -20,7 +20,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 ## 3. Por qué es distinto a "una página web"
 
 - El módulo de expositores no es un directorio: sugiere reuniones de rondas de negocios por rubro/país, con agenda de slots — ataca directamente el objetivo comercial del evento (Corredor Bioceánico), no solo su difusión.
-- El mapa interactivo es un dato, no una imagen: sabe qué sala está en ronda de negocios ahora mismo.
+- El mapa interactivo es un dato, no una imagen: es el plano real del predio calcado stand por stand —cubiertos, artesanos, descubiertos, gastronómicos y sectores de servicio—, filtrable por tipo y consultable stand por stand.
 - El acceso (gratuito o pago, según se confirme) es un interruptor de configuración, no una decisión enterrada en el código — se puede ajustar sin volver a programar nada.
 
 ## 4. Equipo
@@ -78,6 +78,7 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 | 2026-09-02 | Landing | Los números "01-04" de la sección Ejes pasan de texto mono chico a numeral display (Unbounded) gigante, en el color de cada eje, bleedeando fuera del borde de la card y que se intensifica al hover — deja de ser texto de relleno genérico y se conecta con la identidad de bandas minerales de "Estratos". Verificado con Playwright (desktop + mobile) | [PR #58](https://github.com/Delestal94/Expo2026/pull/58) |
 | 2026-09-01 | i18n | Scaffolding de `next-intl`: config que hoy siempre resuelve `es-AR` (sin ruteo por idioma todavía), diccionario `es-AR.json`, types de claves de traducción, y primer caso de uso real (título/descripción de metadata migrados desde constantes hardcodeadas). No traduce ni agrega idiomas — deja lista la infraestructura para cuando se sume el resto | [PR #60](https://github.com/Delestal94/Expo2026/pull/60), [ADR-0006](adr/0006-scaffolding-i18n.md) |
 | 2026-09-02 | Decisión | Paleta de marca reemplazada: los 4 colores del isotipo "J" oficial de ExpoJuy en Instagram (cian, violeta, magenta, lavanda) reemplazan la paleta mineral inventada (ocre/terracota/violeta/verde-azulado/rosa) en toda la landing, mapa interactivo, portal de expositores, favicon e imagen de Open Graph — sin tocar la estructura ni el motivo de bandas de "Estratos", solo los colores. Motivo: coherencia real con la marca ya publicada, no una elección estética propia | Este commit |
+| 2026-09-03 | Mapa | El mapa público deja de ser el plano esquemático de 9 zonas inventadas y pasa a ser el calco del plano real 2024 (215 zonas seleccionables + contexto del predio), con filtro por categoría y detalle por stand. El plano vive en un único módulo (`venue-plan.ts`) que comparten el mapa público y el editor interno, así no se duplica la fuente de verdad | [PR #115](https://github.com/Delestal94/Expo2026/pull/115) |
 
 ## 6. Próximos pasos
 

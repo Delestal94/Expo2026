@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, PointerEvent as ReactPointerEvent } from "react";
-import { VENUE_2024_SEED } from "./venue-2024-seed";
+import { CATEGORIES, VENUE_PLAN, categoryMeta, polygonPoints } from "./venue-plan";
+import type { Category, VenueZone, ZoneShape } from "./venue-plan";
 
 // El lienzo usa las mismas dimensiones que el plano simplificado 2024
 // (1200x850), así las coordenadas del calco se leen 1:1 y nada se deforma.
@@ -13,61 +14,6 @@ const CREATE_THRESHOLD = 8;
 const STORAGE_KEY = "expojuy:mapa-editor:zones:v1";
 const REFERENCE_KEY = "expojuy:mapa-editor:referencia:v1";
 
-export type Category =
-  | "cubierto"
-  | "artesano"
-  | "descubierto"
-  | "gastronomico"
-  | "juego"
-  | "institucional"
-  | "infraestructura";
-
-export type ZoneShape = "rect" | "circle" | "polygon";
-
-export interface EditorZone {
-  id: string;
-  label: string;
-  category: Category;
-  shape: ZoneShape;
-  /** Grados, sentido horario. Ignorado para shape:"circle". */
-  rotation: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  /**
-   * Solo para shape:"polygon" — vértices normalizados (0..1) relativos al
-   * bounding box de la zona. Al guardarlos relativos, mover y redimensionar
-   * siguen funcionando con la misma lógica que un rectángulo: solo cambian
-   * x/y/width/height y el polígono se reescala solo.
-   */
-  points?: [number, number][];
-  areaM2: number | null;
-  notes: string;
-}
-
-/** Convierte los vértices normalizados de un polígono a coordenadas del lienzo. */
-function polygonPoints(zone: EditorZone) {
-  if (!zone.points?.length) return "";
-  return zone.points
-    .map(([px, py]) => `${zone.x + px * zone.width},${zone.y + py * zone.height}`)
-    .join(" ");
-}
-
-const CATEGORIES: { id: Category; label: string; color: string }[] = [
-  { id: "cubierto", label: "Cubierto", color: "var(--color-cyan)" },
-  { id: "artesano", label: "Artesano", color: "var(--color-magenta)" },
-  { id: "descubierto", label: "Descubierto", color: "var(--color-violet)" },
-  { id: "gastronomico", label: "Gastronómico", color: "var(--color-lavender)" },
-  { id: "juego", label: "Juegos", color: "var(--color-accent)" },
-  { id: "institucional", label: "Institucional", color: "#9a94ad" },
-  { id: "infraestructura", label: "Infraestructura", color: "#5c5a6b" },
-];
-
-function categoryMeta(id: Category) {
-  return CATEGORIES.find((c) => c.id === id) ?? CATEGORIES[0];
-}
-
 function makeId() {
   return `zona-${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -75,7 +21,7 @@ function makeId() {
 const HANDLES = ["nw", "n", "ne", "e", "se", "s", "sw", "w"] as const;
 type Handle = (typeof HANDLES)[number];
 
-function handlePoint(z: EditorZone, handle: Handle) {
+function handlePoint(z: VenueZone, handle: Handle) {
   const midX = z.x + z.width / 2;
   const midY = z.y + z.height / 2;
   const map: Record<Handle, { x: number; y: number }> = {
@@ -94,7 +40,7 @@ function handlePoint(z: EditorZone, handle: Handle) {
 /** Proyecta un punto del lienzo al espacio local (sin rotación) de la zona,
  * rotando alrededor de su centro — así el resize funciona igual estén o no
  * rotadas (necesario para el patrón de espina de pescado, rotado 45°). */
-function toLocalPoint(zone: EditorZone, px: number, py: number) {
+function toLocalPoint(zone: VenueZone, px: number, py: number) {
   if (!zone.rotation) return { x: px, y: py };
   const cx = zone.x + zone.width / 2;
   const cy = zone.y + zone.height / 2;
@@ -107,7 +53,7 @@ function toLocalPoint(zone: EditorZone, px: number, py: number) {
   };
 }
 
-function computeResize(handle: Handle, origin: EditorZone, px: number, py: number) {
+function computeResize(handle: Handle, origin: VenueZone, px: number, py: number) {
   const { x: lx, y: ly } = toLocalPoint(origin, px, py);
   let { x, y, width, height } = origin;
   const right = origin.x + origin.width;
@@ -131,7 +77,7 @@ function computeResize(handle: Handle, origin: EditorZone, px: number, py: numbe
 
 type DragState =
   | { kind: "move"; id: string; offsetX: number; offsetY: number }
-  | { kind: "resize"; id: string; handle: Handle; origin: EditorZone }
+  | { kind: "resize"; id: string; handle: Handle; origin: VenueZone }
   | { kind: "create" };
 
 interface DraftRect {
@@ -146,13 +92,13 @@ export function ZoneEditor() {
   const dragRef = useRef<DragState | null>(null);
   const createStart = useRef<{ x: number; y: number } | null>(null);
 
-  const [zones, setZones] = useState<EditorZone[]>(() => {
-    if (typeof window === "undefined") return VENUE_2024_SEED;
+  const [zones, setZones] = useState<VenueZone[]>(() => {
+    if (typeof window === "undefined") return VENUE_PLAN;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : VENUE_2024_SEED;
+      return raw ? JSON.parse(raw) : VENUE_PLAN;
     } catch {
-      return VENUE_2024_SEED;
+      return VENUE_PLAN;
     }
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -203,13 +149,13 @@ export function ZoneEditor() {
     };
   };
 
-  const updateZone = (id: string, patch: Partial<EditorZone>) => {
+  const updateZone = (id: string, patch: Partial<VenueZone>) => {
     setZones((prev) => prev.map((z) => (z.id === id ? { ...z, ...patch } : z)));
   };
 
   const addZone = (category: Category, x: number, y: number, width: number, height: number) => {
     const meta = categoryMeta(category);
-    const zone: EditorZone = {
+    const zone: VenueZone = {
       id: makeId(),
       label: `Nuevo ${meta.label.toLowerCase()}`,
       category,
@@ -241,7 +187,7 @@ export function ZoneEditor() {
     svgRef.current?.setPointerCapture(e.pointerId);
   };
 
-  const handleZonePointerDown = (e: ReactPointerEvent<SVGGElement>, zone: EditorZone) => {
+  const handleZonePointerDown = (e: ReactPointerEvent<SVGGElement>, zone: VenueZone) => {
     e.stopPropagation();
     const { x, y } = toSvgPoint(e.clientX, e.clientY);
     setSelectedId(zone.id);
@@ -251,7 +197,7 @@ export function ZoneEditor() {
 
   const handleHandlePointerDown = (
     e: ReactPointerEvent<SVGRectElement>,
-    zone: EditorZone,
+    zone: VenueZone,
     handle: Handle,
   ) => {
     e.stopPropagation();
@@ -365,7 +311,7 @@ export function ZoneEditor() {
 
   const handleRestoreBase = () => {
     if (window.confirm("Esto descarta tus cambios y vuelve al plano base 2024. ¿Continuar?")) {
-      setZones(VENUE_2024_SEED.map((z) => ({ ...z })));
+      setZones(VENUE_PLAN.map((z) => ({ ...z })));
       setSelectedId(null);
     }
   };
@@ -666,8 +612,8 @@ function ZoneForm({
   onChange,
   onDelete,
 }: {
-  zone: EditorZone;
-  onChange: (patch: Partial<EditorZone>) => void;
+  zone: VenueZone;
+  onChange: (patch: Partial<VenueZone>) => void;
   onDelete: () => void;
 }) {
   const inputClass =
