@@ -20,14 +20,14 @@ export function About() {
   const t = useTranslations("Landing.About");
 
   return (
-    <section id="sobre" className="relative scroll-mt-20 lg:scroll-mt-24 border-b border-line px-6 py-24 sm:px-10 sm:py-28 lg:px-16 lg:py-32">
+    <section id="sobre" className="relative scroll-mt-20 lg:scroll-mt-24 border-b border-line px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-18">
       <EntranceVein color="var(--color-cyan)" />
-      <div className="grid gap-y-16 lg:grid-cols-12 lg:gap-x-12 lg:items-center">
+      <div className="grid gap-y-10 lg:grid-cols-12 lg:gap-x-12 lg:items-center">
         <div className="lg:col-span-7">
           <p className="text-balance font-display text-2xl leading-relaxed font-medium text-paper sm:text-3xl lg:text-4xl">
             {t("descriptionIntro")}
           </p>
-          <p className="my-3 font-display text-[clamp(3.5rem,10vw,7rem)] leading-[0.85] font-black tracking-tight text-accent drop-shadow-[0_0_30px_rgba(0,240,255,0.28)] transition-all duration-300 sm:my-4">
+          <p className="my-2.5 font-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.85] font-black tracking-tight text-accent drop-shadow-[0_0_25px_rgba(0,240,255,0.25)] sm:my-3">
             {t("descriptionEmphasis")}
           </p>
           <p className="max-w-xl text-balance font-display text-2xl leading-relaxed font-medium text-paper sm:text-3xl lg:text-4xl">
@@ -38,33 +38,37 @@ export function About() {
           {/* Resplandor ambiental de fondo */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-br from-accent/10 via-purple-500/5 to-transparent blur-2xl opacity-60"
+            className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-br from-accent/10 via-purple-500/5 to-transparent blur-2xl opacity-50"
           />
-          <dl className="relative flex flex-col gap-2.5">
+          <dl className="relative flex flex-col gap-2">
             {STATS.map((stat, i) => (
               <div
                 key={stat.key}
-                className={`group relative flex flex-col-reverse transition-all duration-300 motion-safe:hover:translate-x-1.5 ${BAND_WIDTH[i]}`}
+                className={`group relative flex flex-col-reverse ${BAND_WIDTH[i]}`}
               >
-                <dt className="flex items-center justify-between px-6 pt-2 pb-4 font-mono text-[0.68rem] tracking-[0.18em] text-paper-dim uppercase">
+                <dt className="flex items-center justify-end gap-2 px-6 pt-1.5 pb-2.5 font-mono text-[0.65rem] tracking-[0.16em] text-paper-dim uppercase">
                   <span>{t(`stats.${stat.key}`)}</span>
                   <span
-                    className="h-1.5 w-1.5 rounded-full opacity-60 transition-opacity group-hover:opacity-100 motion-safe:animate-pulse"
-                    style={{ backgroundColor: stat.color, boxShadow: `0 0 8px ${stat.color}` }}
+                    className="h-1.5 w-1.5 rounded-full opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ backgroundColor: stat.color, boxShadow: `0 0 6px ${stat.color}` }}
                   />
                 </dt>
                 <dd
-                  className="relative flex items-center justify-end overflow-hidden rounded-xl px-7 py-5 font-mono text-3xl font-black text-ink tabular-nums shadow-md transition-all duration-300 group-hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.5)] sm:py-6 sm:text-4xl lg:text-5xl"
+                  className="relative flex items-center justify-end overflow-hidden rounded-xl px-7 py-4 font-mono text-3xl font-black text-ink tabular-nums shadow-sm transition-all duration-500 group-hover:shadow-[0_6px_20px_-4px_rgba(0,0,0,0.4)] sm:py-5 sm:text-4xl lg:text-5xl"
                   style={{ backgroundColor: stat.color }}
                 >
-                  {/* Destello metálico suave de izquierda a derecha en hover */}
+                  {/* Destello metálico sutil y pausado en hover */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/40 via-white/10 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[250%]"
+                    className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1200 ease-in-out group-hover:translate-x-[200%]"
                   />
-                  <span className="relative z-10 transition-transform duration-300 group-hover:scale-105">
-                    {stat.value}
-                  </span>
+                  {stat.key === "dates" ? (
+                    <span className="relative z-10">
+                      9<span className="mx-1.5 text-[0.52em] font-normal tracking-normal lowercase opacity-75">al</span>12 OCT
+                    </span>
+                  ) : (
+                    <span className="relative z-10">{stat.value}</span>
+                  )}
                 </dd>
               </div>
             ))}

@@ -593,3 +593,33 @@ body {
   color: var(--color-paper-dim);
   text-align: right;
 }
+
+/* Flujo cromático continuo para la veta de cuenta regresiva y acentos */
+.strata-flow-bar {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-cyan) 0%,
+    var(--color-violet) 25%,
+    var(--color-magenta) 50%,
+    var(--color-lavender) 75%,
+    var(--color-cyan) 100%
+  );
+  background-size: 200% 100%;
+  animation: strata-flow 3.5s linear infinite;
+}
+
+@keyframes strata-flow {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strata-flow-bar {
+    animation: none;
+    background-position: 0% 0;
+  }
+}
