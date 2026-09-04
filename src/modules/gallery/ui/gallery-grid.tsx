@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { GALLERY_PHOTOS } from "./gallery-data";
@@ -12,6 +13,7 @@ function wrap(index: number, delta: number) {
 }
 
 export function GalleryGrid() {
+  const t = useTranslations("Gallery");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const open = openIndex !== null ? GALLERY_PHOTOS[openIndex] : null;
   const currentNumber = openIndex !== null ? openIndex + 1 : null;
@@ -106,7 +108,7 @@ export function GalleryGrid() {
           >
             <Image
               src={photo.src}
-              alt={photo.alt}
+              alt={t("photoAlt", { n: photo.n })}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
               className="object-cover transition duration-500 hover:scale-105"
@@ -121,22 +123,22 @@ export function GalleryGrid() {
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
-          aria-label={open.alt}
+          aria-label={t("photoAlt", { n: open.n })}
           className="fixed inset-0 z-50 flex items-center justify-center bg-ink/95 p-6"
           onClick={() => setOpenIndex(null)}
         >
           <p className="sr-only" aria-live="polite">
-            {`Foto ${currentNumber} de ${TOTAL}: ${open.alt}`}
+            {t("dialogAnnounce", { current: currentNumber, total: TOTAL, alt: t("photoAlt", { n: open.n }) })}
           </p>
 
           <button
             ref={closeButtonRef}
             type="button"
             onClick={() => setOpenIndex(null)}
-            aria-label="Cerrar"
+            aria-label={t("closeLabel")}
             className="absolute top-6 right-6 z-10 font-mono text-sm text-paper-dim outline-paper outline-offset-4 transition hover:text-paper focus-visible:text-paper focus-visible:outline-2"
           >
-            Cerrar ✕
+            {t("closeLabel")} ✕
           </button>
 
           <button
@@ -145,7 +147,7 @@ export function GalleryGrid() {
               event.stopPropagation();
               goPrev();
             }}
-            aria-label="Foto anterior"
+            aria-label={t("prevLabel")}
             className="absolute top-1/2 left-2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line text-paper-dim transition hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none sm:left-6"
           >
             <span aria-hidden="true" className="text-lg">
@@ -159,7 +161,7 @@ export function GalleryGrid() {
               event.stopPropagation();
               goNext();
             }}
-            aria-label="Foto siguiente"
+            aria-label={t("nextLabel")}
             className="absolute top-1/2 right-2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line text-paper-dim transition hover:border-accent hover:text-accent focus-visible:border-accent focus-visible:text-accent focus-visible:outline-none sm:right-6"
           >
             <span aria-hidden="true" className="text-lg">
@@ -174,7 +176,13 @@ export function GalleryGrid() {
             onTouchEnd={handleTouchEnd}
             className="relative h-[80vh] w-full max-w-4xl motion-safe:animate-[strata-settle_0.35s_cubic-bezier(0.16,1,0.3,1)_backwards]"
           >
-            <Image src={open.src} alt={open.alt} fill sizes="100vw" className="object-contain" />
+            <Image
+              src={open.src}
+              alt={t("photoAlt", { n: open.n })}
+              fill
+              sizes="100vw"
+              className="object-contain"
+            />
           </div>
 
           <div

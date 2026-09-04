@@ -1,20 +1,22 @@
 # Matriz de Cumplimiento — Desafío Digital ExpoJuy 2026
 
-> **Documento vivo de auditoría y control de calidad.**  
+> **Documento vivo de auditoría y control de calidad.**
 > Contrastado contra las **Bases y Condiciones** y las **Consignas Técnicas del Desafío** provistas por el Ministerio de Desarrollo Económico y Producción de Jujuy (Dirección de Servicios Basados en el Conocimiento), la Cámara de Comercio Exterior de Jujuy y ClusteAR.
+>
+> Última auditoría: 3 de septiembre de 2026, contra el estado real del código en `develop` (no contra intenciones de diseño ni contra lo que dicen otros documentos). Donde una fila anterior de este documento afirmaba algo que el código no respaldaba, se corrigió — ver la nota al pie de cada sección.
 
 ---
 
 ## 📊 Estado General de Cumplimiento
 
 ```
-[█████████████████░░░] 85% Completitud Integral
-• ✅ Cumplido al 100%: 23 ítems
-• 🟡 A medias / En progreso: 5 ítems
-• 🔴 Pendiente / Por completar: 3 ítems
+[████████████████████░] 96% Completitud Integral
+• ✅ Cumplido: 30 ítems
+• 🟡 A medias / En progreso: 2 ítems
+• 🔴 Pendiente / Por completar: 1 ítem
 ```
 
----
+Los tres ítems que no están al 100% son intencionales o dependen de un tercero, no de trabajo pendiente propio — están detallados en la sección 6.
 
 ## 1. Requisitos Administrativos y de Participación (Bases y Condiciones)
 
@@ -22,88 +24,83 @@
 |---|---|:---:|---|
 | **Elegibilidad de Participantes** *(Cap. II, Art. 4)* | Mayores de 18 años residentes en Jujuy; estudiantes/egresados de SBC, desarrolladores, diseñadores UX/UI. | ✅ **100%** | Ambos integrantes cumplen el perfil legal y profesional. |
 | **Composición del Equipo** *(Cap. II, Art. 5)* | Entre 2 y 4 participantes. Designar un representante como interlocutor. | ✅ **100%** | Equipo de 2 integrantes: Delestal94 y Maximiliano Lezano. |
-| **Inscripción Oficial al Programa** *(Cap. III, Art. 6)* | Completar formulario oficial de inscripción dentro de los plazos. | ✅ **100%** | **Formulario enviado por el equipo**. En espera de confirmación formal para remitir adjuntos. |
-| **Plazo Límite de Entrega Etapa 1** *(Cap. III, Art. 6; Cap. IV, Art. 9)* | **8 de septiembre de 2026 a las 23:59 hs** (hora argentina). | 🟡 **En curso** | Quedan 5 días para el cierre de recepción formal. |
+| **Inscripción Oficial al Programa** *(Cap. III, Art. 6)* | Completar formulario oficial de inscripción dentro de los plazos. | ✅ **100%** | Formulario enviado por el equipo. |
+| **Plazo Límite de Entrega Etapa 1** *(Cap. III, Art. 6; Cap. IV, Art. 9)* | **8 de septiembre de 2026 a las 23:59 hs** (hora argentina). | 🟡 **En curso** | Todavía dentro del plazo. Vale la fecha/hora que registre el sistema de recepción oficial. |
 | **Gratuidad de Participación** *(Cap. III, Art. 6)* | La inscripción es libre y sin costo. | ✅ **100%** | Respetado. |
 | **Infraestructura y Hosting** *(Cap. IX, Art. 18)* | Cámara provee dominio y hosting; participantes no asumen costos. | ✅ **100%** | Prototipo desplegado en Vercel (tier gratuito) sin costos de infra. |
-| **Premio y Compromiso Etapa 2** *(Cap. VIII y X)* | $750.000 ARS + Certificado + Desarrollo final hasta el 30/09. | ✅ **100%** | Cronograma de desarrollo previsto y documentado en Roadmap. |
-| **Propiedad Intelectual y Licencias** *(Cap. XII y XIV)* | Cesión de derechos a la Cámara; autores conservan autoría. Recursos con licencia legal. | ✅ **100%** | Fotos oficiales reales (ExpoJuy 2024), código propio, sin plagio. |
-
----
+| **Premio y Compromiso Etapa 2** *(Cap. VIII y X)* | $750.000 ARS + Certificado + Desarrollo final hasta el 30/09. | ✅ **100%** | Cronograma de desarrollo previsto y documentado en Roadmap (memoria descriptiva, §13). |
+| **Propiedad Intelectual y Licencias** *(Cap. XII y XIV)* | Cesión de derechos a la Cámara; autores conservan autoría. Recursos con licencia legal. | ✅ **100%** | Fotos oficiales reales (ExpoJuy 2024), código propio, sin plagio. Los enlaces a redes sociales usan las cuentas reales verificadas de @expojuy y de la Cámara, no perfiles inventados. |
 
 ## 2. Documentación Oficial a Presentar — Etapa 1 (Bases Anexo III / Consignas §4)
-
-> 💡 **Guía de Documentación para el Envío Formal**: Esta es la lista taxativa exigida por el Anexo III de las Bases.
 
 | Entregable Oficial Exigido | Estado | ¿Lo tenemos creado? | Ubicación / Detalle en el Proyecto |
 |---|:---:|:---:|---|
 | **1. Formulario de inscripción** | ✅ **Enviado** | **SÍ** | Completado y enviado a la organización. |
 | **2. Integrantes del equipo** | ✅ **100%** | **SÍ** | Delestal94 y Maximiliano Lezano (con designación de interlocutor). |
-| **3. Link al Mockup / Prototipo Navegable** | ✅ **100%** | **SÍ** | • **Web en Vivo (Vercel)**: `https://expojuy2026.vercel.app`<br>• **Suite Mockups Estática**: Carpeta `ux-ui/mockups/` autónoma.<br>• **Repositorio Público**: `https://github.com/Delestal94/Expo2026` |
-| **4. Memoria Descriptiva** | 🟡 **90%** | **SÍ (Falta PDF)** | Redactada completa en `docs/memoria-descriptiva.md` y `docs/memoria-ejecutiva.md`. **Solo resta exportarla a formato PDF oficial con carátula institucional**. |
+| **3. Link al Mockup / Prototipo Navegable** | ✅ **100%** | **SÍ** | Web en vivo (Vercel), suite de mockups estática (`ux-ui/mockups/`) y repositorio público. |
+| **4. Memoria Descriptiva** | ✅ **100%** | **SÍ** | `docs/memoria-descriptiva.md`, exportada a **`docs/memoria-descriptiva.pdf`** con carátula institucional. Las 8 secciones que exige Consignas §4.2 están completas, incluidas Organización del contenido (§4) y Estrategia responsive (§11), que faltaban en la auditoría anterior. |
 | **5. Explicación Conceptual de la Propuesta** | ✅ **100%** | **SÍ** | Sistema y concepto "Estratos" detallado en `ux-ui/DESIGN.md` y en la Sección 3 de la Memoria Descriptiva. |
-| **6. Tecnologías Propuestas** | ✅ **100%** | **SÍ** | Detallado en `docs/architecture.md` (Next.js 16, TypeScript, Supabase PostgreSQL, Tailwind CSS v4, Vercel, Arquitectura Modular Hexagonal). |
-| **7. Declaración de Uso de IA** | ✅ **100%** | **SÍ** | Redactada en la Sección 8 de la Memoria Descriptiva (Uso responsable, Ley 25.326, RAG sin alucinación y soporte al proceso creativo/código). |
-
----
+| **6. Tecnologías Propuestas** | ✅ **100%** | **SÍ** | Detallado en `docs/architecture.md` (Next.js 16, TypeScript, arquitectura modular por puertos y adaptadores). |
+| **7. Declaración de Uso de IA** | ✅ **100%** | **SÍ** | Redactada en la Sección 9 de la Memoria Descriptiva. |
 
 ## 3. Secciones Mínimas Sugeridas (Consignas Técnicas §5 y Anexo II)
 
-| Sección Sugerida | Requerimiento de Contenido | Estado en Mockups | Estado en Proyecto Develop | Acción de Refinamiento |
-|---|---|:---:|:---:|---|
-| **Inicio (Home / Hero)** | Identidad, slogan, cuenta regresiva, llamada a la acción principal. | ✅ **100%** | ✅ **100%** | `index.html` (Hub) + `develop` Hero con canvas de estratos unificado y reloj dinámico. |
-| **Sobre ExpoJuy 2026** | Historia, contexto, cambio de formato a 4 días, impacto productivo. | ✅ **100%** | ✅ **100%** | Incluido en la landing y en la Vista 01 (Roadmap). |
-| **Expositores** | Catálogo/directorio de empresas participantes por rubro. | ✅ **100%** | ✅ **100%** | `Directory` filtrable en develop + **Vista 03 (Rondas B2B)** con matching comercial. |
-| **Agenda de Actividades** | Cronograma de conferencias, rondas matutinas y espectáculos vespertinos. | 🟡 **A Medias** | 🟡 Parcial | En Vista 01 y 03 hay slots y fases; **falta agregar la grilla horaria día por día** (9 al 12 de octubre). |
-| **Noticias / Novedades** | Espacio editorial de prensa, anuncios oficiales y novedades del evento. | 🔴 **Faltante** | 🔴 Pendiente | **Debe agregarse una tarjeta/sección de Noticias Oficiales** en la suite (ej. en el Home o en una vista). |
-| **Plano / Mapa del Predio** | Ubicación espacial de stands, pabellones, auditorios y servicios en Ciudad Cultural. | ✅ **100%** | ✅ **100% (Actualizado)** | En develop: `venue-map.tsx` y `venue-plan.ts` actualizados con stands interactivos. En mockups: **Vista 06**. |
-| **Sponsors / Patrocinadores** | Espacios visuales destacados para sponsors institucionales y privados. | 🟡 **A Medias** | 🟡 Básico | Logos presentes en footer; **falta bloque destacado de Sponsors** (Exar, Ledesma, Macro, etc.) en el Home. |
-| **Contacto** | Vías de comunicación institucional, formulario y soporte. | 🟡 **A Medias** | 🟡 Links | Hay enlaces de WhatsApp y Cámara en footer; **conviene un formulario de contacto visual interactivo**. |
-| **Preguntas Frecuentes (FAQ)**| Respuestas a dudas recurrentes de visitantes y expositores. | 🟡 **A Medias** | 🟡 Parcial | El Concierge IA (Vista 04) las responde, pero **falta un acordeón visual clásico de FAQ**. |
-| **Redes Sociales** | Enlaces y presencia de canales oficiales (@expojuy, LinkedIn, YouTube). | ✅ **100%** | ✅ **100%** | Integrado en cabeceras y pie de página institucionales con lockup dark y marca oficial. |
+| Sección Sugerida | Requerimiento de Contenido | Estado en el sitio (`develop`) | Detalle |
+|---|---|:---:|---|
+| **Inicio (Home / Hero)** | Identidad, slogan, cuenta regresiva, llamada a la acción principal. | ✅ **100%** | Lockup oficial real, cuenta regresiva y dos CTA. |
+| **Sobre ExpoJuy 2026** | Historia, contexto, cambio de formato a 4 días, impacto productivo. | ✅ **100%** | Sección "Sobre" + los 4 Ejes productivos. |
+| **Expositores** | Catálogo/directorio de empresas participantes por rubro. | ✅ **100%** | Directorio con **buscador de texto libre** (nuevo) + filtro por eje. |
+| **Agenda de Actividades** | Cronograma de conferencias, rondas matutinas y espectáculos vespertinos. | ✅ **100%\*** | Nueva sección **Agenda**: estructura diaria confirmada por prensa (rondas de negocios por la mañana, expo por la tarde) para los 4 días, con selector interactivo. *La grilla horaria minuto a minuto de charlas y shows nocturnos todavía no la publicó la organización para 2026 (en la edición 2024 se conoció recién la semana previa) — no es trabajo pendiente nuestro, es información que no existe todavía. |
+| **Noticias** | Espacio editorial de prensa, anuncios oficiales y novedades del evento. | ✅ **100%** | Nueva sección **Noticias**: 3 coberturas de prensa reales (con enlace a la nota original) + 1 novedad propia del sitio. |
+| **Plano / Mapa del Predio** | Ubicación espacial de stands, pabellones, auditorios y servicios en Ciudad Cultural. | ✅ **100%** | `venue-map.tsx` y `venue-plan.ts`: plano calcado del CAD con más de 200 zonas interactivas. |
+| **Sponsors** | Espacios visuales destacados para sponsors institucionales y privados. | ✅ **100%** | Tres grupos en el pie (acompañan / sponsors / organiza) con logos reales y efecto de marca al pasar el mouse. |
+| **Contacto** | Vías de comunicación institucional, formulario y soporte. | ✅ **100%** | Nueva sección **Contacto**: email, teléfono y dirección reales de la Cámara, WhatsApp y redes sociales, además del formulario de proveedores en Acceso. |
+| **Preguntas Frecuentes (FAQ)** | Respuestas a dudas recurrentes de visitantes y expositores. | ✅ **100%** | Nueva sección **FAQ**: acordeón accesible con 8 preguntas reales (fechas, entradas, postulación, accesibilidad, idiomas, novedades). |
+| **Redes Sociales** | Enlaces y presencia de canales oficiales (@expojuy, LinkedIn, YouTube). | ✅ **100%** | Corregido — la auditoría anterior lo daba por cumplido sin que existiera ningún enlace. Ahora: Instagram (`@expojuy`), Facebook y LinkedIn reales de la Cámara, en el pie de página, en Contacto y en el JSON-LD (`sameAs`). |
 
----
+*\* Nota metodológica: en la auditoría del 3/9 a la mañana, esta fila decía "🟡 A Medias" porque la sección no existía en el código a pesar de que la matriz anterior no la mencionaba como pendiente. Se corrigió en la misma jornada.*
 
 ## 4. Funcionalidades Sugeridas y Valor Agregado (Consignas Técnicas §6)
 
 | Funcionalidad | Descripción | Nivel de Cumplimiento | Dónde se visualiza |
 |---|---|:---:|---|
-| **Buscador de Expositores** | Búsqueda por texto libre de stands, empresas y rubros. | ✅ **100%** | Vista 03 (`03-rondas-b2b.html`) y Vista 06 (`06-mapa.html`). |
-| **Filtro por Rubros / Ejes** | Minería/Litio, Comercio Exterior, Corredor Bioceánico, Economía del Conocimiento. | ✅ **100%** | Presente en Vista 03, Vista 05 (Galería), Vista 06 y `develop`. |
-| **Agenda Interactiva** | Navegación de paneles, charlas y rondas de negocios. | 🟡 **A Medias** | Vista 03 tiene agenda de slots de 20 min; falta visor diario de conferencias. |
-| **Mapa del Predio Dinámico** | Visualización de zonificación y estado de salas en vivo. | ✅ **100%** | Actualizado en `develop` (`venue-map.tsx`) y en Vista 06 con salas en tiempo real ("EN RONDA / EN VIVO"). |
-| **Compra o Gestión de Entradas** | Venta digital / acreditación QR según esquema de acceso. | ✅ **100%** | Vista 02 (`02-acceso.html`): simulador de molinete, QR holográfico dinámico y switch `free/paid`. |
-| **Integración con Redes Sociales** | Acceso a perfiles oficiales y material de difusión. | ✅ **100%** | Enlaces y lockup de marca oficial de Instagram (`@expojuy`). |
-| **Espacios para Patrocinadores** | Banners y menciones con jerarquía (Platinum, Gold, Silver). | 🟡 **A Medias** | En footer; falta bloque visual bento de sponsors de primer nivel. |
-| **Panel para Futuras Actualizaciones** | Arquitectura desacoplada para conectar CMS (Sanity/Strapi). | ✅ **100%** | Documentado en `architecture.md` mediante patrón de puertos y adaptadores. |
-| **✨ Valor Agregado 1: Concierge IA Multilingüe** | Asistente en 4 idiomas (ES, EN, PT, ZH) con tarjetas ricas y derivación humana. | ✅ **100% (Diferencial)** | Vista 04 (`04-asistente.html`) — no solicitado explícitamente, gran valor diferencial. |
-| **✨ Valor Agregado 2: Memoria Visual 2024** | Galería histórica con 30 fotos de alta resolución y lightbox accesible. | ✅ **100% (Diferencial)** | Vista 05 (`05-galeria.html`) — refuerza respaldo institucional real. |
-| **✨ Valor Agregado 3: Matching B2B Algorítmico** | Score de compatibilidad comercial para el Corredor Bioceánico. | ✅ **100% (Diferencial)** | Vista 03 (`03-rondas-b2b.html`) — responde al objetivo prioritario del evento. |
-
----
+| **Buscador de Expositores** | Búsqueda por texto libre de stands, empresas y rubros. | ✅ **100%** | Directorio de Expositores — antes solo estaba en los mockups estáticos, ahora también en la app real, combinable con el filtro de eje. |
+| **Filtro por Rubros / Ejes** | Minería/Litio, Comercio Exterior, Corredor Bioceánico, Economía del Conocimiento. | ✅ **100%** | Directorio de expositores y Mapa. |
+| **Agenda Interactiva** | Navegación de paneles, charlas y rondas de negocios. | ✅ **100%** | Selector de día (Vie 9 a Lun 12) en la nueva sección Agenda, más la vista detallada de slots de rondas de negocios en Expositores. |
+| **Mapa del Predio Dinámico** | Visualización de zonificación y estado de salas en vivo. | ✅ **100%** | `venue-map.tsx`, con panel de detalle por zona. |
+| **Compra o Gestión de Entradas** | Venta digital / acreditación QR según esquema de acceso. | 🟡 **Diseñado, cobro pendiente** | Alta de cuenta y QR de ingreso gratuito ya funcionan. El cobro real (Mercado Pago) queda a propósito detrás de un interruptor de configuración hasta que la Cámara confirme el esquema de precios 2026 — decisión documentada en [ADR-0003](adr/0003-modo-de-acceso.md), no una tarea sin hacer. |
+| **Integración con Redes Sociales** | Acceso a perfiles oficiales y material de difusión. | ✅ **100%** | Ver sección 3. |
+| **Espacios para Patrocinadores** | Banners y menciones con jerarquía. | ✅ **100%** | Grillas de logos reales en el pie, separadas por Acompañan / Sponsors / Organiza. |
+| **Panel para Futuras Actualizaciones** | Arquitectura desacoplada para conectar CMS (Sanity/Strapi). | ✅ **100%** | Documentado en `architecture.md` mediante patrón de puertos y adaptadores; flags tipados en `src/lib/config/flags.ts`. |
+| **✨ Valor Agregado 1: Concierge IA Multilingüe** | Asistente en varios idiomas con derivación humana. | 🔴 **Diseñado, no implementado** | Diseñado con sus reglas de uso responsable en la Memoria Descriptiva §9; la implementación está en la Fase 3 del roadmap (después del 27/09), no es parte del alcance de esta primera etapa. |
+| **✨ Valor Agregado 2: Memoria Visual 2024** | Galería histórica con fotos reales y lightbox accesible. | ✅ **100%** | Sección Galería + `/galeria`. |
+| **✨ Valor Agregado 3: Matching B2B Algorítmico** | Score de compatibilidad comercial. | ✅ **100%** | `matching-preview.tsx`, dentro de Expositores. |
 
 ## 5. Criterios Técnicos de Evaluación (Bases Art. 13 / Consignas §11)
 
-| Criterio Evaluado | Justificación de Cumplimiento Técnico | Puntuación Estimada |
-|---|---|:---:|
-| **1. Calidad del Diseño Visual** | Sistema de diseño "Estratos" propio, tipografía Unbounded/Manrope, paleta oficial del isotipo de ExpoJuy en Instagram, microanimaciones de lona canvas, estética sobria y moderna. | 10 / 10 |
-| **2. Claridad de la Arquitectura de Información** | Estructura modular, navegación fija flotante con conmutador de vistas, breadcrumbs, navegación clara y sin ambigüedades. | 9.5 / 10 |
-| **3. Experiencia de Usuario (UX)** | Tiempos de carga instantáneos (archivos estáticos puros en mockups), interactividad en cliente, simuladores de molinete y matching en vivo. | 10 / 10 |
-| **4. Accesibilidad (a11y)** | Cumplimiento de WCAG 2.1 (contraste verificado, navegación por teclado con foco visible, lightbox con trampeo de foco, soporte `prefers-reduced-motion`, nuevo componente `entrance-vein`). | 9.5 / 10 |
-| **5. Adaptabilidad Móvil (Responsive)** | Layout fluido con clamp(), grilla bento colapsable de 12 a 1 columna, navegación mobile amigable. | 9.5 / 10 |
-| **6. Escalabilidad de la Solución** | Arquitectura modular hexagonal (`src/modules/*`), tipado estricto con TypeScript, backend escalable en Supabase PostgreSQL. | 10 / 10 |
-| **7. Factibilidad Técnica** | Repositorio público real con CI en verde (58 tests unitarios pasando, 0 errores de TypeScript), no solo un diseño en Figma. | 10 / 10 |
-| **8. Innovación** | Canvas con metáfora geológica del litio y cerro, matching B2B para el Corredor Bioceánico, acreditación QR offline y Concierge multilingüe. | 10 / 10 |
-| **9. Uso Responsable de IA** | Declaración formal de ética (Ley 25.326), RAG sin alucinaciones, derivación a operadores humanos y control de costos por rate limit. | 10 / 10 |
-| **10. Originalidad de la Propuesta** | Identidad inspirada en la Quebrada y el litio jujeño, lejos de plantillas genéricas de WordPress o bootstrap. | 10 / 10 |
+| Criterio Evaluado | Justificación de Cumplimiento Técnico |
+|---|---|
+| **Calidad del diseño visual** | Sistema de diseño "Estratos" propio, tipografía Unbounded/Manrope/JetBrains Mono, paleta de marca coherente con Instagram. |
+| **Claridad de la arquitectura de información** | Índice de secciones (`SectionNav`) que resalta la sección activa; orden de contenido documentado y justificado en la Memoria Descriptiva §4. |
+| **Experiencia de usuario** | Buscador con estado vacío explicado, filtros combinables, agenda interactiva por día, acordeones accesibles. |
+| **Accesibilidad** | Roles ARIA en filtros/tabs/acordeón, navegación completa por teclado, foco visible, `prefers-reduced-motion` respetado — con tests automatizados que lo verifican. |
+| **Adaptabilidad Móvil (Responsive)** | Detallada como sección propia de la Memoria Descriptiva (§11): grillas fluidas, tipografía con `clamp()`, patrones de scroll horizontal en mobile. |
+| **Escalabilidad de la solución** | Arquitectura modular (`src/modules/*`) con límites verificados por lint; cada sección nueva (Noticias, Agenda) se sumó como módulo propio sin tocar los existentes. |
+| **Factibilidad técnica** | Repositorio público con CI en verde: 64 tests unitarios, 0 errores de TypeScript, build de producción exitoso. |
+| **Innovación** | Metáfora geológica del litio y cerro, matching B2B, credencial QR con validación offline. |
+| **Uso responsable de IA** | Declaración formal en la Memoria Descriptiva §9; uso de IA en este mismo ciclo de desarrollo declarado y supervisado por el equipo. |
+| **Originalidad de la propuesta** | Identidad inspirada en la Quebrada y el litio jujeño; contenido de Noticias/Contacto con datos reales verificados, no genéricos. |
 
----
+## 6. Lo que no está al 100% — y por qué
 
-## 6. Plan de Acción Inmediato (Hacia el 8 de Septiembre 23:59 hs)
+1. **Cobro real de entradas (Mercado Pago)** — 🟡 a propósito. No hay confirmación pública del esquema de precios 2026; construir el cobro ahora significaría inventar un precio institucional. El interruptor ya está listo para activarlo apenas la Cámara confirme (ADR-0003).
+2. **Asistente con IA** — 🔴 pendiente, pero de la Fase 3 del roadmap (después del 27/09), no de esta primera etapa. Las bases piden una *propuesta conceptual*, no el sitio completo (Consignas §2, Bases Art. 7); el asistente está diseñado, no construido.
+3. **Grilla horaria detallada de la Agenda** — 🟡 depende de un tercero. La organización todavía no publicó el cronograma minuto a minuto de charlas y shows para 2026 (en 2024 se conoció la semana previa al evento). La sección Agenda ya muestra la estructura confirmada (rondas AM / expo PM) y avisa explícitamente qué falta, en vez de inventar horarios.
 
-### 🔴 Próximos Pasos Prioritarios:
-1. **Generar PDF de la Memoria Descriptiva**: Compilar `docs/memoria-descriptiva.md` a un PDF formal con carátula institucional y membrete (¡único documento formal que resta exportar!).
-2. **Incorporar Sección de Noticias / Prensa**: Agregar un bloque bento de novedades recientes en la propuesta.
-3. **Incorporar Bloque de Sponsors & Patrocinadores Destacados**: Ubicar en el Home/Hub las marcas que apoyan la edición (Exar, Ledesma, Cámara, etc.).
-4. **Incorporar Acordeón de FAQ y Formulario de Contacto**: Añadir estas dos secciones mínimas requeridas por las consignas.
-5. **Agenda Diaria de Actividades**: Detallar el programa de actividades por día (Jueves 9, Viernes 10, Sábado 11, Domingo 12).
+### Riesgo operativo (no de cumplimiento): `main` sigue atrás de `develop`
+
+El dominio de producción (`expojuy2026.vercel.app`, citado como "prototipo en vivo" en la Memoria Descriptiva) sirve la rama `main`, que a la fecha de esta auditoría está varios commits atrás de `develop` — no refleja todavía Noticias, Agenda, Contacto, FAQ, redes sociales ni el buscador de expositores. Promover `main` es una decisión del equipo (afecta el sitio público), pendiente de confirmación antes de enviar el link definitivo a la organización.
+
+## 7. Multiidioma — gap detectado, fuera de esta corrección
+
+La Memoria Descriptiva (§6) declara español, inglés, portugués y mandarín como decisión de arquitectura, pero **hoy el sitio solo tiene `es-AR.json`** — no hay traducción real todavía. No es parte de las secciones mínimas ni de las funcionalidades sugeridas por las consignas, así que no bloquea la etapa 1, pero queda anotado para no perderlo de vista de cara a la Fase 1 del roadmap (11/09–20/09).

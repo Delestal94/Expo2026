@@ -112,12 +112,225 @@
       "minutes": "min",
       "seconds": "seg"
     },
+    "SocialLinks": {
+      "instagram": "Instagram de ExpoJuy",
+      "facebook": "Facebook de la Cámara de Comercio Exterior de Jujuy",
+      "linkedin": "LinkedIn de la Cámara de Comercio Exterior de Jujuy"
+    },
+    "Contact": {
+      "eyebrow": "Contacto",
+      "title": "¿Necesitás algo puntual?",
+      "description": "Escribinos por el canal que prefieras — te contesta el mismo equipo de la Cámara de Comercio Exterior de Jujuy que organiza ExpoJuy.",
+      "emailLabel": "Email",
+      "phoneLabel": "Teléfono",
+      "addressLabel": "Dirección",
+      "whatsappCta": "Escribir por WhatsApp",
+      "socialTitle": "Seguí las novedades",
+      "socialDescription": "Anuncios, fechas y avances de la edición 2026, en tiempo real."
+    },
+    "Faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Antes de que preguntes",
+      "items": {
+        "dates": {
+          "question": "¿Cuándo y dónde es ExpoJuy 2026?",
+          "answer": "Del 9 al 12 de octubre, en Ciudad Cultural, San Salvador de Jujuy."
+        },
+        "tickets": {
+          "question": "¿Necesito entrada para visitar la expo?",
+          "answer": "En la edición 2024 la entrada era paga (valores de referencia en la sección Acceso). Todavía no hay confirmación pública del esquema para 2026."
+        },
+        "exhibitors": {
+          "question": "¿Cómo postulo mi empresa como expositora?",
+          "answer": "Por la convocatoria oficial de la Cámara de Comercio Exterior de Jujuy — no hay alta de expositores desde este sitio. Vas a encontrar el formulario y el WhatsApp en la sección Acceso."
+        },
+        "businessRounds": {
+          "question": "¿Qué son las rondas de negocios?",
+          "answer": "Reuniones matutinas entre empresas jujeñas y delegaciones del Corredor Bioceánico, organizadas por rubro e interés en común. Mirá el directorio en la sección Expositores."
+        },
+        "accessibility": {
+          "question": "¿El predio es accesible para personas con movilidad reducida?",
+          "answer": "Escribinos por WhatsApp o email contándonos qué necesitás y te confirmamos los detalles antes de tu visita."
+        },
+        "parking": {
+          "question": "¿Hay estacionamiento?",
+          "answer": "La disponibilidad la confirma la organización más cerca de la fecha — consultanos por nuestros canales de contacto."
+        },
+        "languages": {
+          "question": "¿En qué idiomas está disponible el sitio?",
+          "answer": "En español, inglés, portugués y mandarín — cambiá el idioma desde el selector arriba a la izquierda."
+        },
+        "updates": {
+          "question": "¿Cómo me entero de las novedades?",
+          "answer": "Seguinos en Instagram (@expojuy) o revisá la sección Noticias de este sitio."
+        }
+      }
+    },
     "SiteFooter": {
       "brand": "ExpoJuy 2026",
       "organizes": "Organiza",
       "organizerAlt": "Cámara de Comercio Exterior de Jujuy",
       "institutions": "Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.",
       "badge": "Prototipo — Desafío Digital 2026"
+    }
+  },
+  "Pages": {
+    "Cuenta": {
+      "metaTitle": "Crear cuenta — ExpoJuy 2026",
+      "backLink": "← Volver",
+      "heading": "Tu cuenta de visitante",
+      "description": "Creá tu cuenta ahora. La compra de la entrada todavía no está disponible — se habilita en la próxima etapa."
+    },
+    "Galeria": {
+      "metaTitle": "Galería 2024 — ExpoJuy 2026",
+      "metaDescription": "Fotos de la 16ª edición de ExpoJuy (2024) en la Ciudad Cultural de San Salvador de Jujuy.",
+      "backLink": "← Volver",
+      "heading": "Galería — 16ª edición (2024)",
+      "description": "30 fotos de ExpoJuy 2024 en la Ciudad Cultural de San Salvador de Jujuy."
+    }
+  },
+  "Exhibitors": {
+    "searchLabel": "Buscar expositor",
+    "searchPlaceholder": "Buscar por empresa, rubro o qué ofrece...",
+    "filterGroupLabel": "Filtrar por eje",
+    "filterAll": "Todos",
+    "viewProfilesCta": "Ver los {count} perfiles",
+    "buscaLabel": "Busca",
+    "noResults": "Ningún expositor coincide con “{query}”. Probá con otro término o rubro.",
+    "ejes": {
+      "mineria": "Minería y litio",
+      "comercio": "Comercio exterior",
+      "corredor": "Corredor bioceánico",
+      "conocimiento": "Economía del conocimiento"
+    },
+    "items": {
+      "altiplano-servicios": {
+        "pitch": "Logística y mantenimiento de equipos para operaciones de litio en el altiplano jujeño.",
+        "busca": "Contratos con operadoras mineras"
+      },
+      "quebrada-litio": {
+        "pitch": "Provisión de insumos químicos certificados para plantas de procesamiento de litio.",
+        "busca": "Distribuidores regionales"
+      },
+      "jujuy-exporta": {
+        "pitch": "Consultora de comercio exterior especializada en trámites de exportación agroindustrial.",
+        "busca": "Compradores en Chile y Paraguay"
+      },
+      "andes-trade": {
+        "pitch": "Bróker de cargas para el Corredor Bioceánico, con operación en tres pasos fronterizos.",
+        "busca": "Socios logísticos internacionales"
+      },
+      "capricornio-log": {
+        "pitch": "Transporte de cargas entre Jujuy, el norte de Chile y Paraguay por el paso de Jama.",
+        "busca": "Delegaciones de Chile y Paraguay"
+      },
+      "textiles-andinos": {
+        "pitch": "Cooperativa textil con fibra de llama, buscando canales de exportación regional.",
+        "busca": "Importadores del Corredor Bioceánico"
+      },
+      "jujuy-software": {
+        "pitch": "Agrupación de estudios de desarrollo de software y agtech de la provincia.",
+        "busca": "Clientes B2B e inversión ángel"
+      },
+      "clustear-demo": {
+        "pitch": "Incubadora de proyectos de economía del conocimiento del ecosistema jujeño.",
+        "busca": "Mentores y fondos de inversión"
+      }
+    },
+    "Portal": {
+      "eyebrow": "Portal de expositores",
+      "title": "No es un directorio — es quien conecta las rondas de negocios",
+      "description": "Perfiles de ejemplo para este prototipo, organizados por eje. El sistema sugiere con quién reunirse según rubro y objetivo comercial en común.",
+      "howItWorksEyebrow": "Cómo funciona",
+      "howItWorksTitle": "Cómo sugiere reuniones el sistema",
+      "agendaEyebrow": "Ejemplo",
+      "agendaTitle": "Agenda de reuniones",
+      "footerNote": "Estos son perfiles de ejemplo — el alta real de tu empresa se hace por la convocatoria oficial de la Cámara, no desde este portal (<link>ver cómo postularte</link>)."
+    },
+    "Matching": {
+      "expositorLabel": "Expositor",
+      "a": { "detail": "Ofrece: bróker de cargas internacional" },
+      "b": { "detail": "Ofrece: transporte por el paso de Jama" },
+      "shared": {
+        "corredor": "Corredor Bioceánico",
+        "logistica": "Logística internacional",
+        "pasoDeJama": "Paso de Jama"
+      },
+      "disclaimer": "En la primera versión, la sugerencia se calcula por rubro y país en común — no similitud semántica completa (ver decisión en <code>docs/architecture.md</code>). La agenda de reuniones se habilita en la próxima etapa."
+    }
+  },
+  "BusinessRounds": {
+    "Agenda": {
+      "status": {
+        "disponible": "Disponible",
+        "sugerido": "Sugerido",
+        "confirmado": "Confirmado"
+      },
+      "table": "Mesa {n}",
+      "sharedInterestLabel": "Interés en común",
+      "sharedInterest": {
+        "pasoDeJama": "Paso de Jama",
+        "exportacionRegional": "Exportación regional",
+        "automatizacionProcesos": "Automatización de procesos",
+        "comercioExterior": "Comercio exterior"
+      },
+      "days": { "fri": "Vie", "sat": "Sáb", "sun": "Dom", "mon": "Lun" },
+      "exampleDisclaimer": "Agenda de ejemplo — la reserva de reuniones todavía no tiene backend real detrás."
+    },
+    "Program": {
+      "eyebrow": "Agenda",
+      "title": "Cuatro días, un mismo ritmo",
+      "description": "Mañana de rondas de negocios, tarde de expo — así confirmó la organización el formato 2026. La grilla horaria de charlas, paneles y shows nocturnos se publica más cerca de la fecha, como en la edición anterior.",
+      "dayTabsLabel": "Elegir día de la agenda",
+      "morningLabel": "Mañana",
+      "morningContent": "Rondas de negocios internacionales — Corredor Bioceánico",
+      "afternoonLabel": "Tarde",
+      "afternoonContent": "Expo abierta en Ciudad Cultural — stands, minería, comercio exterior y economía del conocimiento",
+      "highlight": { "apertura": "Apertura", "cierre": "Cierre" },
+      "highlightNote": {
+        "apertura": "día de apertura del evento.",
+        "cierre": "día de cierre del evento."
+      },
+      "dateLine": "{day} {dayNumber} de octubre"
+    }
+  },
+  "Gallery": {
+    "previewEyebrow": "Edición anterior",
+    "previewTitle": "Explorá la 16ª edición",
+    "viewFullCta": "Ver galería completa",
+    "photoAlt": "ExpoJuy 2024 — foto {n}",
+    "closeLabel": "Cerrar",
+    "prevLabel": "Foto anterior",
+    "nextLabel": "Foto siguiente",
+    "dialogAnnounce": "Foto {current} de {total}: {alt}"
+  },
+  "News": {
+    "eyebrow": "Noticias",
+    "title": "Lo último de ExpoJuy 2026",
+    "description": "Cobertura real de prensa sobre el anuncio de esta edición, más las novedades propias del desarrollo de este sitio.",
+    "readOnSite": "Ver en el sitio",
+    "readOnSource": "Leer en {source}",
+    "items": {
+      "sede-confirmada": {
+        "tag": "Organización",
+        "title": "Ciudad Cultural, confirmada como sede de la edición 2026",
+        "excerpt": "La 17ª edición de ExpoJuy se realizará del 9 al 12 de octubre, consolidando el nuevo formato de cuatro días con rondas de negocios por la mañana y expo por la tarde."
+      },
+      "lanzamiento-oficial": {
+        "tag": "Corredor Bioceánico",
+        "title": "Lanzamiento oficial: el foco pasa al comercio internacional",
+        "excerpt": "La organización presentó la edición 2026 con eje en el Corredor Bioceánico de Capricornio, con delegaciones esperadas de Chile, Paraguay y Brasil."
+      },
+      "sadir-convocatoria": {
+        "tag": "Convocatoria",
+        "title": "El Gobernador convocó a las empresas jujeñas a sumarse",
+        "excerpt": "Carlos Sadir destacó el perfil comercial de esta edición y llamó a las empresas de la provincia a participar de las rondas de negocios internacionales."
+      },
+      "sitio-mapa": {
+        "tag": "Sitio oficial",
+        "title": "El sitio suma un plano interactivo de todo el predio",
+        "excerpt": "Ya podés recorrer Ciudad Cultural stand por stand desde la sección Mapa, con más de 200 espacios ubicados y filtrables por rubro."
+      }
     }
   },
   "VisitorAccess": {
@@ -137,7 +350,14 @@
     },
     "AdmissionTicket": {
       "paidNotice": "Tu cuenta de visitante ya está creada. El ingreso de esta edición es pago — el QR se emite después de pagar la entrada, todavía no disponible.",
-      "freeNotice": "Ingreso gratuito — mostrá este QR en el acceso."
+      "freeNotice": "Ingreso gratuito — mostrá este QR en el acceso.",
+      "admitOne": "Entrada",
+      "brand": "ExpoJuy 2026",
+      "month": "Oct",
+      "venue": "Ciudad Cultural · Jujuy",
+      "dateRangeLabel": "9 al 12 de octubre de 2026",
+      "scanLabel": "Escaneo en acceso",
+      "pendingLabel": "Entrada pendiente"
     }
   }
 }

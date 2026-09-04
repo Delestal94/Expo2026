@@ -1,3 +1,5 @@
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/lib/i18n/routing";
 import {
   About,
   AccessInfo,
@@ -10,8 +12,19 @@ import {
 import { MapSection } from "@/modules/interactive-map";
 import { PortalSection } from "@/modules/exhibitors";
 import { GalleryPreview } from "@/modules/gallery";
+import { NewsSection } from "@/modules/news";
+import { ProgramSection } from "@/modules/business-rounds";
 
-export default function Home() {
+type Locale = (typeof routing.locales)[number];
+
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <main>
       <EventStructuredData />
@@ -19,8 +32,10 @@ export default function Home() {
       <Hero />
       <About />
       <Ejes />
+      <NewsSection />
       <GalleryPreview />
       <MapSection />
+      <ProgramSection />
       <PortalSection />
       <AccessInfo />
       <SiteFooter />

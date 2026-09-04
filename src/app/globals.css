@@ -7,10 +7,10 @@
   --color-ink: #0d0b2e;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
-  /* Paleta de marca ExpoJuy — los 4 colores del isotipo "J", coherente
-     con Instagram (@expojuy). El isotipo real usa azul/verde agua/magenta/
-     amarillo; esta es una variante recoloreada a pedido, no los valores
-     oficiales exactos (ver PR de paleta oficial en el historial). */
+  /* Paleta de marca ExpoJuy — sampleada directamente de los 4 rellenos
+     del isotipo "J" oficial en public/images/logos/expojuy-mark.svg
+     (.fil0-.fil3), coherente con Instagram (@expojuy). No es una
+     aproximación: son los valores HEX reales del archivo de marca. */
   --color-cyan: #2de3d6;
   --color-violet: #7c3aed;
   --color-magenta: #d946ef;

@@ -20,6 +20,11 @@ const EVENT_JSON_LD = {
   organizer: {
     "@type": "Organization",
     name: "Cámara de Comercio Exterior de Jujuy",
+    sameAs: [
+      "https://www.instagram.com/expojuy/",
+      "https://www.facebook.com/camaradecomercioexteriorjujuy/",
+      "https://ar.linkedin.com/company/c%C3%A1mara-de-comercio-exterior-de-jujuy",
+    ],
   },
   url: "https://expojuy2026.vercel.app",
 };
