@@ -48,12 +48,21 @@ export function SectionNav() {
     );
     if (targets.length === 0) return;
 
+    const visibleMap = new Map<string, boolean>();
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const intersecting = entries.find((entry) => entry.isIntersecting);
-        if (intersecting) setActiveId(intersecting.target.id);
+        entries.forEach((entry) => {
+          visibleMap.set(entry.target.id, entry.isIntersecting);
+        });
+
+        // Selecciona la primera sección en orden de documento que esté visible en la zona de lectura
+        const firstVisible = SECTIONS.find((section) => visibleMap.get(section.id));
+        if (firstVisible) {
+          setActiveId(firstVisible.id);
+        }
       },
-      { rootMargin: "-45% 0px -45% 0px", threshold: 0 },
+      { rootMargin: "-12% 0px -48% 0px", threshold: [0, 0.1, 0.3] },
     );
     targets.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -85,6 +94,7 @@ export function SectionNav() {
             <a
               key={section.id}
               href={`#${section.id}`}
+              onClick={() => setActiveId(section.id)}
               aria-current={isActive ? "true" : undefined}
               tabIndex={visible ? 0 : -1}
               className="group flex items-center gap-2 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
@@ -123,6 +133,7 @@ export function SectionNav() {
               <a
                 key={section.id}
                 href={`#${section.id}`}
+                onClick={() => setActiveId(section.id)}
                 aria-current={isActive ? "true" : undefined}
                 tabIndex={visible ? 0 : -1}
                 className="flex shrink-0 scroll-mx-3 snap-start items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"

@@ -14,24 +14,37 @@ const EJES: Eje[] = [
   { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
 ];
 
+/** Escalonado geológico de estratos: la columna derecha (02 y 04) da un paso hacia abajo respecto a la izquierda (01 y 03), manteniendo un gap vertical limpio. */
+const STRATA_OFFSET = [
+  "",
+  "sm:mt-8 lg:mt-12",
+  "",
+  "sm:mt-8 lg:mt-12",
+];
+
 export function Ejes() {
   const t = useTranslations("Landing.Ejes");
 
   return (
-    <section id="ejes" className="relative px-6 pt-2 pb-16 sm:px-10 sm:pt-4 sm:pb-20 lg:px-16 lg:pt-2 lg:pb-20">
+    <section id="ejes" className="relative scroll-mt-20 lg:scroll-mt-24 px-6 py-24 sm:px-10 sm:py-28 lg:px-16 lg:py-32">
       <EntranceVein color="var(--color-violet)" />
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
         {t("eyebrow")}
       </span>
 
-      {/* Mobile: tira con scroll horizontal y snap. Desktop: grilla compacta 2x2 con gap vertical reducido */}
-      <div className="relative -mx-6 mt-8 sm:mx-0">
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-4 lg:gap-y-5 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden">
-          {EJES.map((eje) => (
+      {/* Mobile: tira con scroll horizontal y snap. Desktop: grilla escalonada con espaciado vertical armónico */}
+      <div className="relative -mx-6 mt-12 sm:mx-0">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:items-start sm:gap-x-8 sm:gap-y-6 lg:gap-x-10 lg:gap-y-8 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden">
+          {EJES.map((eje, i) => (
             <article
               key={eje.n}
-              className="group relative flex w-[82vw] shrink-0 snap-start flex-col gap-3.5 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] px-7 py-7 transition-all duration-300 hover:border-paper/25 hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] motion-safe:hover:-translate-y-1 sm:w-auto sm:shrink"
+              className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-5 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] px-8 py-9 transition-all duration-300 hover:border-paper/25 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.8)] motion-safe:hover:-translate-y-1.5 sm:w-auto sm:shrink ${STRATA_OFFSET[i]}`}
             >
+              {/* Destello metálico diagonal que cruza de izquierda a derecha en hover */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/20 via-white/5 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[250%]"
+              />
               {/* Resplandor mineral ambiental animado */}
               <div
                 aria-hidden="true"
