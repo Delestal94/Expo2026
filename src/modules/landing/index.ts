@@ -1,6 +1,5 @@
 export { About } from "./ui/about";
 export { AccessInfo } from "./ui/access-info";
-export { Contact } from "./ui/contact";
 export { CtaLink } from "./ui/cta-link";
 export { Ejes } from "./ui/ejes";
 export { Hero } from "./ui/hero";

@@ -18,7 +18,6 @@ const SECTIONS: SectionLink[] = [
   { id: "agenda", label: "Agenda", shortLabel: "Agenda", color: "var(--color-violet)" },
   { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-cyan)" },
   { id: "acceso", label: "Acceso y cómo llegar", shortLabel: "Acceso", color: "var(--color-violet)" },
-  { id: "contacto", label: "Contacto", shortLabel: "Contacto", color: "var(--color-magenta)" },
 ];
 
 /**

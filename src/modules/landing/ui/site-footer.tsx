@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { INSTITUTIONAL_PARTNERS, SPONSORS, type Logo } from "./partners-data";
+import { WHATSAPP_URL } from "./access-info";
+import { CtaLink } from "./cta-link";
 import { SocialLinks } from "./social-links";
 
 /** Mismas 4 vetas que About/Ejes/SectionNav usan para el resto del sitio. */
@@ -65,6 +67,7 @@ function LogoGrid({
 
 export function SiteFooter() {
   const t = useTranslations("Landing.SiteFooter");
+  const contact = useTranslations("Landing.Contact");
   const organizer: Logo = {
     src: "/images/logos/camara-comercio-exterior.png",
     alt: t("organizerAlt"),
@@ -94,7 +97,53 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="mt-10 flex flex-col gap-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
+      <div className="mx-auto grid max-w-380 gap-8 border-b border-line py-12 lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-5">
+          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+            {contact("eyebrow")}
+          </span>
+          <h2 className="mt-3 font-display text-2xl font-medium text-paper sm:text-3xl">
+            {contact("title")}
+          </h2>
+          <p className="mt-3 max-w-lg text-sm text-paper-dim">{contact("description")}</p>
+          <div className="mt-6">
+            <CtaLink href={WHATSAPP_URL} variant="outline" external>
+              {contact("whatsappCta")}
+            </CtaLink>
+          </div>
+        </div>
+
+        <dl className="grid gap-5 sm:grid-cols-3 lg:col-span-7 lg:grid-cols-1">
+          <div>
+            <dt className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+              {contact("emailLabel")}
+            </dt>
+            <dd className="mt-1 text-sm text-paper">
+              <a href="mailto:camaradecomercioexterior@gmail.com" className="hover:text-accent">
+                camaradecomercioexterior@gmail.com
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+              {contact("phoneLabel")}
+            </dt>
+            <dd className="mt-1 text-sm text-paper">
+              <a href="tel:+543884233539" className="hover:text-accent">
+                +54 388 423-3539
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+              {contact("addressLabel")}
+            </dt>
+            <dd className="mt-1 text-sm text-paper">Belgrano 860, 2º piso — San Salvador de Jujuy</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div className="mx-auto mt-10 flex max-w-380 flex-col gap-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
         <div className="inline-flex items-center self-center rounded-xl bg-paper p-3 sm:self-auto">
           <Image
             src="/images/logos/expojuy-lockup.svg"
@@ -106,6 +155,9 @@ export function SiteFooter() {
         </div>
         <p className="max-w-md text-sm text-paper-dim">{t("institutions")}</p>
         <div className="flex flex-col items-center gap-2 sm:items-end">
+          <span className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+            {contact("socialTitle")}
+          </span>
           <SocialLinks />
           <span className="font-mono text-xs text-paper-dim">{t("badge")}</span>
         </div>
