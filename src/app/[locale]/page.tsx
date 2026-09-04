@@ -3,7 +3,6 @@ import { routing } from "@/lib/i18n/routing";
 import {
   About,
   AccessInfo,
-  Contact,
   Ejes,
   EventStructuredData,
   Hero,
@@ -39,7 +38,6 @@ export default async function Home({
       <ProgramSection />
       <PortalSection />
       <AccessInfo />
-      <Contact />
       <SiteFooter />
     </main>
   );
