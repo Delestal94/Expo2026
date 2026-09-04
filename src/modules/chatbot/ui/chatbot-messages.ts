@@ -14,6 +14,7 @@ export const chatbotMessages = {
     typing: "Escribiendo…",
     assistantTitle: "Asistente ExpoJuy 2026",
     statusOnline: "En línea",
+    faqTitle: "Preguntas frecuentes",
     initialMessage:
       "¡Hola! 👋 Soy el asistente oficial de ExpoJuy 2026. ¿En qué puedo ayudarte? Puedo contarte sobre el evento, la sede en Ciudad Cultural, rondas de negocios, expositores o cómo adquirir tu entrada.",
     fallbackMessage:
@@ -35,6 +36,7 @@ export const chatbotMessages = {
     typing: "Typing…",
     assistantTitle: "ExpoJuy 2026 Assistant",
     statusOnline: "Online",
+    faqTitle: "Frequently asked questions",
     initialMessage:
       "Hi! 👋 I'm the official ExpoJuy 2026 assistant. How can I help you? I can tell you about the event, Ciudad Cultural venue, business rounds, exhibitors, or ticketing info.",
     fallbackMessage:
@@ -56,6 +58,7 @@ export const chatbotMessages = {
     typing: "Digitando…",
     assistantTitle: "Assistente ExpoJuy 2026",
     statusOnline: "Online",
+    faqTitle: "Perguntas frequentes",
     initialMessage:
       "Olá! 👋 Sou o assistente oficial da ExpoJuy 2026. Em que posso ajudar? Posso contar sobre o evento, a sede em Ciudad Cultural, rodadas de negócios, expositores ou ingressos.",
     fallbackMessage:
@@ -77,6 +80,7 @@ export const chatbotMessages = {
     typing: "正在输入…",
     assistantTitle: "ExpoJuy 2026 智能助手",
     statusOnline: "在线",
+    faqTitle: "常见问题",
     initialMessage:
       "您好！👋 我是 ExpoJuy 2026 官方助手。有什么可以帮您的？我可以为您解答活动日程、文化城会场信息、商务洽谈、参展企业及入场门票等问题。",
     fallbackMessage:
