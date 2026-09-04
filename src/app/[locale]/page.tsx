@@ -6,7 +6,6 @@ import {
   Contact,
   Ejes,
   EventStructuredData,
-  Faq,
   Hero,
   SectionNav,
   SiteFooter,
@@ -41,7 +40,6 @@ export default async function Home({
       <PortalSection />
       <AccessInfo />
       <Contact />
-      <Faq />
       <SiteFooter />
     </main>
   );

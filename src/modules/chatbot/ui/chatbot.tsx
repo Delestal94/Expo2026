@@ -1,8 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { chatbotMessages, type ChatbotLocale } from "./chatbot-messages";
+
+const FAQ_KEYS = [
+  "dates",
+  "tickets",
+  "exhibitors",
+  "businessRounds",
+  "accessibility",
+  "parking",
+  "languages",
+  "updates",
+] as const;
 
 interface Message {
   role: "user" | "assistant";
@@ -14,6 +25,7 @@ export function ChatBot() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isFaqOpen, setIsFaqOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialMessageShown = useRef(false);
@@ -22,6 +34,7 @@ export function ChatBot() {
   const locale: ChatbotLocale =
     rawLocale in chatbotMessages ? (rawLocale as ChatbotLocale) : "es-AR";
   const t = chatbotMessages[locale] ?? chatbotMessages["es-AR"];
+  const faq = useTranslations("Landing.Faq");
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -236,6 +249,33 @@ export function ChatBot() {
 
             <div ref={messagesEndRef} />
           </div>
+
+          <section className="border-t border-[var(--color-line)] bg-[#121022]/80 px-3 py-2 sm:px-4">
+            <button
+              type="button"
+              onClick={() => setIsFaqOpen((open) => !open)}
+              aria-expanded={isFaqOpen}
+              className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left font-mono text-xs tracking-wide text-[var(--color-cyan)] uppercase transition hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
+            >
+              {t.faqTitle}
+              <span aria-hidden="true">{isFaqOpen ? "−" : "+"}</span>
+            </button>
+
+            {isFaqOpen && (
+              <div className="mt-2 max-h-40 space-y-1 overflow-y-auto pr-1">
+                {FAQ_KEYS.map((key) => (
+                  <details key={key} className="rounded-lg border border-[var(--color-line)] bg-[#0d0b2e] px-3 py-2">
+                    <summary className="cursor-pointer list-none text-xs font-medium text-[var(--color-paper)] marker:content-none">
+                      {faq(`items.${key}.question`)}
+                    </summary>
+                    <p className="mt-2 text-xs leading-relaxed text-[var(--color-paper-dim)]">
+                      {faq(`items.${key}.answer`)}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            )}
+          </section>
 
           {/* Input & Form */}
           <form

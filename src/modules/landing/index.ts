@@ -3,7 +3,6 @@ export { AccessInfo } from "./ui/access-info";
 export { Contact } from "./ui/contact";
 export { CtaLink } from "./ui/cta-link";
 export { Ejes } from "./ui/ejes";
-export { Faq } from "./ui/faq";
 export { Hero } from "./ui/hero";
 export { LanguageSwitcher } from "./ui/language-switcher";
 export { SectionNav } from "./ui/section-nav";
