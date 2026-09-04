@@ -1,15 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-const MATCH = {
-  a: { name: "Andes Trade Corredor", detail: "Ofrece: bróker de cargas internacional" },
-  b: { name: "Corredor Capricornio Logística", detail: "Ofrece: transporte por el paso de Jama" },
-  score: 92,
-  shared: ["Corredor Bioceánico", "Logística internacional", "Paso de Jama"],
-};
+const MATCH_SCORE = 92;
+const MATCH_A_NAME = "Andes Trade Corredor";
+const MATCH_B_NAME = "Corredor Capricornio Logística";
+const SHARED_TAG_KEYS = ["corredor", "logistica", "pasoDeJama"] as const;
 
 export function MatchingPreview() {
+  const t = useTranslations("Exhibitors.Matching");
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
@@ -26,10 +26,10 @@ export function MatchingPreview() {
       <div className="grid items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         <div className="rounded-xl border border-line bg-ink p-5">
           <span className="font-mono text-[0.65rem] tracking-[0.1em] text-violet uppercase">
-            Expositor
+            {t("expositorLabel")}
           </span>
-          <h4 className="mt-2 font-display text-lg text-paper">{MATCH.a.name}</h4>
-          <p className="mt-1 text-sm text-paper-dim">{MATCH.a.detail}</p>
+          <h4 className="mt-2 font-display text-lg text-paper">{MATCH_A_NAME}</h4>
+          <p className="mt-1 text-sm text-paper-dim">{t("a.detail")}</p>
         </div>
 
         <div className="flex flex-col items-center gap-2 py-4 md:py-0">
@@ -41,35 +41,34 @@ export function MatchingPreview() {
             </line>
           </svg>
           <span className="rounded-full border border-accent px-3 py-1 font-mono text-sm font-semibold text-accent">
-            {MATCH.score}%
+            {MATCH_SCORE}%
           </span>
         </div>
 
         <div className="rounded-xl border border-line bg-ink p-5">
           <span className="font-mono text-[0.65rem] tracking-[0.1em] text-violet uppercase">
-            Expositor
+            {t("expositorLabel")}
           </span>
-          <h4 className="mt-2 font-display text-lg text-paper">{MATCH.b.name}</h4>
-          <p className="mt-1 text-sm text-paper-dim">{MATCH.b.detail}</p>
+          <h4 className="mt-2 font-display text-lg text-paper">{MATCH_B_NAME}</h4>
+          <p className="mt-1 text-sm text-paper-dim">{t("b.detail")}</p>
         </div>
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
-        {MATCH.shared.map((tag) => (
+        {SHARED_TAG_KEYS.map((key) => (
           <span
-            key={tag}
+            key={key}
             className="rounded-full bg-violet/15 px-3 py-1 font-mono text-[0.68rem] text-violet"
           >
-            {tag}
+            {t(`shared.${key}`)}
           </span>
         ))}
       </div>
 
       <p className="mt-5 text-sm text-paper-dim">
-        En la primera versión, la sugerencia se calcula por rubro y país en
-        común — no similitud semántica completa (ver decisión en{" "}
-        <span className="font-mono">docs/architecture.md</span>). La agenda de
-        reuniones se habilita en la próxima etapa.
+        {t.rich("disclaimer", {
+          code: (chunks) => <span className="font-mono">{chunks}</span>,
+        })}
       </p>
     </div>
   );

@@ -1,28 +1,28 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { PROGRAM_DAYS } from "./program-data";
 
 export function ProgramSection() {
+  const t = useTranslations("BusinessRounds.Program");
+  const tDays = useTranslations("BusinessRounds.Agenda.days");
   const [activeDate, setActiveDate] = useState(PROGRAM_DAYS[0]!.date);
   const active = PROGRAM_DAYS.find((day) => day.date === activeDate) ?? PROGRAM_DAYS[0]!;
 
   return (
     <section id="agenda" className="relative border-t border-line px-6 py-20 sm:px-10 lg:px-16">
       <EntranceVein color="var(--color-violet)" />
-      <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">Agenda</span>
+      <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+        {t("eyebrow")}
+      </span>
       <h2 className="mt-4 max-w-2xl text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-        Cuatro días, un mismo ritmo
+        {t("title")}
       </h2>
-      <p className="mt-4 max-w-2xl text-paper-dim">
-        Mañana de rondas de negocios, tarde de expo — así confirmó la
-        organización el formato 2026. La grilla horaria de charlas, paneles y
-        shows nocturnos se publica más cerca de la fecha, como en la edición
-        anterior.
-      </p>
+      <p className="mt-4 max-w-2xl text-paper-dim">{t("description")}</p>
 
-      <div className="mt-8 flex flex-wrap gap-2" role="tablist" aria-label="Elegir día de la agenda">
+      <div className="mt-8 flex flex-wrap gap-2" role="tablist" aria-label={t("dayTabsLabel")}>
         {PROGRAM_DAYS.map((day) => {
           const isActive = day.date === activeDate;
           return (
@@ -38,8 +38,8 @@ export function ProgramSection() {
                   : "border-line text-paper-dim hover:border-paper-dim"
               }`}
             >
-              {day.label}
-              {day.highlight && <span className="ml-1.5 text-accent">· {day.highlight}</span>}
+              {tDays(day.dayKey)} {day.dayNumber}
+              {day.highlight && <span className="ml-1.5 text-accent">· {t(`highlight.${day.highlight}`)}</span>}
             </button>
           );
         })}
@@ -47,19 +47,22 @@ export function ProgramSection() {
 
       <div role="tabpanel" className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-line bg-[#121022] p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">Mañana</span>
-          <p className="mt-2 font-display text-lg text-paper">{active.morning}</p>
+          <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
+            {t("morningLabel")}
+          </span>
+          <p className="mt-2 font-display text-lg text-paper">{t("morningContent")}</p>
         </div>
         <div className="rounded-2xl border border-line bg-[#121022] p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">Tarde</span>
-          <p className="mt-2 font-display text-lg text-paper">{active.afternoon}</p>
+          <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
+            {t("afternoonLabel")}
+          </span>
+          <p className="mt-2 font-display text-lg text-paper">{t("afternoonContent")}</p>
         </div>
       </div>
 
       <p className="mt-6 text-sm text-paper-dim">
-        {active.weekday} {active.date.slice(-2)} de octubre
-        {active.highlight === "Apertura" && " — día de apertura del evento."}
-        {active.highlight === "Cierre" && " — día de cierre del evento."}
+        {t("dateLine", { day: tDays(active.dayKey), dayNumber: active.dayNumber })}
+        {active.highlight && ` — ${t(`highlightNote.${active.highlight}`)}`}
       </p>
     </section>
   );

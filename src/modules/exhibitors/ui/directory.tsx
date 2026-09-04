@@ -1,15 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { EJE_FILTERS, EXHIBITORS, type Exhibitor } from "./exhibitors-data";
 import { ExhibitorCard } from "./exhibitor-card";
 
 export const INITIAL_VISIBLE_COUNT = 4;
-
-function matchesQuery(exhibitor: Exhibitor, query: string) {
-  const haystack = `${exhibitor.name} ${exhibitor.ejeLabel} ${exhibitor.pitch} ${exhibitor.busca}`.toLowerCase();
-  return haystack.includes(query.toLowerCase());
-}
 
 /**
  * Sin resultados no es "nada" — es la única veta que sí calzaba con el
@@ -68,6 +64,7 @@ function EmptyDirectory({
 }
 
 export function Directory() {
+  const t = useTranslations("Exhibitors");
   const [filter, setFilter] = useState<Exhibitor["eje"] | "todos">("todos");
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
@@ -77,6 +74,18 @@ export function Directory() {
     setExpanded(false);
   };
 
+  function matchesQuery(exhibitor: Exhibitor, needle: string) {
+    const haystack = [
+      exhibitor.name,
+      t(`ejes.${exhibitor.eje}`),
+      t(`items.${exhibitor.id}.pitch`),
+      t(`items.${exhibitor.id}.busca`),
+    ]
+      .join(" ")
+      .toLowerCase();
+    return haystack.includes(needle.toLowerCase());
+  }
+
   const byEje = filter === "todos" ? EXHIBITORS : EXHIBITORS.filter((e) => e.eje === filter);
   const matching = query.trim() ? byEje.filter((e) => matchesQuery(e, query.trim())) : byEje;
   const visible = expanded ? matching : matching.slice(0, INITIAL_VISIBLE_COUNT);
@@ -85,7 +94,7 @@ export function Directory() {
   return (
     <div>
       <label className="block">
-        <span className="sr-only">Buscar expositor</span>
+        <span className="sr-only">{t("searchLabel")}</span>
         <input
           type="search"
           value={query}
@@ -93,12 +102,12 @@ export function Directory() {
             setQuery(e.target.value);
             setExpanded(false);
           }}
-          placeholder="Buscar por empresa, rubro o qué ofrece..."
+          placeholder={t("searchPlaceholder")}
           className="w-full rounded-full border border-line bg-transparent px-5 py-2.5 text-sm text-paper placeholder:text-paper-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </label>
 
-      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filtrar por eje">
+      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={t("filterGroupLabel")}>
         <button
           type="button"
           onClick={() => selectFilter("todos")}
@@ -109,7 +118,7 @@ export function Directory() {
               : "border-line text-paper-dim hover:border-paper-dim"
           }`}
         >
-          Todos
+          {t("filterAll")}
         </button>
         {EJE_FILTERS.map((eje) => {
           const isActive = filter === eje.id;
@@ -126,7 +135,7 @@ export function Directory() {
                   : { borderColor: "var(--color-line)", color: "var(--color-paper-dim)" }
               }
             >
-              {eje.label}
+              {t(`ejes.${eje.id}`)}
             </button>
           );
         })}
@@ -135,7 +144,14 @@ export function Directory() {
       {matching.length === 0 ? (
         <EmptyDirectory
           query={query.trim()}
-          activeEje={filter === "todos" ? null : EJE_FILTERS.find((eje) => eje.id === filter)!}
+          activeEje={
+            filter === "todos"
+              ? null
+              : {
+                  label: t(`ejes.${filter}`),
+                  color: EJE_FILTERS.find((eje) => eje.id === filter)!.color,
+                }
+          }
           onClearQuery={() => setQuery("")}
         />
       ) : (
@@ -160,7 +176,7 @@ export function Directory() {
             aria-expanded={expanded}
             className="flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-xs uppercase tracking-[0.1em] text-paper-dim transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            <span>Ver los {matching.length} perfiles</span>{" "}
+            <span>{t("viewProfilesCta", { count: matching.length })}</span>{" "}
             <span className="text-accent">+{hidden}</span>
           </button>
         </div>

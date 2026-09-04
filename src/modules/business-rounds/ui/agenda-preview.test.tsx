@@ -1,11 +1,21 @@
 import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
+import esAR from "@/lib/i18n/messages/es-AR.json";
 import { AgendaPreview } from "./agenda-preview";
 import { AGENDA_SLOTS } from "./agenda-data";
 
+function renderAgendaPreview() {
+  return render(
+    <NextIntlClientProvider locale="es-AR" messages={esAR}>
+      <AgendaPreview />
+    </NextIntlClientProvider>,
+  );
+}
+
 describe("AgendaPreview", () => {
   it("muestra un slot por cada entrada de la agenda de ejemplo", () => {
-    render(<AgendaPreview />);
+    renderAgendaPreview();
 
     expect(screen.getAllByRole("article")).toHaveLength(AGENDA_SLOTS.length);
     for (const name of new Set(AGENDA_SLOTS.map((slot) => slot.participantA))) {
@@ -14,10 +24,11 @@ describe("AgendaPreview", () => {
   });
 
   it("marca el estado de cada slot", () => {
-    render(<AgendaPreview />);
+    renderAgendaPreview();
 
-    expect(screen.getAllByText("Confirmado").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Sugerido").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Disponible").length).toBeGreaterThan(0);
+    const { status } = esAR.BusinessRounds.Agenda;
+    expect(screen.getAllByText(status.confirmado).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(status.sugerido).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(status.disponible).length).toBeGreaterThan(0);
   });
 });
