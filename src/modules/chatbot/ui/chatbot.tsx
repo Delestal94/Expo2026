@@ -95,6 +95,18 @@ export function ChatBot() {
     setIsOpen(false);
   };
 
+  const handleFaqSelect = (key: (typeof FAQ_KEYS)[number]) => {
+    const question = faq(`items.${key}.question`);
+    const answer = faq(`items.${key}.answer`);
+
+    setMessages((previous) => [
+      ...previous,
+      { role: "user", content: question },
+      { role: "assistant", content: answer },
+    ]);
+    setIsFaqOpen(false);
+  };
+
   const handleSendMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
@@ -269,23 +281,46 @@ export function ChatBot() {
               type="button"
               onClick={() => setIsFaqOpen((open) => !open)}
               aria-expanded={isFaqOpen}
-              className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left font-mono text-xs tracking-wide text-[var(--color-cyan)] uppercase transition hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
+              className="group relative flex w-full items-center gap-3 overflow-hidden rounded-xl border border-[var(--color-cyan)]/25 bg-[linear-gradient(120deg,rgba(45,227,214,0.12),rgba(122,75,218,0.12))] px-3 py-2.5 text-left transition hover:border-[var(--color-cyan)]/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
             >
-              {t.faqTitle}
-              <span aria-hidden="true">{isFaqOpen ? "−" : "+"}</span>
+              <span
+                aria-hidden="true"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--color-cyan)]/30 bg-[var(--color-cyan)]/10 font-display text-lg text-[var(--color-cyan)]"
+              >
+                ?
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-mono text-xs tracking-wide text-[var(--color-cyan)] uppercase">
+                  {t.faqTitle}
+                </span>
+                <span className="mt-0.5 block text-xs text-[var(--color-paper-dim)]">
+                  {t.faqDescription}
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className={`text-lg text-[var(--color-cyan)] transition-transform duration-200 ${
+                  isFaqOpen ? "rotate-45" : "group-hover:scale-110"
+                }`}
+              >
+                +
+              </span>
             </button>
 
             {isFaqOpen && (
-              <div className="mt-2 max-h-40 space-y-1 overflow-y-auto pr-1">
+              <div className="mt-2 grid grid-cols-2 gap-2">
                 {FAQ_KEYS.map((key) => (
-                  <details key={key} className="rounded-lg border border-[var(--color-line)] bg-[#0d0b2e] px-3 py-2">
-                    <summary className="cursor-pointer list-none text-xs font-medium text-[var(--color-paper)] marker:content-none">
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => handleFaqSelect(key)}
+                    className="group flex min-h-16 items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[#0d0b2e] p-2.5 text-left transition hover:border-[var(--color-lavender)] hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
+                  >
+                    <span className="font-mono text-[0.625rem] text-[var(--color-cyan)]">→</span>
+                    <span className="line-clamp-3 text-xs leading-snug text-[var(--color-paper)]">
                       {faq(`items.${key}.question`)}
-                    </summary>
-                    <p className="mt-2 text-xs leading-relaxed text-[var(--color-paper-dim)]">
-                      {faq(`items.${key}.answer`)}
-                    </p>
-                  </details>
+                    </span>
+                  </button>
                 ))}
               </div>
             )}
