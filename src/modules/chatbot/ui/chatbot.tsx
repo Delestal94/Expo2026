@@ -26,6 +26,7 @@ export function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialMessageShown = useRef(false);
@@ -47,6 +48,19 @@ export function ChatBot() {
       setMessages([{ role: "assistant", content: t.initialMessage }]);
     }
   }, [isOpen, t.initialMessage]);
+
+  // El bot aparece junto al índice de secciones, después del Hero.
+  useEffect(() => {
+    const hero = document.getElementById("inicio");
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsPastHero(!entry.isIntersecting);
+      if (entry.isIntersecting) setIsOpen(false);
+    }, { rootMargin: "-15% 0px 0px 0px" });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   // Scroll down when messages update
   useEffect(() => {
@@ -137,7 +151,7 @@ export function ChatBot() {
   return (
     <>
       {/* Botón flotante */}
-      {!isOpen && (
+      {isPastHero && !isOpen && (
         <aside
           aria-label={t.openLabel}
           className="fixed bottom-6 right-6 z-50 transition-transform duration-200 hover:scale-105"
