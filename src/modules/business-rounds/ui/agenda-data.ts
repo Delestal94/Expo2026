@@ -1,22 +1,33 @@
 export type MeetingSlotStatus = "disponible" | "sugerido" | "confirmado";
 
+export type SharedInterestKey =
+  | "pasoDeJama"
+  | "exportacionRegional"
+  | "automatizacionProcesos"
+  | "comercioExterior";
+
 export interface MeetingSlot {
   id: string;
   day: string;
   startTime: string;
   endTime: string;
-  table: string;
+  table: number;
   status: MeetingSlotStatus;
   participantA: string;
   participantB?: string;
-  sharedInterest?: string;
+  sharedInterest?: SharedInterestKey;
 }
 
+/**
+ * `dayKey` resuelve el nombre corto del día ("Vie", "Sáb"...) vía el
+ * diccionario (`BusinessRounds.Agenda.days.<dayKey>`) — el número de
+ * fecha (`dayNumber`) no necesita traducción.
+ */
 export const EVENT_DAYS = [
-  { date: "2026-10-09", label: "Vie 9" },
-  { date: "2026-10-10", label: "Sáb 10" },
-  { date: "2026-10-11", label: "Dom 11" },
-  { date: "2026-10-12", label: "Lun 12" },
+  { date: "2026-10-09", dayKey: "fri", dayNumber: 9 },
+  { date: "2026-10-10", dayKey: "sat", dayNumber: 10 },
+  { date: "2026-10-11", dayKey: "sun", dayNumber: 11 },
+  { date: "2026-10-12", dayKey: "mon", dayNumber: 12 },
 ] as const;
 
 /**
@@ -31,29 +42,29 @@ export const AGENDA_SLOTS: MeetingSlot[] = [
     day: "2026-10-09",
     startTime: "10:00",
     endTime: "10:30",
-    table: "Mesa 1",
+    table: 1,
     status: "confirmado",
     participantA: "Andes Trade Corredor",
     participantB: "Corredor Capricornio Logística",
-    sharedInterest: "Paso de Jama",
+    sharedInterest: "pasoDeJama",
   },
   {
     id: "slot-02",
     day: "2026-10-09",
     startTime: "10:30",
     endTime: "11:00",
-    table: "Mesa 2",
+    table: 2,
     status: "sugerido",
     participantA: "Jujuy Exporta SRL",
     participantB: "Textiles Andinos Cooperativa",
-    sharedInterest: "Exportación regional",
+    sharedInterest: "exportacionRegional",
   },
   {
     id: "slot-03",
     day: "2026-10-09",
     startTime: "11:00",
     endTime: "11:30",
-    table: "Mesa 3",
+    table: 3,
     status: "disponible",
     participantA: "Altiplano Servicios Mineros",
   },
@@ -62,18 +73,18 @@ export const AGENDA_SLOTS: MeetingSlot[] = [
     day: "2026-10-10",
     startTime: "10:00",
     endTime: "10:30",
-    table: "Mesa 1",
+    table: 1,
     status: "sugerido",
     participantA: "Quebrada Litio Insumos",
     participantB: "Jujuy Software Cluster",
-    sharedInterest: "Automatización de procesos",
+    sharedInterest: "automatizacionProcesos",
   },
   {
     id: "slot-05",
     day: "2026-10-10",
     startTime: "11:00",
     endTime: "11:30",
-    table: "Mesa 2",
+    table: 2,
     status: "disponible",
     participantA: "Clustear Innovación",
   },
@@ -82,10 +93,10 @@ export const AGENDA_SLOTS: MeetingSlot[] = [
     day: "2026-10-11",
     startTime: "15:00",
     endTime: "15:30",
-    table: "Mesa 1",
+    table: 1,
     status: "confirmado",
     participantA: "Jujuy Exporta SRL",
     participantB: "Andes Trade Corredor",
-    sharedInterest: "Comercio exterior",
+    sharedInterest: "comercioExterior",
   },
 ];

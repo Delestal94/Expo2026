@@ -5,6 +5,7 @@ export { CtaLink } from "./ui/cta-link";
 export { Ejes } from "./ui/ejes";
 export { Faq } from "./ui/faq";
 export { Hero } from "./ui/hero";
+export { LanguageSwitcher } from "./ui/language-switcher";
 export { SectionNav } from "./ui/section-nav";
 export { SiteFooter } from "./ui/site-footer";
 export { SocialLinks } from "./ui/social-links";

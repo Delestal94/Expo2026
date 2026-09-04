@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { getFeatureFlags } from "@/lib/config/flags";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
@@ -54,46 +55,43 @@ function SectionDisclosure({
 }
 
 export async function PortalSection() {
-  const flags = await getFeatureFlags();
+  const [flags, t] = await Promise.all([getFeatureFlags(), getTranslations("Exhibitors.Portal")]);
 
   return (
     <section id="expositores" className="relative border-t border-line px-6 py-24 sm:px-10 lg:px-16">
       <EntranceVein color="var(--color-cyan)" />
       <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-        Portal de expositores
+        {t("eyebrow")}
       </span>
       <h2 className="mt-4 max-w-2xl text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-        No es un directorio — es quien conecta las rondas de negocios
+        {t("title")}
       </h2>
-      <p className="mt-4 max-w-2xl text-paper-dim">
-        Perfiles de ejemplo para este prototipo, organizados por eje. El
-        sistema sugiere con quién reunirse según rubro y objetivo comercial en
-        común.
-      </p>
+      <p className="mt-4 max-w-2xl text-paper-dim">{t("description")}</p>
 
       <div className="mt-10">
         <Directory />
       </div>
 
       <div className="mt-6 flex flex-col gap-4">
-        <SectionDisclosure eyebrow="Cómo funciona" title="Cómo sugiere reuniones el sistema">
+        <SectionDisclosure eyebrow={t("howItWorksEyebrow")} title={t("howItWorksTitle")}>
           <MatchingPreview />
         </SectionDisclosure>
 
         {flags.businessRounds && (
-          <SectionDisclosure eyebrow="Ejemplo" title="Agenda de reuniones">
+          <SectionDisclosure eyebrow={t("agendaEyebrow")} title={t("agendaTitle")}>
             <AgendaPreview />
           </SectionDisclosure>
         )}
       </div>
 
       <p className="mt-8 text-sm text-paper-dim">
-        Estos son perfiles de ejemplo — el alta real de tu empresa se hace por
-        la convocatoria oficial de la Cámara, no desde este portal (
-        <a href="#acceso" className="text-accent underline underline-offset-2 hover:brightness-110">
-          ver cómo postularte
-        </a>
-        ).
+        {t.rich("footerNote", {
+          link: (chunks) => (
+            <a href="#acceso" className="text-accent underline underline-offset-2 hover:brightness-110">
+              {chunks}
+            </a>
+          ),
+        })}
       </p>
     </section>
   );

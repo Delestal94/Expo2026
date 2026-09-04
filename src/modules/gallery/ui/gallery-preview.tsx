@@ -1,5 +1,6 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { GALLERY_PHOTOS, GALLERY_PREVIEW_COUNT } from "./gallery-data";
 
@@ -19,16 +20,17 @@ const MOSAIC_CELLS = [
 ] as const;
 
 export function GalleryPreview() {
+  const t = useTranslations("Gallery");
   const photos = GALLERY_PHOTOS.slice(0, GALLERY_PREVIEW_COUNT);
 
   return (
     <section id="galeria" className="relative px-6 py-16 sm:px-10 lg:px-16">
       <EntranceVein color="var(--color-magenta)" />
       <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
-        Edición anterior
+        {t("previewEyebrow")}
       </span>
       <h2 className="mt-3 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
-        Explorá la 16ª edición
+        {t("previewTitle")}
       </h2>
 
       {/* Mobile: tira con scroll horizontal y snap — un gesto de "hojear" que no
@@ -44,7 +46,7 @@ export function GalleryPreview() {
               >
                 <Image
                   src={photo.src}
-                  alt={photo.alt}
+                  alt={t("photoAlt", { n: photo.n })}
                   fill
                   sizes={cell ? `${cell.sizes}, 68vw` : "(min-width: 640px) 33vw, 68vw"}
                   className="object-cover transition duration-500 hover:scale-105"
@@ -64,7 +66,7 @@ export function GalleryPreview() {
         href="/galeria"
         className="mt-6 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
       >
-        Ver galería completa
+        {t("viewFullCta")}
         <span aria-hidden="true">→</span>
       </Link>
     </section>

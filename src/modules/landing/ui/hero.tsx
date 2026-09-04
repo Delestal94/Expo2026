@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
+import { LanguageSwitcher } from "./language-switcher";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
@@ -29,7 +30,10 @@ export function Hero() {
           />
           <span>{t("eyebrow")}</span>
         </div>
-        <span>{t("edition")}</span>
+        <div className="flex items-center gap-4">
+          <span>{t("edition")}</span>
+          <LanguageSwitcher />
+        </div>
       </nav>
 
       <div className="relative z-10 flex flex-col gap-8">

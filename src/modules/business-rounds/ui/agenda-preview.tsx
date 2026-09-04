@@ -1,10 +1,5 @@
+import { useTranslations } from "next-intl";
 import { AGENDA_SLOTS, EVENT_DAYS, type MeetingSlot, type MeetingSlotStatus } from "./agenda-data";
-
-const STATUS_LABEL: Record<MeetingSlotStatus, string> = {
-  disponible: "Disponible",
-  sugerido: "Sugerido",
-  confirmado: "Confirmado",
-};
 
 const STATUS_COLOR: Record<MeetingSlotStatus, string> = {
   disponible: "var(--color-line)",
@@ -13,17 +8,19 @@ const STATUS_COLOR: Record<MeetingSlotStatus, string> = {
 };
 
 function SlotCard({ slot }: { slot: MeetingSlot }) {
+  const t = useTranslations("BusinessRounds.Agenda");
+
   return (
     <article className="rounded-xl border border-line bg-ink p-4">
       <div className="flex items-center justify-between gap-2">
         <span className="font-mono text-xs tracking-[0.08em] text-paper-dim uppercase">
-          {slot.startTime}–{slot.endTime} · {slot.table}
+          {slot.startTime}–{slot.endTime} · {t("table", { n: slot.table })}
         </span>
         <span
           className="rounded-full border px-2.5 py-0.5 font-mono text-[0.65rem] uppercase"
           style={{ borderColor: STATUS_COLOR[slot.status], color: STATUS_COLOR[slot.status] }}
         >
-          {STATUS_LABEL[slot.status]}
+          {t(`status.${slot.status}`)}
         </span>
       </div>
       <p className="mt-2 font-display text-paper">
@@ -31,7 +28,9 @@ function SlotCard({ slot }: { slot: MeetingSlot }) {
         {slot.participantB && <> ↔ {slot.participantB}</>}
       </p>
       {slot.sharedInterest && (
-        <p className="mt-1 text-sm text-paper-dim">Interés en común: {slot.sharedInterest}</p>
+        <p className="mt-1 text-sm text-paper-dim">
+          {t("sharedInterestLabel")}: {t(`sharedInterest.${slot.sharedInterest}`)}
+        </p>
       )}
     </article>
   );
@@ -43,6 +42,8 @@ function SlotCard({ slot }: { slot: MeetingSlot }) {
  * backend de reservas real, así que no hay acción de "reservar" acá.
  */
 export function AgendaPreview() {
+  const t = useTranslations("BusinessRounds.Agenda");
+
   return (
     <div>
       <div className="flex flex-col gap-8">
@@ -51,7 +52,9 @@ export function AgendaPreview() {
           if (slots.length === 0) return null;
           return (
             <div key={day.date}>
-              <h4 className="font-mono text-sm font-semibold text-violet uppercase">{day.label}</h4>
+              <h4 className="font-mono text-sm font-semibold text-violet uppercase">
+                {t(`days.${day.dayKey}`)} {day.dayNumber}
+              </h4>
               <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {slots.map((slot) => (
                   <SlotCard key={slot.id} slot={slot} />
@@ -61,10 +64,7 @@ export function AgendaPreview() {
           );
         })}
       </div>
-      <p className="mt-6 text-sm text-paper-dim">
-        Agenda de ejemplo — la reserva de reuniones todavía no tiene backend
-        real detrás.
-      </p>
+      <p className="mt-6 text-sm text-paper-dim">{t("exampleDisclaimer")}</p>
     </div>
   );
 }

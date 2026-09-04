@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
 import type { Exhibitor } from "./exhibitors-data";
 
@@ -16,6 +17,7 @@ export function ExhibitorCard({
   index?: number;
 }) {
   const delay = (index % 3) * 0.08;
+  const t = useTranslations("Exhibitors");
 
   return (
     <article
@@ -34,13 +36,13 @@ export function ExhibitorCard({
           color: exhibitor.color,
         }}
       >
-        {exhibitor.ejeLabel}
+        {t(`ejes.${exhibitor.eje}`)}
       </span>
       <h3 className="font-display text-lg font-medium text-paper">{exhibitor.name}</h3>
-      <p className="text-sm text-paper-dim">{exhibitor.pitch}</p>
+      <p className="text-sm text-paper-dim">{t(`items.${exhibitor.id}.pitch`)}</p>
       <div className="mt-auto flex items-center gap-2 border-t border-line pt-4 text-xs text-paper-dim">
-        <span className="font-mono uppercase tracking-[0.08em]">Busca</span>
-        <span>{exhibitor.busca}</span>
+        <span className="font-mono uppercase tracking-[0.08em]">{t("buscaLabel")}</span>
+        <span>{t(`items.${exhibitor.id}.busca`)}</span>
         <span
           aria-hidden="true"
           className="ml-auto -translate-x-1 text-[var(--card-color)] opacity-0 transition-[transform,opacity] duration-300 group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:translate-x-0 motion-reduce:opacity-100"
