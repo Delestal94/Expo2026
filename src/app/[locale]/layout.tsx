@@ -4,8 +4,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
-import "../globals.css";
+import "@/app/globals.css";
 
 const unbounded = Unbounded({
   subsets: ["latin"],
@@ -84,7 +85,10 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-body antialiased">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {children}
+          <ChatBot />
+        </NextIntlClientProvider>
       </body>
     </html>
   );
