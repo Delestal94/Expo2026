@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
     <div
       role="group"
       aria-label="Elegir idioma"
-      className="flex items-center gap-1 rounded-full border border-line p-0.5"
+      className="relative flex items-center gap-1 rounded-full border border-line bg-ink/70 p-0.5 backdrop-blur-sm"
     >
       {routing.locales.map((code) => {
         const isActive = code === locale;
@@ -43,11 +43,19 @@ export function LanguageSwitcher() {
                 router.replace(pathname, { locale: code });
               });
             }}
-            className={`rounded-full px-2 py-1 font-mono text-[0.65rem] tracking-[0.08em] uppercase transition-colors disabled:cursor-default ${
-              isActive ? "bg-paper text-ink" : "text-paper-dim hover:text-paper"
+            className={`group relative rounded-full px-2.5 py-1 font-mono text-[0.68rem] tracking-[0.08em] uppercase transition-all duration-300 ease-out ${
+              isActive
+                ? "bg-paper font-bold text-ink shadow-sm"
+                : "cursor-pointer text-paper-dim hover:bg-paper/10 hover:text-paper active:scale-95"
             }`}
           >
-            {LOCALE_LABEL[code]}
+            {!isActive && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))] opacity-0 transition-opacity duration-300 group-hover:opacity-25"
+              />
+            )}
+            <span className="relative z-10">{LOCALE_LABEL[code]}</span>
           </button>
         );
       })}
