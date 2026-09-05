@@ -14,7 +14,7 @@ function loadAuthProvider() {
   return import("@/lib/adapters/auth").then((mod) => mod.createAuthProvider());
 }
 
-type Mode = "signup" | "signin";
+type Mode = "signup" | "signin" | "forgot";
 
 function errorMessageOf(error: unknown, fallback: string): string {
   return error instanceof Error ? error.message : fallback;
@@ -30,7 +30,7 @@ function errorMessageOf(error: unknown, fallback: string): string {
  */
 function AccessFormSkeleton({ label }: { label: string }) {
   return (
-    <div role="status" className="rounded-2xl border border-line bg-[#121022] p-6">
+    <div role="status" className="rounded-2xl border border-line bg-ink/70 p-6">
       <span className="sr-only">{label}</span>
       <div className="flex gap-2 rounded-full border border-line p-1" aria-hidden="true">
         <div className="skeleton-strata h-9 flex-1 rounded-full" />
@@ -65,6 +65,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -89,8 +90,15 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
     event.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
+    setSuccessMessage(null);
     try {
       const provider = await loadAuthProvider();
+      if (mode === "forgot") {
+        await provider.resetPassword(email);
+        setSuccessMessage(t("recoverySuccess"));
+        return;
+      }
+
       const result =
         mode === "signup"
           ? await provider.signUp(email, password)
@@ -107,6 +115,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
   async function handleSignOut() {
     setIsSubmitting(true);
     setErrorMessage(null);
+    setSuccessMessage(null);
     try {
       await (await loadAuthProvider()).signOut();
       setSession(null);
@@ -123,7 +132,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
 
   if (session) {
     return (
-      <div className="rounded-2xl border border-line bg-[#121022] p-6">
+      <div className="rounded-2xl border border-line bg-ink/70 p-6">
         <p className="text-paper">
           {t.rich("sessionActive", {
             email: session.user.email,
@@ -149,33 +158,66 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-[#121022] p-6">
-      <div className="flex gap-2 rounded-full border border-line p-1" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mode === "signup"}
-          onClick={() => setMode("signup")}
-          className={`flex-1 rounded-full px-4 py-2 font-body text-sm font-semibold transition ${
-            mode === "signup" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
-          }`}
-        >
-          {t("tabSignup")}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mode === "signin"}
-          onClick={() => setMode("signin")}
-          className={`flex-1 rounded-full px-4 py-2 font-body text-sm font-semibold transition ${
-            mode === "signin" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
-          }`}
-        >
-          {t("tabSignin")}
-        </button>
-      </div>
+    <div className="rounded-2xl border border-line bg-ink/70 p-6">
+      {mode !== "forgot" ? (
+        <div className="flex gap-2 rounded-full border border-line p-1" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "signup"}
+            onClick={() => {
+              setMode("signup");
+              setErrorMessage(null);
+              setSuccessMessage(null);
+            }}
+            className={`flex-1 rounded-full px-4 py-2 font-body text-sm font-semibold transition ${
+              mode === "signup" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
+            }`}
+          >
+            {t("tabSignup")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "signin"}
+            onClick={() => {
+              setMode("signin");
+              setErrorMessage(null);
+              setSuccessMessage(null);
+            }}
+            className={`flex-1 rounded-full px-4 py-2 font-body text-sm font-semibold transition ${
+              mode === "signin" ? "bg-accent text-ink" : "text-paper-dim hover:text-paper"
+            }`}
+          >
+            {t("tabSignin")}
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center justify-between border-b border-line/60 pb-3">
+          <span className="font-mono text-xs tracking-wider text-accent uppercase">
+            {t("tabForgot")}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              setMode("signin");
+              setErrorMessage(null);
+              setSuccessMessage(null);
+            }}
+            className="font-mono text-xs text-paper-dim transition hover:text-paper"
+          >
+            ← {t("backToSignin")}
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+        {mode === "forgot" && (
+          <p className="text-xs text-paper-dim leading-relaxed">
+            {t("forgotDescription")}
+          </p>
+        )}
+
         <div className="flex flex-col gap-1.5">
           <label htmlFor="visitor-email" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
             {t("emailLabel")}
@@ -191,21 +233,38 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="visitor-password" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
-            {t("passwordLabel")}
-          </label>
-          <input
-            id="visitor-password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="rounded-xl border border-line bg-ink px-4 py-2.5 text-paper outline-none focus-visible:border-accent"
-          />
-        </div>
+        {mode !== "forgot" && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <label htmlFor="visitor-password" className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+                {t("passwordLabel")}
+              </label>
+              {mode === "signin" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("forgot");
+                    setErrorMessage(null);
+                    setSuccessMessage(null);
+                  }}
+                  className="font-mono text-[0.68rem] text-accent transition hover:underline"
+                >
+                  {t("forgotPassword")}
+                </button>
+              )}
+            </div>
+            <input
+              id="visitor-password"
+              type="password"
+              required
+              minLength={8}
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="rounded-xl border border-line bg-ink px-4 py-2.5 text-paper outline-none focus-visible:border-accent"
+            />
+          </div>
+        )}
 
         <button
           type="submit"
@@ -216,8 +275,16 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
             ? t("submitLoading")
             : mode === "signup"
               ? t("tabSignup")
-              : t("submitSignin")}
+              : mode === "signin"
+                ? t("submitSignin")
+                : t("sendRecoveryEmail")}
         </button>
+
+        {successMessage && (
+          <div role="status" className="rounded-xl border border-accent/40 bg-accent/15 p-3 text-xs text-accent">
+            {successMessage}
+          </div>
+        )}
 
         <p role="status" aria-live="polite" className="min-h-5 text-sm text-terracotta">
           {errorMessage}

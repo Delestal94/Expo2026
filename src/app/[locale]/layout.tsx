@@ -84,7 +84,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       lang={locale}
       className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="font-body antialiased">
+      <body className="font-body antialiased overflow-x-clip">
         <NextIntlClientProvider>
           {children}
           <ChatBot />

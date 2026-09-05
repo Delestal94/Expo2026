@@ -18,6 +18,7 @@ const mockProvider = {
   signIn: vi.fn(),
   signOut: vi.fn(),
   getSession: vi.fn(),
+  resetPassword: vi.fn(),
 };
 
 vi.mock("@/lib/adapters/auth", () => ({
@@ -116,10 +117,21 @@ describe("AccessForm", () => {
     expect(await screen.findByText("EXPOJUY26-USER1")).toBeInTheDocument();
   });
 
-  it("avisa que el QR todavía no está disponible cuando el modo de acceso es pago", async () => {
-    mockProvider.getSession.mockResolvedValue(SESSION);
-    renderAccessForm("paid");
+  it("permite solicitar la recuperación de contraseña", async () => {
+    const user = userEvent.setup();
+    mockProvider.resetPassword.mockResolvedValue(undefined);
+    renderAccessForm("free");
 
-    expect(await screen.findByText(/el QR se emite después de pagar la entrada/)).toBeInTheDocument();
+    await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
+    await user.click(screen.getByRole("button", { name: "¿Olvidaste tu contraseña?" }));
+
+    expect(screen.getByText("Recuperar contraseña")).toBeInTheDocument();
+    await user.type(screen.getByLabelText("Email"), "recuperar@example.com");
+    await user.click(screen.getByRole("button", { name: "Enviar enlace de recuperación" }));
+
+    await waitFor(() =>
+      expect(mockProvider.resetPassword).toHaveBeenCalledWith("recuperar@example.com"),
+    );
+    expect(await screen.findByText(/Te enviamos un correo/)).toBeInTheDocument();
   });
 });

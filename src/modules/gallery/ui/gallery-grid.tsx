@@ -12,6 +12,7 @@ function wrap(index: number, delta: number) {
   return (index + delta + TOTAL) % TOTAL;
 }
 
+
 export function GalleryGrid() {
   const t = useTranslations("Gallery");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -59,9 +60,6 @@ export function GalleryGrid() {
       }
       if (event.key !== "Tab") return;
 
-      // Trampa de foco genérica sobre los botones del diálogo (cerrar,
-      // anterior, siguiente) en vez de forzar siempre "cerrar" — ahora
-      // hay más de un control para recorrer con Tab.
       const focusable = dialogRef.current?.querySelectorAll<HTMLButtonElement>("button");
       if (!focusable || focusable.length === 0) return;
       const first = focusable[0];
@@ -98,22 +96,30 @@ export function GalleryGrid() {
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {GALLERY_PHOTOS.map((photo, i) => (
           <button
             key={photo.src}
             type="button"
             onClick={() => setOpenIndex(i)}
-            className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line outline-none focus-visible:border-accent"
+            aria-label={t("photoAlt", { n: photo.n })}
+            className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line/80 bg-ink/60 outline-none transition-all duration-500 hover:border-magenta/60 hover:shadow-[0_8px_30px_rgba(217,70,239,0.18)] focus-visible:border-magenta"
           >
             <Image
               src={photo.src}
-              alt={t("photoAlt", { n: photo.n })}
+              alt=""
               fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition duration-500 hover:scale-105"
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               loading={i < 4 ? "eager" : "lazy"}
             />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div aria-hidden="true" className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.65rem] tracking-wider text-paper uppercase backdrop-blur-sm">
+                #{String(photo.n).padStart(2, "0")}
+              </span>
+              <span className="font-mono text-xs text-magenta">↗</span>
+            </div>
           </button>
         ))}
       </div>

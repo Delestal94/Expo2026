@@ -45,18 +45,47 @@ export function ProgramSection() {
         })}
       </div>
 
-      <div role="tabpanel" className="mt-8 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-[#121022] p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
-            {t("morningLabel")}
-          </span>
-          <p className="mt-2 font-display text-lg text-paper">{t("morningContent")}</p>
+      <div role="tabpanel" className="mt-8 flex flex-col gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border border-line bg-ink/60 p-6 transition-all duration-300">
+            <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
+              {t("morningLabel")}
+            </span>
+            <h3 className="mt-2 font-display text-lg text-paper">{active.morningTitle}</h3>
+            <p className="mt-2 text-sm text-paper-dim">{active.morningDescription}</p>
+          </div>
+          <div className="rounded-2xl border border-line bg-ink/60 p-6 transition-all duration-300">
+            <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
+              {t("afternoonLabel")}
+            </span>
+            <h3 className="mt-2 font-display text-lg text-paper">{active.afternoonTitle}</h3>
+            <p className="mt-2 text-sm text-paper-dim">{active.afternoonDescription}</p>
+          </div>
         </div>
-        <div className="rounded-2xl border border-line bg-[#121022] p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
-            {t("afternoonLabel")}
-          </span>
-          <p className="mt-2 font-display text-lg text-paper">{t("afternoonContent")}</p>
+
+        <div className="rounded-2xl border border-line bg-ink/40 p-5 sm:p-6">
+          <div className="flex items-center justify-between gap-2 border-b border-line/60 pb-3">
+            <span className="font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
+              Actividades destacadas · {tDays(active.dayKey)} {active.dayNumber}
+            </span>
+            <span className="font-mono text-[0.65rem] text-accent">● Confirmado</span>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {active.activities.map((act) => (
+              <div
+                key={act.time}
+                className="flex flex-col justify-between rounded-xl border border-line/70 bg-ink/80 p-3.5 transition hover:border-accent/40"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs font-semibold text-accent">{act.time} hs</span>
+                  <span className="rounded-full border border-line px-2 py-0.5 font-mono text-[0.6rem] text-paper-dim uppercase">
+                    {act.tag}
+                  </span>
+                </div>
+                <p className="mt-2.5 text-xs leading-snug text-paper">{act.title}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

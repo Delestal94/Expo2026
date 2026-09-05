@@ -88,21 +88,21 @@ export async function AccessInfo() {
               })}
             </p>
 
-            {/* Tira de entrada en vez de tres tarjetas idénticas: los precios se leen
-                como un ticket perforado, y el tramo sin cargo se destaca con un sello
-                en vez de competir como una cuarta cifra igual a las otras. */}
+            {/* Tira de entrada: el tramo sin cargo se destaca con su badge de cortesía en acento magenta */}
             <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
               {REFERENCE_PRICING.map((tier) => {
                 const isFree = tier.key === "under5";
                 return (
                   <div
                     key={tier.key}
-                    className={`relative flex-1 p-5 text-center ${isFree ? "bg-accent/10" : "bg-[#121022]"}`}
+                    className={`relative flex-1 p-5 text-center ${
+                      isFree ? "bg-accent/10" : "bg-ink/70"
+                    }`}
                   >
                     {isFree && (
                       <span
                         aria-hidden="true"
-                        className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-accent px-2.5 py-1 font-mono text-[0.6rem] tracking-[0.15em] text-accent uppercase"
+                        className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
                       >
                         {t("pricing.freeBadge")}
                       </span>
@@ -140,21 +140,22 @@ export async function AccessInfo() {
         </div>
 
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
-          {/* El mapa ocupa el alto real de la tarjeta (que lo define el texto de
-              precios de la columna izquierda, no el mapa) — a la altura vieja le
-              sobraba mucho contenedor vacío antes de llegar a la tarjeta de
-              proveedores. */}
-          <div className="h-80 w-full sm:h-104 lg:h-120">
+          {/* Google Maps Embed:
+              Nota técnica: en iframes gratuitos de Google Maps (embed pb=...), Google no expone
+              parámetros para ocultar etiquetas de POI/locales cross-origin (requiere la Google Maps
+              JavaScript API de pago con StyledMapType y styles:[{featureType:'poi',stylers:[{visibility:'off'}]}]).
+              Se aplica una calibración cromática sutil para integrar el mapa al tono dark de la interfaz. */}
+          <div className="h-80 w-full sm:h-104 lg:h-120 overflow-hidden bg-ink">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="h-full w-full border-0"
+              className="h-full w-full border-0 brightness-[0.88] contrast-[1.08] saturate-[0.85]"
             />
           </div>
 
-          <div className="flex flex-1 flex-col justify-center border-t border-line bg-[#121022] p-6 text-left">
+          <div className="flex flex-1 flex-col justify-center border-t border-line bg-ink/70 p-6 text-left">
             <h3 className="font-display text-lg font-medium text-paper">
               {t("providersTitle")}
             </h3>

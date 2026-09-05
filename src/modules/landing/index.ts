@@ -3,6 +3,7 @@ export { AccessInfo } from "./ui/access-info";
 export { CtaLink } from "./ui/cta-link";
 export { Ejes } from "./ui/ejes";
 export { Hero } from "./ui/hero";
+export { HeroAboutStage } from "./ui/hero-about-stage";
 export { LanguageSwitcher } from "./ui/language-switcher";
 export { SectionNav } from "./ui/section-nav";
 export { SiteFooter } from "./ui/site-footer";

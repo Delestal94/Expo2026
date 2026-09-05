@@ -31,8 +31,8 @@ function LogoGrid({
             key={logo.src}
             className={
               tone === "dark"
-                ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
-                : "group relative flex h-40 w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper p-6 shadow-sm"
+                ? "flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-ink/80 p-6 transition duration-300 hover:border-accent/40"
+                : "group relative flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper p-6 shadow-sm transition duration-300 hover:shadow-md"
             }
           >
             <div className="relative h-full w-full">
@@ -75,7 +75,7 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-line px-6 py-16 sm:px-10 lg:px-16">
-      {/* Acompañan, sponsors y organiza — cada grupo a todo el ancho, en una sola fila. */}
+      {/* Acompañan, sponsors y organiza — cada grupo a todo el ancho, en una sola fila centrada */}
       <div className="mx-auto flex max-w-380 flex-col gap-10 border-b border-line pb-12">
         <div className="text-center">
           <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">

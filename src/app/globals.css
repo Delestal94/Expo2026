@@ -1,10 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
-     fondo del sitio lea como el navy saturado de la referencia, no como un
-     gris-negro neutro. */
-  --color-ink: #0d0b2e;
+  /* Azul/negro obsidiana profundo (midnight blue/black) con alto contraste para resaltar los acentos de marca */
+  --color-ink: #070b19;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
   /* Paleta de marca ExpoJuy — sampleada directamente de los 4 rellenos
@@ -25,6 +23,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -36,6 +36,9 @@ html {
 body {
   background: var(--color-ink);
   color: var(--color-paper);
+  overflow-x: clip;
+  max-width: 100vw;
+  min-height: 100vh;
 }
 
 ::selection {

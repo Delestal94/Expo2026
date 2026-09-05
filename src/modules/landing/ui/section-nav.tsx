@@ -60,6 +60,11 @@ export function SectionNav() {
         const firstVisible = SECTIONS.find((section) => visibleMap.get(section.id));
         if (firstVisible) {
           setActiveId(firstVisible.id);
+        } else {
+          const ejesEl = document.getElementById("ejes");
+          if (ejesEl && window.scrollY < ejesEl.offsetTop - 100) {
+            setActiveId("sobre");
+          }
         }
       },
       { rootMargin: "-12% 0px -48% 0px", threshold: [0, 0.1, 0.3] },

@@ -181,6 +181,23 @@ export function Directory() {
           </button>
         </div>
       )}
+
+      {expanded && matching.length > INITIAL_VISIBLE_COUNT && (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              setExpanded(false);
+              document.getElementById("expositores")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            aria-expanded={expanded}
+            className="flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-xs uppercase tracking-[0.1em] text-paper-dim transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <span>{t("collapseCta")}</span>
+            <span className="text-accent" aria-hidden="true">↑</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

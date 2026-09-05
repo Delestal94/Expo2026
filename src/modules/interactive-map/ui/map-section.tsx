@@ -1,21 +1,14 @@
-import { getTranslations } from "next-intl/server";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { VenueMap } from "./venue-map";
 
 export async function MapSection() {
-  const t = await getTranslations("InteractiveMap");
-
   return (
-    <section id="mapa" className="relative border-t border-line px-6 py-20 sm:px-10 lg:px-16">
+    <section
+      id="mapa"
+      className="relative border-t border-line px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-4 lg:py-5 w-full min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-between overflow-hidden"
+    >
       <EntranceVein color="var(--color-lavender)" />
-      <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-        {t("eyebrow")}
-      </span>
-      <h2 className="mt-4 max-w-2xl text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-        {t("title")}
-      </h2>
-      <p className="mt-4 max-w-2xl text-paper-dim">{t("description")}</p>
-      <div className="mt-10">
+      <div className="w-full h-full flex-1 flex flex-col min-h-0">
         <VenueMap />
       </div>
     </section>
