@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+/* ─── Fuentes oficiales ExpoJuy 2026 — familia Ambit ─────────────────────── */
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
      fondo del sitio lea como el navy saturado de la referencia, no como un
@@ -18,9 +51,12 @@
   --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
 
-  --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* Ambit es la tipografía oficial de ExpoJuy 2026 — tanto display como body
+     usan la misma familia. El rol mono se reserva para JetBrains Mono porque
+     los labels técnicos, fechas y códigos QR necesitan alineación tabular real. */
+  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 html {
@@ -94,5 +130,33 @@ body {
     opacity: 1;
     transform: translateY(0) scaleY(1);
     transform-origin: bottom;
+  }
+}
+
+/* La galería se comporta como una sucesión de momentos, no como una pared
+   inmóvil: cada toma deriva apenas sobre su encuadre y recibe un reflejo de
+   luz de marca. Ambas animaciones se desactivan con reducir movimiento. */
+@keyframes gallery-drift {
+  from {
+    transform: scale(1.04) translate3d(-1.5%, -0.75%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(1.5%, 0.75%, 0);
+  }
+}
+
+@keyframes gallery-sheen {
+  0%,
+  58% {
+    transform: translateX(-145%) skewX(-18deg);
+    opacity: 0;
+  }
+  68% {
+    opacity: 0.48;
+  }
+  82%,
+  100% {
+    transform: translateX(265%) skewX(-18deg);
+    opacity: 0;
   }
 }

@@ -1,25 +1,16 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
 import "@/app/globals.css";
 
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  weight: ["500", "700", "900"],
-  variable: "--font-unbounded",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-manrope",
-});
-
+/* Ambit (fuente oficial) se carga vía @font-face en globals.css.
+   JetBrains Mono se mantiene solo para el rol font-mono (labels técnicos,
+   fechas y códigos QR que necesitan alineación tabular real). */
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["500", "600"],
@@ -82,7 +73,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+      className={jetbrainsMono.variable}
     >
       <body className="font-body antialiased">
         <NextIntlClientProvider>
