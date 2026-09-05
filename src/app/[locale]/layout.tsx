@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
 import "@/app/globals.css";
-
-/* Ambit (fuente oficial) se carga vía @font-face en globals.css.
-   JetBrains Mono se mantiene solo para el rol font-mono (labels técnicos,
-   fechas y códigos QR que necesitan alineación tabular real). */
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-jetbrains-mono",
-});
 
 /** Formato Open Graph (guion bajo) por idioma — no es el mismo string que el locale de next-intl. */
 const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
@@ -73,7 +63,6 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={jetbrainsMono.variable}
     >
       <body className="font-body antialiased">
         <NextIntlClientProvider>

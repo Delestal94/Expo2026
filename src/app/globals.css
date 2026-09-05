@@ -51,12 +51,11 @@
   --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
 
-  /* Ambit es la tipografía oficial de ExpoJuy 2026 — tanto display como body
-     usan la misma familia. El rol mono se reserva para JetBrains Mono porque
-     los labels técnicos, fechas y códigos QR necesitan alineación tabular real. */
+  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
+     roles tipográficos del sitio: display, body y mono. */
   --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
   --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
