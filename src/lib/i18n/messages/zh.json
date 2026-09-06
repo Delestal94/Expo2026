@@ -357,7 +357,9 @@
       "venue": "文化城 · 胡胡伊",
       "dateRangeLabel": "2026年10月9日至12日",
       "scanLabel": "入口核验",
-      "pendingLabel": "待出票"
+      "pendingLabel": "待出票",
+      "loadingCode": "正在生成您的入场码…",
+      "codeError": "无法生成您的入场码，请刷新页面或稍后再试。"
     }
   }
 }
