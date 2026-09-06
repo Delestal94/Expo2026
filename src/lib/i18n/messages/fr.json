@@ -357,7 +357,9 @@
       "venue": "Ciudad Cultural · Jujuy",
       "dateRangeLabel": "9 au 12 octobre 2026",
       "scanLabel": "Scan à l'entrée",
-      "pendingLabel": "Billet en attente"
+      "pendingLabel": "Billet en attente",
+      "loadingCode": "Génération de votre code d'accès…",
+      "codeError": "Impossible de générer votre code d'accès. Rechargez la page ou réessayez dans quelques minutes."
     }
   }
 }
