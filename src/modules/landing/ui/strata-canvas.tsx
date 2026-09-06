@@ -5,15 +5,21 @@ import { getCurrentTheme, THEME_CHANGE_EVENT, type Theme } from "@/lib/ui/theme"
 
 // Mismos tonos que --color-ink en cada tema (ver globals.css) — el canvas
 // no puede leer variables CSS directamente en fillStyle, así que se
-// duplican acá. En tema claro, mix-blend-screen sobre un fondo casi
-// blanco licúa casi todo el neón de las bandas (screen con blanco da
-// blanco) — es un efecto más apagado a propósito, no un bug: recrear el
-// glow completo en claro pediría cambiar el blend mode y repensar la
-// pieza, y la alternativa (mantener el fondo oscuro bajo un tema claro)
-// se ve rota, no "sutil".
+// duplican acá.
 const BG_FILL: Record<Theme, string> = {
   dark: "#0b0a12",
   light: "#f5f1e8",
+};
+
+// "screen" aclara — funciona porque las bandas son más claras que el
+// fondo oscuro. Sobre un fondo casi blanco, screen contra un color
+// licúa casi todo a blanco (screen con blanco da blanco): las bandas
+// prácticamente desaparecían en tema claro. "multiply" oscurece en vez
+// de aclarar, así que sobre un fondo claro las bandas siguen leyéndose
+// como cinta de color en vez de casi desaparecer.
+const BLEND_MODE: Record<Theme, string> = {
+  dark: "screen",
+  light: "multiply",
 };
 
 interface Band {
@@ -69,9 +75,15 @@ export function StrataCanvas() {
     let lastDraw = 0;
     let bgFill = BG_FILL[getCurrentTheme()];
 
+    function applyBlendMode(theme: Theme) {
+      if (canvas) canvas.style.mixBlendMode = BLEND_MODE[theme];
+    }
+    applyBlendMode(getCurrentTheme());
+
     function handleThemeChange(event: Event) {
-      const detail = (event as CustomEvent<Theme>).detail;
-      bgFill = BG_FILL[detail ?? getCurrentTheme()];
+      const theme = (event as CustomEvent<Theme>).detail ?? getCurrentTheme();
+      bgFill = BG_FILL[theme];
+      applyBlendMode(theme);
       if (prefersReducedMotion) draw(lastDraw);
     }
     window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
@@ -172,7 +184,7 @@ export function StrataCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full opacity-70 mix-blend-screen"
+      className="absolute inset-0 h-full w-full opacity-70"
     />
   );
 }
