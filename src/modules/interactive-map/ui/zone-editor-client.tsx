@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
 const ZoneEditorImpl = dynamic(() => import("./zone-editor").then((m) => m.ZoneEditor), {
   ssr: false,
   loading: () => (
-    <p className="rounded-2xl border border-line bg-[#121022] p-6 text-sm text-paper-dim">
+    <p className="rounded-2xl border border-line bg-surface p-6 text-sm text-paper-dim">
       Cargando editor…
     </p>
   ),

@@ -1,10 +1,16 @@
 import { useTranslations } from "next-intl";
 
+/**
+ * `text` es el color de texto legible sobre cada `color` de fondo — no
+ * siempre es el mismo: ink (oscuro) sobre violet da ~3.3:1, por debajo del
+ * 4.5:1 de WCAG AA para texto chico (encontrado con axe-core mientras se
+ * verificaban los fixes del issue #35). Paper (claro) sí pasa sobre violet.
+ */
 const STATS = [
-  { key: "edition", value: "17ª", color: "var(--color-cyan)" },
-  { key: "days", value: "4", color: "var(--color-violet)" },
-  { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
+  { key: "edition", value: "17ª", color: "var(--color-cyan)", text: "var(--color-ink)" },
+  { key: "days", value: "4", color: "var(--color-violet)", text: "var(--color-paper)" },
+  { key: "stands", value: "+200", color: "var(--color-magenta)", text: "var(--color-ink)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)", text: "var(--color-ink)" },
 ] as const;
 
 /**
@@ -34,12 +40,12 @@ export function About() {
           <div
             key={stat.key}
             className="flex flex-col gap-1 rounded-xl px-4 py-3"
-            style={{ backgroundColor: stat.color }}
+            style={{ backgroundColor: stat.color, color: stat.text }}
           >
-            <dd className="font-mono text-xl font-black text-ink tabular-nums sm:text-2xl">
+            <dd className="font-mono text-xl font-black tabular-nums sm:text-2xl">
               {stat.value}
             </dd>
-            <dt className="font-mono text-[0.6rem] tracking-[0.14em] text-ink/70 uppercase">
+            <dt className="font-mono text-[0.6rem] tracking-[0.14em] uppercase">
               {t(`stats.${stat.key}`)}
             </dt>
           </div>

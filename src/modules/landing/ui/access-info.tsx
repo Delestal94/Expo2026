@@ -97,7 +97,7 @@ export async function AccessInfo() {
                 return (
                   <div
                     key={tier.key}
-                    className={`relative flex-1 p-5 text-center ${isFree ? "bg-accent/10" : "bg-[#121022]"}`}
+                    className={`relative flex-1 p-5 text-center ${isFree ? "bg-accent/10" : "bg-surface"}`}
                   >
                     {isFree && (
                       <span
@@ -154,7 +154,7 @@ export async function AccessInfo() {
             />
           </div>
 
-          <div className="flex flex-1 flex-col justify-center border-t border-line bg-[#121022] p-6 text-left">
+          <div className="flex flex-1 flex-col justify-center border-t border-line bg-surface p-6 text-left">
             <h3 className="font-display text-lg font-medium text-paper">
               {t("providersTitle")}
             </h3>

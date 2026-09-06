@@ -27,11 +27,11 @@ function stratumColorFor(code: string): string {
 
 /**
  * Mismo tono que el contenedor donde vive este componente en
- * `access-form.tsx` (`bg-[#121022]`, no hay token para esto). Los
- * "agujeros" de la perforación pintan este color en vez de transparentar,
- * simulando el recorte sobre la tarjeta que lo envuelve.
+ * `access-form.tsx` (`bg-surface`). Los "agujeros" de la perforación pintan
+ * este color en vez de transparentar, simulando el recorte sobre la tarjeta
+ * que lo envuelve.
  */
-const PUNCH_COLOR = "#121022";
+const PUNCH_COLOR = "var(--color-surface)";
 
 /**
  * Siempre apilada, sin variante en fila: este componente vive dentro del

@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
-import type { Exhibitor } from "./exhibitors-data";
+import { textSafeColor, type Exhibitor } from "./exhibitors-data";
 
 /**
  * Al filtrar por eje, el directorio entero se reemplazaba de golpe — sin
@@ -21,7 +21,7 @@ export function ExhibitorCard({
 
   return (
     <article
-      className="group flex flex-col gap-4 rounded-2xl border border-line bg-[#121022] p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_32px_-20px_var(--card-color)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-safe:animate-[strata-settle_0.45s_cubic-bezier(0.16,1,0.3,1)_backwards]"
+      className="group flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_32px_-20px_var(--card-color)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-safe:animate-[strata-settle_0.45s_cubic-bezier(0.16,1,0.3,1)_backwards]"
       style={
         {
           "--card-color": exhibitor.color,
@@ -33,7 +33,7 @@ export function ExhibitorCard({
         className="w-fit rounded-full px-3 py-1 font-mono text-[0.65rem] tracking-[0.1em] uppercase transition-[background-color] duration-300 group-hover:bg-[color-mix(in_srgb,var(--card-color)_32%,transparent)]"
         style={{
           backgroundColor: `color-mix(in srgb, ${exhibitor.color} 20%, transparent)`,
-          color: exhibitor.color,
+          color: textSafeColor(exhibitor.color),
         }}
       >
         {t(`ejes.${exhibitor.eje}`)}
