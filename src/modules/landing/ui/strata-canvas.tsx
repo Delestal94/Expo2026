@@ -36,7 +36,7 @@ function createBands(height: number): Band[] {
       phase: 0.2,
       width: 44,
       color: "#2de3d6",
-      glow: 32,
+      glow: 24,
       divergenceDir: -1.4,
     },
     {
@@ -47,7 +47,7 @@ function createBands(height: number): Band[] {
       phase: 1.8,
       width: 40,
       color: "#7c4dff",
-      glow: 28,
+      glow: 22,
       divergenceDir: -0.7,
     },
     {
@@ -58,7 +58,7 @@ function createBands(height: number): Band[] {
       phase: 3.4,
       width: 38,
       color: "#b83fe0",
-      glow: 26,
+      glow: 20,
       divergenceDir: 0.7,
     },
     {
@@ -69,7 +69,7 @@ function createBands(height: number): Band[] {
       phase: 4.9,
       width: 34,
       color: "#b9a6f5",
-      glow: 24,
+      glow: 18,
       divergenceDir: 1.4,
     },
   ];
@@ -197,16 +197,16 @@ export function StrataCanvas() {
 
         ctx.strokeStyle = band.color;
         // En hero son bandas con presencia; al scrollear a barras se vuelven líneas finas, tenues y elegantes (3px a 5px)
-        const targetWidth = Math.max(2.5, band.width * (1 - scrollProgress * 0.82));
+        const targetWidth = Math.max(3.5, band.width * (1 - scrollProgress * 0.82));
         ctx.lineWidth = targetWidth;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
 
-        // Opacidad tenue en barras (0.28 a 0.35) para acompañar sin competir con el texto ni las barras
-        const alpha = Math.max(0.28, 0.7 - scrollProgress * 0.38);
+        // Opacidad tenue (0.26 en Hero hasta 0.14 en barras) con ancho generoso para presencia sin encandilar
+        const alpha = Math.max(0.14, 0.26 - scrollProgress * 0.12);
         ctx.globalAlpha = alpha;
         ctx.shadowColor = band.color;
-        ctx.shadowBlur = Math.max(8, band.glow * (1 - scrollProgress * 0.5));
+        ctx.shadowBlur = Math.max(6, band.glow * (1 - scrollProgress * 0.5));
         ctx.stroke();
       }
 
@@ -267,7 +267,7 @@ export function StrataCanvas() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen transition-opacity duration-300 motion-reduce:transition-none will-change-transform"
       style={{
-        opacity: "var(--strata-canvas-opacity, 0.8)",
+        opacity: "var(--strata-canvas-opacity, 0.6)",
       }}
     />
   );

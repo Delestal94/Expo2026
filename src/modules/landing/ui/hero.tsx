@@ -75,7 +75,7 @@ export function Hero() {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/20 via-transparent to-ink"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink"
       />
 
       {/* Navegación superior */}
@@ -98,7 +98,7 @@ export function Hero() {
 
       {/* Bloque central oficial (Lockup con parallax espacial) */}
       <div
-        className="relative z-10 flex flex-col gap-8 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:filter-none"
+        className="relative z-10 flex flex-col gap-8 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:filter-none drop-shadow-[0_2px_16px_rgba(7,11,25,0.95)]"
         style={{
           transform:
             "translate3d(0, var(--hero-mid-y, 0px), 0) scale(var(--hero-mid-scale, 1))",
@@ -106,7 +106,7 @@ export function Hero() {
           filter: "blur(var(--hero-mid-blur, 0px))",
         }}
       >
-        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
+        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase drop-shadow-[0_1px_6px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
           {t("tagline")}
         </span>
         <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
@@ -116,10 +116,10 @@ export function Hero() {
             width={1000}
             height={305}
             priority
-            className="h-auto w-full max-w-205"
+            className="h-auto w-full max-w-205 drop-shadow-[0_2px_12px_rgba(7,11,25,0.8)]"
           />
         </h1>
-        <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
+        <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}
         </p>
       </div>

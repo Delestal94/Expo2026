@@ -22,9 +22,34 @@
 }
 
 html {
+  color-scheme: dark;
   scroll-behavior: smooth;
   overflow-x: clip;
   max-width: 100vw;
+}
+
+/* Scrollbar refinada a tono con la estética dark / cyber-mineral del sitio */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 241, 232, 0.25) #090e24;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090e24;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 241, 232, 0.22);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
 }
 
 @media (prefers-reduced-motion: reduce) {
