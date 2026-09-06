@@ -1,7 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/lib/i18n/routing";
 import {
-  About,
   AccessInfo,
   Ejes,
   EventStructuredData,
@@ -30,7 +29,6 @@ export default async function Home({
       <EventStructuredData />
       <SectionNav />
       <Hero />
-      <About />
       <Ejes />
       <NewsSection />
       <GalleryPreview />

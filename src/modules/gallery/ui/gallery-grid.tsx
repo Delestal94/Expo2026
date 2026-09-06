@@ -104,15 +104,25 @@ export function GalleryGrid() {
             key={photo.src}
             type="button"
             onClick={() => setOpenIndex(i)}
-            className="relative aspect-[4/3] overflow-hidden rounded-xl border border-line outline-none focus-visible:border-accent"
+            className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-line shadow-[0_10px_24px_rgba(0,0,0,0.18)] outline-none transition-[transform,border-color,box-shadow] duration-500 motion-reduce:transition-none hover:-translate-y-1 hover:border-[var(--color-lavender)] hover:shadow-[0_16px_36px_rgba(45,227,214,0.16)] focus-visible:border-accent"
           >
             <Image
               src={photo.src}
               alt={t("photoAlt", { n: photo.n })}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition duration-500 hover:scale-105"
+              className="object-cover motion-safe:animate-[gallery-drift_12s_ease-in-out_infinite_alternate] motion-reduce:animate-none group-hover:!scale-110"
+              style={{ animationDelay: `${i * -1.2}s` }}
               loading={i < 4 ? "eager" : "lazy"}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 bg-gradient-to-r from-transparent via-[rgba(45,227,214,0.42)] to-transparent motion-safe:animate-[gallery-sheen_9s_ease-in-out_infinite] motion-reduce:animate-none"
+              style={{ animationDelay: `${i * -0.9}s` }}
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-3 bottom-0 h-0.5 origin-left scale-x-0 bg-[var(--color-cyan)] transition-transform duration-500 group-hover:scale-x-100"
             />
           </button>
         ))}
