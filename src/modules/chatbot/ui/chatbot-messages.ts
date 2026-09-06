@@ -98,6 +98,29 @@ export const chatbotMessages = {
     startListeningLabel: "开始语音收听",
     voiceNotSupported: "您的浏览器不支持语音识别。",
   },
+  fr: {
+    openLabel: "Ouvrir le chat d'aide",
+    closeLabel: "Fermer le chat",
+    sendButton: "Envoyer",
+    placeholder: "Écrivez votre question…",
+    typing: "En train d'écrire…",
+    assistantTitle: "Assistant ExpoJuy 2026",
+    statusOnline: "En ligne",
+    faqTitle: "Questions rapides",
+    faqDescription: "Choisissez un sujet et obtenez une réponse instantanée.",
+    initialMessage:
+      "Bonjour ! 👋 Je suis l'assistant officiel d'ExpoJuy 2026. Comment puis-je vous aider ? Je peux vous parler de l'événement, du site Ciudad Cultural, des rencontres d'affaires, des exposants ou des billets.",
+    fallbackMessage:
+      "Désolé, je n'ai pas pu me connecter à l'assistant pour le moment. Veuillez réessayer plus tard.",
+    apiKeyMissing:
+      "L'assistant n'est pas configuré. Contactez l'organisateur.",
+    rateLimit: "Trop de demandes. Réessayez dans un instant.",
+    errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
+    voiceLabel: "Écouter la réponse",
+    stopListeningLabel: "Arrêter l'écoute",
+    startListeningLabel: "Démarrer l'écoute vocale",
+    voiceNotSupported: "Votre navigateur ne prend pas en charge la reconnaissance vocale.",
+  },
 } as const;
 
 export type ChatbotLocale = keyof typeof chatbotMessages;
