@@ -4,6 +4,8 @@ import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { StrataCanvas } from "./strata-canvas";
+import { ThemeToggle } from "./theme-toggle";
+import { Wordmark } from "./wordmark";
 
 export function Hero() {
   const t = useTranslations("Landing.Hero");
@@ -38,6 +40,7 @@ export function Hero() {
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <span className="shrink-0">{t("edition")}</span>
           <LanguageSwitcher />
+          <ThemeToggle />
         </div>
       </nav>
 
@@ -51,14 +54,7 @@ export function Hero() {
             El "2026" del título tipográfico anterior no forma parte del
             lockup real; sigue presente en "17ª EDICIÓN" y en el countdown. */}
         <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
-          <Image
-            src="/images/logos/expojuy-wordmark-dark.svg"
-            alt={t("titleAlt")}
-            width={1000}
-            height={305}
-            priority
-            className="h-auto w-full max-w-205"
-          />
+          <Wordmark alt={t("titleAlt")} />
         </h1>
         <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}

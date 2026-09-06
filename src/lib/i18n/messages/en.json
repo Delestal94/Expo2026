@@ -113,6 +113,10 @@
       "minutes": "min",
       "seconds": "sec"
     },
+    "ThemeToggle": {
+      "switchToLight": "Switch to light theme",
+      "switchToDark": "Switch to dark theme"
+    },
     "SocialLinks": {
       "instagram": "ExpoJuy on Instagram",
       "facebook": "Jujuy Foreign Trade Chamber on Facebook",

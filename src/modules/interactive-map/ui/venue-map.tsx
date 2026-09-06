@@ -69,7 +69,11 @@ export function VenueMap() {
                 style={{ backgroundColor: cat.color }}
               />
               {t(`category.${cat.id}`)}
-              <span className="tabular-nums opacity-70">{counts.get(cat.id) ?? 0}</span>
+              {/* Sin opacity-70 extra: heredaba paper-dim (ya atenuado) y la
+                  multiplicación de las dos bajaba a ~2.9:1 en tema claro,
+                  por debajo del 4.5:1 de WCAG AA — encontrado con axe-core
+                  auditando el modo claro nuevo. */}
+              <span className="tabular-nums">{counts.get(cat.id) ?? 0}</span>
             </button>
           );
         })}

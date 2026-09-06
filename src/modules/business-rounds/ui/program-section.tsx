@@ -55,13 +55,13 @@ export function ProgramSection() {
 
       <div role="tabpanel" className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-line bg-surface p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
+          <span className="font-mono text-xs tracking-[0.15em] text-cyan-text uppercase">
             {t("morningLabel")}
           </span>
           <p className="mt-2 font-display text-lg text-paper">{t("morningContent")}</p>
         </div>
         <div className="rounded-2xl border border-line bg-surface p-6">
-          <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
+          <span className="font-mono text-xs tracking-[0.15em] text-lavender-text uppercase">
             {t("afternoonLabel")}
           </span>
           <p className="mt-2 font-display text-lg text-paper">{t("afternoonContent")}</p>

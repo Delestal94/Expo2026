@@ -57,8 +57,27 @@
      tamaños chicos — no llega al 4.5:1 de WCAG AA (issue #35). Esta variante
      más clara conserva el matiz de marca pero solo se usa donde el violeta
      hace de texto o de fondo-con-texto-oscuro encima; el violeta original
-     se mantiene para bordes, glows y otros usos decorativos. */
+     se mantiene para bordes, glows y otros usos decorativos.
+     Lo mismo para cyan/magenta/lavender: en tema oscuro el color base ya
+     tiene contraste de sobra como texto, así que el valor "-text" es
+     idéntico al base acá — solo diverge bajo [data-theme="light"], donde
+     un violeta/cyan/magenta/lavender vívido sobre fondo claro no pasa
+     4.5:1 y hace falta una versión más oscura. */
   --color-violet-text: #a78bfa;
+  --color-cyan-text: #2de3d6;
+  --color-magenta-text: #d946ef;
+  --color-lavender-text: #c4b5fd;
+
+  /* Versiones que NUNCA cambian de valor entre temas — a diferencia de
+     --color-ink/--color-paper (que invierten valores para que bg-ink y
+     text-paper sigan significando "fondo/texto de página" en los dos
+     temas), estas dos son para el puñado de lugares que necesitan
+     específicamente "el tono oscuro de marca" o "el tono claro de marca"
+     sin importar el tema — ej. los chips de stats de About, donde ya se
+     eligió a mano cuál de los dos pasa contraste contra cada color vívido
+     de fondo (que tampoco cambia entre temas). */
+  --color-ink-fixed: #0d0b2e;
+  --color-paper-fixed: #f5f1e8;
 
   /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
      roles tipográficos del sitio: display, body y mono. */
@@ -67,8 +86,44 @@
   --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
+/*
+ * Tema claro (issue de toggle manual, sin seguir prefers-color-scheme del
+ * SO a pedido explícito). Activado agregando data-theme="light" al <html>
+ * (ver theme-toggle.tsx) — no hay bloque para "dark" porque :root ya ES
+ * el tema oscuro por default.
+ *
+ * --color-ink y --color-paper INVIERTEN VALORES en vez de reasignar roles:
+ * en oscuro, ink=fondo/paper=texto; en claro, paper pasa a ser el valor
+ * oscuro y ink el claro. Como bg-ink+text-paper (fondo de página) y
+ * bg-paper+text-ink (chips "invertidos": pestaña activa, botón sólido)
+ * son los dos únicos patrones que usa el sitio con estos tokens, invertir
+ * el VALOR en vez de reescribir cada uso mantiene ambos patrones
+ * coherentes en los dos temas sin tocar los ~280 lugares que ya usan
+ * bg-ink/text-paper/bg-paper/text-ink.
+ *
+ * --color-accent (y los "-text" de cyan/violet/magenta/lavender) sí bajan
+ * de brillo: un cyan neón que se lee perfecto sobre navy da ~1.4:1 sobre
+ * un fondo claro — casi invisible. Los tonos de acento "vívidos" (fills,
+ * bordes, glows, tints de badges) se mantienen sin cambios: ahí no hace
+ * falta el mismo contraste que en texto plano.
+ */
+:root[data-theme="light"] {
+  --color-ink: #f5f1e8;
+  --color-paper: #0d0b2e;
+  --color-paper-dim: #6b6355;
+  --color-line: rgba(13, 11, 46, 0.14);
+  --color-surface: #fbf9f4;
+  --color-accent: #0f766e;
+  --color-cyan-text: #0f766e;
+  --color-violet-text: #6d28d9;
+  --color-magenta-text: #86198f;
+  --color-lavender-text: #4338ca;
+  color-scheme: light;
+}
+
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {

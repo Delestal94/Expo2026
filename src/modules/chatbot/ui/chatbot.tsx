@@ -177,7 +177,7 @@ export function ChatBot() {
             type="button"
             onClick={handleOpen}
             aria-label={t.openLabel}
-            className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-line)] bg-[#0d0b2e]/90 text-[var(--color-paper)] shadow-[0_8px_32px_rgba(45,227,214,0.25)] backdrop-blur-md transition hover:border-[var(--color-cyan)] hover:shadow-[0_12px_40px_rgba(45,227,214,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-cyan)] sm:h-16 sm:w-16"
+            className="group relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-line)] bg-ink/90 text-[var(--color-paper)] shadow-[0_8px_32px_rgba(45,227,214,0.25)] backdrop-blur-md transition hover:border-[var(--color-cyan)] hover:shadow-[0_12px_40px_rgba(45,227,214,0.4)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-cyan)] sm:h-16 sm:w-16"
           >
             <span
               className="absolute -top-1 -right-1 flex h-3.5 w-3.5"
@@ -209,7 +209,7 @@ export function ChatBot() {
         <section
           role="dialog"
           aria-label={t.assistantTitle}
-          className="fixed right-4 bottom-20 z-50 flex h-[min(600px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[#0d0b2e]/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:right-6 sm:w-[400px] lg:bottom-6 lg:h-[min(600px,calc(100vh-2rem))]"
+          className="fixed right-4 bottom-20 z-50 flex h-[min(600px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-ink/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:right-6 sm:w-[400px] lg:bottom-6 lg:h-[min(600px,calc(100vh-2rem))]"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--color-line)] bg-surface/90 px-4 py-3 sm:px-5">
@@ -259,7 +259,7 @@ export function ChatBot() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs leading-relaxed sm:text-sm ${
                     msg.role === "assistant"
-                      ? "border border-[var(--color-line)] bg-[#15123a] text-[var(--color-paper)] shadow-sm"
+                      ? "border border-[var(--color-line)] bg-surface text-[var(--color-paper)] shadow-sm"
                       : "border border-[var(--color-cyan)]/30 bg-[var(--color-cyan)]/15 text-[var(--color-paper)]"
                   }`}
                 >
@@ -271,7 +271,7 @@ export function ChatBot() {
             {/* Estado de carga / escribiendo */}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-line)] bg-[#15123a] px-4 py-2.5 text-xs font-mono text-[var(--color-paper-dim)]">
+                <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-line)] bg-surface px-4 py-2.5 text-xs font-mono text-[var(--color-paper-dim)]">
                   <span className="h-2 w-2 rounded-full bg-[var(--color-cyan)] animate-ping" />
                   <span>{t.typing}</span>
                 </div>
@@ -319,7 +319,7 @@ export function ChatBot() {
                     key={key}
                     type="button"
                     onClick={() => handleFaqSelect(key)}
-                    className="group flex min-h-16 items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[#0d0b2e] p-2.5 text-left transition hover:border-[var(--color-lavender)] hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
+                    className="group flex min-h-16 items-start gap-2 rounded-xl border border-[var(--color-line)] bg-ink p-2.5 text-left transition hover:border-[var(--color-lavender)] hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-cyan)]"
                   >
                     <span className="font-mono text-[0.625rem] text-[var(--color-cyan)]">→</span>
                     <span className="line-clamp-3 text-xs leading-snug text-[var(--color-paper)]">
@@ -343,7 +343,7 @@ export function ChatBot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder={t.placeholder}
-                className="flex-1 rounded-full border border-[var(--color-line)] bg-[#0d0b2e] px-4 py-2 text-xs text-[var(--color-paper)] placeholder:text-[var(--color-paper-dim)] focus:border-[var(--color-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--color-cyan)] disabled:opacity-50 sm:text-sm"
+                className="flex-1 rounded-full border border-[var(--color-line)] bg-ink px-4 py-2 text-xs text-[var(--color-paper)] placeholder:text-[var(--color-paper-dim)] focus:border-[var(--color-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--color-cyan)] disabled:opacity-50 sm:text-sm"
                 disabled={isLoading}
               />
               <button

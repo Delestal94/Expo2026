@@ -52,7 +52,7 @@ export function AgendaPreview() {
           if (slots.length === 0) return null;
           return (
             <div key={day.date}>
-              <h4 className="font-mono text-sm font-semibold text-violet uppercase">
+              <h4 className="font-mono text-sm font-semibold text-violet-text uppercase">
                 {t(`days.${day.dayKey}`)} {day.dayNumber}
               </h4>
               <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
