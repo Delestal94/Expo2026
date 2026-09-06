@@ -103,15 +103,21 @@ export function GalleryGrid() {
             type="button"
             onClick={() => setOpenIndex(i)}
             aria-label={t("photoAlt", { n: photo.n })}
-            className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line/80 bg-ink/60 outline-none transition-all duration-500 hover:border-magenta/60 hover:shadow-[0_8px_30px_rgba(217,70,239,0.18)] focus-visible:border-magenta"
+            className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line/80 bg-ink/60 shadow-[0_10px_24px_rgba(0,0,0,0.18)] outline-none transition-all duration-500 hover:-translate-y-1 hover:border-magenta/60 hover:shadow-[0_16px_36px_rgba(217,70,239,0.22)] focus-visible:border-magenta"
           >
             <Image
               src={photo.src}
               alt=""
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="object-cover motion-safe:animate-[gallery-drift_12s_ease-in-out_infinite_alternate] motion-reduce:animate-none group-hover:!scale-110"
+              style={{ animationDelay: `${i * -1.2}s` }}
               loading={i < 4 ? "eager" : "lazy"}
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 bg-gradient-to-r from-transparent via-[rgba(45,227,214,0.42)] to-transparent motion-safe:animate-[gallery-sheen_9s_ease-in-out_infinite] motion-reduce:animate-none"
+              style={{ animationDelay: `${i * -0.9}s` }}
             />
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div aria-hidden="true" className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -120,6 +126,10 @@ export function GalleryGrid() {
               </span>
               <span className="font-mono text-xs text-magenta">↗</span>
             </div>
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-3 bottom-0 h-0.5 origin-left scale-x-0 bg-[var(--color-cyan)] transition-transform duration-500 group-hover:scale-x-100"
+            />
           </button>
         ))}
       </div>

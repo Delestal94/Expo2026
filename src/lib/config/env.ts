@@ -18,7 +18,22 @@ export const env = createEnv({
     EMAIL_PROVIDER: z.enum(["resend", "postmark", "ses"]).default("resend"),
     STORAGE_PROVIDER: z.enum(["r2", "s3", "supabase"]).default("r2"),
     REALTIME_PROVIDER: z.enum(["supabase", "pusher", "ably"]).default("supabase"),
-    ADMISSION_MODE: z.enum(["free", "paid"]).default("free"),
+    // "paid" es la decisión de trabajo (ver ADR-0003): se asume el mismo
+    // esquema pago de la edición 2024 hasta que la Cámara confirme el de
+    // 2026. El checkout real sigue sin credenciales de Mercado Pago (issue
+    // #3) — ver PAYMENT_PROVIDER y MERCADOPAGO_ACCESS_TOKEN más abajo.
+    ADMISSION_MODE: z.enum(["free", "paid"]).default("paid"),
+    // Firma HMAC del código de admisión (issue #57) — nunca se expone al
+    // cliente. Sin esto configurado, cae a un secreto fijo de desarrollo
+    // (marcado como inseguro): alcanza para no romper `npm run dev` sin
+    // .env.local, pero en producción hace falta un valor real en Vercel.
+    TICKET_SIGNING_SECRET: z.string().min(16).optional(),
+    // Credencial del adaptador de Mercado Pago (issue #3/#7) — todavía no
+    // configurada: no existe una cuenta de Mercado Pago para el proyecto.
+    // El adaptador (`mercadopago-payment-provider.ts`) ya está escrito y
+    // testeado con fetch mockeado; falta este valor real para que
+    // `charge()`/`verify()` puedan pegarle a la API real de Mercado Pago.
+    MERCADOPAGO_ACCESS_TOKEN: z.string().optional(),
   },
   client: {
     // Opcionales a propósito: los inyecta la integración de Supabase en

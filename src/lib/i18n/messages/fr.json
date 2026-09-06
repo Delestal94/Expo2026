@@ -1,0 +1,377 @@
+{
+  "Metadata": {
+    "title": "ExpoJuy 2026",
+    "description": "Site officiel d'ExpoJuy 2026 — du 9 au 12 octobre, Ciudad Cultural, Jujuy."
+  },
+  "NotFound": {
+    "eyebrow": "Erreur 404",
+    "introLine": "On dirait que cette",
+    "emphasisLine": "strate",
+    "outroLine": "n'est pas dans la coupe.",
+    "description": "La page que vous cherchiez s'est érodée ou n'a jamais existé sur ce parcours. Retournez à l'accueil ou allez directement à comment venir et accéder.",
+    "ctaHome": "Retour à l'accueil",
+    "ctaAccess": "Comment venir et accéder"
+  },
+  "InteractiveMap": {
+    "eyebrow": "Plan interactif",
+    "title": "Le plan du site, comme des données — pas comme une image fixe",
+    "description": "Calque du plan de l'édition 2024 à Ciudad Cultural : le pavillon couvert, les stands en plein air, la cour gastronomique et les zones de services. Filtrez par type ou touchez un stand pour voir son code et sa surface. Les quantités par catégorie sont celles du calque ; la disposition définitive de 2026 sera confirmée par la Chambre.",
+    "svgLabel": "Plan du site de Ciudad Cultural avec les stands de l'édition 2024",
+    "legend": "Légende",
+    "area": "{m2} m² de surface",
+    "standHint": "Les stands sont attribués par l'appel officiel de la Chambre, pas depuis ce site.",
+    "emptyTitle": "Explorez le plan",
+    "emptyHint": "Passez la souris ou touchez un stand pour voir son code, son type et sa surface.",
+    "viewersOnline": "{count} personnes consultent le plan en ce moment",
+    "filter": {
+      "all": "Tous ({count})"
+    },
+    "category": {
+      "cubierto": "Couverts",
+      "artesano": "Artisans",
+      "descubierto": "Extérieurs",
+      "gastronomico": "Gastronomiques",
+      "juego": "Jeux",
+      "institucional": "Institutionnel",
+      "infraestructura": "Infrastructure"
+    }
+  },
+  "Landing": {
+    "Hero": {
+      "eyebrow": "ExpoJuy · Jujuy, Argentine",
+      "edition": "17ᵉ édition",
+      "tagline": "Défi numérique ExpoJuy 2026 · Proposition",
+      "titleAlt": "EXPOJUY 2026 · De Jujuy au monde",
+      "description": "Là où la Quebrada se connecte au monde : quatre jours de rencontres d'affaires, commerce extérieur et économie de la connaissance au cœur du Corridor Bioocéanique.",
+      "ctaAttend": "Je veux participer",
+      "ctaProviders": "Inscrire mon entreprise comme fournisseur"
+    },
+    "About": {
+      "descriptionIntro": "Après deux semaines au format classique, ExpoJuy se réinvente :",
+      "descriptionEmphasis": "quatre jours",
+      "descriptionOutro": "de rencontres d'affaires le matin et d'exposition l'après-midi, avec l'exploitation du lithium et le commerce international comme axes centraux.",
+      "stats": {
+        "edition": "Édition d'ExpoJuy",
+        "days": "Jours, deux fois plus intense",
+        "stands": "Stands attendus",
+        "dates": "Jours d'octobre, Ciudad Cultural"
+      }
+    },
+    "Ejes": {
+      "eyebrow": "Axes de l'édition 2026",
+      "items": {
+        "mineria": {
+          "title": "Mines et lithium",
+          "description": "Le RIGI approuvé pour Exar doublera la production de lithium à 45 000 tonnes. ExpoJuy connecte les fournisseurs jujuyens à cette demande croissante."
+        },
+        "comercio": {
+          "title": "Commerce extérieur",
+          "description": "Rencontres d'affaires organisées par la Chambre de Commerce Extérieur de Jujuy, avec des délégations déjà intéressées venues d'autres provinces et pays."
+        },
+        "corredor": {
+          "title": "Corridor Bioocéanique",
+          "description": "Le Chili et le Paraguay comme partenaires stratégiques du Corridor du Capricorne — le format de 4 jours facilite le déplacement et le séjour des délégations étrangères."
+        },
+        "conocimiento": {
+          "title": "Économie de la connaissance",
+          "description": "Le même secteur qui porte ce Défi Numérique : logiciels, agtech et services basés sur la connaissance, dans le Plan Stratégique 2026-2030 de la province."
+        }
+      }
+    },
+    "AccessInfo": {
+      "eyebrow": "Accès et entrée",
+      "title": "L'entrée générale était payante lors des dernières éditions — 2026 sera confirmé prochainement.",
+      "description": "En 2024, le billet se vendait en ligne à ces tarifs de référence. L'inscription d'accès (QR + Mercado Pago) est déjà prête à fonctionner de la même façon, gratuite ou payante, dès que la Chambre confirmera le schéma 2026 — voir <code>ADR-0003</code>.",
+      "pricing": {
+        "kids": "Enfants (6 à 12 ans) et retraités",
+        "adults": "Adultes",
+        "under5": "Enfants de moins de 5 ans",
+        "freeBadge": "Gratuit !"
+      },
+      "buyDisabled": "Acheter un billet — disponible à la prochaine étape",
+      "createAccount": "Créer votre compte visiteur",
+      "accountNote": "Vous pouvez créer votre compte dès maintenant — l'achat du billet sera activé à la prochaine étape. ",
+      "pricingNote": "Tarifs de référence, édition 2024. Sous réserve de confirmation pour 2026.",
+      "providersTitle": "Votre entreprise souhaite participer en tant que fournisseur ?",
+      "providersDescription": "Les exposants postulent via l'appel officiel de la Chambre, pas depuis ce site.",
+      "providersFormCta": "Formulaire fournisseurs",
+      "whatsappCta": "WhatsApp : 388 421-2955"
+    },
+    "Directions": {
+      "eyebrow": "On vous attend",
+      "title": "Au cœur de Jujuy",
+      "description": "Ciudad Cultural se trouve à quelques minutes du centre de <strong>San Salvador de Jujuy</strong> et bénéficie d'un accès rapide aux principaux points de la ville.",
+      "cta": "Voir sur Google Maps",
+      "mapLabel": "Plan de Ciudad Cultural",
+      "shareLabel": "Partager la position",
+      "shareTitle": "ExpoJuy 2026 — Ciudad Cultural",
+      "shareText": "Voici comment se rendre à Ciudad Cultural, siège d'ExpoJuy 2026 :"
+    },
+    "Countdown": {
+      "days": "jours",
+      "hours": "h",
+      "minutes": "min",
+      "seconds": "sec"
+    },
+    "ThemeToggle": {
+      "switchToLight": "Passer au thème clair",
+      "switchToDark": "Passer au thème sombre"
+    },
+    "SocialLinks": {
+      "instagram": "Instagram d'ExpoJuy",
+      "facebook": "Facebook de la Chambre de Commerce Extérieur de Jujuy",
+      "linkedin": "LinkedIn de la Chambre de Commerce Extérieur de Jujuy"
+    },
+    "Contact": {
+      "eyebrow": "Contact",
+      "title": "Besoin de quelque chose de précis ?",
+      "description": "Écrivez-nous par le canal de votre choix — vous serez répondu par la même équipe de la Chambre de Commerce Extérieur de Jujuy qui organise ExpoJuy.",
+      "emailLabel": "E-mail",
+      "phoneLabel": "Téléphone",
+      "addressLabel": "Adresse",
+      "whatsappCta": "Écrire sur WhatsApp",
+      "socialTitle": "Suivez les actualités",
+      "socialDescription": "Annonces, dates et avancées de l'édition 2026, en temps réel."
+    },
+    "Faq": {
+      "eyebrow": "Questions fréquentes",
+      "title": "Avant de demander",
+      "items": {
+        "dates": {
+          "question": "Quand et où a lieu ExpoJuy 2026 ?",
+          "answer": "Du 9 au 12 octobre, à Ciudad Cultural, San Salvador de Jujuy."
+        },
+        "tickets": {
+          "question": "Ai-je besoin d'un billet pour visiter l'expo ?",
+          "answer": "Lors de l'édition 2024, l'entrée était payante (tarifs de référence dans la section Accès). Il n'y a pas encore de confirmation officielle du schéma pour 2026."
+        },
+        "exhibitors": {
+          "question": "Comment inscrire mon entreprise comme exposante ?",
+          "answer": "Via l'appel officiel de la Chambre de Commerce Extérieur de Jujuy — il n'y a pas d'inscription d'exposants depuis ce site. Vous trouverez le formulaire et le WhatsApp dans la section Accès."
+        },
+        "businessRounds": {
+          "question": "Que sont les rencontres d'affaires ?",
+          "answer": "Des réunions matinales entre entreprises jujuyennes et délégations du Corridor Bioocéanique, organisées par secteur et intérêt commun. Consultez l'annuaire dans la section Exposants."
+        },
+        "accessibility": {
+          "question": "Le site est-il accessible aux personnes à mobilité réduite ?",
+          "answer": "Écrivez-nous sur WhatsApp ou par e-mail en nous indiquant vos besoins et nous vous confirmerons les détails avant votre visite."
+        },
+        "parking": {
+          "question": "Y a-t-il un parking ?",
+          "answer": "La disponibilité sera confirmée par l'organisation à l'approche de la date — contactez-nous via nos canaux de contact."
+        },
+        "languages": {
+          "question": "Dans quelles langues le site est-il disponible ?",
+          "answer": "En espagnol, anglais, portugais, mandarin et français — changez de langue depuis le sélecteur en haut à gauche."
+        },
+        "updates": {
+          "question": "Comment suivre les actualités ?",
+          "answer": "Suivez-nous sur Instagram (@expojuy) ou consultez la section Actualités de ce site."
+        }
+      }
+    },
+    "SiteFooter": {
+      "brand": "ExpoJuy 2026",
+      "organizes": "Organise",
+      "organizerAlt": "Chambre de Commerce Extérieur de Jujuy",
+      "institutions": "Chambre de Commerce Extérieur de Jujuy · Ministère du Développement Économique et de la Production · Direction Provinciale des Services basés sur la Connaissance · Clustear.",
+      "badge": "Prototype — Défi Numérique 2026"
+    }
+  },
+  "Pages": {
+    "Cuenta": {
+      "metaTitle": "Créer un compte — ExpoJuy 2026",
+      "backLink": "← Retour",
+      "heading": "Votre compte visiteur",
+      "description": "Créez votre compte dès maintenant. L'achat du billet n'est pas encore disponible — il sera activé à la prochaine étape."
+    },
+    "Galeria": {
+      "metaTitle": "Galerie 2024 — ExpoJuy 2026",
+      "metaDescription": "Photos de la 16ᵉ édition d'ExpoJuy (2024) à Ciudad Cultural de San Salvador de Jujuy.",
+      "backLink": "← Retour",
+      "heading": "Galerie — 16ᵉ édition (2024)",
+      "description": "30 photos d'ExpoJuy 2024 à Ciudad Cultural de San Salvador de Jujuy."
+    }
+  },
+  "Exhibitors": {
+    "searchLabel": "Rechercher un exposant",
+    "searchPlaceholder": "Rechercher par entreprise, secteur ou offre...",
+    "filterGroupLabel": "Filtrer par axe",
+    "filterAll": "Tous",
+    "viewProfilesCta": "Voir les {count} profils",
+    "collapseCta": "Afficher moins",
+    "buscaLabel": "Recherche",
+    "noResults": "Aucun exposant ne correspond à « {query} ». Essayez un autre terme ou secteur.",
+    "ejes": {
+      "mineria": "Mines et lithium",
+      "comercio": "Commerce extérieur",
+      "corredor": "Corridor bioocéanique",
+      "conocimiento": "Économie de la connaissance"
+    },
+    "items": {
+      "altiplano-servicios": {
+        "pitch": "Logistique et maintenance d'équipements pour les opérations de lithium sur l'altiplano jujuyen.",
+        "busca": "Contrats avec des opérateurs miniers"
+      },
+      "quebrada-litio": {
+        "pitch": "Fourniture d'intrants chimiques certifiés pour les usines de traitement du lithium.",
+        "busca": "Distributeurs régionaux"
+      },
+      "jujuy-exporta": {
+        "pitch": "Cabinet de conseil en commerce extérieur spécialisé dans les démarches d'exportation agro-industrielle.",
+        "busca": "Acheteurs au Chili et au Paraguay"
+      },
+      "andes-trade": {
+        "pitch": "Courtier en fret pour le Corridor Bioocéanique, opérant sur trois postes-frontières.",
+        "busca": "Partenaires logistiques internationaux"
+      },
+      "capricornio-log": {
+        "pitch": "Transport de marchandises entre Jujuy, le nord du Chili et le Paraguay via le col de Jama.",
+        "busca": "Délégations du Chili et du Paraguay"
+      },
+      "textiles-andinos": {
+        "pitch": "Coopérative textile en fibre de lama, à la recherche de canaux d'exportation régionaux.",
+        "busca": "Importateurs du Corridor Bioocéanique"
+      },
+      "jujuy-software": {
+        "pitch": "Groupement de studios de développement logiciel et agtech de la province.",
+        "busca": "Clients B2B et investisseurs providentiels"
+      },
+      "clustear-demo": {
+        "pitch": "Incubateur de projets d'économie de la connaissance de l'écosystème jujuyen.",
+        "busca": "Mentors et fonds d'investissement"
+      }
+    },
+    "Portal": {
+      "eyebrow": "Portail des exposants",
+      "title": "Ce n'est pas un annuaire — c'est ce qui connecte les rencontres d'affaires",
+      "description": "Profils d'exemple pour ce prototype, organisés par axe. Le système suggère des rencontres selon le secteur et l'objectif commercial commun.",
+      "howItWorksEyebrow": "Comment ça marche",
+      "howItWorksTitle": "Comment le système suggère des rencontres",
+      "agendaEyebrow": "Exemple",
+      "agendaTitle": "Agenda des réunions",
+      "footerNote": "Ce sont des profils d'exemple — l'inscription réelle de votre entreprise se fait via l'appel officiel de la Chambre, pas depuis ce portail (<link>voir comment postuler</link>)."
+    },
+    "Matching": {
+      "expositorLabel": "Exposant",
+      "a": { "detail": "Propose : courtage de fret international" },
+      "b": { "detail": "Propose : transport via le col de Jama" },
+      "shared": {
+        "corredor": "Corridor Bioocéanique",
+        "logistica": "Logistique internationale",
+        "pasoDeJama": "Col de Jama"
+      },
+      "disclaimer": "Dans cette première version, la suggestion est calculée par secteur et pays commun — pas par similarité sémantique complète (voir décision dans <code>docs/architecture.md</code>). L'agenda des réunions sera activé à la prochaine étape."
+    }
+  },
+  "BusinessRounds": {
+    "Agenda": {
+      "status": {
+        "disponible": "Disponible",
+        "sugerido": "Suggéré",
+        "confirmado": "Confirmé"
+      },
+      "table": "Table {n}",
+      "sharedInterestLabel": "Intérêt commun",
+      "sharedInterest": {
+        "pasoDeJama": "Col de Jama",
+        "exportacionRegional": "Exportation régionale",
+        "automatizacionProcesos": "Automatisation des processus",
+        "comercioExterior": "Commerce extérieur"
+      },
+      "days": { "fri": "Ven", "sat": "Sam", "sun": "Dim", "mon": "Lun" },
+      "exampleDisclaimer": "Agenda d'exemple — la réservation de réunions n'a pas encore de backend réel."
+    },
+    "Program": {
+      "eyebrow": "Agenda",
+      "title": "Quatre jours, un même rythme",
+      "description": "Matin de rencontres d'affaires, après-midi d'expo — c'est le format 2026 confirmé par l'organisation. Le programme horaire des conférences, panels et spectacles nocturnes sera publié plus près de la date, comme lors de l'édition précédente.",
+      "dayTabsLabel": "Choisir le jour de l'agenda",
+      "morningLabel": "Matin",
+      "morningContent": "Rencontres d'affaires internationales — Corridor Bioocéanique",
+      "afternoonLabel": "Après-midi",
+      "afternoonContent": "Expo ouverte à Ciudad Cultural — stands, mines, commerce extérieur et économie de la connaissance",
+      "highlight": { "apertura": "Ouverture", "cierre": "Clôture" },
+      "highlightNote": {
+        "apertura": "jour d'ouverture de l'événement.",
+        "cierre": "jour de clôture de l'événement."
+      },
+      "dateLine": "{day} {dayNumber} octobre"
+    }
+  },
+  "Gallery": {
+    "previewEyebrow": "Édition précédente",
+    "previewTitle": "Découvrez la 16ᵉ édition",
+    "viewFullCta": "Voir la galerie complète",
+    "photoAlt": "ExpoJuy 2024 — photo {n}",
+    "closeLabel": "Fermer",
+    "prevLabel": "Photo précédente",
+    "nextLabel": "Photo suivante",
+    "dialogAnnounce": "Photo {current} sur {total} : {alt}"
+  },
+  "News": {
+    "eyebrow": "Actualités",
+    "title": "Les dernières nouvelles d'ExpoJuy 2026",
+    "description": "Couverture de presse réelle sur l'annonce de cette édition, ainsi que les actualités propres au développement de ce site.",
+    "readOnSite": "Voir sur le site",
+    "readOnSource": "Lire sur {source}",
+    "items": {
+      "sede-confirmada": {
+        "tag": "Organisation",
+        "title": "Ciudad Cultural, confirmée comme siège de l'édition 2026",
+        "excerpt": "La 17ᵉ édition d'ExpoJuy se tiendra du 9 au 12 octobre, consolidant le nouveau format de quatre jours avec rencontres d'affaires le matin et expo l'après-midi."
+      },
+      "lanzamiento-oficial": {
+        "tag": "Corridor Bioocéanique",
+        "title": "Lancement officiel : le cap est mis sur le commerce international",
+        "excerpt": "L'organisation a présenté l'édition 2026 avec un axe sur le Corridor Bioocéanique du Capricorne, avec des délégations attendues du Chili, du Paraguay et du Brésil."
+      },
+      "sadir-convocatoria": {
+        "tag": "Appel à participation",
+        "title": "Le Gouverneur a appelé les entreprises jujuyennes à participer",
+        "excerpt": "Carlos Sadir a souligné le profil commercial de cette édition et a appelé les entreprises de la province à participer aux rencontres d'affaires internationales."
+      },
+      "sitio-mapa": {
+        "tag": "Site officiel",
+        "title": "Le site ajoute un plan interactif de tout le site",
+        "excerpt": "Vous pouvez désormais parcourir Ciudad Cultural stand par stand depuis la section Plan, avec plus de 200 espaces localisés et filtrables par secteur."
+      }
+    }
+  },
+  "VisitorAccess": {
+    "AccessForm": {
+      "checkingSession": "Vérification de votre session…",
+      "tabSignup": "Créer un compte",
+      "tabSignin": "J'ai déjà un compte",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "submitLoading": "Un instant...",
+      "submitSignin": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "tabForgot": "Récupérer le mot de passe",
+      "forgotDescription": "Entrez votre e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "sendRecoveryEmail": "Envoyer le lien de récupération",
+      "recoverySuccess": "Nous vous avons envoyé un e-mail avec les instructions pour réinitialiser votre mot de passe.",
+      "backToSignin": "Retour à la connexion",
+      "signOut": "Se déconnecter",
+      "sessionActive": "Session ouverte en tant que <strong>{email}</strong>.",
+      "genericError": "Impossible de terminer l'opération. Réessayez.",
+      "signOutError": "Impossible de fermer la session. Réessayez.",
+      "footerNote": "Ceci crée votre compte visiteur. L'achat du billet n'est pas encore disponible — il sera activé à la prochaine étape."
+    },
+    "AdmissionTicket": {
+      "paidNotice": "Votre compte visiteur est déjà créé. L'entrée de cette édition est payante — le QR est émis après le paiement du billet, pas encore disponible.",
+      "freeNotice": "Entrée gratuite — présentez ce QR à l'accès.",
+      "admitOne": "Billet",
+      "brand": "ExpoJuy 2026",
+      "month": "Oct",
+      "venue": "Ciudad Cultural · Jujuy",
+      "dateRangeLabel": "9 au 12 octobre 2026",
+      "scanLabel": "Scan à l'entrée",
+      "pendingLabel": "Billet en attente",
+      "loadingCode": "Génération de votre code d'accès…",
+      "codeError": "Impossible de générer votre code d'accès. Rechargez la page ou réessayez dans quelques minutes."
+    }
+  }
+}

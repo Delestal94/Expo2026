@@ -1,15 +1,38 @@
-import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js";
+import { GoTrueClient, type Session } from "@supabase/auth-js";
 import { env } from "@/lib/config/env";
 import type { AuthProvider, AuthSession } from "@/lib/ports";
 
-function getClient(): SupabaseClient {
+/**
+ * `@supabase/auth-js` en vez de `@supabase/supabase-js` completo (issue
+ * #69): el meta-paquete arrastra `realtime-js` (con un polyfill de Buffer
+ * de Node) más `postgrest-js`, `storage-js` y `functions-js`, ninguno de
+ * los cuales se usa acá — solo `.auth.*`. `auth-js` expone el mismo
+ * `GoTrueClient` que `supabase-js` usa internamente para `.auth`.
+ *
+ * El `storageKey` se arma exactamente como lo hace `supabase-js`
+ * (`sb-<primer-segmento-del-hostname>-auth-token`) a propósito: si se
+ * usara un storageKey distinto, cualquier sesión que un visitante ya
+ * tuviera guardada en `localStorage` de una visita anterior quedaría
+ * huérfana y lo desloguearía sin aviso.
+ */
+function getClient(): GoTrueClient {
   if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     throw new Error(
       "Faltan NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
         "En Vercel las inyecta la integración de Supabase; en local, copialas a .env.local.",
     );
   }
-  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+  const projectRef = new URL(env.NEXT_PUBLIC_SUPABASE_URL).hostname.split(".")[0];
+
+  return new GoTrueClient({
+    url: `${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1`,
+    headers: { apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY },
+    storageKey: `sb-${projectRef}-auth-token`,
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: typeof window !== "undefined",
+  });
 }
 
 function toAuthSession(session: Session): AuthSession {
@@ -25,7 +48,7 @@ function toAuthSession(session: Session): AuthSession {
 /** Adaptador real del puerto AuthProvider sobre Supabase Auth (ver ADR-0002). */
 export class SupabaseAuthProvider implements AuthProvider {
   async signUp(email: string, password: string): Promise<AuthSession> {
-    const { data, error } = await getClient().auth.signUp({ email, password });
+    const { data, error } = await getClient().signUp({ email, password });
     if (error) throw error;
     if (!data.session) {
       throw new Error(
@@ -36,24 +59,24 @@ export class SupabaseAuthProvider implements AuthProvider {
   }
 
   async signIn(email: string, password: string): Promise<AuthSession> {
-    const { data, error } = await getClient().auth.signInWithPassword({ email, password });
+    const { data, error } = await getClient().signInWithPassword({ email, password });
     if (error) throw error;
     return toAuthSession(data.session);
   }
 
   async signOut(): Promise<void> {
-    const { error } = await getClient().auth.signOut();
+    const { error } = await getClient().signOut();
     if (error) throw error;
   }
 
   async getSession(): Promise<AuthSession | null> {
-    const { data, error } = await getClient().auth.getSession();
+    const { data, error } = await getClient().getSession();
     if (error) throw error;
     return data.session ? toAuthSession(data.session) : null;
   }
 
   async resetPassword(email: string): Promise<void> {
-    const { error } = await getClient().auth.resetPasswordForEmail(email);
+    const { error } = await getClient().resetPasswordForEmail(email);
     if (error) throw error;
   }
 }

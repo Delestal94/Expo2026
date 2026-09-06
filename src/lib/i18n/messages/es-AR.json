@@ -22,6 +22,7 @@
     "standHint": "Los stands se asignan por la convocatoria oficial de la Cámara, no desde este sitio.",
     "emptyTitle": "Recorré el plano",
     "emptyHint": "Pasá el mouse o tocá cualquier stand para ver su código, tipo y superficie.",
+    "viewersOnline": "{count} personas viendo el mapa ahora",
     "filter": {
       "all": "Todos ({count})"
     },
@@ -111,6 +112,10 @@
       "hours": "hs",
       "minutes": "min",
       "seconds": "seg"
+    },
+    "ThemeToggle": {
+      "switchToLight": "Cambiar a tema claro",
+      "switchToDark": "Cambiar a tema oscuro"
     },
     "SocialLinks": {
       "instagram": "Instagram de ExpoJuy",
@@ -364,7 +369,9 @@
       "venue": "Ciudad Cultural · Jujuy",
       "dateRangeLabel": "9 al 12 de octubre de 2026",
       "scanLabel": "Escaneo en acceso",
-      "pendingLabel": "Entrada pendiente"
+      "pendingLabel": "Entrada pendiente",
+      "loadingCode": "Generando tu código de acceso…",
+      "codeError": "No pudimos generar tu código de acceso. Recargá la página o probá de nuevo en unos minutos."
     }
   }
 }

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { EJE_FILTERS, EXHIBITORS, type Exhibitor } from "./exhibitors-data";
+import { EJE_FILTERS, EXHIBITORS, textSafeColor, type Exhibitor } from "./exhibitors-data";
 import { ExhibitorCard } from "./exhibitor-card";
 import { usePortalContext } from "./portal-entrance";
 
@@ -46,7 +46,7 @@ function EmptyDirectory({
         {activeEje ? (
           <>
             Ninguna veta de{" "}
-            <span style={{ color: activeEje.color }}>{activeEje.label}</span> coincide con
+            <span style={{ color: textSafeColor(activeEje.color) }}>{activeEje.label}</span> coincide con
             &ldquo;{query}&rdquo;.
           </>
         ) : (
@@ -141,7 +141,7 @@ export function Directory() {
                 className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100"
                 style={
                   isActive
-                    ? { backgroundColor: eje.color, borderColor: eje.color, color: "var(--color-ink)" }
+                    ? { backgroundColor: textSafeColor(eje.color), borderColor: eje.color, color: "var(--color-ink)" }
                     : { borderColor: "var(--color-line)", color: "var(--color-paper-dim)" }
                 }
               >

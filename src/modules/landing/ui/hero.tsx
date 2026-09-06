@@ -7,6 +7,8 @@ import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { StrataCanvas } from "./strata-canvas";
+import { ThemeToggle } from "./theme-toggle";
+import { Wordmark } from "./wordmark";
 
 export function Hero() {
   const t = useTranslations("Landing.Hero");
@@ -78,21 +80,26 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink"
       />
 
-      {/* Navegación superior */}
-      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]">
+      {/* flex-col en mobile: con 5 idiomas en el selector, forzar todo en una
+          sola fila hacía que el texto del eyebrow (que sí envuelve a varias
+          líneas en pantallas angostas) quedara centrado verticalmente contra
+          "17ª edición" + selector, superponiéndose. Cada bloque ocupa su
+          propia fila hasta sm, donde ya entran cómodos uno al lado del otro. */}
+      <nav className="relative z-10 flex flex-col gap-3 font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards] sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Image
             src="/images/logos/expojuy-mark.svg"
             alt=""
             width={20}
             height={28}
-            className="h-7 w-auto"
+            className="h-7 w-auto shrink-0"
           />
           <span>{t("eyebrow")}</span>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="hidden sm:inline">{t("edition")}</span>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+          <span className="shrink-0">{t("edition")}</span>
           <LanguageSwitcher />
+          <ThemeToggle />
         </div>
       </nav>
 
@@ -110,14 +117,7 @@ export function Hero() {
           {t("tagline")}
         </span>
         <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
-          <Image
-            src="/images/logos/expojuy-wordmark-dark.svg"
-            alt={t("titleAlt")}
-            width={1000}
-            height={305}
-            priority
-            className="h-auto w-full max-w-205 drop-shadow-[0_2px_12px_rgba(7,11,25,0.8)]"
-          />
+          <Wordmark alt={t("titleAlt")} />
         </h1>
         <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}

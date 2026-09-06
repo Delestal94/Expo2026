@@ -1,30 +1,12 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
+import { THEME_INIT_SCRIPT } from "@/lib/ui/theme";
 import "@/app/globals.css";
-
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  weight: ["500", "700", "900"],
-  variable: "--font-unbounded",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-manrope",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-jetbrains-mono",
-});
 
 /** Formato Open Graph (guion bajo) por idioma — no es el mismo string que el locale de next-intl. */
 const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
@@ -32,6 +14,7 @@ const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
   en: "en_US",
   pt: "pt_BR",
   zh: "zh_CN",
+  fr: "fr_FR",
 };
 
 export function generateStaticParams() {
@@ -82,8 +65,18 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
+      {/* Script inline plano, no next/script: "beforeInteractive" de
+          next/script pasa por el runtime de hidratación de Next (llega a
+          ejecutarse en paralelo con React, no antes) — no alcanza a poner
+          data-theme en <html> antes de que el lazy initializer de
+          useState de componentes como Wordmark lea el atributo, y esos
+          arrancan en "dark" igual para cualquiera que haya elegido claro.
+          Un <script> común en <head> sí bloquea el parseo del HTML y
+          corre antes de que exista una sola línea de React. */}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="font-body antialiased overflow-x-clip">
         <NextIntlClientProvider>
           {children}

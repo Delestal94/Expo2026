@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+/* ─── Fuentes oficiales ExpoJuy 2026 — familia Ambit ─────────────────────── */
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Azul/negro obsidiana profundo (midnight blue/black) con alto contraste para resaltar los acentos de marca */
   --color-ink: #070b19;
@@ -15,10 +48,75 @@
   --color-lavender: #c4b5fd;
   --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
+  /* Fondo de card, un tono más claro que --color-ink — antes repetido como
+     literal `bg-[#121022]` en 7 lugares de 6 módulos (issue #84). */
+  --color-surface: #121022;
+  /* --color-violet mide ~3.3:1 contra --color-ink como texto/fondo sólido a
+     tamaños chicos — no llega al 4.5:1 de WCAG AA (issue #35). Esta variante
+     más clara conserva el matiz de marca pero solo se usa donde el violeta
+     hace de texto o de fondo-con-texto-oscuro encima; el violeta original
+     se mantiene para bordes, glows y otros usos decorativos.
+     Lo mismo para cyan/magenta/lavender: en tema oscuro el color base ya
+     tiene contraste de sobra como texto, así que el valor "-text" es
+     idéntico al base acá — solo diverge bajo [data-theme="light"], donde
+     un violeta/cyan/magenta/lavender vívido sobre fondo claro no pasa
+     4.5:1 y hace falta una versión más oscura. */
+  --color-violet-text: #a78bfa;
+  --color-cyan-text: #2de3d6;
+  --color-magenta-text: #d946ef;
+  --color-lavender-text: #c4b5fd;
 
-  --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* Versiones que NUNCA cambian de valor entre temas — a diferencia de
+     --color-ink/--color-paper (que invierten valores para que bg-ink y
+     text-paper sigan significando "fondo/texto de página" en los dos
+     temas), estas dos son para el puñado de lugares que necesitan
+     específicamente "el tono oscuro de marca" o "el tono claro de marca"
+     sin importar el tema — ej. los chips de stats de About, donde ya se
+     eligió a mano cuál de los dos pasa contraste contra cada color vívido
+     de fondo (que tampoco cambia entre temas). */
+  --color-ink-fixed: #0d0b2e;
+  --color-paper-fixed: #f5f1e8;
+
+  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
+     roles tipográficos del sitio: display, body y mono. */
+  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Tema claro (issue de toggle manual, sin seguir prefers-color-scheme del
+ * SO a pedido explícito). Activado agregando data-theme="light" al <html>
+ * (ver theme-toggle.tsx) — no hay bloque para "dark" porque :root ya ES
+ * el tema oscuro por default.
+ *
+ * --color-ink y --color-paper INVIERTEN VALORES en vez de reasignar roles:
+ * en oscuro, ink=fondo/paper=texto; en claro, paper pasa a ser el valor
+ * oscuro y ink el claro. Como bg-ink+text-paper (fondo de página) y
+ * bg-paper+text-ink (chips "invertidos": pestaña activa, botón sólido)
+ * son los dos únicos patrones que usa el sitio con estos tokens, invertir
+ * el VALOR en vez de reescribir cada uso mantiene ambos patrones
+ * coherentes en los dos temas sin tocar los ~280 lugares que ya usan
+ * bg-ink/text-paper/bg-paper/text-ink.
+ *
+ * --color-accent (y los "-text" de cyan/violet/magenta/lavender) sí bajan
+ * de brillo: un cyan neón que se lee perfecto sobre navy da ~1.4:1 sobre
+ * un fondo claro — casi invisible. Los tonos de acento "vívidos" (fills,
+ * bordes, glows, tints de badges) se mantienen sin cambios: ahí no hace
+ * falta el mismo contraste que en texto plano.
+ */
+:root[data-theme="light"] {
+  --color-ink: #f5f1e8;
+  --color-paper: #0d0b2e;
+  --color-paper-dim: #6b6355;
+  --color-line: rgba(13, 11, 46, 0.14);
+  --color-surface: #fbf9f4;
+  --color-accent: #0f766e;
+  --color-cyan-text: #0f766e;
+  --color-violet-text: #6d28d9;
+  --color-magenta-text: #86198f;
+  --color-lavender-text: #4338ca;
+  color-scheme: light;
 }
 
 html {
@@ -152,5 +250,58 @@ body {
   .strata-flow-bar {
     animation: none;
     background-position: 0% 0;
+  }
+}
+
+/* La galería se comporta como una sucesión de momentos, no como una pared
+   inmóvil: cada toma deriva apenas sobre su encuadre y recibe un reflejo de
+   luz de marca. Ambas animaciones se desactivan con reducir movimiento. */
+@keyframes gallery-drift {
+  from {
+    transform: scale(1.04) translate3d(-1.5%, -0.75%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(1.5%, 0.75%, 0);
+  }
+}
+
+@keyframes gallery-sheen {
+  0%,
+  58% {
+    transform: translateX(-145%) skewX(-18deg);
+    opacity: 0;
+  }
+  68% {
+    opacity: 0.48;
+  }
+  82%,
+  100% {
+    transform: translateX(265%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+/* Entrada de una foto nueva cuando una celda del mosaico rota su contenido:
+   crossfade con un leve zoom-in, no un corte seco. */
+@keyframes gallery-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Las tarjetas de Ejes necesitan vida sin depender del hover: el número de
+   fondo respira de forma sutil y continua. */
+@keyframes ejes-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
   }
 }

@@ -22,6 +22,7 @@
     "standHint": "Os estandes são atribuídos pela convocatória oficial da Câmara, não a partir deste site.",
     "emptyTitle": "Explore o mapa",
     "emptyHint": "Passe o mouse ou toque em qualquer estande para ver seu código, tipo e área.",
+    "viewersOnline": "{count} pessoas vendo o mapa agora",
     "filter": {
       "all": "Todos ({count})"
     },
@@ -111,6 +112,10 @@
       "hours": "h",
       "minutes": "min",
       "seconds": "seg"
+    },
+    "ThemeToggle": {
+      "switchToLight": "Mudar para tema claro",
+      "switchToDark": "Mudar para tema escuro"
     },
     "SocialLinks": {
       "instagram": "Instagram da ExpoJuy",
@@ -364,7 +369,9 @@
       "venue": "Ciudad Cultural · Jujuy",
       "dateRangeLabel": "9 a 12 de outubro de 2026",
       "scanLabel": "Leitura na entrada",
-      "pendingLabel": "Entrada pendente"
+      "pendingLabel": "Entrada pendente",
+      "loadingCode": "Gerando seu código de acesso…",
+      "codeError": "Não conseguimos gerar seu código de acesso. Recarregue a página ou tente novamente em alguns minutos."
     }
   }
 }

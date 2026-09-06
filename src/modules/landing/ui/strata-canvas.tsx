@@ -1,6 +1,26 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getCurrentTheme, THEME_CHANGE_EVENT, type Theme } from "@/lib/ui/theme";
+
+// Mismos tonos que --color-ink en cada tema (ver globals.css) — el canvas
+// no puede leer variables CSS directamente en fillStyle, así que se
+// duplican acá.
+const BG_FILL: Record<Theme, string> = {
+  dark: "#0b0a12",
+  light: "#f5f1e8",
+};
+
+// "screen" aclara — funciona porque las bandas son más claras que el
+// fondo oscuro. Sobre un fondo casi blanco, screen contra un color
+// licúa casi todo a blanco (screen con blanco da blanco): las bandas
+// prácticamente desaparecían en tema claro. "multiply" oscurece en vez
+// de aclarar, así que sobre un fondo claro las bandas siguen leyéndose
+// como cinta de color en vez de casi desaparecer.
+const BLEND_MODE: Record<Theme, string> = {
+  dark: "screen",
+  light: "multiply",
+};
 
 interface Band {
   baseY: number;
@@ -36,7 +56,7 @@ function createBands(height: number): Band[] {
       phase: 0.2,
       width: 44,
       color: "#2de3d6",
-      glow: 24,
+      glow: 18,
       divergenceDir: -1.4,
     },
     {
@@ -47,7 +67,7 @@ function createBands(height: number): Band[] {
       phase: 1.8,
       width: 40,
       color: "#7c4dff",
-      glow: 22,
+      glow: 18,
       divergenceDir: -0.7,
     },
     {
@@ -58,7 +78,7 @@ function createBands(height: number): Band[] {
       phase: 3.4,
       width: 38,
       color: "#b83fe0",
-      glow: 20,
+      glow: 18,
       divergenceDir: 0.7,
     },
     {
@@ -115,6 +135,28 @@ export function StrataCanvas() {
     let particles = createParticles(45, canvas.clientWidth, canvas.clientHeight);
     let frame = 0;
     let raf = 0;
+    let lastDraw = 0;
+    let bgFill = BG_FILL[getCurrentTheme()];
+
+    function applyBlendMode(theme: Theme) {
+      if (canvas) canvas.style.mixBlendMode = BLEND_MODE[theme];
+    }
+    applyBlendMode(getCurrentTheme());
+
+    function handleThemeChange(event: Event) {
+      const theme = (event as CustomEvent<Theme>).detail ?? getCurrentTheme();
+      bgFill = BG_FILL[theme];
+      applyBlendMode(theme);
+      if (prefersReducedMotion) draw(lastDraw);
+    }
+    window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
+
+    // El desplazamiento de las bandas es tan lento (speed ~0.0002 rad/ms)
+    // que redibujar a 60fps es imperceptible frente a 30fps — pero cuesta
+    // el doble de tiempo de main thread. shadowBlur es, de por sí, una de
+    // las operaciones más caras de Canvas2D; a la mitad de los frames, la
+    // mitad del costo (issues #36 y #80: TBT 940ms/1480ms medidos a 60fps).
+    const FRAME_INTERVAL_MS = 1000 / 30;
 
     let mouseTargetY = 0;
     let mouseCurrentY = 0;
@@ -136,11 +178,18 @@ export function StrataCanvas() {
 
     function draw(time: number) {
       if (!canvas || !ctx) return;
+
+      if (time - lastDraw < FRAME_INTERVAL_MS) {
+        if (!prefersReducedMotion) frame = requestAnimationFrame(draw);
+        return;
+      }
+      lastDraw = time;
+
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#07060d";
+      ctx.fillStyle = bgFill;
       ctx.fillRect(0, 0, w, h);
 
       mouseCurrentY += (mouseTargetY - mouseCurrentY) * 0.05;
@@ -218,26 +267,16 @@ export function StrataCanvas() {
       }
     }
 
-    function handleVisibilityChange() {
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-        cancelAnimationFrame(frame);
-      } else if (!prefersReducedMotion) {
-        raf = requestAnimationFrame(draw);
-      }
-    }
-
     resize();
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     if (prefersReducedMotion) {
       draw(0);
       return () => {
         window.removeEventListener("resize", resize);
         window.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
       };
     }
 
@@ -254,7 +293,7 @@ export function StrataCanvas() {
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
       observer.disconnect();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
@@ -265,9 +304,9 @@ export function StrataCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 h-full w-full mix-blend-screen transition-opacity duration-300 motion-reduce:transition-none will-change-transform"
+      className="pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-300 motion-reduce:transition-none will-change-transform"
       style={{
-        opacity: "var(--strata-canvas-opacity, 0.6)",
+        opacity: "var(--strata-canvas-opacity, 0.7)",
       }}
     />
   );

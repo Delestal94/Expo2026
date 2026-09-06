@@ -22,6 +22,7 @@
     "standHint": "Stands are assigned through the Chamber's official call for exhibitors, not from this site.",
     "emptyTitle": "Explore the plan",
     "emptyHint": "Hover or tap any stand to see its code, type and floor area.",
+    "viewersOnline": "{count} people viewing the map right now",
     "filter": {
       "all": "All ({count})"
     },
@@ -111,6 +112,10 @@
       "hours": "hrs",
       "minutes": "min",
       "seconds": "sec"
+    },
+    "ThemeToggle": {
+      "switchToLight": "Switch to light theme",
+      "switchToDark": "Switch to dark theme"
     },
     "SocialLinks": {
       "instagram": "ExpoJuy on Instagram",
@@ -364,7 +369,9 @@
       "venue": "Ciudad Cultural · Jujuy",
       "dateRangeLabel": "October 9–12, 2026",
       "scanLabel": "Entrance scan",
-      "pendingLabel": "Ticket pending"
+      "pendingLabel": "Ticket pending",
+      "loadingCode": "Generating your access code…",
+      "codeError": "We couldn't generate your access code. Reload the page or try again in a few minutes."
     }
   }
 }

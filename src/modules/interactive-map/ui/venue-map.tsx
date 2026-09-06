@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CATEGORIES, VENUE_PLAN, categoryMeta, polygonPoints } from "./venue-plan";
 import type { Category, VenueZone } from "./venue-plan";
+import { useMapPresence } from "./use-map-presence";
 
 const VIEW_W = 1200;
 const VIEW_H = 865;
@@ -118,6 +119,7 @@ export function VenueMap() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [filter, setFilter] = useState<Category | null>(null);
+  const viewerCount = useMapPresence();
   const [isDrawn, setIsDrawn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -761,6 +763,12 @@ export function VenueMap() {
                 );
               })}
             </div>
+            {viewerCount !== null && viewerCount > 1 && (
+              <p className="flex items-center gap-2 font-mono text-xs text-paper-dim shrink-0">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent motion-safe:animate-pulse" />
+                {t("viewersOnline", { count: viewerCount })}
+              </p>
+            )}
           </div>
 
           {/* Contenedor del Mapa (Captura 2: Borde redondeado, canvas oscuro, adaptado a VH) */}

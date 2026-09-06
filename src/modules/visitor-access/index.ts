@@ -5,3 +5,4 @@
  * lo que otro módulo necesite se exporta explícitamente desde aquí.
  */
 export { AccessForm } from "./ui/access-form";
+export { signTicketCode } from "./ticket-code";

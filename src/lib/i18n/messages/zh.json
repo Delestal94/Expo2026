@@ -22,6 +22,7 @@
     "standHint": "展位由商会官方招募流程分配，本网站不负责分配。",
     "emptyTitle": "浏览平面图",
     "emptyHint": "将鼠标悬停或点击任意展位，查看其编号、类型和面积。",
+    "viewersOnline": "{count} 人正在查看地图",
     "filter": {
       "all": "全部（{count}）"
     },
@@ -111,6 +112,10 @@
       "hours": "时",
       "minutes": "分",
       "seconds": "秒"
+    },
+    "ThemeToggle": {
+      "switchToLight": "切换到浅色主题",
+      "switchToDark": "切换到深色主题"
     },
     "SocialLinks": {
       "instagram": "ExpoJuy 的 Instagram",
@@ -364,7 +369,9 @@
       "venue": "文化城 · 胡胡伊",
       "dateRangeLabel": "2026年10月9日至12日",
       "scanLabel": "入口核验",
-      "pendingLabel": "待出票"
+      "pendingLabel": "待出票",
+      "loadingCode": "正在生成您的入场码…",
+      "codeError": "无法生成您的入场码，请刷新页面或稍后再试。"
     }
   }
 }

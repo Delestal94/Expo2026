@@ -150,7 +150,15 @@ export function ProgramSection() {
               }`}
             >
               {tDays(day.dayKey)} {day.dayNumber}
-              {day.highlight && <span className="ml-1.5 text-accent">· {t(`highlight.${day.highlight}`)}</span>}
+              {day.highlight && (
+                // El tab activo pasa a fondo claro (bg-paper): text-accent
+                // (cyan) ahí da ~1.4:1 de contraste, muy por debajo de las
+                // 4.5:1 de WCAG AA. Encontrado con axe-core al verificar el
+                // fix del issue #35 — no estaba en la lista original.
+                <span className={`ml-1.5 ${isActive ? "text-ink/70" : "text-accent"}`}>
+                  · {t(`highlight.${day.highlight}`)}
+                </span>
+              )}
             </button>
           );
         })}
@@ -181,7 +189,7 @@ export function ProgramSection() {
               aria-hidden="true"
               className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan/10 blur-2xl transition-opacity duration-500 group-hover:opacity-30"
             />
-            <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
+            <span className="font-mono text-xs tracking-[0.15em] text-cyan-text uppercase">
               {t("morningLabel")}
             </span>
             <h3 className="mt-2 font-display text-lg text-paper sm:text-xl">{active.morningTitle}</h3>
@@ -210,7 +218,7 @@ export function ProgramSection() {
               aria-hidden="true"
               className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-lavender/10 blur-2xl transition-opacity duration-500 group-hover:opacity-30"
             />
-            <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
+            <span className="font-mono text-xs tracking-[0.15em] text-lavender-text uppercase">
               {t("afternoonLabel")}
             </span>
             <h3 className="mt-2 font-display text-lg text-paper sm:text-xl">{active.afternoonTitle}</h3>

@@ -30,7 +30,7 @@ function errorMessageOf(error: unknown, fallback: string): string {
  */
 function AccessFormSkeleton({ label }: { label: string }) {
   return (
-    <div role="status" className="rounded-2xl border border-line bg-ink/70 p-6">
+    <div role="status" className="rounded-2xl border border-line bg-surface p-6">
       <span className="sr-only">{label}</span>
       <div className="flex gap-2 rounded-full border border-line p-1" aria-hidden="true">
         <div className="skeleton-strata h-9 flex-1 rounded-full" />
@@ -132,7 +132,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
 
   if (session) {
     return (
-      <div className="rounded-2xl border border-line bg-ink/70 p-6">
+      <div className="rounded-2xl border border-line bg-surface p-6">
         <p className="text-paper">
           {t.rich("sessionActive", {
             email: session.user.email,
@@ -158,7 +158,7 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-ink/70 p-6">
+    <div className="rounded-2xl border border-line bg-surface p-6">
       {mode !== "forgot" ? (
         <div className="flex gap-2 rounded-full border border-line p-1" role="tablist">
           <button

@@ -111,10 +111,19 @@ describe("AccessForm", () => {
   });
 
   it("emite el QR de ingreso cuando el modo de acceso es gratuito", async () => {
+    // El código ya no se calcula en el cliente (issue #57) — lo devuelve
+    // /api/ticket-code, así que acá se mockea fetch en vez de asumir un
+    // valor calculado a mano a partir del id de usuario.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify({ code: "EXPOJUY26-ABCDEF12" }), { status: 200 })),
+    );
+
     mockProvider.getSession.mockResolvedValue(SESSION);
     renderAccessForm("free");
 
-    expect(await screen.findByText("EXPOJUY26-USER1")).toBeInTheDocument();
+    expect(await screen.findByText("EXPOJUY26-ABCDEF12")).toBeInTheDocument();
+    vi.unstubAllGlobals();
   });
 
   it("permite solicitar la recuperación de contraseña", async () => {

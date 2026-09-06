@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
-import type { Exhibitor } from "./exhibitors-data";
+import { textSafeColor, type Exhibitor } from "./exhibitors-data";
 
 export function ExhibitorCard({
   exhibitor,
@@ -56,7 +56,7 @@ export function ExhibitorCard({
         className="w-fit rounded-full px-3 py-1 font-mono text-[0.65rem] tracking-[0.1em] uppercase transition-[background-color] duration-300 group-hover:bg-[color-mix(in_srgb,var(--card-color)_32%,transparent)]"
         style={{
           backgroundColor: `color-mix(in srgb, ${exhibitor.color} 20%, transparent)`,
-          color: exhibitor.color,
+          color: textSafeColor(exhibitor.color),
         }}
       >
         {t(`ejes.${exhibitor.eje}`)}
