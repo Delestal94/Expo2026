@@ -5,10 +5,9 @@ import { EntranceVein } from "@/lib/ui/entrance-vein";
 
 interface PortalContextValue {
   inView: boolean;
-  isMobile: boolean;
 }
 
-const PortalContext = createContext<PortalContextValue>({ inView: true, isMobile: false });
+const PortalContext = createContext<PortalContextValue>({ inView: true });
 
 export function usePortalContext() {
   return useContext(PortalContext);
@@ -33,20 +32,7 @@ export function PortalEntrance({
   children: ReactNode;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-  });
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.innerWidth < 640;
-  });
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -56,7 +42,7 @@ export function PortalEntrance({
       "(prefers-reduced-motion: reduce)",
     )?.matches;
 
-    if (prefersReducedMotion || typeof window === "undefined") {
+    if (prefersReducedMotion) {
       return;
     }
 
@@ -104,7 +90,7 @@ export function PortalEntrance({
   }, []);
 
   return (
-    <PortalContext.Provider value={{ inView, isMobile }}>
+    <PortalContext.Provider value={{ inView }}>
       <section
         id="expositores"
         ref={sectionRef}

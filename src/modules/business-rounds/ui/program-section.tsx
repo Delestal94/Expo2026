@@ -19,20 +19,7 @@ export function ProgramSection() {
   const active = PROGRAM_DAYS.find((day) => day.date === activeDate) ?? PROGRAM_DAYS[0]!;
 
   const sectionRef = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-  });
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.innerWidth < 640;
-  });
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -42,7 +29,7 @@ export function ProgramSection() {
       "(prefers-reduced-motion: reduce)",
     )?.matches;
 
-    if (prefersReducedMotion || typeof window === "undefined") {
+    if (prefersReducedMotion) {
       return;
     }
 
@@ -179,9 +166,7 @@ export function ProgramSection() {
             style={{
               transform: inView
                 ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"
-                : isMobile
-                ? "translate3d(0, 50px, 0) scale(0.93)"
-                : "translate3d(-55px, 45px, 0) rotate(-2deg) scale(0.92)",
+                : "translate3d(-35px, 40px, 0) rotate(-1.5deg) scale(0.94)",
               opacity: inView ? 1 : 0,
               transitionDelay: inView ? "160ms" : "0ms",
             }}
@@ -210,9 +195,7 @@ export function ProgramSection() {
             style={{
               transform: inView
                 ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"
-                : isMobile
-                ? "translate3d(0, 50px, 0) scale(0.93)"
-                : "translate3d(55px, 45px, 0) rotate(2deg) scale(0.92)",
+                : "translate3d(35px, 40px, 0) rotate(1.5deg) scale(0.94)",
               opacity: inView ? 1 : 0,
               transitionDelay: inView ? "240ms" : "0ms",
             }}

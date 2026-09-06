@@ -70,7 +70,7 @@ export function Directory() {
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
 
-  const { inView, isMobile } = usePortalContext();
+  const { inView } = usePortalContext();
 
   const selectFilter = (next: Exhibitor["eje"] | "todos") => {
     setFilter(next);
@@ -173,7 +173,6 @@ export function Directory() {
               exhibitor={exhibitor}
               index={i}
               inView={inView}
-              isMobile={isMobile}
             />
           ))}
         </div>

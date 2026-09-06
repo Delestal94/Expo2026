@@ -6,13 +6,11 @@ export function ExhibitorCard({
   exhibitor,
   index = 0,
   inView = true,
-  isMobile = false,
   style,
 }: {
   exhibitor: Exhibitor;
   index?: number;
   inView?: boolean;
-  isMobile?: boolean;
   style?: CSSProperties;
 }) {
   const slot = index % 4;
@@ -20,15 +18,11 @@ export function ExhibitorCard({
 
   const initialTransform =
     slot === 0
-      ? isMobile
-        ? "translate3d(0, 45px, 0) scale(0.93)"
-        : "translate3d(-45px, 40px, 0) rotate(-1.8deg) scale(0.92)"
+      ? "translate3d(-25px, 40px, 0) rotate(-1.5deg) scale(0.93)"
       : slot === 1
-      ? "translate3d(0, 50px, 0) scale(0.92)"
+      ? "translate3d(0, 45px, 0) scale(0.93)"
       : slot === 2
-      ? isMobile
-        ? "translate3d(0, 45px, 0) scale(0.93)"
-        : "translate3d(45px, 40px, 0) rotate(1.8deg) scale(0.92)"
+      ? "translate3d(25px, 40px, 0) rotate(1.5deg) scale(0.93)"
       : "translate3d(0, 40px, 0) scale(0.94)";
 
   const delay = inView ? `${140 + slot * 80}ms` : "0ms";

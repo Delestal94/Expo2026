@@ -3,6 +3,7 @@ import { getFeatureFlags } from "@/lib/config/flags";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { CtaLink } from "./cta-link";
 import { ShareLocationButton } from "./share-location-button";
+import { AccessEntrance } from "./access-entrance";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
 /** Reutilizado por Contacto — un solo número de WhatsApp para todo el sitio. */
@@ -43,134 +44,132 @@ export async function AccessInfo() {
 
       {/* Mismo ritmo de grilla que About/Ejes: 12 columnas a todo el ancho de la sección, sin
           tarjetas angostas flotando en el centro. */}
-      <div className="relative grid gap-y-16 lg:grid-cols-12 lg:gap-x-12">
-        <div className="lg:col-span-7">
-          <div id="llegar" className="scroll-mt-24">
-            <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
-              {tDirections("eyebrow")}
-            </span>
-            <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
-              {tDirections("title")}
-            </h3>
-            <p className="mt-4 max-w-lg text-balance text-sm text-paper-dim">
-              {tDirections.rich("description", {
-                strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
-              })}
-            </p>
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <a
-                href={MAPS_LINK}
-                target="_blank"
-                rel="noopener"
-                className="inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-              >
-                {tDirections("cta")}
-              </a>
-              <ShareLocationButton
-                url={MAPS_LINK}
-                title={tDirections("shareTitle")}
-                text={tDirections("shareText")}
-                label={tDirections("shareLabel")}
-              />
+      <AccessEntrance
+        leftContent={
+          <>
+            <div id="llegar" className="scroll-mt-24">
+              <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
+                {tDirections("eyebrow")}
+              </span>
+              <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
+                {tDirections("title")}
+              </h3>
+              <p className="mt-4 max-w-lg text-balance text-sm text-paper-dim">
+                {tDirections.rich("description", {
+                  strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
+                })}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <a
+                  href={MAPS_LINK}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+                >
+                  {tDirections("cta")}
+                </a>
+                <ShareLocationButton
+                  url={MAPS_LINK}
+                  title={tDirections("shareTitle")}
+                  text={tDirections("shareText")}
+                  label={tDirections("shareLabel")}
+                />
+              </div>
             </div>
-          </div>
 
-          <div id="acceso" className="mt-16 scroll-mt-24">
-            <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
-              {t("eyebrow")}
-            </span>
-            <h2 className="mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
-              {t("title")}
-            </h2>
-            <p className="mt-4 max-w-lg text-paper-dim">
-              {t.rich("description", {
-                code: (chunks) => <span className="font-mono">{chunks}</span>,
-              })}
-            </p>
+            <div id="acceso" className="mt-16 scroll-mt-24">
+              <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+                {t("eyebrow")}
+              </span>
+              <h2 className="mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
+                {t("title")}
+              </h2>
+              <p className="mt-4 max-w-lg text-paper-dim">
+                {t.rich("description", {
+                  code: (chunks) => <span className="font-mono">{chunks}</span>,
+                })}
+              </p>
 
-            {/* Tira de entrada: el tramo sin cargo se destaca con su badge de cortesía en acento magenta */}
-            <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
-              {REFERENCE_PRICING.map((tier) => {
-                const isFree = tier.key === "under5";
-                return (
-                  <div
-                    key={tier.key}
-                    className={`relative flex-1 p-5 text-center ${
-                      isFree ? "bg-accent/10" : "bg-ink/70"
-                    }`}
-                  >
-                    {isFree && (
-                      <span
-                        aria-hidden="true"
-                        className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
-                      >
-                        {t("pricing.freeBadge")}
-                      </span>
-                    )}
+              {/* Tira de entrada: el tramo sin cargo se destaca con su badge de cortesía en acento magenta */}
+              <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
+                {REFERENCE_PRICING.map((tier) => {
+                  const isFree = tier.key === "under5";
+                  return (
                     <div
-                      className={`font-display font-black tabular-nums ${
-                        isFree ? "text-xl text-accent sm:text-2xl" : "text-2xl text-paper sm:text-3xl"
+                      key={tier.key}
+                      className={`relative flex-1 p-5 text-center ${
+                        isFree ? "bg-accent/10" : "bg-ink/70"
                       }`}
                     >
-                      {tier.price}
+                      {isFree && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
+                        >
+                          {t("pricing.freeBadge")}
+                        </span>
+                      )}
+                      <div
+                        className={`font-display font-black tabular-nums ${
+                          isFree ? "text-xl text-accent sm:text-2xl" : "text-2xl text-paper sm:text-3xl"
+                        }`}
+                      >
+                        {tier.price}
+                      </div>
+                      <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
                     </div>
-                    <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-6">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
-                  {t("buyDisabled")}
-                </span>
-                {flags.visitorAccess && (
-                  <CtaLink href="/cuenta" size="sm">
-                    {t("createAccount")}
-                  </CtaLink>
-                )}
+                  );
+                })}
               </div>
-              <p className="mt-2 font-mono text-xs text-paper-dim">
-                {flags.visitorAccess && t("accountNote")}
-                {t("pricingNote")}
-              </p>
+
+              <div className="mt-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper-dim">
+                    {t("buyDisabled")}
+                  </span>
+                  {flags.visitorAccess && (
+                    <CtaLink href="/cuenta" size="sm">
+                      {t("createAccount")}
+                    </CtaLink>
+                  )}
+                </div>
+                <p className="mt-2 font-mono text-xs text-paper-dim">
+                  {flags.visitorAccess && t("accountNote")}
+                  {t("pricingNote")}
+                </p>
+              </div>
+            </div>
+          </>
+        }
+        rightContent={
+          <div className="flex flex-col overflow-hidden rounded-2xl border border-line bg-ink shadow-2xl">
+            <div className="h-80 w-full overflow-hidden bg-ink sm:h-104 lg:h-120">
+              <iframe
+                src={MAPS_EMBED_URL}
+                title={tDirections("mapLabel")}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-full w-full border-0 brightness-[0.88] contrast-[1.08] saturate-[0.85]"
+              />
+            </div>
+
+            <div className="flex flex-1 flex-col justify-center border-t border-line bg-ink/70 p-6 text-left">
+              <h3 className="font-display text-lg font-medium text-paper">
+                {t("providersTitle")}
+              </h3>
+              <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <CtaLink href={PROVIDERS_FORM_URL} size="sm" external>
+                  {t("providersFormCta")}
+                </CtaLink>
+                <CtaLink href={WHATSAPP_URL} variant="outline" size="sm" external>
+                  {t("whatsappCta")}
+                </CtaLink>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
-          {/* Google Maps Embed:
-              Nota técnica: en iframes gratuitos de Google Maps (embed pb=...), Google no expone
-              parámetros para ocultar etiquetas de POI/locales cross-origin (requiere la Google Maps
-              JavaScript API de pago con StyledMapType y styles:[{featureType:'poi',stylers:[{visibility:'off'}]}]).
-              Se aplica una calibración cromática sutil para integrar el mapa al tono dark de la interfaz. */}
-          <div className="h-80 w-full sm:h-104 lg:h-120 overflow-hidden bg-ink">
-            <iframe
-              src={MAPS_EMBED_URL}
-              title={tDirections("mapLabel")}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="h-full w-full border-0 brightness-[0.88] contrast-[1.08] saturate-[0.85]"
-            />
-          </div>
-
-          <div className="flex flex-1 flex-col justify-center border-t border-line bg-ink/70 p-6 text-left">
-            <h3 className="font-display text-lg font-medium text-paper">
-              {t("providersTitle")}
-            </h3>
-            <p className="mt-2 text-sm text-paper-dim">{t("providersDescription")}</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <CtaLink href={PROVIDERS_FORM_URL} size="sm" external>
-                {t("providersFormCta")}
-              </CtaLink>
-              <CtaLink href={WHATSAPP_URL} variant="outline" size="sm" external>
-                {t("whatsappCta")}
-              </CtaLink>
-            </div>
-          </div>
-        </div>
-      </div>
+        }
+      />
     </section>
   );
 }
