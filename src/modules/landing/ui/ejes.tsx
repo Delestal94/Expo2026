@@ -48,6 +48,19 @@ export function Ejes() {
                 className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
                 style={{ backgroundColor: eje.color }}
               />
+              {/* Destello constante sobre el borde superior — sin esto la
+                  tarjeta se ve completamente apagada hasta que alguien la
+                  toca con el mouse. Independiente de la barra de hover de
+                  arriba: no comparte propiedad animada, no hay conflicto. */}
+              <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] overflow-hidden">
+                <span
+                  className="absolute inset-y-0 -left-1/2 w-1/3 motion-safe:animate-[gallery-sheen_7s_ease-in-out_infinite] motion-reduce:hidden"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${eje.color}, transparent)`,
+                    animationDelay: `${i * -1.7}s`,
+                  }}
+                />
+              </span>
               <span
                 aria-hidden="true"
                 // Entra completo dentro de la tarjeta: antes salía por arriba y a
@@ -55,7 +68,16 @@ export function Ejes() {
                 className="pointer-events-none absolute top-2 right-5 font-display text-[5.5rem] leading-none font-bold tracking-tighter opacity-[0.07] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-30 sm:text-[7rem]"
                 style={{ color: eje.color }}
               >
-                {eje.n}
+                {/* La respiración vive en un span interno: multiplica la
+                    opacidad de afuera en vez de competir con ella, así el
+                    hover (que sí anima opacity/translate del padre) sigue
+                    funcionando sin que la animación continua lo pise. */}
+                <span
+                  className="block motion-safe:animate-[ejes-breathe_5s_ease-in-out_infinite] motion-reduce:animate-none"
+                  style={{ animationDelay: `${i * -1.3}s` }}
+                >
+                  {eje.n}
+                </span>
               </span>
               <span className="relative font-mono text-sm text-paper-dim">
                 {eje.n}

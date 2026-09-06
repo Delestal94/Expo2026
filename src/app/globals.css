@@ -172,3 +172,15 @@ body {
     transform: scale(1);
   }
 }
+
+/* Las tarjetas de Ejes necesitan vida sin depender del hover: el número de
+   fondo respira de forma sutil y continua. */
+@keyframes ejes-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
