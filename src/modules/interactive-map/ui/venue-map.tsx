@@ -290,8 +290,7 @@ export function VenueMap() {
       }
 
       const scrolled = -rect.top;
-      const pinnedDistance = totalScroll * 0.92;
-      const rawMapProg = Math.min(Math.max(scrolled / pinnedDistance, 0), 1);
+      const rawMapProg = Math.min(Math.max(scrolled / totalScroll, 0), 1);
       maxMapProg = Math.max(maxMapProg, rawMapProg);
       const mapProg = maxMapProg;
 
@@ -305,7 +304,7 @@ export function VenueMap() {
       });
 
       // Bloqueo interactivo al completar
-      if (maxMapProg >= 0.92) {
+      if (maxMapProg >= 0.98) {
         completed = true;
         setIsDrawn(true);
         applyAssembled(runway);
@@ -762,16 +761,6 @@ export function VenueMap() {
                 );
               })}
             </div>
-
-            {active && (
-              <button
-                type="button"
-                onClick={() => setActiveId(null)}
-                className="cursor-pointer font-mono text-xs text-accent transition hover:underline"
-              >
-                ✕ Limpiar selección
-              </button>
-            )}
           </div>
 
           {/* Contenedor del Mapa (Captura 2: Borde redondeado, canvas oscuro, adaptado a VH) */}
@@ -932,9 +921,9 @@ export function VenueMap() {
                 <button
                   type="button"
                   onClick={() => setActiveId(null)}
-                  className="font-mono text-[0.7rem] text-accent transition hover:underline"
+                  className="cursor-pointer font-mono text-xs text-accent transition hover:underline mr-8 sm:mr-10"
                 >
-                  ✕ Deseleccionar
+                  ✕ Limpiar selección
                 </button>
               )}
             </div>

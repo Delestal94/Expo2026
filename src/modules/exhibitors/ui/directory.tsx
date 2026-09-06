@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { EJE_FILTERS, EXHIBITORS, type Exhibitor } from "./exhibitors-data";
 import { ExhibitorCard } from "./exhibitor-card";
+import { usePortalContext } from "./portal-entrance";
 
 export const INITIAL_VISIBLE_COUNT = 4;
 
@@ -69,6 +70,8 @@ export function Directory() {
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
 
+  const { inView, isMobile } = usePortalContext();
+
   const selectFilter = (next: Exhibitor["eje"] | "todos") => {
     setFilter(next);
     setExpanded(false);
@@ -93,52 +96,60 @@ export function Directory() {
 
   return (
     <div>
-      <label className="block">
-        <span className="sr-only">{t("searchLabel")}</span>
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setExpanded(false);
-          }}
-          placeholder={t("searchPlaceholder")}
-          className="w-full rounded-full border border-line bg-transparent px-5 py-2.5 text-sm text-paper placeholder:text-paper-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        />
-      </label>
+      <div
+        className="transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
+        style={{
+          transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 35px, 0) scale(0.96)",
+          opacity: inView ? 1 : 0,
+        }}
+      >
+        <label className="block">
+          <span className="sr-only">{t("searchLabel")}</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setExpanded(false);
+            }}
+            placeholder={t("searchPlaceholder")}
+            className="w-full rounded-full border border-line bg-transparent px-5 py-2.5 text-sm text-paper placeholder:text-paper-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          />
+        </label>
 
-      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={t("filterGroupLabel")}>
-        <button
-          type="button"
-          onClick={() => selectFilter("todos")}
-          aria-pressed={filter === "todos"}
-          className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100 ${
-            filter === "todos"
-              ? "border-paper bg-paper text-ink"
-              : "border-line text-paper-dim hover:border-paper-dim"
-          }`}
-        >
-          {t("filterAll")}
-        </button>
-        {EJE_FILTERS.map((eje) => {
-          const isActive = filter === eje.id;
-          return (
-            <button
-              key={eje.id}
-              type="button"
-              onClick={() => selectFilter(eje.id)}
-              aria-pressed={isActive}
-              className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100"
-              style={
-                isActive
-                  ? { backgroundColor: eje.color, borderColor: eje.color, color: "var(--color-ink)" }
-                  : { borderColor: "var(--color-line)", color: "var(--color-paper-dim)" }
-              }
-            >
-              {t(`ejes.${eje.id}`)}
-            </button>
-          );
-        })}
+        <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={t("filterGroupLabel")}>
+          <button
+            type="button"
+            onClick={() => selectFilter("todos")}
+            aria-pressed={filter === "todos"}
+            className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100 ${
+              filter === "todos"
+                ? "border-paper bg-paper text-ink"
+                : "border-line text-paper-dim hover:border-paper-dim"
+            }`}
+          >
+            {t("filterAll")}
+          </button>
+          {EJE_FILTERS.map((eje) => {
+            const isActive = filter === eje.id;
+            return (
+              <button
+                key={eje.id}
+                type="button"
+                onClick={() => selectFilter(eje.id)}
+                aria-pressed={isActive}
+                className="rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[color,background-color,border-color,transform] duration-200 active:scale-[0.94] motion-reduce:active:scale-100"
+                style={
+                  isActive
+                    ? { backgroundColor: eje.color, borderColor: eje.color, color: "var(--color-ink)" }
+                    : { borderColor: "var(--color-line)", color: "var(--color-paper-dim)" }
+                }
+              >
+                {t(`ejes.${eje.id}`)}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {matching.length === 0 ? (
@@ -157,7 +168,13 @@ export function Directory() {
       ) : (
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((exhibitor, i) => (
-            <ExhibitorCard key={exhibitor.id} exhibitor={exhibitor} index={i} />
+            <ExhibitorCard
+              key={exhibitor.id}
+              exhibitor={exhibitor}
+              index={i}
+              inView={inView}
+              isMobile={isMobile}
+            />
           ))}
         </div>
       )}
