@@ -7,6 +7,7 @@ const messageLoaders = {
   en: () => import("./messages/en.json"),
   pt: () => import("./messages/pt.json"),
   zh: () => import("./messages/zh.json"),
+  fr: () => import("./messages/fr.json"),
 } as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

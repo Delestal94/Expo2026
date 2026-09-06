@@ -13,6 +13,7 @@ const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
   en: "en_US",
   pt: "pt_BR",
   zh: "zh_CN",
+  fr: "fr_FR",
 };
 
 export function generateStaticParams() {
