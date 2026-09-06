@@ -1,10 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import type { AuthSession } from "@/lib/ports";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
-import { admissionTicketCode } from "../ticket-code";
 
 /** Mismo cuarteto que usa el índice de anclas para la "veta" de cada sección. */
 const STRATUM_COLORS = [
@@ -76,6 +76,36 @@ export function AdmissionTicket({
   admissionMode: "free" | "paid";
 }) {
   const t = useTranslations("VisitorAccess.AdmissionTicket");
+  const [code, setCode] = useState<string | null>(null);
+  const [codeError, setCodeError] = useState(false);
+
+  // El código ya no se calcula en el cliente a partir del id de usuario
+  // (issue #57: era forjable, 8 hex sin firma) — se lo pide firmado a
+  // /api/ticket-code, que primero verifica el access token contra
+  // Supabase antes de firmarlo con un secreto que nunca sale del servidor.
+  useEffect(() => {
+    if (admissionMode !== "free") return;
+    let cancelled = false;
+
+    fetch("/api/ticket-code", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.accessToken}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`ticket-code respondió ${res.status}`);
+        return res.json();
+      })
+      .then((data: { code?: string }) => {
+        if (!cancelled && data.code) setCode(data.code);
+      })
+      .catch(() => {
+        if (!cancelled) setCodeError(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [admissionMode, session.accessToken]);
 
   if (admissionMode === "paid") {
     return (
@@ -88,7 +118,22 @@ export function AdmissionTicket({
     );
   }
 
-  const code = admissionTicketCode(session.user.id);
+  if (codeError) {
+    return (
+      <div role="alert" className="mt-5 rounded-xl border border-dashed border-line bg-ink p-5 text-center">
+        <p className="text-sm text-paper-dim">{t("codeError")}</p>
+      </div>
+    );
+  }
+
+  if (!code) {
+    return (
+      <div className="mt-5 rounded-xl border border-dashed border-line bg-ink p-5 text-center">
+        <p className="text-sm text-paper-dim">{t("loadingCode")}</p>
+      </div>
+    );
+  }
+
   const color = stratumColorFor(code);
 
   return (
