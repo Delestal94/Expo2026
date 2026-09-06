@@ -9,9 +9,15 @@ interface SectionLink {
   color: string;
 }
 
+// "Ejes" tenía su propia entrada acá, pero About y Ejes se fusionaron en
+// una sola sección (id="sobre", con id="ejes" anidado adentro) — dos
+// anclas del nav observando un elemento y su propio padre confundía al
+// IntersectionObserver de acá abajo (el hijo "robaba" el estado activo
+// del padre en cuanto cambiaba de intersección, sin importar cuál se
+// veía más en pantalla), y el tab "Ejes" quedaba pegado como activo
+// aunque se tocara "Sobre". Una sola entrada cubre ambas.
 const SECTIONS: SectionLink[] = [
   { id: "sobre", label: "Sobre el evento", shortLabel: "Sobre", color: "var(--color-cyan)" },
-  { id: "ejes", label: "Ejes", shortLabel: "Ejes", color: "var(--color-violet)" },
   { id: "noticias", label: "Noticias", shortLabel: "Noticias", color: "var(--color-cyan)" },
   { id: "galeria", label: "Galería", shortLabel: "Galería", color: "var(--color-magenta)" },
   { id: "mapa", label: "Mapa", shortLabel: "Mapa", color: "var(--color-lavender)" },
