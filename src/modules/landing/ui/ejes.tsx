@@ -41,7 +41,7 @@ export function Ejes() {
           {EJES.map((eje, i) => (
             <article
               key={eje.n}
-              className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-ink px-8 py-10 transition-colors hover:bg-[#121022] sm:w-auto sm:shrink ${OFFSET[i]}`}
+              className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-ink px-8 py-10 transition-colors hover:bg-surface sm:w-auto sm:shrink ${OFFSET[i]}`}
             >
               {/* Tinte de color permanente, no depende de ninguna animación:
                   sin esto la tarjeta es gris hasta que el mouse la toca. Es

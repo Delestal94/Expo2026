@@ -74,13 +74,18 @@ export function VenueMap() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
-        <div className="overflow-hidden rounded-2xl border border-line bg-[#121022] p-3">
-          <svg
-            viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-            role="img"
-            aria-label={t("svgLabel")}
-            className="h-auto w-full"
-          >
+        <div
+          className="overflow-hidden rounded-2xl border border-line bg-surface p-3"
+          role="group"
+          aria-label={t("svgLabel")}
+        >
+          {/* Antes el <svg> llevaba role="img": eso le dice a un lector de
+              pantalla que es una imagen estática, así que los <g> internos
+              con role="button" quedaban semánticamente "atrapados" adentro
+              de una imagen (violación axe-core nested-interactive, issue
+              #63). El nombre accesible del conjunto ahora vive en este div
+              contenedor; el SVG en sí no necesita rol propio. */}
+          <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="h-auto w-full">
             {VENUE_PLAN.map((zone) => {
               const meta = categoryMeta(zone.category);
               const cx = zone.x + zone.width / 2;
@@ -150,7 +155,7 @@ export function VenueMap() {
           </svg>
         </div>
 
-        <div className="flex flex-col gap-4 rounded-2xl border border-line bg-[#121022] p-6">
+        <div className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6">
           {active ? (
             <>
               <span

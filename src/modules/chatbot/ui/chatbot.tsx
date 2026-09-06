@@ -207,7 +207,7 @@ export function ChatBot() {
           className="fixed bottom-4 right-4 z-50 flex h-[min(600px,calc(100vh-2rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[#0d0b2e]/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:bottom-6 sm:right-6 sm:w-[400px]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[var(--color-line)] bg-[#121022]/90 px-4 py-3 sm:px-5">
+          <div className="flex items-center justify-between border-b border-[var(--color-line)] bg-surface/90 px-4 py-3 sm:px-5">
             <div className="flex items-center gap-3">
               <div
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-cyan)]/40 bg-[var(--color-cyan)]/10 text-base font-medium text-[var(--color-cyan)]"
@@ -276,7 +276,7 @@ export function ChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          <section className="border-t border-[var(--color-line)] bg-[#121022]/80 px-3 py-2 sm:px-4">
+          <section className="border-t border-[var(--color-line)] bg-surface/80 px-3 py-2 sm:px-4">
             <button
               type="button"
               onClick={() => setIsFaqOpen((open) => !open)}
@@ -329,7 +329,7 @@ export function ChatBot() {
           {/* Input & Form */}
           <form
             onSubmit={handleSendMessage}
-            className="border-t border-[var(--color-line)] bg-[#121022]/80 p-3 sm:p-4"
+            className="border-t border-[var(--color-line)] bg-surface/80 p-3 sm:p-4"
           >
             <div className="flex items-center gap-2">
               <input

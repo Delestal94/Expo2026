@@ -50,6 +50,15 @@
   --color-lavender: #c4b5fd;
   --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
+  /* Fondo de card, un tono más claro que --color-ink — antes repetido como
+     literal `bg-[#121022]` en 7 lugares de 6 módulos (issue #84). */
+  --color-surface: #121022;
+  /* --color-violet mide ~3.3:1 contra --color-ink como texto/fondo sólido a
+     tamaños chicos — no llega al 4.5:1 de WCAG AA (issue #35). Esta variante
+     más clara conserva el matiz de marca pero solo se usa donde el violeta
+     hace de texto o de fondo-con-texto-oscuro encima; el violeta original
+     se mantiene para bordes, glows y otros usos decorativos. */
+  --color-violet-text: #a78bfa;
 
   /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
      roles tipográficos del sitio: display, body y mono. */
