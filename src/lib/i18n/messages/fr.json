@@ -113,6 +113,10 @@
       "minutes": "min",
       "seconds": "sec"
     },
+    "ThemeToggle": {
+      "switchToLight": "Passer au thème clair",
+      "switchToDark": "Passer au thème sombre"
+    },
     "SocialLinks": {
       "instagram": "Instagram d'ExpoJuy",
       "facebook": "Facebook de la Chambre de Commerce Extérieur de Jujuy",

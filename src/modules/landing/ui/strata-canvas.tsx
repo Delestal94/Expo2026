@@ -1,6 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getCurrentTheme, THEME_CHANGE_EVENT, type Theme } from "@/lib/ui/theme";
+
+// Mismos tonos que --color-ink en cada tema (ver globals.css) — el canvas
+// no puede leer variables CSS directamente en fillStyle, así que se
+// duplican acá. En tema claro, mix-blend-screen sobre un fondo casi
+// blanco licúa casi todo el neón de las bandas (screen con blanco da
+// blanco) — es un efecto más apagado a propósito, no un bug: recrear el
+// glow completo en claro pediría cambiar el blend mode y repensar la
+// pieza, y la alternativa (mantener el fondo oscuro bajo un tema claro)
+// se ve rota, no "sutil".
+const BG_FILL: Record<Theme, string> = {
+  dark: "#0b0a12",
+  light: "#f5f1e8",
+};
 
 interface Band {
   baseY: number;
@@ -53,6 +67,14 @@ export function StrataCanvas() {
     let frame = 0;
     let raf = 0;
     let lastDraw = 0;
+    let bgFill = BG_FILL[getCurrentTheme()];
+
+    function handleThemeChange(event: Event) {
+      const detail = (event as CustomEvent<Theme>).detail;
+      bgFill = BG_FILL[detail ?? getCurrentTheme()];
+      if (prefersReducedMotion) draw(lastDraw);
+    }
+    window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
 
     // El desplazamiento de las bandas es tan lento (speed ~0.0002 rad/ms)
     // que redibujar a 60fps es imperceptible frente a 30fps — pero cuesta
@@ -83,7 +105,7 @@ export function StrataCanvas() {
       const h = canvas.clientHeight;
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#0b0a12";
+      ctx.fillStyle = bgFill;
       ctx.fillRect(0, 0, w, h);
 
       for (const band of bands) {
@@ -113,21 +135,15 @@ export function StrataCanvas() {
       }
     }
 
-    function handleVisibilityChange() {
-      if (document.hidden) {
-        cancelAnimationFrame(raf);
-        cancelAnimationFrame(frame);
-      } else if (!prefersReducedMotion) {
-        raf = requestAnimationFrame(draw);
-      }
-    }
-
     resize();
     window.addEventListener("resize", resize);
 
     if (prefersReducedMotion) {
       draw(0);
-      return () => window.removeEventListener("resize", resize);
+      return () => {
+        window.removeEventListener("resize", resize);
+        window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
+      };
     }
 
     // El canvas sigue montado (y su rAF seguiría corriendo) mucho después
@@ -145,6 +161,7 @@ export function StrataCanvas() {
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
       observer.disconnect();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);

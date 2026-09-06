@@ -113,6 +113,10 @@
       "minutes": "分",
       "seconds": "秒"
     },
+    "ThemeToggle": {
+      "switchToLight": "切换到浅色主题",
+      "switchToDark": "切换到深色主题"
+    },
     "SocialLinks": {
       "instagram": "ExpoJuy 的 Instagram",
       "facebook": "胡胡伊对外贸易商会的 Facebook",
