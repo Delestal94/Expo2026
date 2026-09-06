@@ -1,21 +1,61 @@
 @import "tailwindcss";
 
+/* ─── Fuentes oficiales ExpoJuy 2026 — familia Ambit ─────────────────────── */
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ambit';
+  src: url('/fonts/Ambit-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --color-ink: #0b0a12;
+  /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
+     fondo del sitio lea como el navy saturado de la referencia, no como un
+     gris-negro neutro. */
+  --color-ink: #0d0b2e;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
-  /* Paleta oficial de marca ExpoJuy — los 4 colores exactos del isotipo "J"
-     (archivo de marca provisto por la Cámara), no una estimación visual. */
-  --color-teal: #6ac6c1;
-  --color-blue: #066db3;
-  --color-magenta: #f62c90;
-  --color-yellow: #f5af18;
-  --color-accent: #6ac6c1;
+  /* Paleta de marca ExpoJuy — sampleada directamente de los 4 rellenos
+     del isotipo "J" oficial en public/images/logos/expojuy-mark.svg
+     (.fil0-.fil3), coherente con Instagram (@expojuy). No es una
+     aproximación: son los valores HEX reales del archivo de marca. */
+  --color-cyan: #2de3d6;
+  --color-violet: #7c3aed;
+  --color-magenta: #d946ef;
+  --color-lavender: #c4b5fd;
+  --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
 
-  --font-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
+     roles tipográficos del sitio: display, body y mono. */
+  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -40,4 +80,107 @@ body {
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Skeleton de carga que usa la misma veta mineral que el resto del sitio
+   (ver el glow del CTA del Hero) en vez de un gris genérico — barrido lento
+   para no leerse como error de contraste. */
+.skeleton-strata {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-line) 0%,
+    color-mix(in srgb, var(--color-cyan) 45%, var(--color-line)) 25%,
+    color-mix(in srgb, var(--color-violet) 45%, var(--color-line)) 50%,
+    color-mix(in srgb, var(--color-magenta) 45%, var(--color-line)) 75%,
+    var(--color-line) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%,
+  100% {
+    background-position: 150% 0;
+  }
+  50% {
+    background-position: -50% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-strata {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
+
+/* Entrada del Hero: cada bloque se asienta como un estrato que decanta,
+   con leve compresión vertical en vez de un fade genérico. Gateado por
+   motion-safe: en el markup, así que acá no hace falta repetir la
+   media query de prefers-reduced-motion. */
+@keyframes strata-settle {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scaleY(0.94);
+    transform-origin: bottom;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+/* La galería se comporta como una sucesión de momentos, no como una pared
+   inmóvil: cada toma deriva apenas sobre su encuadre y recibe un reflejo de
+   luz de marca. Ambas animaciones se desactivan con reducir movimiento. */
+@keyframes gallery-drift {
+  from {
+    transform: scale(1.04) translate3d(-1.5%, -0.75%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(1.5%, 0.75%, 0);
+  }
+}
+
+@keyframes gallery-sheen {
+  0%,
+  58% {
+    transform: translateX(-145%) skewX(-18deg);
+    opacity: 0;
+  }
+  68% {
+    opacity: 0.48;
+  }
+  82%,
+  100% {
+    transform: translateX(265%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+/* Entrada de una foto nueva cuando una celda del mosaico rota su contenido:
+   crossfade con un leve zoom-in, no un corte seco. */
+@keyframes gallery-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Las tarjetas de Ejes necesitan vida sin depender del hover: el número de
+   fondo respira de forma sutil y continua. */
+@keyframes ejes-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
 }

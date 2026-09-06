@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import { getFeatureFlags } from "@/lib/config/flags";
+import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { CtaLink } from "./cta-link";
+import { ShareLocationButton } from "./share-location-button";
 
 const PROVIDERS_FORM_URL = "https://forms.gle/ChErBuBgp3QfuxRr7";
-const WHATSAPP_URL = "https://wa.me/5493884212955";
+/** Reutilizado por Contacto — un solo número de WhatsApp para todo el sitio. */
+export const WHATSAPP_URL = "https://wa.me/5493884212955";
 
 const MAPS_EMBED_URL =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3639.6668824201447!2d-65.33387282359566!3d-24.18341278474179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x941b0ee2033f07f3%3A0xc77a811c6a4b0561!2sCiudad%20Cultural!5e0!3m2!1ses-419!2sar!4v1726026179941!5m2!1ses-419!2sar&zoom=14&maptype=roadmap&disableDefaultUI=true&zoomControl=false&streetViewControl=false&fullscreenControl=false";
@@ -19,10 +22,10 @@ const REFERENCE_PRICING = [
 /** Fondo con la paleta de marca, apagado — evita que la sección se sienta vacía sin competir con el texto. */
 const BRAND_WASH = {
   background: [
-    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-teal) 14%, transparent), transparent 60%)",
-    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-blue) 12%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 900px 560px at 8% -5%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 60%)",
+    "radial-gradient(ellipse 800px 560px at 100% 8%, color-mix(in srgb, var(--color-violet) 12%, transparent), transparent 60%)",
     "radial-gradient(ellipse 800px 600px at 92% 100%, color-mix(in srgb, var(--color-magenta) 12%, transparent), transparent 62%)",
-    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-yellow) 10%, transparent), transparent 58%)",
+    "radial-gradient(ellipse 700px 500px at 0% 100%, color-mix(in srgb, var(--color-lavender) 10%, transparent), transparent 58%)",
   ].join(", "),
 };
 
@@ -36,6 +39,7 @@ export async function AccessInfo() {
   return (
     <section className="relative overflow-hidden border-y border-line px-6 py-24 sm:px-10 lg:px-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={BRAND_WASH} />
+      <EntranceVein color="var(--color-violet)" />
 
       {/* Mismo ritmo de grilla que About/Ejes: 12 columnas a todo el ancho de la sección, sin
           tarjetas angostas flotando en el centro. */}
@@ -53,14 +57,22 @@ export async function AccessInfo() {
                 strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
               })}
             </p>
-            <a
-              href={MAPS_LINK}
-              target="_blank"
-              rel="noopener"
-              className="mt-5 inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
-            >
-              {tDirections("cta")}
-            </a>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href={MAPS_LINK}
+                target="_blank"
+                rel="noopener"
+                className="inline-block rounded-full border border-line px-5 py-2.5 font-body text-sm font-semibold text-paper transition hover:border-paper-dim"
+              >
+                {tDirections("cta")}
+              </a>
+              <ShareLocationButton
+                url={MAPS_LINK}
+                title={tDirections("shareTitle")}
+                text={tDirections("shareText")}
+                label={tDirections("shareLabel")}
+              />
+            </div>
           </div>
 
           <div id="acceso" className="mt-16 scroll-mt-24">
@@ -76,18 +88,36 @@ export async function AccessInfo() {
               })}
             </p>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {REFERENCE_PRICING.map((tier) => (
-                <div
-                  key={tier.key}
-                  className="rounded-2xl border border-line bg-[#121022] p-5 text-center"
-                >
-                  <div className="font-mono text-2xl font-semibold text-paper tabular-nums">
-                    {tier.price}
+            {/* Tira de entrada en vez de tres tarjetas idénticas: los precios se leen
+                como un ticket perforado, y el tramo sin cargo se destaca con un sello
+                en vez de competir como una cuarta cifra igual a las otras. */}
+            <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
+              {REFERENCE_PRICING.map((tier) => {
+                const isFree = tier.key === "under5";
+                return (
+                  <div
+                    key={tier.key}
+                    className={`relative flex-1 p-5 text-center ${isFree ? "bg-accent/10" : "bg-[#121022]"}`}
+                  >
+                    {isFree && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-accent px-2.5 py-1 font-mono text-[0.6rem] tracking-[0.15em] text-accent uppercase"
+                      >
+                        {t("pricing.freeBadge")}
+                      </span>
+                    )}
+                    <div
+                      className={`font-display font-black tabular-nums ${
+                        isFree ? "text-xl text-accent sm:text-2xl" : "text-2xl text-paper sm:text-3xl"
+                      }`}
+                    >
+                      {tier.price}
+                    </div>
+                    <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
                   </div>
-                  <div className="mt-2 text-xs text-paper-dim">{t(`pricing.${tier.key}`)}</div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="mt-6">
@@ -110,7 +140,11 @@ export async function AccessInfo() {
         </div>
 
         <div className="flex flex-col overflow-hidden rounded-2xl border border-line lg:col-span-5 lg:col-start-8">
-          <div className="h-64 w-full sm:h-72 lg:h-80">
+          {/* El mapa ocupa el alto real de la tarjeta (que lo define el texto de
+              precios de la columna izquierda, no el mapa) — a la altura vieja le
+              sobraba mucho contenedor vacío antes de llegar a la tarjeta de
+              proveedores. */}
+          <div className="h-80 w-full sm:h-104 lg:h-120">
             <iframe
               src={MAPS_EMBED_URL}
               title={tDirections("mapLabel")}

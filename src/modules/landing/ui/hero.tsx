@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
+import { LanguageSwitcher } from "./language-switcher";
 import { StrataCanvas } from "./strata-canvas";
 
 export function Hero() {
@@ -18,7 +19,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/10 via-transparent to-ink"
       />
 
-      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
+      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]">
         <div className="flex items-center gap-3">
           <Image
             src="/images/logos/expojuy-mark.svg"
@@ -29,24 +30,37 @@ export function Hero() {
           />
           <span>{t("eyebrow")}</span>
         </div>
-        <span>{t("edition")}</span>
+        <div className="flex items-center gap-4">
+          <span>{t("edition")}</span>
+          <LanguageSwitcher />
+        </div>
       </nav>
 
       <div className="relative z-10 flex flex-col gap-8">
-        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
+        <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
           {t("tagline")}
         </span>
-        <h1 className="text-balance font-display text-[clamp(3rem,11vw,8.5rem)] leading-[0.92] font-black text-paper">
-          {t("titleLine1")}
-          <br />
-          {t("titleLine2")}
+        {/* Lockup oficial real (EXPOJUY · De Jujuy al mundo), recortado sin el
+            isotipo — ya está en la esquina de arriba — y recoloreado del gris
+            oscuro original a paper para leerse sobre el fondo navy del Hero.
+            El "2026" del título tipográfico anterior no forma parte del
+            lockup real; sigue presente en "17ª EDICIÓN" y en el countdown. */}
+        <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
+          <Image
+            src="/images/logos/expojuy-wordmark-dark.svg"
+            alt={t("titleAlt")}
+            width={1000}
+            height={305}
+            priority
+            className="h-auto w-full max-w-205"
+          />
         </h1>
-        <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl">
+        <p className="max-w-xl text-balance font-body text-lg text-paper-dim sm:text-xl motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
           {t("description")}
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+      <div className="relative z-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.48s_backwards]">
         <Countdown />
         <div className="flex flex-wrap gap-3">
           <a
@@ -55,7 +69,7 @@ export function Hero() {
           >
             <span
               aria-hidden="true"
-              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-teal),var(--color-blue),var(--color-magenta),var(--color-yellow))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
+              className="absolute -inset-2 -z-10 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet),var(--color-magenta),var(--color-lavender))] opacity-0 blur-lg transition-opacity duration-500 motion-reduce:transition-none group-hover:opacity-70 group-focus-visible:opacity-70"
             />
             <span className="relative inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-body text-sm font-semibold text-ink">
               {t("ctaAttend")}

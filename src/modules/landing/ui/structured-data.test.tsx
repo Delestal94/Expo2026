@@ -16,6 +16,7 @@ describe("EventStructuredData", () => {
     expect(data.endDate).toBe("2026-10-12");
     expect(data.location.address.addressCountry).toBe("AR");
     expect(data.organizer.name).toBe("Cámara de Comercio Exterior de Jujuy");
+    expect(data.organizer.sameAs).toContain("https://www.instagram.com/expojuy/");
     expect(data).not.toHaveProperty("offers");
   });
 });

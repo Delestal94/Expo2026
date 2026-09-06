@@ -35,6 +35,22 @@ describe("AccessForm", () => {
     mockProvider.getSession.mockResolvedValue(null);
   });
 
+  it("muestra un placeholder en vez de una tarjeta vacía mientras verifica la sesión", async () => {
+    let resolveSession: (value: null) => void = () => {};
+    mockProvider.getSession.mockReturnValue(
+      new Promise((resolve) => {
+        resolveSession = resolve;
+      }),
+    );
+    renderAccessForm("free");
+
+    expect(screen.getByText("Verificando tu sesión…")).toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: "Crear cuenta" })).not.toBeInTheDocument();
+
+    resolveSession(null);
+    await screen.findByRole("tab", { name: "Crear cuenta" });
+  });
+
   it("crea una cuenta nueva con el formulario de registro por defecto", async () => {
     const user = userEvent.setup();
     mockProvider.signUp.mockResolvedValue(SESSION);

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asistente IA Concierge — ExpoJuy 2026</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- Background WebGL Shader Canvas -->
+  <div class="strata-canvas-container">
+    <canvas id="strata-canvas"></canvas>
+    <div class="strata-canvas-gradient-mask"></div>
+  </div>
+
+  <!-- Quick Demo Nav Switcher -->
+  <nav class="demo-nav-bar">
+    <span class="demo-nav-title">Vistas</span>
+    <a href="./01-roadmap.html" class="demo-nav-link">01. Roadmap</a>
+    <a href="./02-acceso.html" class="demo-nav-link">02. Acceso & QR</a>
+    <a href="./03-rondas-b2b.html" class="demo-nav-link">03. Rondas B2B</a>
+    <a href="./04-asistente.html" class="demo-nav-link active">04. Concierge IA</a>
+    <a href="./05-galeria.html" class="demo-nav-link">05. Galería</a>
+    <a href="./06-mapa.html" class="demo-nav-link">06. Plano Ciudad Cultural</a>
+    <a href="./index.html" class="demo-nav-link" style="color: var(--color-accent); font-weight: 700;">✦ Hub</a>
+  </nav>
+
+  <!-- Top Institutional Meta Bar -->
+  <div class="top-meta-nav">
+    <div class="logo-group">
+      <img src="./images/logos/expojuy-mark.svg" alt="" style="height: 22px; width: auto;">
+      <span>EXPOJUY · JUJUY, ARGENTINA</span>
+    </div>
+    <div>17ª EDICIÓN</div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="header-section">
+    <div class="category-pill">INTELIGENCIA ARTIFICIAL ACOGIDA AL EVENTO · 4 IDIOMAS</div>
+    <h1 class="headline-title">CONCIERGE<br>VIRTUAL</h1>
+    <p class="headline-subtitle">
+      Asistente oficial multilingüe entrenado con el plano de Ciudad Cultural, catálogo de 167 expositores, cronograma de conferencias y servicios de acreditación.
+    </p>
+
+    <!-- Language Selector Pills -->
+    <div class="filter-pills-bar">
+      <button class="pill-btn active">Español</button>
+      <button class="pill-btn">English</button>
+      <button class="pill-btn">Português</button>
+      <button class="pill-btn">中文</button>
+    </div>
+  </header>
+
+  <!-- Main Content: AI Chat Interface -->
+  <main class="main-container">
+    <div style="max-width: 860px; margin: 0 auto;">
+
+      <!-- Chat Container Card -->
+      <div class="bento-card stripe-accent" style="background: var(--color-surface-elevated); min-height: 520px; padding: 28px; display: flex; flex-direction: column;">
+        
+        <!-- Messages Stream -->
+        <div style="display: flex; flex-direction: column; gap: 20px; flex: 1; margin-bottom: 24px;">
+
+          <!-- AI Message 01 -->
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-accent); color: var(--color-ink); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; box-shadow: 0 0 12px var(--color-accent-glow);">
+              AI
+            </div>
+            <div style="background: rgba(18, 16, 34, 0.9); border: 1px solid var(--color-border); border-radius: var(--radius-md); border-top-left-radius: 4px; padding: 16px 20px; max-width: 80%;">
+              <p style="font-size: 14px; line-height: 1.6; color: var(--color-paper);">
+                ¡Hola! Soy el asistente virtual oficial de ExpoJuy 2026. Puedo orientarte en el predio ferial, consultar la agenda de conferencias o coordinar tus reuniones B2B. ¿En qué puedo ayudarte?
+              </p>
+            </div>
+          </div>
+
+          <!-- User Query -->
+          <div style="display: flex; justify-content: flex-end;">
+            <div style="background: rgba(59, 205, 191, 0.15); border: 1px solid rgba(59, 205, 191, 0.4); border-radius: var(--radius-md); border-top-right-radius: 4px; padding: 14px 20px; max-width: 75%;">
+              <p style="font-size: 14px; color: var(--color-paper); line-height: 1.5;">
+                ¿Dónde queda el stand de Minera Exar y a qué hora es su presentación técnica?
+              </p>
+            </div>
+          </div>
+
+          <!-- AI Rich Answer -->
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-accent); color: var(--color-ink); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; box-shadow: 0 0 12px var(--color-accent-glow);">
+              AI
+            </div>
+            <div style="background: rgba(18, 16, 34, 0.9); border: 1px solid var(--color-border); border-radius: var(--radius-md); border-top-left-radius: 4px; padding: 18px 22px; max-width: 88%;">
+              <p style="font-size: 14px; line-height: 1.6; color: var(--color-paper); margin-bottom: 16px;">
+                El stand de <strong>Minera Exar S.A.</strong> está ubicado en la <strong>Carpa Central Techada (Stand A101)</strong>. Además, hoy tienen una disertación en el Auditorio Principal:
+              </p>
+
+              <!-- Embedded Card A: Stand Location -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(245, 241, 232, 0.04); border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-bottom: 10px;">
+                <div>
+                  <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-accent); text-transform: uppercase;">STAND DESTACADO</span>
+                  <p style="font-size: 13px; font-weight: 700; color: var(--color-paper);">Minera Exar S.A. · Stand A101</p>
+                </div>
+                <a href="./06-mapa.html" class="btn-outline-glass" style="padding: 6px 14px; font-size: 11px;">Ver en Plano →</a>
+              </div>
+
+              <!-- Embedded Card B: Conference -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(245, 241, 232, 0.04); border: 1px solid var(--color-border); border-radius: var(--radius-sm);">
+                <div>
+                  <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-terracotta); text-transform: uppercase;">CONFERENCIA · 17:30 HS</span>
+                  <p style="font-size: 13px; font-weight: 700; color: var(--color-paper);">Panel: RIGI y Futuro del Litio · Sala A CCEJ</p>
+                </div>
+                <button class="btn-solid-accent" style="padding: 6px 14px; font-size: 11px;">Agendar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Query Chips -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+          <button class="pill-btn" style="font-size: 11px; padding: 5px 12px;">🕒 Horarios Rondas B2B</button>
+          <button class="pill-btn" style="font-size: 11px; padding: 5px 12px;">📍 Ubicación Auditorio CCEJ</button>
+          <button class="pill-btn" style="font-size: 11px; padding: 5px 12px;">🚌 Cómo llegar a Ciudad Cultural</button>
+          <button class="pill-btn" style="font-size: 11px; padding: 5px 12px;">🍽️ Patio Gastronómico</button>
+        </div>
+
+        <!-- Input Box -->
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" class="input-glass" placeholder="Escribí tu consulta sobre ExpoJuy 2026...">
+          <button class="btn-solid-accent" style="padding: 12px 20px;">
+            Enviar ➔
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Master Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-lockup">
+        <img src="./images/logos/expojuy-lockup.svg" alt="ExpoJuy 2026">
+      </div>
+      <div class="footer-entities">
+        Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.
+      </div>
+      <div class="footer-watermark">
+        Prototipo — Desafío Digital 2026
+      </div>
+    </div>
+  </footer>
+
+  <script src="./shader.js"></script>
+</body>
+</html>

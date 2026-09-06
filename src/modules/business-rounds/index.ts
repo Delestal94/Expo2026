@@ -5,3 +5,4 @@
  * lo que otro módulo necesite se exporta explícitamente desde aquí.
  */
 export { AgendaPreview } from "./ui/agenda-preview";
+export { ProgramSection } from "./ui/program-section";

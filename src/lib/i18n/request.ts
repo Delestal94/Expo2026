@@ -1,16 +1,20 @@
+import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
-import esAR from "./messages/es-AR.json";
+import { routing } from "./routing";
 
-/**
- * Único locale disponible hoy — el quinto idioma todavía no está decidido
- * (ver issue #4). Cuando se sume uno nuevo, este archivo pasa a resolver
- * el locale real (por ruta, cookie, etc.) en vez de devolver un valor fijo;
- * el resto del código (dictionaries, provider, `useTranslations`/
- * `getTranslations`) no cambia.
- */
-export const locale = "es-AR" as const;
+const messageLoaders = {
+  "es-AR": () => import("./messages/es-AR.json"),
+  en: () => import("./messages/en.json"),
+  pt: () => import("./messages/pt.json"),
+  zh: () => import("./messages/zh.json"),
+} as const;
 
-export default getRequestConfig(async () => ({
-  locale,
-  messages: esAR,
-}));
+export default getRequestConfig(async ({ requestLocale }) => {
+  const requested = await requestLocale;
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+
+  return {
+    locale,
+    messages: (await messageLoaders[locale]()).default,
+  };
+});

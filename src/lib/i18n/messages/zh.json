@@ -1,0 +1,363 @@
+{
+  "Metadata": {
+    "title": "ExpoJuy 2026",
+    "description": "ExpoJuy 2026官方网站 — 10月9日至12日，胡胡伊文化城（Ciudad Cultural）。"
+  },
+  "NotFound": {
+    "eyebrow": "错误 404",
+    "introLine": "看起来这",
+    "emphasisLine": "层",
+    "outroLine": "并不在这条剖面上。",
+    "description": "您要找的页面已被侵蚀，或从未存在于此路径中。返回首页，或直接前往查看如何到达和入场。",
+    "ctaHome": "返回首页",
+    "ctaAccess": "如何到达和入场"
+  },
+  "InteractiveMap": {
+    "eyebrow": "互动地图",
+    "title": "场地平面图，以数据呈现——而非静态图片",
+    "description": "根据2024年文化城（Ciudad Cultural）的平面图绘制：室内展馆、露天展位、美食广场和服务区。按类型筛选，或点击展位查看编号和面积。各类别数量以此图为准；2026年的最终布局将与商会确认。",
+    "svgLabel": "文化城场地平面图，含2024届展位",
+    "legend": "图例",
+    "area": "{m2} 平方米",
+    "standHint": "展位由商会官方招募流程分配，本网站不负责分配。",
+    "emptyTitle": "浏览平面图",
+    "emptyHint": "将鼠标悬停或点击任意展位，查看其编号、类型和面积。",
+    "filter": {
+      "all": "全部（{count}）"
+    },
+    "category": {
+      "cubierto": "室内",
+      "artesano": "手工艺人",
+      "descubierto": "露天",
+      "gastronomico": "美食广场",
+      "juego": "游乐区",
+      "institucional": "机构区",
+      "infraestructura": "基础设施"
+    }
+  },
+  "Landing": {
+    "Hero": {
+      "eyebrow": "ExpoJuy · 阿根廷胡胡伊",
+      "edition": "第17届",
+      "tagline": "ExpoJuy 2026 数字挑战赛 · 提案",
+      "titleAlt": "EXPOJUY 2026 · 从胡胡伊走向世界",
+      "description": "克夫拉达（Quebrada）与世界相连之处：四天的商务对接、外贸与知识经济，汇聚于双洋走廊的核心地带。",
+      "ctaAttend": "我要参加",
+      "ctaProviders": "将我的公司注册为供应商"
+    },
+    "About": {
+      "descriptionIntro": "经过两周的传统形式后，ExpoJuy 重新定义自己：",
+      "descriptionEmphasis": "四天",
+      "descriptionOutro": "上午商务对接、下午展览，以锂矿开采和国际贸易为核心主题。",
+      "stats": {
+        "edition": "ExpoJuy 届数",
+        "days": "天数，强度翻倍",
+        "stands": "预计展位数",
+        "dates": "十月举办天数，文化城"
+      }
+    },
+    "Ejes": {
+      "eyebrow": "2026届四大主题",
+      "items": {
+        "mineria": {
+          "title": "矿业与锂",
+          "description": "为Exar公司批准的RIGI（大型投资激励制度）将使其锂产量翻倍至4.5万吨。ExpoJuy 将胡胡伊供应商与这一不断增长的需求连接起来。"
+        },
+        "comercio": {
+          "title": "对外贸易",
+          "description": "由胡胡伊对外贸易商会组织的商务对接会，已有来自其他省份和国家的代表团表示兴趣。"
+        },
+        "corredor": {
+          "title": "双洋走廊",
+          "description": "智利和巴拉圭作为摩羯座走廊的战略伙伴——为期4天的形式便于外国代表团的往返和住宿安排。"
+        },
+        "conocimiento": {
+          "title": "知识经济",
+          "description": "正是推动本次数字挑战赛的行业：软件、农业科技和知识型服务，属于该省2026-2030年战略计划的一部分。"
+        }
+      }
+    },
+    "AccessInfo": {
+      "eyebrow": "入场与准入",
+      "title": "往届为付费入场——2026年方案即将确认。",
+      "description": "2024年的门票在线销售，参考价格如下。入场登记系统（二维码 + Mercado Pago）已经准备就绪，无论免费或付费均可运作，只待商会确认2026年的方案——详见 <code>ADR-0003</code>。",
+      "pricing": {
+        "kids": "儿童（6至12岁）及退休人员",
+        "adults": "成人",
+        "under5": "5岁以下儿童",
+        "freeBadge": "免费！"
+      },
+      "buyDisabled": "购买门票——将在下一阶段开放",
+      "createAccount": "创建您的访客账户",
+      "accountNote": "您现在即可创建账户——门票购买功能将在下一阶段开放。",
+      "pricingNote": "参考价格为2024届数据，2026年待确认。",
+      "providersTitle": "您的公司想作为供应商参与吗？",
+      "providersDescription": "参展商通过商会官方招募流程报名，而非本网站。",
+      "providersFormCta": "供应商申请表",
+      "whatsappCta": "WhatsApp：388 421-2955"
+    },
+    "Directions": {
+      "eyebrow": "我们恭候您的到来",
+      "title": "胡胡伊的中心地带",
+      "description": "文化城距离<strong>圣萨尔瓦多－德胡胡伊</strong>市中心仅几分钟车程，可快速抵达市内主要地点。",
+      "cta": "在谷歌地图中查看",
+      "mapLabel": "文化城地图",
+      "shareLabel": "分享位置",
+      "shareTitle": "ExpoJuy 2026 — 文化城",
+      "shareText": "这是前往 ExpoJuy 2026 举办地文化城的路线："
+    },
+    "Countdown": {
+      "days": "天",
+      "hours": "时",
+      "minutes": "分",
+      "seconds": "秒"
+    },
+    "SocialLinks": {
+      "instagram": "ExpoJuy 的 Instagram",
+      "facebook": "胡胡伊对外贸易商会的 Facebook",
+      "linkedin": "胡胡伊对外贸易商会的 LinkedIn"
+    },
+    "Contact": {
+      "eyebrow": "联系方式",
+      "title": "有具体问题需要咨询吗？",
+      "description": "请通过您偏好的渠道与我们联系——回复您的正是组织 ExpoJuy 的胡胡伊对外贸易商会团队。",
+      "emailLabel": "电子邮件",
+      "phoneLabel": "电话",
+      "addressLabel": "地址",
+      "whatsappCta": "通过WhatsApp联系",
+      "socialTitle": "关注最新动态",
+      "socialDescription": "2026届的公告、日期和进展，实时更新。"
+    },
+    "Faq": {
+      "eyebrow": "常见问题",
+      "title": "在您提问之前",
+      "items": {
+        "dates": {
+          "question": "ExpoJuy 2026 何时何地举行？",
+          "answer": "10月9日至12日，在圣萨尔瓦多－德胡胡伊的文化城举行。"
+        },
+        "tickets": {
+          "question": "参观展会需要门票吗？",
+          "answer": "2024届为付费入场（参考价格见“入场”版块）。2026年的方案目前尚无公开确认。"
+        },
+        "exhibitors": {
+          "question": "我的公司如何注册成为参展商？",
+          "answer": "请通过胡胡伊对外贸易商会的官方招募流程办理——本网站不提供参展商注册功能。您可以在“入场”版块找到申请表和WhatsApp联系方式。"
+        },
+        "businessRounds": {
+          "question": "什么是商务对接会？",
+          "answer": "上午举行，胡胡伊本地企业与双洋走廊代表团按行业和共同兴趣进行配对会面。请查看“参展商”版块的名录。"
+        },
+        "accessibility": {
+          "question": "场地是否为行动不便人士提供无障碍设施？",
+          "answer": "请通过WhatsApp或电子邮件告诉我们您的需求，我们会在您到访前确认相关细节。"
+        },
+        "parking": {
+          "question": "是否设有停车场？",
+          "answer": "具体安排将由主办方在临近活动日期时确认——欢迎通过我们的联系渠道咨询。"
+        },
+        "languages": {
+          "question": "本网站支持哪些语言？",
+          "answer": "西班牙语、英语、葡萄牙语和中文——可在左上角的语言选择器中切换。"
+        },
+        "updates": {
+          "question": "如何获取最新动态？",
+          "answer": "请关注我们的Instagram账号（@expojuy），或查看本站的“新闻”版块。"
+        }
+      }
+    },
+    "SiteFooter": {
+      "brand": "ExpoJuy 2026",
+      "organizes": "主办方",
+      "organizerAlt": "胡胡伊对外贸易商会",
+      "institutions": "胡胡伊对外贸易商会 · 经济发展与生产部 · 省知识型服务管理局 · Clustear。",
+      "badge": "原型 — 2026年数字挑战赛"
+    }
+  },
+  "Pages": {
+    "Cuenta": {
+      "metaTitle": "创建账户 — ExpoJuy 2026",
+      "backLink": "← 返回",
+      "heading": "您的访客账户",
+      "description": "立即创建您的账户。门票购买功能尚未开放——将在下一阶段启用。"
+    },
+    "Galeria": {
+      "metaTitle": "2024届图库 — ExpoJuy 2026",
+      "metaDescription": "ExpoJuy 第16届（2024年）在圣萨尔瓦多－德胡胡伊文化城的照片。",
+      "backLink": "← 返回",
+      "heading": "图库 — 第16届（2024年）",
+      "description": "ExpoJuy 2024 在圣萨尔瓦多－德胡胡伊文化城拍摄的30张照片。"
+    }
+  },
+  "Exhibitors": {
+    "searchLabel": "搜索参展商",
+    "searchPlaceholder": "按公司名称、行业或提供的产品/服务搜索…",
+    "filterGroupLabel": "按主题筛选",
+    "filterAll": "全部",
+    "viewProfilesCta": "查看全部 {count} 个资料",
+    "buscaLabel": "需求",
+    "noResults": "没有找到与“{query}”匹配的参展商。请尝试其他关键词或行业。",
+    "ejes": {
+      "mineria": "矿业与锂",
+      "comercio": "对外贸易",
+      "corredor": "双洋走廊",
+      "conocimiento": "知识经济"
+    },
+    "items": {
+      "altiplano-servicios": {
+        "pitch": "为胡胡伊高原地区的锂矿作业提供物流和设备维护服务。",
+        "busca": "与矿业运营商签订合同"
+      },
+      "quebrada-litio": {
+        "pitch": "为锂加工厂提供经认证的化学原料。",
+        "busca": "区域经销商"
+      },
+      "jujuy-exporta": {
+        "pitch": "专注于农工业出口手续的对外贸易咨询公司。",
+        "busca": "智利和巴拉圭的买家"
+      },
+      "andes-trade": {
+        "pitch": "服务于双洋走廊的货运经纪公司，业务覆盖三个边境口岸。",
+        "busca": "国际物流合作伙伴"
+      },
+      "capricornio-log": {
+        "pitch": "通过Jama口岸，在胡胡伊、智利北部与巴拉圭之间提供货运服务。",
+        "busca": "智利和巴拉圭代表团"
+      },
+      "textiles-andinos": {
+        "pitch": "以羊驼毛为原料的纺织合作社，正在寻求区域出口渠道。",
+        "busca": "双洋走廊地区的进口商"
+      },
+      "jujuy-software": {
+        "pitch": "汇聚该省软件开发与农业科技团队的产业集群。",
+        "busca": "B2B客户及天使投资"
+      },
+      "clustear-demo": {
+        "pitch": "胡胡伊知识经济生态系统项目孵化器。",
+        "busca": "导师与投资基金"
+      }
+    },
+    "Portal": {
+      "eyebrow": "参展商门户",
+      "title": "这不是一个名录——而是连接商务对接会的枢纽",
+      "description": "本原型的示例资料，按主题分类。系统会根据共同的行业和商业目标推荐会面对象。",
+      "howItWorksEyebrow": "运作方式",
+      "howItWorksTitle": "系统如何推荐会面",
+      "agendaEyebrow": "示例",
+      "agendaTitle": "会面日程",
+      "footerNote": "以上均为示例资料——贵公司若要正式注册，请通过商会的官方招募流程办理，而非本门户（<link>查看申请方式</link>）。"
+    },
+    "Matching": {
+      "expositorLabel": "参展商",
+      "a": { "detail": "提供：国际货运经纪服务" },
+      "b": { "detail": "提供：经Jama口岸的运输服务" },
+      "shared": {
+        "corredor": "双洋走廊",
+        "logistica": "国际物流",
+        "pasoDeJama": "Jama 口岸"
+      },
+      "disclaimer": "在这一初始版本中，推荐结果基于共同的行业和国家计算得出——并非完整的语义相似度匹配（详见 <code>docs/architecture.md</code> 中的相关决策）。会面预约功能将在下一阶段开放。"
+    }
+  },
+  "BusinessRounds": {
+    "Agenda": {
+      "status": {
+        "disponible": "可预约",
+        "sugerido": "推荐",
+        "confirmado": "已确认"
+      },
+      "table": "第{n}桌",
+      "sharedInterestLabel": "共同兴趣",
+      "sharedInterest": {
+        "pasoDeJama": "Jama 口岸",
+        "exportacionRegional": "区域出口",
+        "automatizacionProcesos": "流程自动化",
+        "comercioExterior": "对外贸易"
+      },
+      "days": { "fri": "周五", "sat": "周六", "sun": "周日", "mon": "周一" },
+      "exampleDisclaimer": "示例日程——会面预约功能目前还没有真实的后端系统支持。"
+    },
+    "Program": {
+      "eyebrow": "日程",
+      "title": "四天，同一个节奏",
+      "description": "上午商务对接、下午展览——这是主办方确认的2026年活动形式。具体的讲座、圆桌论坛和夜间演出时间表将在活动临近时公布，与上一届的做法一致。",
+      "dayTabsLabel": "选择日程日期",
+      "morningLabel": "上午",
+      "morningContent": "国际商务对接会 — 双洋走廊",
+      "afternoonLabel": "下午",
+      "afternoonContent": "文化城展览开放 — 展位、矿业、对外贸易与知识经济",
+      "highlight": { "apertura": "开幕", "cierre": "闭幕" },
+      "highlightNote": {
+        "apertura": "活动开幕日。",
+        "cierre": "活动闭幕日。"
+      },
+      "dateLine": "10月{dayNumber}日 · {day}"
+    }
+  },
+  "Gallery": {
+    "previewEyebrow": "往届回顾",
+    "previewTitle": "浏览第16届",
+    "viewFullCta": "查看完整图库",
+    "photoAlt": "ExpoJuy 2024 — 照片 {n}",
+    "closeLabel": "关闭",
+    "prevLabel": "上一张照片",
+    "nextLabel": "下一张照片",
+    "dialogAnnounce": "第 {current} 张，共 {total} 张：{alt}"
+  },
+  "News": {
+    "eyebrow": "新闻",
+    "title": "ExpoJuy 2026 最新动态",
+    "description": "关于本届活动发布的真实媒体报道，以及本网站自身开发进展的最新消息。",
+    "readOnSite": "在本站查看",
+    "readOnSource": "在 {source} 阅读",
+    "items": {
+      "sede-confirmada": {
+        "tag": "组织方",
+        "title": "文化城确认为2026届举办场地",
+        "excerpt": "ExpoJuy 第17届将于10月9日至12日举行，进一步巩固上午商务对接、下午展览的四天新形式。"
+      },
+      "lanzamiento-oficial": {
+        "tag": "双洋走廊",
+        "title": "官方发布：聚焦国际贸易",
+        "excerpt": "主办方发布了以摩羯座双洋走廊为核心的2026届活动，预计将有来自智利、巴拉圭和巴西的代表团参加。"
+      },
+      "sadir-convocatoria": {
+        "tag": "号召",
+        "title": "省长号召胡胡伊企业积极参与",
+        "excerpt": "卡洛斯·萨迪尔（Carlos Sadir）强调了本届活动的商业属性，并号召该省企业参加国际商务对接会。"
+      },
+      "sitio-mapa": {
+        "tag": "官方网站",
+        "title": "网站新增全场互动地图",
+        "excerpt": "现在您可以通过“地图”版块逐一浏览文化城的展位，共收录200多个可按行业筛选的空间。"
+      }
+    }
+  },
+  "VisitorAccess": {
+    "AccessForm": {
+      "checkingSession": "正在检查您的登录状态…",
+      "tabSignup": "创建账户",
+      "tabSignin": "我已有账户",
+      "emailLabel": "电子邮件",
+      "passwordLabel": "密码",
+      "submitLoading": "请稍候…",
+      "submitSignin": "登录",
+      "signOut": "退出登录",
+      "sessionActive": "已以 <strong>{email}</strong> 身份登录。",
+      "genericError": "操作未能完成，请重试。",
+      "signOutError": "退出登录失败，请重试。",
+      "footerNote": "此操作将创建您的访客账户。门票购买功能尚未开放——将在下一阶段启用。"
+    },
+    "AdmissionTicket": {
+      "paidNotice": "您的访客账户已创建成功。本届活动为付费入场——二维码将在完成购票后发放，目前尚不可用。",
+      "freeNotice": "免费入场——请在入口处出示此二维码。",
+      "admitOne": "门票",
+      "brand": "ExpoJuy 2026",
+      "month": "10月",
+      "venue": "文化城 · 胡胡伊",
+      "dateRangeLabel": "2026年10月9日至12日",
+      "scanLabel": "入口核验",
+      "pendingLabel": "待出票"
+    }
+  }
+}
