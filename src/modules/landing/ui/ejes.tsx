@@ -43,21 +43,28 @@ export function Ejes() {
               key={eje.n}
               className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-4 overflow-hidden rounded-2xl border border-line bg-ink px-8 py-10 transition-colors hover:bg-[#121022] sm:w-auto sm:shrink ${OFFSET[i]}`}
             >
+              {/* Tinte de color permanente, no depende de ninguna animación:
+                  sin esto la tarjeta es gris hasta que el mouse la toca. Es
+                  la base sobre la que se apoyan el pulso y el destello. */}
               <div
                 aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                className="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full opacity-25 blur-3xl transition-opacity duration-500 group-hover:opacity-40"
                 style={{ backgroundColor: eje.color }}
               />
-              {/* Destello constante sobre el borde superior — sin esto la
-                  tarjeta se ve completamente apagada hasta que alguien la
-                  toca con el mouse. Independiente de la barra de hover de
-                  arriba: no comparte propiedad animada, no hay conflicto. */}
-              <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] overflow-hidden">
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-1 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                style={{ backgroundColor: eje.color }}
+              />
+              {/* Destello que recorre el borde superior sin parar — sobre la
+                  barra de color de arriba, no comparte propiedad animada con
+                  ella (esa usa opacity fija, esto usa transform+opacity). */}
+              <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 overflow-hidden">
                 <span
-                  className="absolute inset-y-0 -left-1/2 w-1/3 motion-safe:animate-[gallery-sheen_7s_ease-in-out_infinite] motion-reduce:hidden"
+                  className="absolute inset-y-0 -left-1/2 w-1/2 motion-safe:animate-[gallery-sheen_6s_ease-in-out_infinite] motion-reduce:hidden"
                   style={{
-                    background: `linear-gradient(90deg, transparent, ${eje.color}, transparent)`,
-                    animationDelay: `${i * -1.7}s`,
+                    background: `linear-gradient(90deg, transparent, white, transparent)`,
+                    animationDelay: `${i * -1.5}s`,
                   }}
                 />
               </span>
@@ -65,7 +72,7 @@ export function Ejes() {
                 aria-hidden="true"
                 // Entra completo dentro de la tarjeta: antes salía por arriba y a
                 // la derecha, y el overflow-hidden lo cortaba al medio del trazo.
-                className="pointer-events-none absolute top-2 right-5 font-display text-[5.5rem] leading-none font-bold tracking-tighter opacity-[0.07] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-30 sm:text-[7rem]"
+                className="pointer-events-none absolute top-2 right-5 font-display text-[5.5rem] leading-none font-bold tracking-tighter opacity-[0.16] transition-all duration-500 select-none group-hover:translate-y-1 group-hover:opacity-40 sm:text-[7rem]"
                 style={{ color: eje.color }}
               >
                 {/* La respiración vive en un span interno: multiplica la
@@ -73,8 +80,8 @@ export function Ejes() {
                     hover (que sí anima opacity/translate del padre) sigue
                     funcionando sin que la animación continua lo pise. */}
                 <span
-                  className="block motion-safe:animate-[ejes-breathe_5s_ease-in-out_infinite] motion-reduce:animate-none"
-                  style={{ animationDelay: `${i * -1.3}s` }}
+                  className="block motion-safe:animate-[ejes-breathe_4s_ease-in-out_infinite] motion-reduce:animate-none"
+                  style={{ animationDelay: `${i * -1.1}s` }}
                 >
                   {eje.n}
                 </span>
