@@ -19,19 +19,24 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/10 via-transparent to-ink"
       />
 
-      <nav className="relative z-10 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]">
+      {/* flex-col en mobile: con 5 idiomas en el selector, forzar todo en una
+          sola fila hacía que el texto del eyebrow (que sí envuelve a varias
+          líneas en pantallas angostas) quedara centrado verticalmente contra
+          "17ª edición" + selector, superponiéndose. Cada bloque ocupa su
+          propia fila hasta sm, donde ya entran cómodos uno al lado del otro. */}
+      <nav className="relative z-10 flex flex-col gap-3 font-mono text-xs tracking-[0.2em] text-paper-dim uppercase motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards] sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Image
             src="/images/logos/expojuy-mark.svg"
             alt=""
             width={20}
             height={28}
-            className="h-7 w-auto"
+            className="h-7 w-auto shrink-0"
           />
           <span>{t("eyebrow")}</span>
         </div>
-        <div className="flex items-center gap-4">
-          <span>{t("edition")}</span>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+          <span className="shrink-0">{t("edition")}</span>
           <LanguageSwitcher />
         </div>
       </nav>
