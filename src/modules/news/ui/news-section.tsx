@@ -25,7 +25,7 @@ export function NewsSection() {
         {NEWS_ITEMS.map((item) => (
           <article
             key={item.id}
-            className="flex flex-col gap-3 rounded-2xl border border-line bg-[#121022] p-6"
+            className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-6"
           >
             <div className="flex items-center justify-between gap-2">
               <span className="font-mono text-[0.65rem] tracking-[0.15em] text-accent uppercase">

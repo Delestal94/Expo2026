@@ -39,20 +39,28 @@ export function ProgramSection() {
               }`}
             >
               {tDays(day.dayKey)} {day.dayNumber}
-              {day.highlight && <span className="ml-1.5 text-accent">· {t(`highlight.${day.highlight}`)}</span>}
+              {day.highlight && (
+                // El tab activo pasa a fondo claro (bg-paper): text-accent
+                // (cyan) ahí da ~1.4:1 de contraste, muy por debajo de las
+                // 4.5:1 de WCAG AA. Encontrado con axe-core al verificar el
+                // fix del issue #35 — no estaba en la lista original.
+                <span className={`ml-1.5 ${isActive ? "text-ink/70" : "text-accent"}`}>
+                  · {t(`highlight.${day.highlight}`)}
+                </span>
+              )}
             </button>
           );
         })}
       </div>
 
       <div role="tabpanel" className="mt-8 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-line bg-[#121022] p-6">
+        <div className="rounded-2xl border border-line bg-surface p-6">
           <span className="font-mono text-xs tracking-[0.15em] text-cyan uppercase">
             {t("morningLabel")}
           </span>
           <p className="mt-2 font-display text-lg text-paper">{t("morningContent")}</p>
         </div>
-        <div className="rounded-2xl border border-line bg-[#121022] p-6">
+        <div className="rounded-2xl border border-line bg-surface p-6">
           <span className="font-mono text-xs tracking-[0.15em] text-lavender uppercase">
             {t("afternoonLabel")}
           </span>

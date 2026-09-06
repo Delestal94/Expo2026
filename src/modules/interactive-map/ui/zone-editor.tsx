@@ -328,7 +328,7 @@ export function ZoneEditor() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-line bg-[#121022] p-3">
+      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-line bg-surface p-3">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.id}
@@ -409,7 +409,7 @@ export function ZoneEditor() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1.7fr_1fr]">
-        <div className="overflow-hidden rounded-2xl border border-line bg-[#121022] p-2">
+        <div className="overflow-hidden rounded-2xl border border-line bg-surface p-2">
           <svg
             ref={svgRef}
             viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -551,7 +551,7 @@ export function ZoneEditor() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="rounded-2xl border border-line bg-[#121022] p-4">
+          <div className="rounded-2xl border border-line bg-surface p-4">
             {selected ? (
               <ZoneForm
                 key={selected.id}
@@ -571,7 +571,7 @@ export function ZoneEditor() {
           </div>
 
           {zones.length > 0 && (
-            <div className="max-h-80 overflow-y-auto rounded-2xl border border-line bg-[#121022] p-4">
+            <div className="max-h-80 overflow-y-auto rounded-2xl border border-line bg-surface p-4">
               <span className="font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
                 Todas las zonas
               </span>

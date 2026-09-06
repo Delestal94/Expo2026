@@ -15,6 +15,17 @@ export interface Exhibitor {
   color: string;
 }
 
+/**
+ * `--color-violet` mide ~3.3:1 contra `--color-ink` (y contra sí mismo
+ * tintado al 20%) — no llega al 4.5:1 de WCAG AA para texto chico. Se usa
+ * en vez del color crudo en cualquier lugar donde un color de eje hace de
+ * texto, o de fondo sólido con texto oscuro encima; para bordes, glows y
+ * otros usos puramente decorativos se sigue usando el color de marca real.
+ */
+export function textSafeColor(color: string): string {
+  return color === "var(--color-violet)" ? "var(--color-violet-text)" : color;
+}
+
 export const EJE_FILTERS: Array<{ id: Exhibitor["eje"]; color: string }> = [
   { id: "mineria", color: "var(--color-cyan)" },
   { id: "comercio", color: "var(--color-violet)" },

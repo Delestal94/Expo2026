@@ -31,7 +31,7 @@ function LogoGrid({
             key={logo.src}
             className={
               tone === "dark"
-                ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-[#121022] p-6"
+                ? "flex h-40 w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-surface p-6"
                 : "group relative flex h-40 w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper p-6 shadow-sm"
             }
           >

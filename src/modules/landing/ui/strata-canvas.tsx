@@ -24,7 +24,9 @@ function createBands(height: number): Band[] {
     phase: i * 1.7,
     width: 46 - i * 3,
     color,
-    glow: 28,
+    // Bajado de 28 a 18: shadowBlur es la operación más cara de este loop,
+    // y a este radio el glow sigue siendo visible (issues #36, #80).
+    glow: 18,
   }));
 }
 
@@ -50,6 +52,14 @@ export function StrataCanvas() {
     let bands = createBands(canvas.clientHeight);
     let frame = 0;
     let raf = 0;
+    let lastDraw = 0;
+
+    // El desplazamiento de las bandas es tan lento (speed ~0.0002 rad/ms)
+    // que redibujar a 60fps es imperceptible frente a 30fps — pero cuesta
+    // el doble de tiempo de main thread. shadowBlur es, de por sí, una de
+    // las operaciones más caras de Canvas2D; a la mitad de los frames, la
+    // mitad del costo (issues #36 y #80: TBT 940ms/1480ms medidos a 60fps).
+    const FRAME_INTERVAL_MS = 1000 / 30;
 
     function resize() {
       if (!canvas || !ctx) return;
@@ -62,6 +72,13 @@ export function StrataCanvas() {
 
     function draw(time: number) {
       if (!canvas || !ctx) return;
+
+      if (time - lastDraw < FRAME_INTERVAL_MS) {
+        if (!prefersReducedMotion) frame = requestAnimationFrame(draw);
+        return;
+      }
+      lastDraw = time;
+
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
 
