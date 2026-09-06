@@ -7,10 +7,10 @@ import { useTranslations } from "next-intl";
  * verificaban los fixes del issue #35). Paper (claro) sí pasa sobre violet.
  */
 const STATS = [
-  { key: "edition", value: "17ª", color: "var(--color-cyan)", text: "var(--color-ink)" },
-  { key: "days", value: "4", color: "var(--color-violet)", text: "var(--color-paper)" },
-  { key: "stands", value: "+200", color: "var(--color-magenta)", text: "var(--color-ink)" },
-  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)", text: "var(--color-ink)" },
+  { key: "edition", value: "17ª", color: "var(--color-cyan)", text: "var(--color-ink-fixed)" },
+  { key: "days", value: "4", color: "var(--color-violet)", text: "var(--color-paper-fixed)" },
+  { key: "stands", value: "+200", color: "var(--color-magenta)", text: "var(--color-ink-fixed)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)", text: "var(--color-ink-fixed)" },
 ] as const;
 
 /**
