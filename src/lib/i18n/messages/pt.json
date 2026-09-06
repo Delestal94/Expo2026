@@ -357,7 +357,9 @@
       "venue": "Ciudad Cultural · Jujuy",
       "dateRangeLabel": "9 a 12 de outubro de 2026",
       "scanLabel": "Leitura na entrada",
-      "pendingLabel": "Entrada pendente"
+      "pendingLabel": "Entrada pendente",
+      "loadingCode": "Gerando seu código de acesso…",
+      "codeError": "Não conseguimos gerar seu código de acesso. Recarregue a página ou tente novamente em alguns minutos."
     }
   }
 }

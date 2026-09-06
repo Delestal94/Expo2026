@@ -1,3 +1,4 @@
+import { GoTrueClient } from "@supabase/auth-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { env } from "@/lib/config/env";
 import { SupabaseAuthProvider } from "./supabase-auth-provider";
@@ -9,8 +10,10 @@ const mockAuth = {
   getSession: vi.fn(),
 };
 
-vi.mock("@supabase/supabase-js", () => ({
-  createClient: vi.fn(() => ({ auth: mockAuth })),
+vi.mock("@supabase/auth-js", () => ({
+  GoTrueClient: vi.fn(function GoTrueClientMock() {
+    return mockAuth;
+  }),
 }));
 
 vi.mock("@/lib/config/env", () => ({
@@ -84,6 +87,16 @@ describe("SupabaseAuthProvider", () => {
     await expect(
       new SupabaseAuthProvider().signIn("visitante@example.com", "secreto123"),
     ).rejects.toThrow(/NEXT_PUBLIC_SUPABASE_URL/);
+  });
+
+  it("arma el storageKey igual que supabase-js, para no huerfanar sesiones ya guardadas (issue #69)", async () => {
+    mockAuth.getSession.mockResolvedValue({ data: { session: null }, error: null });
+
+    await new SupabaseAuthProvider().getSession();
+
+    expect(GoTrueClient).toHaveBeenCalledWith(
+      expect.objectContaining({ storageKey: "sb-example-auth-token" }),
+    );
   });
 
   it("lanza un error si Supabase devuelve una sesión sin email", async () => {
