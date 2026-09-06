@@ -3,6 +3,7 @@ import esAR from "./messages/es-AR.json";
 import en from "./messages/en.json";
 import pt from "./messages/pt.json";
 import zh from "./messages/zh.json";
+import fr from "./messages/fr.json";
 
 /**
  * es-AR es el diccionario canónico (ver types.d.ts) — si un idioma
@@ -26,6 +27,7 @@ describe("paridad de mensajes entre idiomas", () => {
     ["en", en],
     ["pt", pt],
     ["zh", zh],
+    ["fr", fr],
   ])("%s tiene exactamente las mismas claves que es-AR", (_locale, messages) => {
     const keys = collectKeys(messages).sort();
     const missing = canonicalKeys.filter((k) => !keys.includes(k));

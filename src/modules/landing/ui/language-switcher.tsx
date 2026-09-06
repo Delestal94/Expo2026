@@ -10,6 +10,7 @@ const LOCALE_LABEL: Record<(typeof routing.locales)[number], string> = {
   en: "EN",
   pt: "PT",
   zh: "中文",
+  fr: "FR",
 };
 
 /**
