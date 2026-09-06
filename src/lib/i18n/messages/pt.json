@@ -22,6 +22,7 @@
     "standHint": "Os estandes são atribuídos pela convocatória oficial da Câmara, não a partir deste site.",
     "emptyTitle": "Explore o mapa",
     "emptyHint": "Passe o mouse ou toque em qualquer estande para ver seu código, tipo e área.",
+    "viewersOnline": "{count} pessoas vendo o mapa agora",
     "filter": {
       "all": "Todos ({count})"
     },

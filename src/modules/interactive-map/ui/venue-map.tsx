@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { CATEGORIES, VENUE_PLAN, categoryMeta, polygonPoints } from "./venue-plan";
 import type { Category, VenueZone } from "./venue-plan";
+import { useMapPresence } from "./use-map-presence";
 
 const VIEW_W = 1200;
 const VIEW_H = 850;
@@ -19,6 +20,7 @@ export function VenueMap() {
   const t = useTranslations("InteractiveMap");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [filter, setFilter] = useState<Category | null>(null);
+  const viewerCount = useMapPresence();
 
   const active = activeId ? (VENUE_PLAN.find((z) => z.id === activeId) ?? null) : null;
 
@@ -72,6 +74,13 @@ export function VenueMap() {
           );
         })}
       </div>
+
+      {viewerCount !== null && viewerCount > 1 && (
+        <p className="flex items-center gap-2 font-mono text-xs text-paper-dim">
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent motion-safe:animate-pulse" />
+          {t("viewersOnline", { count: viewerCount })}
+        </p>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
         <div

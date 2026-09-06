@@ -22,6 +22,7 @@
     "standHint": "Les stands sont attribués par l'appel officiel de la Chambre, pas depuis ce site.",
     "emptyTitle": "Explorez le plan",
     "emptyHint": "Passez la souris ou touchez un stand pour voir son code, son type et sa surface.",
+    "viewersOnline": "{count} personnes consultent le plan en ce moment",
     "filter": {
       "all": "Tous ({count})"
     },
