@@ -166,7 +166,12 @@ export function ChatBot() {
       {isPastHero && !isOpen && (
         <aside
           aria-label={t.openLabel}
-          className="fixed bottom-6 right-6 z-50 transition-transform duration-200 hover:scale-105"
+          // El dock inferior de SectionNav (fixed bottom-0, visible hasta lg)
+          // se pisaba con este botón cuando ambos usaban el mismo bottom-6 —
+          // acá sube por encima del dock en mobile/tablet y vuelve a bottom-6
+          // en desktop, donde el dock no existe (reemplazado por el riel
+          // vertical).
+          className="fixed right-6 bottom-24 z-50 transition-transform duration-200 hover:scale-105 lg:bottom-6"
         >
           <button
             type="button"
@@ -204,7 +209,7 @@ export function ChatBot() {
         <section
           role="dialog"
           aria-label={t.assistantTitle}
-          className="fixed bottom-4 right-4 z-50 flex h-[min(600px,calc(100vh-2rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[#0d0b2e]/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:bottom-6 sm:right-6 sm:w-[400px]"
+          className="fixed right-4 bottom-20 z-50 flex h-[min(600px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[#0d0b2e]/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:right-6 sm:w-[400px] lg:bottom-6 lg:h-[min(600px,calc(100vh-2rem))]"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--color-line)] bg-surface/90 px-4 py-3 sm:px-5">
