@@ -22,6 +22,7 @@
     "standHint": "Los stands se asignan por la convocatoria oficial de la Cámara, no desde este sitio.",
     "emptyTitle": "Recorré el plano",
     "emptyHint": "Pasá el mouse o tocá cualquier stand para ver su código, tipo y superficie.",
+    "viewersOnline": "{count} personas viendo el mapa ahora",
     "filter": {
       "all": "Todos ({count})"
     },

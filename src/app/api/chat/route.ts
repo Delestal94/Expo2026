@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { retrieveContext } from "@/modules/chatbot";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 const DEFAULT_MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-3.5-sonnet";
@@ -188,10 +189,29 @@ export async function POST(request: NextRequest) {
     const trimmedMessage = message.trim();
     const systemPrompt = SYSTEM_PROMPTS[locale] || SYSTEM_PROMPTS["es-AR"];
 
+    // RAG liviano (issue #9): en vez de un system prompt fijo con hechos
+    // escritos a mano, se busca en el contenido real del sitio (FAQ, ejes,
+    // noticias, expositores) lo que tenga que ver con el mensaje del
+    // visitante y se lo suma como contexto adicional. Si no hay nada
+    // relevante, el prompt queda igual que antes.
+    const relevantDocs = retrieveContext(locale, trimmedMessage);
+    const contextMessage: ChatMessage[] =
+      relevantDocs.length > 0
+        ? [
+            {
+              role: "system",
+              content:
+                "Contexto adicional del sitio, relevante para la consulta (usalo si ayuda a responder, ignoralo si no):\n" +
+                relevantDocs.map((doc) => `- ${doc.text}`).join("\n"),
+            },
+          ]
+        : [];
+
     if (OPENROUTER_API_KEY) {
       try {
         const messages: ChatMessage[] = [
           systemPrompt,
+          ...contextMessage,
           ...conversation.slice(-8).map((c) => ({
             role: c.role,
             content: c.content,
