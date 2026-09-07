@@ -86,10 +86,13 @@ describe("AdmissionTicket", () => {
   });
 
   it("si /api/ticket-code falla, avisa en vez de quedarse cargando para siempre", async () => {
+    // El mock responde 401 cuando el token no tiene código asociado, que es
+    // el caso de sesión vencida: ahí recargar no sirve y hay que decir que
+    // vuelva a iniciar sesión.
     mockTicketCodeApi({});
 
     renderAdmissionTicket({ session, admissionMode: "free" });
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/no pudimos generar/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/tu sesión venció/i);
   });
 });

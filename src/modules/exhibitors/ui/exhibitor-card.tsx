@@ -73,12 +73,6 @@ export function ExhibitorCard({
       <div className="mt-auto flex items-center gap-2 border-t border-line/70 pt-4 text-xs text-paper-dim">
         <span className="font-mono uppercase tracking-[0.08em]">{t("buscaLabel")}</span>
         <span>{t(`items.${exhibitor.id}.busca`)}</span>
-        <span
-          aria-hidden="true"
-          className="ml-auto -translate-x-1 text-[var(--card-color)] opacity-0 transition-[transform,opacity] duration-300 group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:translate-x-0 motion-reduce:opacity-100"
-        >
-          ⟶
-        </span>
       </div>
     </article>
     </Reveal>
