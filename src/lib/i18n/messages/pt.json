@@ -34,7 +34,30 @@
       "juego": "Jogos",
       "institucional": "Institucional",
       "infraestructura": "Infraestrutura"
-    }
+    },
+    "groupCovered": "Pavilhão coberto — Série {prefix}",
+    "groupOutdoor": "Exterior — Série D (Descobertos)",
+    "groupCrafts": "Setor E — Artesãos e Jogos",
+    "groupFood": "Setor F — Gastronomia",
+    "groupOther": "Outros estandes",
+    "quickSelect": "Seletor rápido de estande",
+    "quickSelectPlaceholder": "Escolha um estande na lista ou toque no mapa...",
+    "servicesTitle": "Serviços e equipamentos incluídos",
+    "servicePower": "Ligação elétrica 220V monofásica",
+    "serviceLighting": "Iluminação focal e testeira frontal com identificação",
+    "serviceSecurity": "Segurança perimetral e vigilância privada 24 h",
+    "serviceWifi": "Wi-Fi de alta velocidade para expositores",
+    "askAvailability": "Consultar disponibilidade",
+    "venueTitle": "Predio Ciudad Cultural · Jujuy",
+    "venueArea": "Área total:",
+    "venueStands": "Estandes comerciais:",
+    "venueParking": "Capacidade de estacionamento:",
+    "whatsappTemplate": "Olá! Gostaria de consultar a disponibilidade e as condições comerciais do estande {stand} ({category}{area}) na ExpoJuy 2026.",
+    "areaFallback": "16 m² de área",
+    "exploring": "Explorando:",
+    "selectedStand": "Estande selecionado:",
+    "tapHint": "Toque em qualquer estande para ver características e serviços",
+    "clearSelection": "Limpar seleção"
   },
   "Landing": {
     "Hero": {
@@ -47,6 +70,7 @@
       "ctaProviders": "Cadastrar minha empresa como fornecedora"
     },
     "About": {
+      "title": "Sobre a ExpoJuy 2026",
       "descriptionIntro": "Depois de duas semanas no formato clássico, a ExpoJuy se reinventa:",
       "descriptionEmphasis": "quatro dias",
       "descriptionOutro": "de rodadas de negócios pela manhã e exposição à tarde, com a mineração de lítio e o comércio internacional como eixos centrais.",
@@ -202,7 +226,7 @@
     "viewProfilesCta": "Ver os {count} perfis",
     "collapseCta": "Mostrar menos",
     "buscaLabel": "Busca",
-    "noResults": "Nenhum expositor corresponde a “{query}”. Tente outro termo ou setor.",
+    "noResults": "Nenhuma veia corresponde a “{query}”.",
     "ejes": {
       "mineria": "Mineração e lítio",
       "comercio": "Comércio exterior",
@@ -255,15 +279,21 @@
     },
     "Matching": {
       "expositorLabel": "Expositor",
-      "a": { "detail": "Oferece: corretagem de cargas internacional" },
-      "b": { "detail": "Oferece: transporte pela passagem de Jama" },
+      "a": {
+        "detail": "Oferece: corretagem de cargas internacional"
+      },
+      "b": {
+        "detail": "Oferece: transporte pela passagem de Jama"
+      },
       "shared": {
         "corredor": "Corredor Bioceânico",
         "logistica": "Logística internacional",
         "pasoDeJama": "Passagem de Jama"
       },
       "disclaimer": "Nesta primeira versão, a sugestão é calculada por setor e país em comum — não é similaridade semântica completa (veja a decisão em <code>docs/architecture.md</code>). O agendamento de reuniões é habilitado na próxima etapa."
-    }
+    },
+    "noResultsInEje": "Nenhuma veia de <eje>{ejeLabel}</eje> corresponde a “{query}”.",
+    "clearSearch": "Limpar busca"
   },
   "BusinessRounds": {
     "Agenda": {
@@ -280,7 +310,12 @@
         "automatizacionProcesos": "Automação de processos",
         "comercioExterior": "Comércio exterior"
       },
-      "days": { "fri": "Sex", "sat": "Sáb", "sun": "Dom", "mon": "Seg" },
+      "days": {
+        "fri": "Sex",
+        "sat": "Sáb",
+        "sun": "Dom",
+        "mon": "Seg"
+      },
       "exampleDisclaimer": "Agenda de exemplo — a reserva de reuniões ainda não tem um backend real por trás."
     },
     "Program": {
@@ -292,7 +327,10 @@
       "morningContent": "Rodadas de negócios internacionais — Corredor Bioceânico",
       "afternoonLabel": "Tarde",
       "afternoonContent": "Feira aberta na Ciudad Cultural — estandes, mineração, comércio exterior e economia do conhecimento",
-      "highlight": { "apertura": "Abertura", "cierre": "Encerramento" },
+      "highlight": {
+        "apertura": "Abertura",
+        "cierre": "Encerramento"
+      },
       "highlightNote": {
         "apertura": "dia de abertura do evento.",
         "cierre": "dia de encerramento do evento."

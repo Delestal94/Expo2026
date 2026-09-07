@@ -34,7 +34,30 @@
       "juego": "Jeux",
       "institucional": "Institutionnel",
       "infraestructura": "Infrastructure"
-    }
+    },
+    "groupCovered": "Hall couvert — Série {prefix}",
+    "groupOutdoor": "Extérieur — Série D (Découverts)",
+    "groupCrafts": "Secteur E — Artisans et Jeux",
+    "groupFood": "Secteur F — Restauration",
+    "groupOther": "Autres stands",
+    "quickSelect": "Sélecteur rapide de stand",
+    "quickSelectPlaceholder": "Choisissez un stand dans la liste ou touchez le plan...",
+    "servicesTitle": "Services et équipements inclus",
+    "servicePower": "Raccordement électrique 220V monophasé",
+    "serviceLighting": "Éclairage focal et bandeau frontal avec enseigne",
+    "serviceSecurity": "Sécurité périmétrique et surveillance privée 24 h",
+    "serviceWifi": "Wi-Fi haut débit pour les exposants",
+    "askAvailability": "Demander la disponibilité",
+    "venueTitle": "Site Ciudad Cultural · Jujuy",
+    "venueArea": "Superficie totale :",
+    "venueStands": "Stands commerciaux :",
+    "venueParking": "Capacité de stationnement :",
+    "whatsappTemplate": "Bonjour ! Je souhaiterais connaître la disponibilité et les conditions commerciales du stand {stand} ({category}{area}) à ExpoJuy 2026.",
+    "areaFallback": "16 m² de surface",
+    "exploring": "Exploration :",
+    "selectedStand": "Stand sélectionné :",
+    "tapHint": "Touchez un stand pour voir ses caractéristiques et services",
+    "clearSelection": "Effacer la sélection"
   },
   "Landing": {
     "Hero": {
@@ -47,6 +70,7 @@
       "ctaProviders": "Inscrire mon entreprise comme fournisseur"
     },
     "About": {
+      "title": "À propos d'ExpoJuy 2026",
       "descriptionIntro": "Après deux semaines au format classique, ExpoJuy se réinvente :",
       "descriptionEmphasis": "quatre jours",
       "descriptionOutro": "de rencontres d'affaires le matin et d'exposition l'après-midi, avec l'exploitation du lithium et le commerce international comme axes centraux.",
@@ -202,7 +226,7 @@
     "viewProfilesCta": "Voir les {count} profils",
     "collapseCta": "Afficher moins",
     "buscaLabel": "Recherche",
-    "noResults": "Aucun exposant ne correspond à « {query} ». Essayez un autre terme ou secteur.",
+    "noResults": "Aucun filon ne correspond à «{query}».",
     "ejes": {
       "mineria": "Mines et lithium",
       "comercio": "Commerce extérieur",
@@ -255,15 +279,21 @@
     },
     "Matching": {
       "expositorLabel": "Exposant",
-      "a": { "detail": "Propose : courtage de fret international" },
-      "b": { "detail": "Propose : transport via le col de Jama" },
+      "a": {
+        "detail": "Propose : courtage de fret international"
+      },
+      "b": {
+        "detail": "Propose : transport via le col de Jama"
+      },
       "shared": {
         "corredor": "Corridor Bioocéanique",
         "logistica": "Logistique internationale",
         "pasoDeJama": "Col de Jama"
       },
       "disclaimer": "Dans cette première version, la suggestion est calculée par secteur et pays commun — pas par similarité sémantique complète (voir décision dans <code>docs/architecture.md</code>). L'agenda des réunions sera activé à la prochaine étape."
-    }
+    },
+    "noResultsInEje": "Aucun filon de <eje>{ejeLabel}</eje> ne correspond à «{query}».",
+    "clearSearch": "Effacer la recherche"
   },
   "BusinessRounds": {
     "Agenda": {
@@ -280,7 +310,12 @@
         "automatizacionProcesos": "Automatisation des processus",
         "comercioExterior": "Commerce extérieur"
       },
-      "days": { "fri": "Ven", "sat": "Sam", "sun": "Dim", "mon": "Lun" },
+      "days": {
+        "fri": "Ven",
+        "sat": "Sam",
+        "sun": "Dim",
+        "mon": "Lun"
+      },
       "exampleDisclaimer": "Agenda d'exemple — la réservation de réunions n'a pas encore de backend réel."
     },
     "Program": {
@@ -292,7 +327,10 @@
       "morningContent": "Rencontres d'affaires internationales — Corridor Bioocéanique",
       "afternoonLabel": "Après-midi",
       "afternoonContent": "Expo ouverte à Ciudad Cultural — stands, mines, commerce extérieur et économie de la connaissance",
-      "highlight": { "apertura": "Ouverture", "cierre": "Clôture" },
+      "highlight": {
+        "apertura": "Ouverture",
+        "cierre": "Clôture"
+      },
       "highlightNote": {
         "apertura": "jour d'ouverture de l'événement.",
         "cierre": "jour de clôture de l'événement."

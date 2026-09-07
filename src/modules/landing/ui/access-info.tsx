@@ -51,9 +51,14 @@ export async function AccessInfo() {
               <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
                 {tDirections("eyebrow")}
               </span>
-              <h3 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
+              {/* h2 y no h3: "Cómo llegar" y "Acceso e ingreso" son bloques
+                  hermanos —ninguno cuelga del otro— y este va primero en el
+                  DOM, así que como h3 dejaba la secuencia h3 → h2, invertida
+                  para quien navega por encabezados. El tamaño visual se
+                  mantiene; lo que cambia es el nivel semántico. */}
+              <h2 className="mt-2 text-balance font-display text-2xl font-medium text-paper sm:text-3xl">
                 {tDirections("title")}
-              </h3>
+              </h2>
               <p className="mt-4 max-w-lg text-balance text-sm text-paper-dim">
                 {tDirections.rich("description", {
                   strong: (chunks) => <strong className="text-paper">{chunks}</strong>,
@@ -104,7 +109,7 @@ export async function AccessInfo() {
                       {isFree && (
                         <span
                           aria-hidden="true"
-                          className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
+                          className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta-text uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
                         >
                           {t("pricing.freeBadge")}
                         </span>
