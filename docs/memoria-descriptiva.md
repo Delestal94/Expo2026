@@ -71,7 +71,7 @@ Documento técnico completo en [`docs/architecture.md`](architecture.md) y en la
 - **Nada hardcodeado**: cada módulo funcional (registro de acceso, portal de expositores, asistente IA, mapa interactivo) es una *feature flag* editable sin deploy, con kill-switch de emergencia.
 - **Nada atado a un proveedor**: pagos, CMS, IA, email, storage y realtime están detrás de una interfaz propia (arquitectura de puertos y adaptadores) — cambiar de proveedor es escribir un adaptador nuevo, no reescribir la lógica de negocio.
 - **Nada acoplado entre módulos**: cada capacidad de negocio vive en su propia carpeta con un único punto de entrada público, verificado por una regla de lint que rompe el build si se viola.
-- **Multiidioma real**: español, inglés, portugués y mandarín priorizados por la audiencia real del evento (Corredor Bioceánico, inversión minera), no por una lista genérica de "idiomas más hablados".
+- **Multiidioma real**: español, inglés, portugués, mandarín y francés priorizados por la audiencia real del evento (Corredor Bioceánico, inversión minera), no por una lista genérica de "idiomas más hablados". Los cinco están completos, incluido el asistente con IA.
 
 Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo lint, type-check, tests y build en cada cambio, protección de ramas real, y un historial de decisiones (ADRs) que registra cada elección con su fecha y su porqué.
 
@@ -83,7 +83,7 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §8) | **Construido** (alta de cuenta, login y QR de ingreso en modo gratuito); cobro en modo pago (Mercado Pago), pendiente |
 | Portal de expositores + rondas de negocios | Directorio con buscador y filtro por eje, matching por rubro/país, agenda de reuniones | **Construido** (datos de ejemplo) — ver sección 12 |
 | Agenda de actividades | Estructura diaria confirmada (rondas AM / expo PM) para los 4 días, con selector interactivo | **Construido** — la grilla horaria detallada de charlas y shows la publica la organización más cerca de la fecha |
-| Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
+| Asistente con IA | Responde sobre fechas, sede, ejes y acceso recuperando el contenido real del sitio (RAG), en los 5 idiomas | **Construido** — endpoint propio contra OpenRouter; sin credencial cargada degrada a respuestas guiadas en vez de fallar. La derivación a un humano está diseñada, no construida |
 | Mapa interactivo | Plano calcado del CAD de Ciudad Cultural, con más de 200 zonas filtrables por categoría | **Construido** — ver sección 12 |
 
 ## 8. Dos decisiones que no bloquearon el avance
@@ -134,10 +134,12 @@ Verificado manualmente en 390px (mobile), 768px (tablet) y 1440px/1920px (deskto
 
 | Fecha | Fase | Entregable |
 |---|---|---|
-| 31/08 – 08/09 | Fase 0 | Este documento + mockup navegable |
-| 11/09 – 20/09 | Fase 1 | Landing completa + CMS |
-| 20/09 – 27/09 | Fase 2 | Registro de acceso + portal de expositores |
-| 27/09 – 30/09 | Fase 3 | Asistente IA + entrega final |
+| 31/08 – 08/09 | Fase 0 | Este documento + prototipo funcional navegable |
+| 11/09 – 20/09 | Fase 1 | Gestor de contenidos, para que la Cámara publique sin depender del equipo |
+| 20/09 – 27/09 | Fase 2 | Cobro de entradas y datos reales de expositores |
+| 27/09 – 30/09 | Fase 3 | Derivación a humano en el asistente, grilla horaria definitiva y entrega final |
+
+La landing, el registro de acceso, el portal de expositores, el mapa interactivo y el asistente con IA se adelantaron a la Fase 0 y ya están construidos (ver §7). Lo que queda en las fases siguientes es, sobre todo, lo que depende de terceros: el esquema de precios que define la Cámara, los datos reales de expositores y la grilla horaria que publica la organización.
 
 ## 14. Equipo
 
