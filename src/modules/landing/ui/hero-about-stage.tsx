@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
@@ -56,26 +56,32 @@ const ABOUT_LINES: Record<
   },
 };
 
+/** Datos duros del evento: acompañan al titular, no compiten con los ejes. */
 const STATS = [
   { key: "edition", value: "17ª", color: "var(--color-cyan)" },
   { key: "days", value: "4", color: "var(--color-violet)" },
   { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9 al 12 OCT", color: "var(--color-lavender)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
 ] as const;
 
-const BAND_WIDTH = [
-  "w-full",
-  "w-full sm:w-[91%]",
-  "w-full sm:w-[98%]",
-  "w-full sm:w-[83%]",
-];
+/** Los cuatro ejes temáticos: cada uno es una línea de tipografía viva. */
+const EJES = [
+  { n: "01", key: "mineria", color: "var(--color-cyan)" },
+  { n: "02", key: "comercio", color: "var(--color-violet)" },
+  { n: "03", key: "corredor", color: "var(--color-magenta)" },
+  { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
+] as const;
 
 export function HeroAboutStage() {
   const tHero = useTranslations("Landing.Hero");
   const tAbout = useTranslations("Landing.About");
+  const tEjes = useTranslations("Landing.Ejes");
   const locale = useLocale();
   const lines = ABOUT_LINES[locale] ?? ABOUT_LINES["es-AR"];
   const stageRef = useRef<HTMLElement>(null);
+  // Eje apuntado. Arranca en el primero para que la franja de abajo nunca
+  // esté vacía y se entienda que las líneas responden.
+  const [activeEje, setActiveEje] = useState<number | null>(0);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -87,19 +93,25 @@ export function HeroAboutStage() {
     if (prefersReducedMotion) return;
 
     let ticking = false;
+    let snapping = false;
+    let snapTimeout = 0;
+    let settleTimeout = 0;
+    // Umbral mínimo de scroll real para disparar el snap: un toque de
+    // rueda/trackpad alcanza, no hace falta agotar los 112vh del track.
+    const TRIGGER_PROGRESS = 0.04;
 
-    function update() {
+    /**
+     * Los tres actos se solapan y cubren el recorrido completo (0 → 0.92).
+     *
+     * Antes quedaban dos huecos grandes —de 0.38 a 0.58 y de 0.78 a 1.0—
+     * heredados de un acto de traslación que se eliminó: el 42% del scroll
+     * no animaba nada y el recorrido se sentía lento y a los tirones. Con
+     * las ventanas encadenadas siempre hay algo en movimiento.
+     */
+    function apply(progress: number) {
       if (!stage) return;
-      const rect = stage.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-      const totalScroll = rect.height - viewH;
-      if (totalScroll <= 0) return;
-
-      // Progreso normalizado de 0 a 1 dentro de la pista fija
-      const progress = Math.min(Math.max(-rect.top / totalScroll, 0), 1);
-
-      // ── ACTO 1: HERO ZOOM-THROUGH Y DESAPARICIÓN DE ESTRATOS (0.00 a 0.20) ──
-      const heroZoomProgress = Math.min(Math.max(progress / 0.22, 0), 1);
+      // ── ACTO 1: HERO ZOOM-THROUGH Y DESAPARICIÓN (0.00 → 0.32) ──
+      const heroZoomProgress = Math.min(Math.max(progress / 0.32, 0), 1);
       const heroMidScale = 1 + heroZoomProgress * 1.8;
       const heroMidOpacity = Math.max(0, 1 - heroZoomProgress * 1.35);
       const heroMidBlur = heroZoomProgress * 8;
@@ -130,9 +142,9 @@ export function HeroAboutStage() {
         strataOpacity.toFixed(3),
       );
 
-      // ── ACTO 2: TEXTO DE ABOUT APARECE CENTRADO EN EL FONDO LIMPIO (0.24 a 0.38) ──
+      // ── ACTO 2: APARECE EL BLOQUE "SOBRE" (0.22 → 0.58, solapado con el 1) ──
       const textAppearProgress = Math.min(
-        Math.max((progress - 0.24) / 0.14, 0),
+        Math.max((progress - 0.22) / 0.36, 0),
         1,
       );
       const textOpacity = textAppearProgress;
@@ -147,36 +159,111 @@ export function HeroAboutStage() {
         textOpacity > 0.05 ? "auto" : "none",
       );
 
-      // ── ACTO 3: TRASLADO ARMONIOSO Y UNIFICADO DEL CENTRO A LA IZQUIERDA (0.42 a 0.68) ──
-      const glideProgress = Math.min(
-        Math.max((progress - 0.42) / 0.24, 0),
-        1,
-      );
-      // Easing suave (smoothstep cúbico) para que la traslación sea natural y progresiva
-      const easedGlide = glideProgress * glideProgress * (3 - 2 * glideProgress);
-      // En desktop, 18vw traslada el bloque exactamente al centro horizontal
-      const glideX = (1 - easedGlide) * 18;
-      stage.style.setProperty("--about-glide-x", `${glideX.toFixed(2)}vw`);
-
-      // ── ACTO 4: CARGA SIMULTÁNEA DE LAS 4 BARRAS (0.58 a 0.78) ──
+      // ── ACTO 3: ENTRAN LOS EJES Y LOS DATOS (0.48 → 0.92) ──
       const barsProgress = Math.min(
-        Math.max((progress - 0.58) / 0.20, 0),
+        Math.max((progress - 0.48) / 0.44, 0),
         1,
       );
       const barsScale = barsProgress;
       const barsOpacity = Math.min(1, barsProgress * 2.0);
 
-      // ── ACTO 5: SUBTÍTULOS APARECEN ÚNICAMENTE CUANDO LAS BARRAS YA ESTÁN 100% COMPLETAS (0.78 a 0.90) ──
-      const labelsProgress = Math.min(
-        Math.max((progress - 0.78) / 0.12, 0),
-        1,
-      );
-      const labelsOpacity = labelsProgress;
-
       stage.style.setProperty("--bars-scale", barsScale.toFixed(3));
       stage.style.setProperty("--bars-opacity", barsOpacity.toFixed(3));
-      stage.style.setProperty("--labels-opacity", labelsOpacity.toFixed(3));
+    }
 
+    // Último progreso REAL (derivado del scroll), para disparar el snap por
+    // flanco —al cruzar el umbral— y no por nivel.
+    let lastProgress = 0;
+
+    /**
+     * Completa el recorrido moviendo el scroll de verdad hasta el extremo
+     * del track, en vez de animar solo las variables CSS.
+     *
+     * La versión anterior animaba las variables con su propio rAF y dejaba
+     * la posición real de scroll donde estaba: el estado visual decía
+     * "progreso 1" mientras el scroll real seguía en ~0.3. Como el flanco se
+     * calcula contra `lastProgress`, el siguiente scroll leía
+     * `0.3 < 0.96 && 1 >= 0.96` y disparaba el snap hacia atrás — de ahí el
+     * rebote al hero al segundo scroll hacia abajo. Moviendo el scroll real,
+     * lo visual y la posición nunca se separan y el bug no puede existir.
+     */
+    /** Progreso real 0→1 dentro de la pista, o null si todavía no aplica. */
+    function getProgress(): number | null {
+      if (!stage) return null;
+      const rect = stage.getBoundingClientRect();
+      const viewH = window.innerHeight || 800;
+      const totalScroll = rect.height - viewH;
+      if (totalScroll <= 0) return null;
+      return Math.min(Math.max(-rect.top / totalScroll, 0), 1);
+    }
+
+    function snapTo(target: 0 | 1) {
+      if (!stage) return;
+      const rect = stage.getBoundingClientRect();
+      const viewH = window.innerHeight || 800;
+      const totalScroll = rect.height - viewH;
+      if (totalScroll <= 0) return;
+
+      const sectionTop = window.scrollY + rect.top;
+      snapping = true;
+      window.clearTimeout(snapTimeout);
+      window.scrollTo({
+        top: sectionTop + target * totalScroll,
+        behavior: "smooth",
+      });
+      // El scroll suave no avisa cuándo terminó: liberamos el bloqueo cuando
+      // ya no puede seguir en curso, y verificamos que efectivamente haya
+      // llegado a un extremo (el usuario pudo haberlo interrumpido).
+      snapTimeout = window.setTimeout(() => {
+        snapping = false;
+        settle();
+      }, 700);
+    }
+
+    /**
+     * Red de contención: al dejar de scrollear, si el recorrido quedó a
+     * mitad de camino lo lleva al extremo más cercano.
+     *
+     * El disparo por flanco solo se cumple viniendo de un extremo
+     * (`lastProgress` ≤ 0.04 o ≥ 0.96). Scrolleando muy despacio, el propio
+     * scroll del usuario interrumpe el `scrollTo` suave y el recorrido queda
+     * parado en el medio: desde ahí ninguna de las dos condiciones puede
+     * volver a cumplirse nunca y la animación se congela a mitad. Esto lo
+     * resuelve mirando dónde quedó, sin depender de por dónde pasó.
+     */
+    function settle() {
+      if (snapping) return;
+      const progress = getProgress();
+      if (progress === null) return;
+      if (progress <= TRIGGER_PROGRESS || progress >= 1 - TRIGGER_PROGRESS) return;
+      snapTo(progress < 0.5 ? 0 : 1);
+    }
+
+    function update() {
+      const progress = getProgress();
+      if (progress === null) {
+        ticking = false;
+        return;
+      }
+
+      apply(progress);
+
+      // Mientras el snap está en curso no se evalúan flancos: si no, el
+      // propio scroll suave se dispararía a sí mismo.
+      if (!snapping) {
+        const crossedForward =
+          progress > TRIGGER_PROGRESS && lastProgress <= TRIGGER_PROGRESS;
+        const crossedBackward =
+          progress < 1 - TRIGGER_PROGRESS && lastProgress >= 1 - TRIGGER_PROGRESS;
+
+        if (crossedForward) {
+          snapTo(1);
+        } else if (crossedBackward) {
+          snapTo(0);
+        }
+      }
+
+      lastProgress = progress;
       ticking = false;
     }
 
@@ -185,6 +272,12 @@ export function HeroAboutStage() {
         requestAnimationFrame(update);
         ticking = true;
       }
+      // Cada scroll reinicia la cuenta: `settle` corre recién cuando el
+      // visitante suelta, no durante el gesto.
+      if (!snapping) {
+        window.clearTimeout(settleTimeout);
+        settleTimeout = window.setTimeout(settle, 140);
+      }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -192,13 +285,15 @@ export function HeroAboutStage() {
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(snapTimeout);
+      window.clearTimeout(settleTimeout);
     };
   }, []);
 
   return (
     <section
       ref={stageRef}
-      className="relative h-auto border-b border-line overflow-x-clip motion-safe:h-[280vh]"
+      className="relative h-auto overflow-x-clip motion-safe:h-[112vh]"
     >
       {/* Puntos de anclaje para navegación oficial (#inicio y #sobre) */}
       <div
@@ -207,17 +302,23 @@ export function HeroAboutStage() {
       />
       <div
         id="sobre"
-        className="pointer-events-none absolute motion-safe:top-[172vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
+        className="pointer-events-none absolute motion-safe:top-[69vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
       />
 
       {/* Viewport fijo durante el recorrido scrollytelling */}
-      <div className="relative flex min-h-svh flex-col justify-between overflow-hidden px-6 pt-8 pb-10 sm:px-10 lg:px-16 motion-safe:sticky motion-safe:top-0 motion-safe:h-screen">
+      {/* `bg-ink` no es decorativo: `position: sticky` crea un contexto de
+          apilamiento, así que el `mix-blend-mode: screen` del canvas queda
+          aislado acá adentro y no alcanza el fondo del body. Sin un color
+          pintado en este contenedor, el canvas mezcla contra transparente y
+          su relleno negro se ve negro. Con el color de página explícito,
+          screen se comporta como identidad y solo las bandas suman luz. */}
+      <div className="relative flex min-h-svh flex-col justify-between overflow-hidden bg-ink px-6 pt-8 pb-10 sm:px-10 lg:px-16 motion-safe:sticky motion-safe:top-0 motion-safe:h-screen">
         {/* Fondo animado de estratos a todo el ancho (apertura de cañón con el scroll) */}
         <StrataCanvas />
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/20 to-ink/90"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ink/10 via-ink/5 to-ink/30"
         />
 
         {/* ══════════════════════════════════════════════════════════
@@ -226,7 +327,7 @@ export function HeroAboutStage() {
 
         {/* Navegación superior del Hero */}
         <nav
-          className="relative z-20 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]"
+          className="motion-entrance relative z-20 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_backwards]"
           style={{
             opacity: "var(--hero-controls-opacity, 1)",
             transform: "translate3d(0, calc(-1 * var(--hero-controls-y, 0px)), 0)",
@@ -252,7 +353,7 @@ export function HeroAboutStage() {
 
         {/* Bloque central Hero (Zoom hacia la cámara al scrollear) */}
         <div
-          className="pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:filter-none drop-shadow-[0_2px_16px_rgba(7,11,25,0.95)]"
+          className="motion-entrance pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform drop-shadow-[0_2px_16px_rgba(7,11,25,0.95)]"
           style={{
             transform: "scale(var(--hero-mid-scale, 1))",
             opacity: "var(--hero-mid-opacity, 1)",
@@ -279,7 +380,7 @@ export function HeroAboutStage() {
 
         {/* Bloque inferior Hero (Countdown y CTAs) */}
         <div
-          className="relative z-20 flex flex-col gap-8 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 sm:flex-row sm:items-end sm:justify-between motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.48s_backwards]"
+          className="motion-entrance relative z-20 flex flex-col gap-8 will-change-transform sm:flex-row sm:items-end sm:justify-between motion-safe:animate-[strata-settle_0.6s_cubic-bezier(0.16,1,0.3,1)_0.48s_backwards]"
           style={{
             opacity: "var(--hero-controls-opacity, 1)",
             transform: "translate3d(0, var(--hero-controls-y, 0px), 0)",
@@ -317,120 +418,143 @@ export function HeroAboutStage() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            CAPA 2: ELEMENTOS ABOUT
-            (Texto emerge al medio -> se traslada a la izquierda
-             -> se cargan las 4 barras simultáneamente)
+            CAPA 2: ELEMENTOS ABOUT — tipografía cinética en dos columnas.
+            Los ejes no viven en tarjetas: son cuatro líneas de texto
+            enorme, sin fondo ni borde. La activa se estira (tracking),
+            toma su color y arrastra una regla que crece bajo ella.
+
+            El reparto en dos columnas es lo que mantiene todo legible:
+            apilado en una sola, la suma de alturas desbordaba el viewport
+            y el `overflow-hidden` del contenedor recortaba el final. Los
+            tamaños se atan con min(vw, vh) para que en pantallas bajas
+            encojan por alto y no solo por ancho.
             ══════════════════════════════════════════════════════════ */}
+        {/* Con movimiento reducido no hay recorrido que revele este bloque:
+            las variables se quedan en su valor inicial (0) y el contenido
+            quedaba INVISIBLE — el relato, los datos y los cuatro ejes
+            desaparecían. `.motion-entrance` (globals.css) fuerza el estado
+            final, y `motion-safe:absolute` lo saca de la superposición sobre
+            el hero para que caiga en el flujo, debajo, donde se puede leer. */}
         <div
-          className="pointer-events-none absolute inset-x-6 top-1/2 z-30 -translate-y-1/2 sm:inset-x-10 lg:inset-x-16"
+          className="motion-entrance pointer-events-none z-30 flex items-center motion-safe:absolute motion-safe:inset-0 motion-reduce:relative motion-reduce:mt-12 px-6 py-6 sm:px-10 lg:px-12 xl:px-16"
           style={{
             opacity: "var(--about-text-opacity, 0)",
             pointerEvents: "var(--about-pointer-events, none)" as React.CSSProperties["pointerEvents"],
           }}
         >
-          <div className="grid gap-y-8 lg:grid-cols-12 lg:gap-x-12 lg:items-center">
-            {/* Bloque de texto con las 8 líneas originales en Manrope/Unbounded y traslación armónica */}
-            <div
-              className="pointer-events-auto lg:col-span-7 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
-              style={{
-                transform:
-                  "translate3d(var(--about-glide-x, 0vw), 0, 0) scale(var(--about-text-scale, 1))",
-                filter: "blur(var(--about-text-blur, 0px))",
-              }}
-            >
-              <div className="relative w-full max-w-none mx-auto lg:mx-0">
-                <div className="flex flex-col text-left">
-                  {/* Líneas 1 y 2 de la captura */}
-                  <div className="flex flex-col gap-1 sm:gap-1.5">
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-ambit text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,2.5vw,3rem)] leading-[1.12] font-semibold text-paper tracking-tight">
-                      {lines.intro1}
-                    </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-ambit text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,2.5vw,3rem)] leading-[1.12] font-semibold text-paper tracking-tight">
-                      {lines.intro2}
-                    </span>
-                  </div>
+          <div
+            className="motion-entrance pointer-events-auto grid w-full gap-6 will-change-transform lg:grid-cols-12 lg:items-center lg:gap-12"
+            style={{
+              transform: "scale(var(--about-text-scale, 1))",
+              filter: "blur(var(--about-text-blur, 0px))",
+            }}
+          >
+            {/* ── Columna izquierda: el relato y los datos duros ── */}
+            <div className="lg:col-span-4">
+              <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(1.9vw,3.2vh),1.6rem)]">
+                {lines.intro1} {lines.intro2}
+              </p>
 
-                  {/* Línea 3: cuatro días */}
-                  <div className="my-3 sm:my-4 lg:my-6 xl:my-7">
-                    <span className="block font-ambit text-[clamp(3.8rem,8.5vw,8.5rem)] leading-[0.88] font-bold tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)]">
-                      {tAbout("descriptionEmphasis")}
-                    </span>
-                  </div>
+              <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(4.6vw,9vh),5.5rem)]">
+                {tAbout("descriptionEmphasis")}
+              </p>
 
-                  {/* Líneas 4 y 5 de la captura */}
-                  <div className="flex flex-col gap-1 sm:gap-1.5 max-w-2xl xl:max-w-none">
-                    <span className="block whitespace-normal lg:whitespace-nowrap font-ambit text-sm sm:text-base md:text-lg lg:text-[clamp(1rem,1.35vw,1.5rem)] text-paper-dim leading-relaxed font-normal">
-                      {lines.outro1}
-                    </span>
-                    <span className="block whitespace-normal lg:whitespace-nowrap font-ambit text-sm sm:text-base md:text-lg lg:text-[clamp(1rem,1.35vw,1.5rem)] text-paper-dim leading-relaxed font-normal">
-                      {lines.outro2}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+              <p className="mt-3 max-w-lg font-ambit leading-snug font-normal text-paper-dim text-[clamp(0.75rem,min(1.25vw,2.2vh),1.05rem)]">
+                {lines.outro1} {lines.outro2}
+              </p>
 
-            {/* 4 Barras de estratos: una arriba de la otra, con tipografía Ambit y revelación de subtítulos al completarse */}
-            <div className="relative pointer-events-auto lg:col-span-5 lg:col-start-8 lg:self-center">
-              {/* Resplandor ambiental de fondo */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-br from-accent/10 via-purple-500/5 to-transparent blur-2xl opacity-50"
-              />
-              <dl className="relative flex flex-col gap-2 sm:gap-2.5">
-                {STATS.map((stat, i) => (
-                  <div
-                    key={stat.key}
-                    className={`group relative flex flex-col-reverse ${BAND_WIDTH[i]}`}
-                  >
-                    <dt
-                      className="flex items-center justify-end gap-2.5 px-3 pt-2 pb-1 font-ambit text-[0.72rem] tracking-[0.14em] text-paper-dim uppercase font-semibold will-change-transform motion-reduce:opacity-100"
-                      style={{
-                        opacity: "var(--labels-opacity, 0)",
-                      }}
-                    >
-                      <span className="text-right whitespace-nowrap">
-                        {tAbout(`stats.${stat.key}`)}
-                      </span>
-                      <span
-                        className="h-2 w-2 shrink-0 rounded-full"
-                        style={{
-                          backgroundColor: stat.color,
-                          boxShadow: `0 0 8px ${stat.color}`,
-                        }}
-                      />
-                    </dt>
+              <dl
+                className="motion-entrance mt-5 flex flex-wrap gap-x-7 gap-y-3 border-t border-line pt-4 will-change-transform"
+                style={{
+                  opacity: "var(--bars-opacity, 0)",
+                  transform: "translateY(calc((1 - var(--bars-scale, 0)) * 14px))",
+                }}
+              >
+                {STATS.map((stat) => (
+                  <div key={stat.key} className="flex flex-col">
                     <dd
-                      className="relative flex items-center justify-end overflow-hidden rounded-xl px-7 py-4 font-ambit text-3xl font-bold text-ink tabular-nums shadow-sm transition-all duration-500 group-hover:shadow-[0_6px_20px_-4px_rgba(0,0,0,0.4)] sm:py-5 sm:text-4xl lg:text-5xl will-change-transform"
-                      style={{
-                        backgroundColor: stat.color,
-                        clipPath:
-                          "inset(0 calc((1 - var(--bars-scale, 0)) * 100%) 0 0 round 0.75rem)",
-                        opacity: "var(--bars-opacity, 0)",
-                      }}
+                      className="font-ambit font-bold tabular-nums leading-none tracking-tight text-[clamp(1.1rem,min(2vw,3.4vh),1.9rem)]"
+                      style={{ color: stat.color }}
                     >
-                      {/* Destello metálico sutil y pausado en hover */}
-                      <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1200 ease-in-out group-hover:translate-x-[200%]"
-                      />
-                      <div className="relative z-10 flex items-baseline">
-                        {stat.key === "dates" ? (
-                          <>
-                            <span>9</span>
-                            <span className="mx-2 text-[0.48em] font-normal tracking-normal text-ink/40 lowercase select-none">
-                              al
-                            </span>
-                            <span>12 OCT</span>
-                          </>
-                        ) : (
-                          <span>{stat.value}</span>
-                        )}
-                      </div>
+                      {stat.value}
                     </dd>
+                    <dt className="mt-1 max-w-32 font-mono uppercase leading-tight tracking-[0.12em] text-paper-dim text-[clamp(0.5rem,min(0.75vw,1.25vh),0.72rem)]">
+                      {tAbout(`stats.${stat.key}`)}
+                    </dt>
                   </div>
                 ))}
               </dl>
+            </div>
+
+            {/* ── Columna derecha: los cuatro ejes en tipografía cinética ── */}
+            <div
+              className="motion-entrance will-change-transform lg:col-span-8"
+              style={{
+                opacity: "var(--bars-opacity, 0)",
+                transform: "translateY(calc((1 - var(--bars-scale, 0)) * 18px))",
+              }}
+            >
+              <p className="mb-3 font-mono uppercase tracking-[0.25em] text-paper-dim text-[clamp(0.55rem,min(0.8vw,1.35vh),0.78rem)]">
+                {tEjes("eyebrow")}
+              </p>
+
+              {EJES.map((eje, i) => {
+                const isActive = activeEje === i;
+                return (
+                  <button
+                    key={eje.n}
+                    type="button"
+                    aria-expanded={isActive}
+                    onMouseEnter={() => setActiveEje(i)}
+                    onFocus={() => setActiveEje(i)}
+                    onClick={() => setActiveEje(i)}
+                    className="group block w-full cursor-pointer border-0 bg-transparent py-1.5 text-left"
+                  >
+                    <span className="flex items-baseline gap-3 sm:gap-5">
+                      <span
+                        className="shrink-0 font-mono tabular-nums tracking-[0.2em] transition-colors duration-500 text-[clamp(0.55rem,min(0.9vw,1.5vh),0.85rem)]"
+                        style={{ color: isActive ? eje.color : "var(--color-paper-dim)" }}
+                      >
+                        {eje.n}
+                      </span>
+                      <span
+                        className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.2rem,min(3.7vw,6.6vh),3.5rem)]"
+                        style={{
+                          color: isActive ? eje.color : "var(--color-paper)",
+                          opacity: isActive ? 1 : 0.4,
+                          letterSpacing: isActive ? "0.03em" : "-0.02em",
+                        }}
+                      >
+                        {tEjes(`items.${eje.key}.title`)}
+                      </span>
+                    </span>
+
+                    {/* Regla que se dibuja bajo la línea activa */}
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 block h-px origin-left transition-transform duration-500 ease-out motion-reduce:transition-none"
+                      style={{
+                        backgroundColor: eje.color,
+                        transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                      }}
+                    />
+                  </button>
+                );
+              })}
+
+              {/* Descripción del eje activo: alto reservado para que
+                  cambiar de eje no mueva nunca las líneas de arriba. */}
+              <p
+                className="mt-4 max-w-3xl border-l-2 pl-4 leading-relaxed text-paper-dim transition-colors duration-500 text-[clamp(0.8rem,min(1.3vw,2.2vh),1.1rem)]"
+                style={{
+                  borderColor: activeEje === null ? "var(--color-line)" : EJES[activeEje].color,
+                  minHeight: "4.5em",
+                }}
+              >
+                {activeEje === null
+                  ? tEjes("eyebrow")
+                  : tEjes(`items.${EJES[activeEje].key}.description`)}
+              </p>
             </div>
           </div>
         </div>

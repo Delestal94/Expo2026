@@ -1,49 +1,56 @@
 import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
+import { Reveal } from "@/lib/ui/reveal";
 import { textSafeColor, type Exhibitor } from "./exhibitors-data";
+
+/**
+ * Cada tarjeta entra desde un punto distinto según su posición en la fila
+ * (las de los bordes con una pizca de rotación, la del medio recta), pero
+ * SIEMPRE con la misma curva y duración que el resto del sitio.
+ */
+const ENTRANCE_BY_SLOT = [
+  { x: -25, y: 40, rotate: -1.5, scale: 0.93 },
+  { x: 0, y: 45, rotate: 0, scale: 0.93 },
+  { x: 25, y: 40, rotate: 1.5, scale: 0.93 },
+  { x: 0, y: 40, rotate: 0, scale: 0.94 },
+] as const;
 
 export function ExhibitorCard({
   exhibitor,
   index = 0,
   inView = true,
-  style,
 }: {
   exhibitor: Exhibitor;
   index?: number;
   inView?: boolean;
-  style?: CSSProperties;
 }) {
   const slot = index % 4;
   const t = useTranslations("Exhibitors");
-
-  const initialTransform =
-    slot === 0
-      ? "translate3d(-25px, 40px, 0) rotate(-1.5deg) scale(0.93)"
-      : slot === 1
-      ? "translate3d(0, 45px, 0) scale(0.93)"
-      : slot === 2
-      ? "translate3d(25px, 40px, 0) rotate(1.5deg) scale(0.93)"
-      : "translate3d(0, 40px, 0) scale(0.94)";
-
-  const delay = inView ? `${140 + slot * 80}ms` : "0ms";
+  const entrance = ENTRANCE_BY_SLOT[slot]!;
 
   return (
+    <Reveal
+      revealed={inView}
+      delay={140 + slot * 80}
+      x={entrance.x}
+      y={entrance.y}
+      rotate={entrance.rotate}
+      scale={entrance.scale}
+      className="h-full max-sm:[--reveal-x:0px]"
+    >
     <article
-      className="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_36px_-20px_var(--card-color)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:hover:translate-y-0"
-      style={
-        {
-          "--card-color": exhibitor.color,
-          transform: inView ? "translate3d(0, 0, 0) rotate(0deg) scale(1)" : initialTransform,
-          opacity: inView ? 1 : 0,
-          transitionDelay: delay,
-          ...style,
-        } as CSSProperties
-      }
+      // 300ms ease-out, no 800ms con la curva de entrada: esto responde a
+      // un gesto del visitante, no es una llegada en escena. Antes compartía
+      // la declaración de `transition` con la entrada, y arrastraba también
+      // su `transition-delay` inline (hasta 380ms): el hover tardaba casi
+      // 1.2s en completarse y se sentía roto.
+      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_36px_-20px_var(--card-color)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      style={{ "--card-color": exhibitor.color } as CSSProperties}
     >
       {/* Vena mineral superior dinámica con color del eje */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--card-color)] to-transparent opacity-60 transition-all duration-300 group-hover:h-[3px] group-hover:opacity-100"
+        className="absolute inset-x-0 top-0 h-[2px] origin-top bg-gradient-to-r from-transparent via-[var(--card-color)] to-transparent opacity-60 transition-[transform,opacity] duration-300 motion-reduce:transition-none group-hover:scale-y-150 group-hover:opacity-100"
       />
 
       {/* Resplandor ambiental de esquina */}
@@ -74,5 +81,6 @@ export function ExhibitorCard({
         </span>
       </div>
     </article>
+    </Reveal>
   );
 }

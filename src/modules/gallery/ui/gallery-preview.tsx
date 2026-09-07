@@ -60,6 +60,26 @@ const COMPOSITIONS: CompositionState[] = [
     r2Flex1: 1.3,
     r2Flex2: 1.3,
   },
+  // Contraste fuerte: una panorámica arriba y tres verticales angostas abajo
+  {
+    row1Height: "62%",
+    row2Height: "38%",
+    r1Flex0: 1.0,
+    r1Flex1: 2.8,
+    r2Flex0: 1.0,
+    r2Flex1: 1.4,
+    r2Flex2: 1.0,
+  },
+  // Peso abajo: la fila inferior manda y se abre hacia la izquierda
+  {
+    row1Height: "40%",
+    row2Height: "60%",
+    r1Flex0: 1.7,
+    r1Flex1: 1.2,
+    r2Flex0: 2.4,
+    r2Flex1: 1.0,
+    r2Flex2: 1.2,
+  },
 ];
 
 const GALLERY_WASH = {
@@ -98,15 +118,12 @@ export function GalleryPreview() {
   const runwayRef = useRef<HTMLElement>(null);
   const bentoRef = useRef<HTMLDivElement>(null);
   const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const headerRef = useRef<HTMLDivElement>(null);
-  const titleGroupRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const eyebrowRef = useRef<HTMLSpanElement>(null);
 
   const [compositionIndex, setCompositionIndex] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [isAssembled, setIsAssembled] = useState(false);
 
   // Índices de fotos actuales para los 5 contenedores
@@ -142,9 +159,16 @@ export function GalleryPreview() {
       return;
     }
 
-    let ticking = false;
-    let maxProg = 0;
     let completed = false;
+    let introTriggered = false;
+    let introRaf = 0;
+    let currentProg = 0;
+    // Toda la presentación del bento en una sola línea de tiempo. Antes el
+    // armado dependía del scroll y sólo se daba por completo al llegar a
+    // maxProg 0.95, lo que exigía scrollear más de una pantalla entera: si
+    // llegabas a la sección y parabas, `isAssembled` nunca pasaba a true y
+    // el ciclo de rotación de fotos jamás arrancaba. Ahora corre por tiempo.
+    const INTRO_MS = 1800;
 
     // Medición exacta de coordenadas de cada slot respecto al centro del Bento
     function calculateCardCenters() {
@@ -184,8 +208,23 @@ export function GalleryPreview() {
       return { titleCenterX, eyebrowCenterX };
     }
 
+    // Las medidas se toman FUERA del bucle y se recalculan solo en resize o
+    // al arrancar la intro. `measured` es lo que corta el recálculo por
+    // frame: antes `render()` volvía a medir cuando `titleCenterX === 0`,
+    // que no es un centinela de "sin medir" sino un valor perfectamente
+    // válido (el título ocupa todo el header en pantallas angostas). En esas
+    // pantallas se disparaban 3 `getBoundingClientRect` en cada uno de los
+    // ~108 frames de la intro: sincronización de layout forzada dentro del
+    // bucle de animación, justo lo que no puede pasar.
+    let measured = false;
     let deltaCenters = calculateCardCenters();
     let textOffsets = calculateTextOffsets();
+
+    function measure() {
+      deltaCenters = calculateCardCenters();
+      textOffsets = calculateTextOffsets();
+      measured = true;
+    }
 
     function applyAssembledStyles() {
       if (!runway) return;
@@ -205,10 +244,11 @@ export function GalleryPreview() {
     // Carga completa inmediata únicamente al navegar directo (click en barra lateral o URL con hash)
     function handleFastLoad() {
       completed = true;
-      maxProg = 1;
+      introTriggered = true;
+      currentProg = 1;
+      cancelAnimationFrame(introRaf);
       setIsAssembled(true);
       applyAssembledStyles();
-      window.removeEventListener("scroll", onScroll);
     }
 
     if (window.location.hash.includes("galeria")) {
@@ -230,33 +270,12 @@ export function GalleryPreview() {
     };
     document.addEventListener("click", onGlobalClick, { capture: true });
 
-    function update() {
-      if (!runway || completed) return;
+    function render(prog: number) {
+      if (!runway) return;
 
-      const rect = runway.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-      const totalScroll = rect.height - viewH;
-      if (totalScroll <= 0) return;
+      if (!measured) measure();
 
-      if (deltaCenters.length < 5 || deltaCenters.every((d) => d.dx === 0 && d.dy === 0)) {
-        deltaCenters = calculateCardCenters();
-      }
-      if (textOffsets.titleCenterX === 0) {
-        textOffsets = calculateTextOffsets();
-      }
-
-      // Umbral continuo: el movimiento arranca en cuanto la sección empieza a asomarse por abajo
-      const entryDistance = viewH * 0.80;
-      const pinnedDistance = totalScroll * 0.95;
-      const totalActiveDistance = entryDistance + pinnedDistance;
-
-      // Desplazamiento acumulado desde que la sección empieza a asomarse
-      const scrolled = entryDistance - rect.top;
-      const rawProg = Math.min(Math.max(scrolled / totalActiveDistance, 0), 1);
-
-      // Cerrojo monotónico: solo avanza, nunca retrocede ni se desarma
-      maxProg = Math.max(maxProg, rawProg);
-      const prog = maxProg;
+      currentProg = prog;
 
       // 1. Texto del encabezado: ya cargado y visible al 100%, centrado en ambas líneas y se desliza a la izquierda
       const textProg = Math.min(Math.max(prog / 0.50, 0), 1);
@@ -309,63 +328,102 @@ export function GalleryPreview() {
       runway.style.setProperty("--gal-controls-opacity", controlsEase.toFixed(3));
       runway.style.setProperty("--gal-controls-y", `${controlsY.toFixed(1)}px`);
 
-      // 4. Fijación permanente al completar
-      if (maxProg >= 0.95) {
-        completed = true;
-        setIsAssembled(true);
-        applyAssembledStyles();
-        window.removeEventListener("scroll", onScroll);
-      }
-
-      ticking = false;
     }
 
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
+    /** Arma el bento completo en una sola pasada de tiempo. */
+    function runIntro(startTime: number) {
+      function step(now: number) {
+        const t = Math.min((now - startTime) / INTRO_MS, 1);
+        render(t);
+
+        if (t < 1) {
+          introRaf = requestAnimationFrame(step);
+        } else {
+          completed = true;
+          setIsAssembled(true);
+          applyAssembledStyles();
+        }
       }
+      introRaf = requestAnimationFrame(step);
+    }
+
+    function startIntro() {
+      if (introTriggered || completed) return;
+      introTriggered = true;
+      measure();
+      runIntro(performance.now());
     }
 
     function onResize() {
-      deltaCenters = calculateCardCenters();
-      textOffsets = calculateTextOffsets();
-      update();
+      measure();
+      if (completed) {
+        applyAssembledStyles();
+      } else {
+        render(currentProg);
+      }
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
-    // Primer cálculo inicial al montar
+
+    // Estado inicial (racimo desordenado) antes de que la sección asome.
     setTimeout(() => {
-      deltaCenters = calculateCardCenters();
-      textOffsets = calculateTextOffsets();
-      update();
+      if (completed || introTriggered) return;
+      measure();
+      render(0);
     }, 40);
 
+    // El armado se dispara por visibilidad, no por posición de scroll: apenas
+    // la sección asoma, se completa sola y habilita el ciclo de rotación.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startIntro();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(runway);
+
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("hashchange", onHashChange);
       document.removeEventListener("click", onGlobalClick, { capture: true });
+      cancelAnimationFrame(introRaf);
     };
   }, []);
 
-  // Ciclo rítmico automático de variabilidad de tamaños e imágenes (solo activo cuando está armada)
+  // Ciclo automático (solo cuando el bento ya está armado).
+  //
+  // Antes cambiaban a la vez la composición y una foto al azar cada 4.5s: se
+  // leía como un salto seco y períodos largos de quietud. Ahora rota una foto
+  // por tick en round-robin —siempre hay una entrando fundida, y cada
+  // contenedor recorre la galería— y la composición se mueve cada 3 ticks,
+  // así el cambio de layout no compite con el de las imágenes.
+  //
+  // El ciclo no se pausa al pasar el mouse: el hover solo agranda la tarjeta
+  // apuntada (`hoveredCard`), pero las fotos siguen rotando.
   useEffect(() => {
-    if (isPaused || !isAssembled) return;
+    if (!isAssembled) return;
 
+    let tick = 0;
     const interval = setInterval(() => {
-      setCompositionIndex((prev) => (prev + 1) % COMPOSITIONS.length);
+      const slot = tick % 5;
       setPhotoIndices((prev) => {
         const next = [...prev];
-        const randomSlot = Math.floor(Math.random() * 5);
-        next[randomSlot] = (next[randomSlot]! + 5) % GALLERY_PHOTOS.length;
+        next[slot] = (next[slot]! + 5) % GALLERY_PHOTOS.length;
         return next;
       });
-    }, 4500);
+
+      if (tick % 3 === 2) {
+        setCompositionIndex((prev) => (prev + 1) % COMPOSITIONS.length);
+      }
+      tick += 1;
+    }, 1700);
 
     return () => clearInterval(interval);
-  }, [isPaused, isAssembled]);
+  }, [isAssembled]);
 
   const comp = COMPOSITIONS[compositionIndex]!;
 
@@ -394,15 +452,14 @@ export function GalleryPreview() {
           className="relative flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between shrink-0 w-full"
         >
           <div
-            ref={titleGroupRef}
-            className="flex flex-col items-start text-left w-fit shrink-0 will-change-transform motion-reduce:transform-none"
+            className={`flex flex-col items-start text-left w-fit shrink-0 motion-reduce:transform-none ${isAssembled ? "" : "will-change-transform"}`}
             style={{
               transform: "translate3d(var(--gal-title-x, 0px), 0, 0)",
             }}
           >
             <span
               ref={eyebrowRef}
-              className="font-mono text-xs tracking-[0.25em] text-magenta uppercase will-change-transform motion-reduce:transform-none"
+              className={`font-mono text-xs tracking-[0.25em] text-magenta uppercase motion-reduce:transform-none ${isAssembled ? "" : "will-change-transform"}`}
               style={{
                 transform: "translate3d(var(--gal-eyebrow-x, 0px), 0, 0)",
               }}
@@ -418,7 +475,7 @@ export function GalleryPreview() {
           </div>
 
           <div
-            className="flex items-center gap-4 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 transition-opacity duration-300"
+            className={`motion-entrance flex items-center gap-4 transition-opacity duration-300 ${isAssembled ? "" : "will-change-transform"}`}
             style={{
               opacity: "var(--gal-controls-opacity, 0)",
               transform: "translate3d(0, var(--gal-controls-y, 16px), 0)",
@@ -436,7 +493,7 @@ export function GalleryPreview() {
                   type="button"
                   onClick={() => setCompositionIndex(i)}
                   aria-label={`Composición ${i + 1}`}
-                  className={`h-2 rounded-full transition-all duration-500 ${
+                  className={`h-2 rounded-full transition-[width,background-color] duration-500 motion-reduce:transition-none ${
                     compositionIndex === i
                       ? "w-6 bg-magenta"
                       : "w-2 bg-paper-dim/40 hover:bg-paper-dim"
@@ -459,15 +516,11 @@ export function GalleryPreview() {
         <div
           ref={bentoRef}
           className="relative hidden sm:flex flex-1 min-h-0 flex-col gap-3 lg:gap-4 my-3 sm:my-4 w-full h-full"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => {
-            setIsPaused(false);
-            setHoveredCard(null);
-          }}
+          onMouseLeave={() => setHoveredCard(null)}
         >
           {/* Fila Superior: 2 tarjetas */}
           <div
-            className={`flex gap-3 lg:gap-4 w-full min-h-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`flex gap-3 lg:gap-4 w-full min-h-0 transition-[height] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               isAssembled ? "" : "relative z-20"
             }`}
             style={{ height: comp.row1Height }}
@@ -483,12 +536,11 @@ export function GalleryPreview() {
               style={{ flex: flexR1_0 }}
             >
               <Link
-                ref={(el) => {
-                  cardRefs.current[0] = el;
-                }}
                 href="/galeria"
                 onMouseEnter={() => setHoveredCard(0)}
-                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] will-change-transform motion-reduce:transform-none ${
+                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] motion-reduce:transform-none ${
+                  isAssembled ? "" : "will-change-transform"
+                } ${
                   hoveredCard === 0 ? "z-30" : "z-10"
                 }`}
                 style={{
@@ -497,23 +549,21 @@ export function GalleryPreview() {
                 }}
               >
                 <Image
+                  key={photoIndices[0]}
                   src={GALLERY_PHOTOS[photoIndices[0]! % GALLERY_PHOTOS.length]!.src}
                   alt={t("photoAlt", { n: GALLERY_PHOTOS[photoIndices[0]!]!.n })}
                   fill
                   sizes="(min-width: 1024px) 60vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-safe:animate-[gallery-fade-in_700ms_cubic-bezier(0.16,1,0.3,1)]"
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-90" />
                 <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between transition-opacity duration-300"
+                  className="absolute bottom-3 left-3 right-3 flex items-center justify-end transition-opacity duration-300"
                   style={{
                     opacity: isAssembled ? 1 : "var(--gal-c0-badge-opacity, 1)",
                   }}
                 >
-                  <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                    Foto #{String(GALLERY_PHOTOS[photoIndices[0]!]!.n).padStart(2, "0")}
-                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
@@ -532,12 +582,11 @@ export function GalleryPreview() {
               style={{ flex: flexR1_1 }}
             >
               <Link
-                ref={(el) => {
-                  cardRefs.current[1] = el;
-                }}
                 href="/galeria"
                 onMouseEnter={() => setHoveredCard(1)}
-                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] will-change-transform motion-reduce:transform-none ${
+                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] motion-reduce:transform-none ${
+                  isAssembled ? "" : "will-change-transform"
+                } ${
                   hoveredCard === 1 ? "z-30" : "z-10"
                 }`}
                 style={{
@@ -546,22 +595,20 @@ export function GalleryPreview() {
                 }}
               >
                 <Image
+                  key={photoIndices[1]}
                   src={GALLERY_PHOTOS[photoIndices[1]! % GALLERY_PHOTOS.length]!.src}
                   alt={t("photoAlt", { n: GALLERY_PHOTOS[photoIndices[1]!]!.n })}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-safe:animate-[gallery-fade-in_700ms_cubic-bezier(0.16,1,0.3,1)]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-90" />
                 <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between transition-opacity duration-300"
+                  className="absolute bottom-3 left-3 right-3 flex items-center justify-end transition-opacity duration-300"
                   style={{
                     opacity: isAssembled ? 1 : "var(--gal-c1-badge-opacity, 1)",
                   }}
                 >
-                  <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                    Foto #{String(GALLERY_PHOTOS[photoIndices[1]!]!.n).padStart(2, "0")}
-                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
@@ -572,7 +619,7 @@ export function GalleryPreview() {
 
           {/* Fila Inferior: 3 tarjetas */}
           <div
-            className={`flex gap-3 lg:gap-4 w-full min-h-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            className={`flex gap-3 lg:gap-4 w-full min-h-0 transition-[height] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
               isAssembled ? "" : "relative z-10"
             }`}
             style={{ height: comp.row2Height }}
@@ -588,12 +635,11 @@ export function GalleryPreview() {
               style={{ flex: flexR2_0 }}
             >
               <Link
-                ref={(el) => {
-                  cardRefs.current[2] = el;
-                }}
                 href="/galeria"
                 onMouseEnter={() => setHoveredCard(2)}
-                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] will-change-transform motion-reduce:transform-none ${
+                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] motion-reduce:transform-none ${
+                  isAssembled ? "" : "will-change-transform"
+                } ${
                   hoveredCard === 2 ? "z-30" : "z-10"
                 }`}
                 style={{
@@ -602,22 +648,20 @@ export function GalleryPreview() {
                 }}
               >
                 <Image
+                  key={photoIndices[2]}
                   src={GALLERY_PHOTOS[photoIndices[2]! % GALLERY_PHOTOS.length]!.src}
                   alt={t("photoAlt", { n: GALLERY_PHOTOS[photoIndices[2]!]!.n })}
                   fill
                   sizes="(min-width: 1024px) 35vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-safe:animate-[gallery-fade-in_700ms_cubic-bezier(0.16,1,0.3,1)]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-90" />
                 <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between transition-opacity duration-300"
+                  className="absolute bottom-3 left-3 right-3 flex items-center justify-end transition-opacity duration-300"
                   style={{
                     opacity: isAssembled ? 1 : "var(--gal-c2-badge-opacity, 1)",
                   }}
                 >
-                  <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                    Foto #{String(GALLERY_PHOTOS[photoIndices[2]!]!.n).padStart(2, "0")}
-                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
@@ -636,12 +680,11 @@ export function GalleryPreview() {
               style={{ flex: flexR2_1 }}
             >
               <Link
-                ref={(el) => {
-                  cardRefs.current[3] = el;
-                }}
                 href="/galeria"
                 onMouseEnter={() => setHoveredCard(3)}
-                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] will-change-transform motion-reduce:transform-none ${
+                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] motion-reduce:transform-none ${
+                  isAssembled ? "" : "will-change-transform"
+                } ${
                   hoveredCard === 3 ? "z-30" : "z-10"
                 }`}
                 style={{
@@ -650,22 +693,20 @@ export function GalleryPreview() {
                 }}
               >
                 <Image
+                  key={photoIndices[3]}
                   src={GALLERY_PHOTOS[photoIndices[3]! % GALLERY_PHOTOS.length]!.src}
                   alt={t("photoAlt", { n: GALLERY_PHOTOS[photoIndices[3]!]!.n })}
                   fill
                   sizes="(min-width: 1024px) 35vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-safe:animate-[gallery-fade-in_700ms_cubic-bezier(0.16,1,0.3,1)]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-90" />
                 <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between transition-opacity duration-300"
+                  className="absolute bottom-3 left-3 right-3 flex items-center justify-end transition-opacity duration-300"
                   style={{
                     opacity: isAssembled ? 1 : "var(--gal-c3-badge-opacity, 1)",
                   }}
                 >
-                  <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                    Foto #{String(GALLERY_PHOTOS[photoIndices[3]!]!.n).padStart(2, "0")}
-                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
@@ -684,12 +725,11 @@ export function GalleryPreview() {
               style={{ flex: flexR2_2 }}
             >
               <Link
-                ref={(el) => {
-                  cardRefs.current[4] = el;
-                }}
                 href="/galeria"
                 onMouseEnter={() => setHoveredCard(4)}
-                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] will-change-transform motion-reduce:transform-none ${
+                className={`group relative flex h-full w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/80 shadow-2xl transition-[border-color,box-shadow] duration-500 ease-out hover:border-magenta/70 hover:shadow-[0_12px_40px_rgba(217,70,239,0.25)] motion-reduce:transform-none ${
+                  isAssembled ? "" : "will-change-transform"
+                } ${
                   hoveredCard === 4 ? "z-30" : "z-10"
                 }`}
                 style={{
@@ -698,22 +738,20 @@ export function GalleryPreview() {
                 }}
               >
                 <Image
+                  key={photoIndices[4]}
                   src={GALLERY_PHOTOS[photoIndices[4]! % GALLERY_PHOTOS.length]!.src}
                   alt={t("photoAlt", { n: GALLERY_PHOTOS[photoIndices[4]!]!.n })}
                   fill
                   sizes="(min-width: 1024px) 35vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-safe:animate-[gallery-fade-in_700ms_cubic-bezier(0.16,1,0.3,1)]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-40 transition-opacity duration-300 group-hover:opacity-90" />
                 <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between transition-opacity duration-300"
+                  className="absolute bottom-3 left-3 right-3 flex items-center justify-end transition-opacity duration-300"
                   style={{
                     opacity: isAssembled ? 1 : "var(--gal-c4-badge-opacity, 1)",
                   }}
                 >
-                  <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                    Foto #{String(GALLERY_PHOTOS[photoIndices[4]!]!.n).padStart(2, "0")}
-                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
@@ -742,10 +780,7 @@ export function GalleryPreview() {
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-60" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                    <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.68rem] tracking-wider text-paper uppercase backdrop-blur-sm">
-                      Foto #{String(photo.n).padStart(2, "0")}
-                    </span>
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end">
                     <span className="font-mono text-xs text-magenta">↗</span>
                   </div>
                 </Link>

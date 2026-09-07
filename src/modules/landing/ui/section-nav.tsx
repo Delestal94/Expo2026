@@ -62,15 +62,19 @@ export function SectionNav() {
           visibleMap.set(entry.target.id, entry.isIntersecting);
         });
 
-        // Selecciona la primera sección en orden de documento que esté visible en la zona de lectura
+        // Selecciona la primera sección en orden de documento que esté
+        // visible en la zona de lectura. Si no hay ninguna (se está entre
+        // dos secciones), se mantiene la última activa: parpadear a "sin
+        // sección" en cada hueco sería peor que quedarse un instante atrás.
+        //
+        // Acá había un fallback que leía `document.getElementById("ejes")`
+        // y su `offsetTop`. Ese id dejó de existir cuando Ejes se fusionó
+        // con Sobre: la rama nunca se ejecutaba, y de haberse ejecutado
+        // habría hecho una lectura de layout dentro del callback del
+        // observer.
         const firstVisible = SECTIONS.find((section) => visibleMap.get(section.id));
         if (firstVisible) {
           setActiveId(firstVisible.id);
-        } else {
-          const ejesEl = document.getElementById("ejes");
-          if (ejesEl && window.scrollY < ejesEl.offsetTop - 100) {
-            setActiveId("sobre");
-          }
         }
       },
       { rootMargin: "-12% 0px -48% 0px", threshold: [0, 0.1, 0.3] },
@@ -110,15 +114,25 @@ export function SectionNav() {
               tabIndex={visible ? 0 : -1}
               className="group flex items-center gap-2 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             >
-              <span className="pointer-events-none max-w-0 overflow-hidden rounded-full bg-ink/90 py-1 font-mono text-[0.65rem] tracking-wide whitespace-nowrap text-paper opacity-0 shadow-lg ring-1 ring-line transition-all duration-200 motion-reduce:transition-none group-hover:max-w-[10rem] group-hover:px-2.5 group-hover:opacity-100 group-focus-visible:max-w-[10rem] group-focus-visible:px-2.5 group-focus-visible:opacity-100">
+              {/* Excepción consciente: revelar una etiqueta por ancho SÍ es
+                  una animación de layout, pero es un solo elemento de un
+                  subárbol `fixed`, 200ms, y solo mientras hay un puntero
+                  encima. `transition-all` sí sobraba — limitado a lo que
+                  realmente cambia. */}
+              <span className="pointer-events-none max-w-0 overflow-hidden rounded-full bg-ink/90 py-1 font-mono text-[0.65rem] tracking-wide whitespace-nowrap text-paper opacity-0 shadow-lg ring-1 ring-line transition-[max-width,padding,opacity] duration-200 ease-out motion-reduce:transition-none group-hover:max-w-[10rem] group-hover:px-2.5 group-hover:opacity-100 group-focus-visible:max-w-[10rem] group-focus-visible:px-2.5 group-focus-visible:opacity-100">
                 {section.label}
               </span>
+              {/* La banda mide siempre 2rem y se comprime con `scaleX`
+                  desde la derecha. Antes animaba `width` (0.9rem ↔ 2rem):
+                  cambiar el ancho de un elemento dispara layout, y acá
+                  ocurría en cada cambio de sección activa mientras el
+                  visitante scrollea. `scaleX` lo resuelve el compositor. */}
               <span
                 aria-hidden="true"
-                className="h-1.5 rounded-full transition-all duration-200 motion-reduce:transition-none"
+                className="h-1.5 w-8 origin-right rounded-full transition-[transform,opacity] duration-200 ease-out motion-reduce:transition-none"
                 style={{
                   backgroundColor: section.color,
-                  width: isActive ? "2rem" : "0.9rem",
+                  transform: `scaleX(${isActive ? 1 : 0.45})`,
                   opacity: isActive ? 1 : 0.5,
                 }}
               />

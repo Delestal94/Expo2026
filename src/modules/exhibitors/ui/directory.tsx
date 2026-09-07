@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Reveal } from "@/lib/ui/reveal";
 import { EJE_FILTERS, EXHIBITORS, textSafeColor, type Exhibitor } from "./exhibitors-data";
 import { ExhibitorCard } from "./exhibitor-card";
 import { usePortalContext } from "./portal-entrance";
@@ -96,13 +97,7 @@ export function Directory() {
 
   return (
     <div>
-      <div
-        className="transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-        style={{
-          transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 35px, 0) scale(0.96)",
-          opacity: inView ? 1 : 0,
-        }}
-      >
+      <Reveal revealed={inView} y={35}>
         <label className="block">
           <span className="sr-only">{t("searchLabel")}</span>
           <input
@@ -150,7 +145,7 @@ export function Directory() {
             );
           })}
         </div>
-      </div>
+      </Reveal>
 
       {matching.length === 0 ? (
         <EmptyDirectory
@@ -181,9 +176,14 @@ export function Directory() {
       {hidden > 0 && (
         <div className="mt-8 flex flex-col items-center gap-3">
           <div className="h-px w-24 overflow-hidden bg-line" aria-hidden="true">
+            {/* Se escala en vez de cambiar el ancho: mismo resultado visual,
+                pero `transform` lo resuelve el compositor y `width` obliga a
+                recalcular layout en cada frame de la transición. */}
             <div
-              className="h-full bg-accent transition-[width] duration-500 motion-reduce:transition-none"
-              style={{ width: `${(visible.length / matching.length) * 100}%` }}
+              className="h-full w-full origin-left bg-accent transition-transform duration-500 motion-reduce:transition-none"
+              style={{
+                transform: `scaleX(${visible.length / matching.length})`,
+              }}
             />
           </div>
           <button

@@ -2,7 +2,6 @@ import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/lib/i18n/routing";
 import {
   AccessInfo,
-  Ejes,
   EventStructuredData,
   HeroAboutStage,
   SectionNav,
@@ -29,7 +28,6 @@ export default async function Home({
       <EventStructuredData />
       <SectionNav />
       <HeroAboutStage />
-      <Ejes />
       <NewsSection />
       <GalleryPreview />
       <MapSection />

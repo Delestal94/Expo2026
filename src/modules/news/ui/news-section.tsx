@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
+import { Reveal } from "@/lib/ui/reveal";
+import { useSectionReveal } from "@/lib/ui/use-section-reveal";
 import { NEWS_ITEMS } from "./news-data";
 
 /** Enlace interno (ancla de la misma página) vs. nota de prensa externa. */
@@ -25,123 +26,17 @@ const SECTION_WASH = {
   ].join(", "),
 };
 
+/**
+ * Desplazamiento lateral de entrada de cada tarjeta: las de los extremos
+ * llegan desde más afuera que las del centro, así la grilla se cierra hacia
+ * adentro en vez de aparecer en bloque. Se anulan en una sola columna
+ * (mobile), donde no hay "afuera" que justifique el gesto.
+ */
+const CARD_ENTRANCE_X = [-45, -15, 15, 45];
+
 export function NewsSection() {
   const t = useTranslations("News");
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
-      section.style.setProperty("--news-header-y", "0px");
-      section.style.setProperty("--news-header-opacity", "1");
-      NEWS_ITEMS.forEach((_, i) => {
-        section.style.setProperty(`--news-card-${i}-x`, "0px");
-        section.style.setProperty(`--news-card-${i}-y`, "0px");
-        section.style.setProperty(`--news-card-${i}-scale`, "1");
-        section.style.setProperty(`--news-card-${i}-opacity`, "1");
-      });
-      return;
-    }
-
-    let ticking = false;
-    let headerMaxProg = 0;
-    const cardsMaxProg = [0, 0, 0, 0];
-    let allCompleted = false;
-
-    // Ventanas de scroll progresivo para header y las 4 tarjetas
-    const cardWindows = [
-      { start: 0.88, end: 0.58, xOffset: -45 }, // Card 0 (izq exterior)
-      { start: 0.80, end: 0.50, xOffset: -15 }, // Card 1 (izq interior)
-      { start: 0.72, end: 0.42, xOffset: 15 },  // Card 2 (der interior)
-      { start: 0.64, end: 0.34, xOffset: 45 },  // Card 3 (der exterior)
-    ];
-
-    function update() {
-      if (!section || allCompleted) return;
-
-      const rect = section.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-      const sectionTop = rect.top;
-      const isMobile = window.innerWidth < 640;
-
-      // 1. Animación de scroll del encabezado (0.95 a 0.70)
-      const hStartY = viewH * 0.95;
-      const hEndY = viewH * 0.70;
-      const hCurrentProg = Math.min(
-        Math.max((hStartY - sectionTop) / (hStartY - hEndY), 0),
-        1,
-      );
-      headerMaxProg = Math.max(headerMaxProg, hCurrentProg);
-
-      const headerY = (1 - headerMaxProg) * 35;
-      const headerOpacity = Math.min(1, headerMaxProg * 1.4);
-      section.style.setProperty("--news-header-y", `${headerY.toFixed(1)}px`);
-      section.style.setProperty("--news-header-opacity", headerOpacity.toFixed(3));
-
-      // 2. Animación de scroll de las 4 tarjetas
-      let completedCardsCount = 0;
-
-      cardWindows.forEach(({ start, end, xOffset }, i) => {
-        const startY = viewH * start;
-        const endY = viewH * end;
-        const currentProg = Math.min(
-          Math.max((startY - sectionTop) / (startY - endY), 0),
-          1,
-        );
-        cardsMaxProg[i] = Math.max(cardsMaxProg[i]!, currentProg);
-        const prog = cardsMaxProg[i]!;
-
-        if (prog >= 1) {
-          completedCardsCount++;
-        }
-
-        const x = isMobile ? 0 : (1 - prog) * xOffset;
-        const y = (1 - prog) * 55;
-        const scale = 0.94 + 0.06 * prog;
-        const opacity = Math.min(1, prog * 1.35);
-
-        section.style.setProperty(`--news-card-${i}-x`, `${x.toFixed(1)}px`);
-        section.style.setProperty(`--news-card-${i}-y`, `${y.toFixed(1)}px`);
-        section.style.setProperty(`--news-card-${i}-scale`, scale.toFixed(3));
-        section.style.setProperty(`--news-card-${i}-opacity`, opacity.toFixed(3));
-      });
-
-      if (headerMaxProg >= 1 && completedCardsCount === cardWindows.length) {
-        allCompleted = true;
-        section.style.setProperty("--news-header-y", "0px");
-        section.style.setProperty("--news-header-opacity", "1");
-        cardWindows.forEach((_, i) => {
-          section.style.setProperty(`--news-card-${i}-x`, "0px");
-          section.style.setProperty(`--news-card-${i}-y`, "0px");
-          section.style.setProperty(`--news-card-${i}-scale`, "1");
-          section.style.setProperty(`--news-card-${i}-opacity`, "1");
-        });
-        window.removeEventListener("scroll", onScroll);
-      }
-
-      ticking = false;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  const { ref: sectionRef, revealed } = useSectionReveal<HTMLElement>();
 
   return (
     <section
@@ -152,13 +47,7 @@ export function NewsSection() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={SECTION_WASH} />
       <EntranceVein color="var(--color-cyan)" />
 
-      <div
-        className="relative will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
-        style={{
-          transform: "translate3d(0, var(--news-header-y, 0px), 0)",
-          opacity: "var(--news-header-opacity, 1)",
-        }}
-      >
+      <Reveal revealed={revealed} y={35} scale={1} className="relative">
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
           {t("eyebrow")}
         </span>
@@ -166,20 +55,26 @@ export function NewsSection() {
           {t("title")}
         </h2>
         <p className="mt-4 max-w-2xl text-paper-dim">{t("description")}</p>
-      </div>
+      </Reveal>
 
       <div className="relative mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {NEWS_ITEMS.map((item, index) => {
           const color = CARD_COLORS[index % CARD_COLORS.length]!;
 
           return (
-            <article
+            <Reveal
               key={item.id}
-              className="group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-b from-surface via-surface/95 to-surface/85 p-6 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-2 hover:border-paper/35 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.7)] will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
-              style={{
-                transform: `translate3d(var(--news-card-${index}-x, 0px), var(--news-card-${index}-y, 0px), 0) scale(var(--news-card-${index}-scale, 1))`,
-                opacity: `var(--news-card-${index}-opacity, 1)`,
-              }}
+              revealed={revealed}
+              // 90ms entre hermanas: la grilla se arma, no aparece. El
+              // encabezado abre y la última tarjeta cierra a los ~970ms.
+              delay={160 + index * 90}
+              x={CARD_ENTRANCE_X[index] ?? 0}
+              y={50}
+              scale={0.94}
+              className="max-sm:[--reveal-x:0px]"
+            >
+            <article
+              className="group relative flex h-full flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-b from-surface via-surface/95 to-surface/85 p-6 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-2 hover:border-paper/35 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.7)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
               {/* Resplandor ambiental de acento en hover */}
               <div
@@ -191,7 +86,7 @@ export function NewsSection() {
               {/* Vena superior con degradé al color mineral del card */}
               <div
                 aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-[2px] opacity-40 transition-all duration-300 group-hover:h-[3px] group-hover:opacity-100"
+                className="absolute inset-x-0 top-0 h-[2px] origin-top opacity-40 transition-[transform,opacity] duration-300 motion-reduce:transition-none group-hover:scale-y-150 group-hover:opacity-100"
                 style={{
                   background: `linear-gradient(90deg, transparent 0%, ${color} 50%, transparent 100%)`,
                 }}
@@ -240,6 +135,7 @@ export function NewsSection() {
                 </a>
               </div>
             </article>
+            </Reveal>
           );
         })}
       </div>
