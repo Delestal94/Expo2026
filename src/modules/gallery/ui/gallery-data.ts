@@ -14,4 +14,4 @@ export const GALLERY_PHOTOS: GalleryPhoto[] = Array.from({ length: 30 }, (_, i) 
   src: `/images/galeria-2024/foto-${String(i + 1).padStart(2, "0")}.jpg`,
 }));
 
-export const GALLERY_PREVIEW_COUNT = 6;
+export const GALLERY_PREVIEW_COUNT = 11;

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   applyTheme,
   getCurrentTheme,
+  getResolvedTheme,
   getStoredTheme,
   setTheme,
   THEME_CHANGE_EVENT,
@@ -49,15 +50,20 @@ describe("theme", () => {
   });
 
   it("THEME_INIT_SCRIPT respeta una preferencia guardada por sobre el SO", () => {
-    // Regresión: el default pasó a seguir prefers-color-scheme del SO,
-    // pero una preferencia explícita (localStorage) tiene que seguir
-    // ganando — este test no ejecuta el script (jsdom no tiene
-    // matchMedia real por default), solo verifica que el script generado
-    // efectivamente chequea localStorage ANTES que matchMedia.
     const storedIndex = THEME_INIT_SCRIPT.indexOf("localStorage.getItem");
     const matchMediaIndex = THEME_INIT_SCRIPT.indexOf("matchMedia");
     expect(storedIndex).toBeGreaterThan(-1);
     expect(matchMediaIndex).toBeGreaterThan(-1);
     expect(storedIndex).toBeLessThan(matchMediaIndex);
+  });
+
+  it("getResolvedTheme() devuelve el tema guardado, o preferencia de SO, o dark por defecto", () => {
+    expect(getResolvedTheme()).toBe("dark");
+
+    localStorage.setItem("expojuy-theme", "light");
+    expect(getResolvedTheme()).toBe("light");
+
+    localStorage.setItem("expojuy-theme", "dark");
+    expect(getResolvedTheme()).toBe("dark");
   });
 });

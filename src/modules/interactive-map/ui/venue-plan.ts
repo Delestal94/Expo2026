@@ -190,11 +190,11 @@ const cSeries: VenueZone[] = (() => {
     const c = i % 2;
     add(`C${6 + i}`, [968 + c * 20, 215 + r * 16, 986 + c * 20, 229 + r * 16]);
   }
-  // Bloque inferior, tres columnas.
+  // Bloque inferior, tres columnas (alineado dentro del límite sur del pabellón, y < 370).
   for (let i = 0; i < 19; i++) {
     const r = Math.floor(i / 3);
     const c = i % 3;
-    add(`C${10 + i}`, [960 + c * 25, 288 + r * 16, 982 + c * 25, 302 + r * 16]);
+    add(`C${10 + i}`, [960 + c * 25, 250 + r * 16, 982 + c * 25, 264 + r * 16]);
   }
   return out;
 })();

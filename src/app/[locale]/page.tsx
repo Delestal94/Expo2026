@@ -4,7 +4,7 @@ import {
   AccessInfo,
   Ejes,
   EventStructuredData,
-  Hero,
+  HeroAboutStage,
   SectionNav,
   SiteFooter,
 } from "@/modules/landing";
@@ -25,10 +25,10 @@ export default async function Home({
   setRequestLocale(locale);
 
   return (
-    <main>
+    <main className="overflow-x-clip">
       <EventStructuredData />
       <SectionNav />
-      <Hero />
+      <HeroAboutStage />
       <Ejes />
       <NewsSection />
       <GalleryPreview />

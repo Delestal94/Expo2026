@@ -349,7 +349,7 @@ export function ChatBot() {
               <button
                 type="submit"
                 disabled={isLoading || !inputValue.trim()}
-                className="inline-flex h-9 items-center justify-center rounded-full bg-[var(--color-cyan)] px-4 font-mono text-xs font-semibold tracking-wider text-[var(--color-ink)] uppercase transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-9 items-center justify-center rounded-full bg-[var(--color-cyan)] px-4 font-mono text-xs font-semibold tracking-wider text-[var(--color-ink-fixed)] uppercase transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label={t.sendButton}
               >
                 {t.sendButton}

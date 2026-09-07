@@ -34,10 +34,8 @@
 }
 
 @theme {
-  /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
-     fondo del sitio lea como el navy saturado de la referencia, no como un
-     gris-negro neutro. */
-  --color-ink: #0d0b2e;
+  /* Azul/negro obsidiana profundo (midnight blue/black) con alto contraste para resaltar los acentos de marca */
+  --color-ink: #070b19;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
   /* Paleta de marca ExpoJuy — sampleada directamente de los 4 rellenos
@@ -79,11 +77,12 @@
   --color-ink-fixed: #0d0b2e;
   --color-paper-fixed: #f5f1e8;
 
-  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
-     roles tipográficos del sitio: display, body y mono. */
-  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  /* Tipografías del proyecto: Unbounded (display futurista/mineral),
+     Manrope (lectura elegante), JetBrains Mono (telemetría/códigos) y Ambit (marca oficial) */
+  --font-display: var(--font-unbounded), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-manrope), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-ambit:   'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
@@ -122,8 +121,34 @@
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Scrollbar refinada a tono con la estética dark / cyber-mineral del sitio */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 241, 232, 0.25) #090e24;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090e24;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 241, 232, 0.22);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -135,6 +160,9 @@ html {
 body {
   background: var(--color-ink);
   color: var(--color-paper);
+  overflow-x: clip;
+  max-width: 100vw;
+  min-height: 100vh;
 }
 
 ::selection {
@@ -193,6 +221,36 @@ body {
     opacity: 1;
     transform: translateY(0) scaleY(1);
     transform-origin: bottom;
+  }
+}
+
+/* Flujo cromático continuo para la veta de cuenta regresiva y acentos */
+.strata-flow-bar {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-cyan) 0%,
+    var(--color-violet) 25%,
+    var(--color-magenta) 50%,
+    var(--color-lavender) 75%,
+    var(--color-cyan) 100%
+  );
+  background-size: 200% 100%;
+  animation: strata-flow 3.5s linear infinite;
+}
+
+@keyframes strata-flow {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strata-flow-bar {
+    animation: none;
+    background-position: 0% 0;
   }
 }
 
