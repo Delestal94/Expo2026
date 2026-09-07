@@ -78,6 +78,9 @@ export function AdmissionTicket({
   const t = useTranslations("VisitorAccess.AdmissionTicket");
   const [code, setCode] = useState<string | null>(null);
   const [codeError, setCodeError] = useState(false);
+  // El 401 se separa del resto: "recargá la página" no arregla una sesión
+  // vencida, y era lo único que le decíamos al visitante.
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   // El código ya no se calcula en el cliente a partir del id de usuario
   // (issue #57: era forjable, 8 hex sin firma) — se lo pide firmado a
@@ -92,6 +95,10 @@ export function AdmissionTicket({
       headers: { Authorization: `Bearer ${session.accessToken}` },
     })
       .then((res) => {
+        if (res.status === 401) {
+          if (!cancelled) setSessionExpired(true);
+          throw new Error("sesión vencida");
+        }
         if (!res.ok) throw new Error(`ticket-code respondió ${res.status}`);
         return res.json();
       })
@@ -121,7 +128,9 @@ export function AdmissionTicket({
   if (codeError) {
     return (
       <div role="alert" className="mt-5 rounded-xl border border-dashed border-line bg-ink p-5 text-center">
-        <p className="text-sm text-paper-dim">{t("codeError")}</p>
+        <p className="text-sm text-paper-dim">
+          {sessionExpired ? t("codeExpired") : t("codeError")}
+        </p>
       </div>
     );
   }

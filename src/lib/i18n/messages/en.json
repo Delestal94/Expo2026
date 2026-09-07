@@ -57,7 +57,8 @@
     "exploring": "Exploring:",
     "selectedStand": "Selected stand:",
     "tapHint": "Tap any stand to see its features and services",
-    "clearSelection": "Clear selection"
+    "clearSelection": "Clear selection",
+    "backToVenue": "See general venue information"
   },
   "Landing": {
     "Hero": {
@@ -105,7 +106,7 @@
     "AccessInfo": {
       "eyebrow": "Access and admission",
       "title": "General admission was paid in past editions — 2026 will be confirmed soon.",
-      "description": "In 2024 tickets were sold online at these reference prices. Access registration (QR + Mercado Pago) is already set up to work the same way, free or paid, as soon as the Chamber confirms the 2026 scheme — see <code>ADR-0003</code>.",
+      "description": "In 2024 tickets were sold online at these reference prices. Access registration (QR + Mercado Pago) is already set up to work the same way, free or paid, as soon as the Chamber confirms the 2026 scheme.",
       "pricing": {
         "kids": "Children (6 to 12) and retirees",
         "adults": "Adults",
@@ -396,7 +397,14 @@
       "sessionActive": "Signed in as <strong>{email}</strong>.",
       "genericError": "Couldn't complete the operation. Please try again.",
       "signOutError": "Couldn't sign out. Please try again.",
-      "footerNote": "This creates your visitor account. Ticket purchase isn't available yet — it unlocks in the next stage."
+      "footerNote": "This creates your visitor account. Ticket purchase isn't available yet — it unlocks in the next stage.",
+      "errorEmailTaken": "That email already has an account. Try signing in.",
+      "errorBadCredentials": "That email and password don't match. Check them and try again.",
+      "errorConfirmEmail": "We sent you an email to confirm your account. Open it and come back to sign in.",
+      "errorTooMany": "Too many attempts in a row. Wait a minute and try again.",
+      "errorNetwork": "We couldn't connect. Check your connection and try again.",
+      "errorWeakPassword": "Your password needs at least 8 characters.",
+      "footerNoteFree": "This creates your visitor account and issues your entry QR code."
     },
     "AdmissionTicket": {
       "paidNotice": "Your visitor account is already created. Admission for this edition is paid — the QR code is issued after paying for the ticket, not yet available.",
@@ -409,7 +417,8 @@
       "scanLabel": "Entrance scan",
       "pendingLabel": "Ticket pending",
       "loadingCode": "Generating your access code…",
-      "codeError": "We couldn't generate your access code. Reload the page or try again in a few minutes."
+      "codeError": "We couldn't generate your access code. Reload the page or try again in a few minutes.",
+      "codeExpired": "Your session expired. Sign out and sign back in to generate your code."
     }
   }
 }

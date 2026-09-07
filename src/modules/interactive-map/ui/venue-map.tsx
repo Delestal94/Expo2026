@@ -473,7 +473,7 @@ export function VenueMap() {
                           </span>
                         </span>
                       ) : (
-                        <span className="text-paper-dim">Elegí un puesto de la lista o tocá el plano...</span>
+                        <span className="text-paper-dim">{t("quickSelectPlaceholder")}</span>
                       )}
                     </span>
                     <svg
@@ -639,7 +639,7 @@ export function VenueMap() {
                       onClick={() => setActiveId(null)}
                       className="rounded-full border border-line py-1.5 xl:py-2 text-center font-mono text-xs text-paper-dim transition hover:border-paper hover:text-paper"
                     >
-                      ✕ Ver información general del predio
+                      ✕ {t("backToVenue")}
                     </button>
                   </div>
                 </div>

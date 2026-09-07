@@ -57,7 +57,8 @@
     "exploring": "正在查看：",
     "selectedStand": "已选展位：",
     "tapHint": "点击任一展位即可查看其特点与配套服务",
-    "clearSelection": "清除选择"
+    "clearSelection": "清除选择",
+    "backToVenue": "查看场馆总体信息"
   },
   "Landing": {
     "Hero": {
@@ -105,7 +106,7 @@
     "AccessInfo": {
       "eyebrow": "入场与准入",
       "title": "往届为付费入场——2026年方案即将确认。",
-      "description": "2024年的门票在线销售，参考价格如下。入场登记系统（二维码 + Mercado Pago）已经准备就绪，无论免费或付费均可运作，只待商会确认2026年的方案——详见 <code>ADR-0003</code>。",
+      "description": "2024年的门票在线销售，参考价格如下。入场登记系统（二维码 + Mercado Pago）已经准备就绪，无论免费或付费均可运作，只待商会确认2026年的方案。",
       "pricing": {
         "kids": "儿童（6至12岁）及退休人员",
         "adults": "成人",
@@ -396,7 +397,14 @@
       "sessionActive": "已以 <strong>{email}</strong> 身份登录。",
       "genericError": "操作未能完成，请重试。",
       "signOutError": "退出登录失败，请重试。",
-      "footerNote": "此操作将创建您的访客账户。门票购买功能尚未开放——将在下一阶段启用。"
+      "footerNote": "此操作将创建您的访客账户。门票购买功能尚未开放——将在下一阶段启用。",
+      "errorEmailTaken": "该邮箱已注册，请尝试登录。",
+      "errorBadCredentials": "邮箱或密码不匹配，请检查后重试。",
+      "errorConfirmEmail": "我们已发送确认邮件，请打开邮件后返回登录。",
+      "errorTooMany": "尝试次数过多，请等待一分钟后重试。",
+      "errorNetwork": "无法连接，请检查网络后重试。",
+      "errorWeakPassword": "密码至少需要 8 个字符。",
+      "footerNoteFree": "此操作将创建您的访客账户并生成入场二维码。"
     },
     "AdmissionTicket": {
       "paidNotice": "您的访客账户已创建成功。本届活动为付费入场——二维码将在完成购票后发放，目前尚不可用。",
@@ -409,7 +417,8 @@
       "scanLabel": "入口核验",
       "pendingLabel": "待出票",
       "loadingCode": "正在生成您的入场码…",
-      "codeError": "无法生成您的入场码，请刷新页面或稍后再试。"
+      "codeError": "无法生成您的入场码，请刷新页面或稍后再试。",
+      "codeExpired": "您的登录已过期。请退出后重新登录以生成入场码。"
     }
   }
 }

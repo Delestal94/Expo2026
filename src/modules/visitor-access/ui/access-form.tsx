@@ -16,8 +16,39 @@ function loadAuthProvider() {
 
 type Mode = "signup" | "signin" | "forgot";
 
-function errorMessageOf(error: unknown, fallback: string): string {
-  return error instanceof Error ? error.message : fallback;
+/**
+ * Traduce lo que devuelve el proveedor de autenticación a algo que el
+ * visitante pueda accionar.
+ *
+ * Antes esto era `error.message` directo, así que en pantalla aparecía el
+ * texto crudo del SDK: en inglés ("User already registered") o, peor, la
+ * excepción interna del adaptador nombrando a Supabase. Un mensaje así no
+ * dice qué hacer, y el caso más común —Supabase pide confirmar el email,
+ * que es su valor por defecto— caía justo ahí.
+ *
+ * Se compara sobre el texto del proveedor porque no expone códigos
+ * estables; por eso el fallback genérico sigue existiendo.
+ */
+type ErrorKey =
+  | "errorEmailTaken"
+  | "errorBadCredentials"
+  | "errorConfirmEmail"
+  | "errorTooMany"
+  | "errorNetwork"
+  | "errorWeakPassword";
+
+const ERROR_PATTERNS: Array<[RegExp, ErrorKey]> = [
+  [/already registered|already exists|ya tiene una cuenta|user already/i, "errorEmailTaken"],
+  [/confirmación de email|confirm|not confirmed|no devolvió una sesión/i, "errorConfirmEmail"],
+  [/invalid login|invalid credentials|credenciales/i, "errorBadCredentials"],
+  [/rate limit|too many|demasiados/i, "errorTooMany"],
+  [/fetch failed|network|networkerror|failed to fetch|timeout/i, "errorNetwork"],
+  [/password.*(short|least|weak)|contraseña.*(corta|caracteres)/i, "errorWeakPassword"],
+];
+
+function errorKeyOf(error: unknown): ErrorKey | null {
+  const raw = error instanceof Error ? error.message : String(error ?? "");
+  return ERROR_PATTERNS.find(([patron]) => patron.test(raw))?.[1] ?? null;
 }
 
 /**
@@ -106,7 +137,8 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
       setSession(result);
       setPassword("");
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, t("genericError")));
+      const clave = errorKeyOf(error);
+      setErrorMessage(clave ? t(clave) : t("genericError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -120,7 +152,8 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
       await (await loadAuthProvider()).signOut();
       setSession(null);
     } catch (error) {
-      setErrorMessage(errorMessageOf(error, t("signOutError")));
+      const clave = errorKeyOf(error);
+      setErrorMessage(clave ? t(clave) : t("signOutError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -291,7 +324,13 @@ export function AccessForm({ admissionMode }: { admissionMode: "free" | "paid" }
         </p>
       </form>
 
-      <p className="text-sm text-paper-dim">{t("footerNote")}</p>
+      {/* La nota depende del modo: en gratuito el registro entrega un QR
+          real, así que avisar que "la compra no está disponible" sería
+          falso. `ADMISSION_MODE` se cambia por variable de entorno
+          (ADR-0003), sin pasar por acá. */}
+      <p className="text-sm text-paper-dim">
+        {admissionMode === "free" ? t("footerNoteFree") : t("footerNote")}
+      </p>
     </div>
   );
 }

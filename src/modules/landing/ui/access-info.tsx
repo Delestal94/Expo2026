@@ -89,11 +89,7 @@ export async function AccessInfo() {
               <h2 className="mt-6 text-balance font-display text-3xl font-medium text-paper sm:text-4xl">
                 {t("title")}
               </h2>
-              <p className="mt-4 max-w-lg text-paper-dim">
-                {t.rich("description", {
-                  code: (chunks) => <span className="font-mono">{chunks}</span>,
-                })}
-              </p>
+              <p className="mt-4 max-w-lg text-paper-dim">{t("description")}</p>
 
               {/* Tira de entrada: el tramo sin cargo se destaca con su badge de cortesía en acento magenta */}
               <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line divide-y divide-dashed divide-line sm:flex-row sm:divide-x sm:divide-y-0">
