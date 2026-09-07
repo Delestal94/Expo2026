@@ -29,10 +29,16 @@ function LogoGrid({
         return (
           <div
             key={logo.src}
+            // bg-ink-fixed/bg-paper-fixed, no bg-surface/bg-paper: estos
+            // logos son artwork real (oscuro/color sobre placa clara,
+            // blanco sobre placa oscura para el organizador) — el tono de
+            // la placa no puede invertirse con el tema o el logo
+            // desaparece contra su propio fondo (issue reportado en tema
+            // claro: quedaban ilegibles).
             className={
               tone === "dark"
-                ? "flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-surface p-6 transition duration-300 hover:border-accent/40"
-                : "group relative flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper p-6 shadow-sm transition duration-300 hover:shadow-md"
+                ? "flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-ink-fixed p-6 transition duration-300 hover:border-accent/40"
+                : "group relative flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper-fixed p-6 shadow-sm transition duration-300 hover:shadow-md"
             }
           >
             <div className="relative h-full w-full">
@@ -144,7 +150,10 @@ export function SiteFooter() {
       </div>
 
       <div className="mx-auto mt-10 flex max-w-380 flex-col gap-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
-        <div className="inline-flex items-center self-center rounded-xl bg-paper p-3 sm:self-auto">
+        {/* bg-paper-fixed: expojuy-lockup.svg usa gris oscuro (#424141)
+            para el texto — pensado para placa clara siempre, no para lo
+            que sea que "paper" signifique en cada tema. */}
+        <div className="inline-flex items-center self-center rounded-xl bg-paper-fixed p-3 sm:self-auto">
           <Image
             src="/images/logos/expojuy-lockup.svg"
             alt={t("brand")}

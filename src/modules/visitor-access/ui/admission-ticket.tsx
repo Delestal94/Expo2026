@@ -171,7 +171,11 @@ export function AdmissionTicket({
         <span className="font-mono text-[0.6rem] tracking-[0.25em] text-paper-dim uppercase">
           {t("scanLabel")}
         </span>
-        <div className="rounded-lg bg-paper p-3">
+        {/* bg-paper-fixed, no bg-paper: el QR necesita un marco claro
+            siempre (QRCodeSVG ya pinta sus propios módulos negro sobre
+            blanco por defecto) — con bg-paper esto se volvía un marco
+            oscuro alrededor del QR en tema claro. */}
+        <div className="rounded-lg bg-paper-fixed p-3">
           <QRCodeSVG value={code} size={128} />
         </div>
         <span className="font-mono text-[0.65rem] tracking-[0.1em] text-paper-dim">{code}</span>

@@ -3,10 +3,12 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
 import { THEME_INIT_SCRIPT } from "@/lib/ui/theme";
+import { ThemeSync } from "@/lib/ui/theme-sync";
 import "@/app/globals.css";
 
 const unbounded = Unbounded({
@@ -84,21 +86,20 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
-      {/* Script inline plano, no next/script: "beforeInteractive" de
-          next/script pasa por el runtime de hidratación de Next (llega a
-          ejecutarse en paralelo con React, no antes) — no alcanza a poner
-          data-theme en <html> antes de que el lazy initializer de
-          useState de componentes como Wordmark lea el atributo, y esos
-          arrancan en "dark" igual para cualquiera que haya elegido claro.
-          Un <script> común en <head> sí bloquea el parseo del HTML y
-          corre antes de que exista una sola línea de React. */}
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
       </head>
       <body className="font-body antialiased overflow-x-clip">
         <NextIntlClientProvider>
+          <ThemeSync />
           {children}
           <ChatBot />
         </NextIntlClientProvider>

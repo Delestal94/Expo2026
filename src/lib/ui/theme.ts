@@ -46,6 +46,19 @@ export function getCurrentTheme(): Theme {
   return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
 }
 
+export function getResolvedTheme(): Theme {
+  const stored = getStoredTheme();
+  if (stored) return stored;
+  if (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-color-scheme: light)").matches
+  ) {
+    return "light";
+  }
+  return "dark";
+}
+
 /**
  * Script que se inyecta inline en <head> (ver layout.tsx) para aplicar el
  * tema correcto ANTES del primer paint — sin esto, la página siempre
