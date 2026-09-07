@@ -57,7 +57,8 @@
     "exploring": "Explorando:",
     "selectedStand": "Estande selecionado:",
     "tapHint": "Toque em qualquer estande para ver características e serviços",
-    "clearSelection": "Limpar seleção"
+    "clearSelection": "Limpar seleção",
+    "backToVenue": "Ver informações gerais do local"
   },
   "Landing": {
     "Hero": {
@@ -105,7 +106,7 @@
     "AccessInfo": {
       "eyebrow": "Acesso e entrada",
       "title": "A entrada geral foi paga nas últimas edições — 2026 será confirmado em breve.",
-      "description": "Em 2024 a entrada era vendida online por estes valores de referência. O cadastro de acesso (QR + Mercado Pago) já está pronto para funcionar do mesmo jeito, gratuito ou pago, assim que a Câmara confirmar o esquema de 2026 — ver <code>ADR-0003</code>.",
+      "description": "Em 2024 a entrada era vendida online por estes valores de referência. O cadastro de acesso (QR + Mercado Pago) já está pronto para funcionar do mesmo jeito, gratuito ou pago, assim que a Câmara confirmar o esquema de 2026.",
       "pricing": {
         "kids": "Crianças (6 a 12 anos) e aposentados",
         "adults": "Adultos",
@@ -396,7 +397,14 @@
       "sessionActive": "Sessão iniciada como <strong>{email}</strong>.",
       "genericError": "Não foi possível concluir a operação. Tente novamente.",
       "signOutError": "Não foi possível encerrar a sessão. Tente novamente.",
-      "footerNote": "Isso cria sua conta de visitante. A compra do ingresso ainda não está disponível — é habilitada na próxima etapa."
+      "footerNote": "Isso cria sua conta de visitante. A compra do ingresso ainda não está disponível — é habilitada na próxima etapa.",
+      "errorEmailTaken": "Esse email já tem uma conta. Tente entrar.",
+      "errorBadCredentials": "O email ou a senha não conferem. Revise e tente de novo.",
+      "errorConfirmEmail": "Enviamos um email para confirmar sua conta. Abra e volte para entrar.",
+      "errorTooMany": "Muitas tentativas seguidas. Espere um minuto e tente de novo.",
+      "errorNetwork": "Não conseguimos conectar. Verifique sua conexão e tente de novo.",
+      "errorWeakPassword": "A senha precisa de pelo menos 8 caracteres.",
+      "footerNoteFree": "Isto cria sua conta de visitante e libera seu QR code de entrada."
     },
     "AdmissionTicket": {
       "paidNotice": "Sua conta de visitante já foi criada. A entrada desta edição é paga — o QR é emitido depois do pagamento do ingresso, ainda não disponível.",
@@ -409,7 +417,8 @@
       "scanLabel": "Leitura na entrada",
       "pendingLabel": "Entrada pendente",
       "loadingCode": "Gerando seu código de acesso…",
-      "codeError": "Não conseguimos gerar seu código de acesso. Recarregue a página ou tente novamente em alguns minutos."
+      "codeError": "Não conseguimos gerar seu código de acesso. Recarregue a página ou tente novamente em alguns minutos.",
+      "codeExpired": "Sua sessão expirou. Saia e entre de novo para gerar seu código."
     }
   }
 }

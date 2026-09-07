@@ -57,7 +57,8 @@
     "exploring": "Exploration :",
     "selectedStand": "Stand sélectionné :",
     "tapHint": "Touchez un stand pour voir ses caractéristiques et services",
-    "clearSelection": "Effacer la sélection"
+    "clearSelection": "Effacer la sélection",
+    "backToVenue": "Voir les informations générales du site"
   },
   "Landing": {
     "Hero": {
@@ -105,7 +106,7 @@
     "AccessInfo": {
       "eyebrow": "Accès et entrée",
       "title": "L'entrée générale était payante lors des dernières éditions — 2026 sera confirmé prochainement.",
-      "description": "En 2024, le billet se vendait en ligne à ces tarifs de référence. L'inscription d'accès (QR + Mercado Pago) est déjà prête à fonctionner de la même façon, gratuite ou payante, dès que la Chambre confirmera le schéma 2026 — voir <code>ADR-0003</code>.",
+      "description": "En 2024, le billet se vendait en ligne à ces tarifs de référence. L'inscription d'accès (QR + Mercado Pago) est déjà prête à fonctionner de la même façon, gratuite ou payante, dès que la Chambre confirmera le schéma 2026.",
       "pricing": {
         "kids": "Enfants (6 à 12 ans) et retraités",
         "adults": "Adultes",
@@ -396,7 +397,14 @@
       "sessionActive": "Session ouverte en tant que <strong>{email}</strong>.",
       "genericError": "Impossible de terminer l'opération. Réessayez.",
       "signOutError": "Impossible de fermer la session. Réessayez.",
-      "footerNote": "Ceci crée votre compte visiteur. L'achat du billet n'est pas encore disponible — il sera activé à la prochaine étape."
+      "footerNote": "Ceci crée votre compte visiteur. L'achat du billet n'est pas encore disponible — il sera activé à la prochaine étape.",
+      "errorEmailTaken": "Cet email a déjà un compte. Essayez de vous connecter.",
+      "errorBadCredentials": "L'email ou le mot de passe ne correspondent pas. Vérifiez et réessayez.",
+      "errorConfirmEmail": "Nous vous avons envoyé un email pour confirmer votre compte. Ouvrez-le puis revenez vous connecter.",
+      "errorTooMany": "Trop de tentatives d'affilée. Attendez une minute et réessayez.",
+      "errorNetwork": "La connexion a échoué. Vérifiez votre réseau et réessayez.",
+      "errorWeakPassword": "Le mot de passe doit faire au moins 8 caractères.",
+      "footerNoteFree": "Ceci crée votre compte visiteur et génère votre QR code d'entrée."
     },
     "AdmissionTicket": {
       "paidNotice": "Votre compte visiteur est déjà créé. L'entrée de cette édition est payante — le QR est émis après le paiement du billet, pas encore disponible.",
@@ -409,7 +417,8 @@
       "scanLabel": "Scan à l'entrée",
       "pendingLabel": "Billet en attente",
       "loadingCode": "Génération de votre code d'accès…",
-      "codeError": "Impossible de générer votre code d'accès. Rechargez la page ou réessayez dans quelques minutes."
+      "codeError": "Impossible de générer votre code d'accès. Rechargez la page ou réessayez dans quelques minutes.",
+      "codeExpired": "Votre session a expiré. Déconnectez-vous et reconnectez-vous pour générer votre code."
     }
   }
 }

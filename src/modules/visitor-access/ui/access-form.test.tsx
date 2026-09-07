@@ -84,9 +84,10 @@ describe("AccessForm", () => {
     );
   });
 
-  it("muestra el error del proveedor sin romper el formulario", async () => {
+  it("traduce el error del proveedor a copy accionable en vez de mostrarlo crudo", async () => {
     const user = userEvent.setup();
-    mockProvider.signIn.mockRejectedValue(new Error("Credenciales inválidas"));
+    // Texto tal cual lo devuelve el SDK: no debe llegar así a la pantalla.
+    mockProvider.signIn.mockRejectedValue(new Error("Invalid login credentials"));
     renderAccessForm("free");
 
     await user.click(await screen.findByRole("tab", { name: "Ya tengo cuenta" }));
@@ -94,7 +95,10 @@ describe("AccessForm", () => {
     await user.type(screen.getByLabelText("Contraseña"), "mal-password");
     await user.click(screen.getByRole("button", { name: "Iniciar sesión" }));
 
-    expect(await screen.findByText("Credenciales inválidas")).toBeInTheDocument();
+    expect(
+      await screen.findByText(/el email o la contraseña no coinciden/i),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/invalid login credentials/i)).not.toBeInTheDocument();
   });
 
   it("muestra la sesión activa y permite cerrarla", async () => {
