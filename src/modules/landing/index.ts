@@ -1,7 +1,5 @@
-export { About } from "./ui/about";
 export { AccessInfo } from "./ui/access-info";
 export { CtaLink } from "./ui/cta-link";
-export { Hero } from "./ui/hero";
 export { HeroAboutStage } from "./ui/hero-about-stage";
 export { LanguageSwitcher } from "./ui/language-switcher";
 export { SectionNav } from "./ui/section-nav";
