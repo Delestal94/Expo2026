@@ -1,0 +1,136 @@
+/*
+ * Estilos del PDF de la memoria descriptiva.
+ *
+ * El PDF es un entregable formal de la primera etapa (Bases Anexo III), así
+ * que se lee impreso y en pantalla: de ahí el fondo claro, el cuerpo en
+ * serif de pantalla y los colores de marca reservados para jerarquía, no
+ * para decorar. La paleta es la misma del sitio (isotipo oficial), para que
+ * la memoria y el prototipo se lean como una sola presentación.
+ */
+
+:root {
+  --cyan: #0f766e;
+  --violet: #6d28d9;
+  --magenta: #86198f;
+  --ink: #14122c;
+  --dim: #55516b;
+  --line: #d9d5e4;
+}
+
+body {
+  font-family: "Segoe UI", -apple-system, system-ui, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.6;
+  color: var(--ink);
+  max-width: none;
+}
+
+/* ── Carátula ───────────────────────────────────────────────────────────
+   El primer h1 del documento hace de portada: ocupa la página entera y
+   fuerza un salto, así el cuerpo arranca limpio en la hoja 2. */
+h1:first-of-type {
+  margin: 0;
+  padding: 34vh 0 0;
+  font-size: 30pt;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  border-bottom: 4px solid var(--cyan);
+  padding-bottom: 0.4em;
+  page-break-after: always;
+}
+
+/* Los datos de equipo y repositorio, que van sueltos bajo el título. */
+h1:first-of-type + p {
+  font-size: 10pt;
+  color: var(--dim);
+  line-height: 1.9;
+}
+
+h2 {
+  margin-top: 1.9em;
+  padding-bottom: 0.22em;
+  border-bottom: 2px solid var(--line);
+  font-size: 15pt;
+  letter-spacing: -0.01em;
+  color: var(--violet);
+  page-break-after: avoid;
+}
+
+h3 {
+  margin-top: 1.3em;
+  font-size: 11.5pt;
+  color: var(--magenta);
+  page-break-after: avoid;
+}
+
+/* Una tabla partida al medio por un salto de página es ilegible. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 9pt;
+  page-break-inside: avoid;
+}
+
+th {
+  background: #f2f0f7;
+  text-align: left;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+th,
+td {
+  border: 1px solid var(--line);
+  padding: 0.42em 0.6em;
+  vertical-align: top;
+}
+
+code {
+  background: #f2f0f7;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 0.88em;
+}
+
+pre {
+  background: #f7f6fa;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.8em;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.1em 0 0.1em 1em;
+  border-left: 3px solid var(--cyan);
+  color: var(--dim);
+}
+
+a {
+  color: var(--violet);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(109, 40, 217, 0.3);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.6em 0;
+}
+
+img {
+  max-width: 100%;
+  page-break-inside: avoid;
+}
+
+li {
+  margin: 0.22em 0;
+}
