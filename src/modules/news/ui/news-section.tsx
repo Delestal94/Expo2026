@@ -175,7 +175,7 @@ export function NewsSection() {
           return (
             <article
               key={item.id}
-              className="group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-b from-[#141126]/90 via-[#0e0b1f]/80 to-[#090716]/90 p-6 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-2 hover:border-paper/35 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.7)] will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
+              className="group relative flex flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-b from-surface via-surface/95 to-surface/85 p-6 backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-2 hover:border-paper/35 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.7)] will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
               style={{
                 transform: `translate3d(var(--news-card-${index}-x, 0px), var(--news-card-${index}-y, 0px), 0) scale(var(--news-card-${index}-scale, 1))`,
                 opacity: `var(--news-card-${index}-opacity, 1)`,

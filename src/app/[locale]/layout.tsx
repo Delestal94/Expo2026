@@ -1,12 +1,31 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
 import { THEME_INIT_SCRIPT } from "@/lib/ui/theme";
 import "@/app/globals.css";
+
+const unbounded = Unbounded({
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+  variable: "--font-unbounded",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-manrope",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-jetbrains-mono",
+});
 
 /** Formato Open Graph (guion bajo) por idioma — no es el mismo string que el locale de next-intl. */
 const OG_LOCALE: Record<(typeof routing.locales)[number], string> = {
@@ -65,6 +84,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
+      className={`${unbounded.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
       {/* Script inline plano, no next/script: "beforeInteractive" de
           next/script pasa por el runtime de hidratación de Next (llega a

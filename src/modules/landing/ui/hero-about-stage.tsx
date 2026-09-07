@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
+import { ThemeToggle } from "./theme-toggle";
 import { StrataCanvas } from "./strata-canvas";
 
 const ABOUT_LINES: Record<
@@ -15,55 +16,43 @@ const ABOUT_LINES: Record<
     intro2: string;
     outro1: string;
     outro2: string;
-    outro3: string;
-    outro4: string;
-    outro5: string;
   }
 > = {
   "es-AR": {
-    intro1: "Después de dos semanas de formato clásico,",
-    intro2: "ExpoJuy se reinventa:",
-    outro1: "de rondas de negocios por la mañana",
-    outro2: "y exposición por la tarde,",
-    outro3: "con la minería del litio",
-    outro4: "y el comercio internacional",
-    outro5: "como ejes centrales.",
+    intro1: "Después de dos semanas de formato",
+    intro2: "clásico, ExpoJuy se reinventa:",
+    outro1: "de rondas de negocios por la mañana y exposición por la tarde, con",
+    outro2: "la minería del litio y el comercio internacional como ejes centrales.",
   },
   es: {
-    intro1: "Después de dos semanas de formato clásico,",
-    intro2: "ExpoJuy se reinventa:",
-    outro1: "de rondas de negocios por la mañana",
-    outro2: "y exposición por la tarde,",
-    outro3: "con la minería del litio",
-    outro4: "y el comercio internacional",
-    outro5: "como ejes centrales.",
+    intro1: "Después de dos semanas de formato",
+    intro2: "clásico, ExpoJuy se reinventa:",
+    outro1: "de rondas de negocios por la mañana y exposición por la tarde, con",
+    outro2: "la minería del litio y el comercio internacional como ejes centrales.",
   },
   en: {
-    intro1: "After two weeks in its classic format,",
+    intro1: "After two weeks of classic format,",
     intro2: "ExpoJuy reinvents itself:",
-    outro1: "of morning business rounds",
-    outro2: "and afternoon exhibits,",
-    outro3: "with lithium mining",
-    outro4: "and international trade",
-    outro5: "as the central themes.",
+    outro1: "with morning business rounds and afternoon exhibits, with",
+    outro2: "lithium mining and international trade as central themes.",
   },
   pt: {
     intro1: "Após duas semanas em formato clássico,",
     intro2: "a ExpoJuy se reinventa:",
-    outro1: "de rodadas de negócios pela manhã",
-    outro2: "e exposição à tarde,",
-    outro3: "com a mineração de lítio",
-    outro4: "e o comércio internacional",
-    outro5: "como eixos centrais.",
+    outro1: "de rodadas de negócios pela manhã e exposição à tarde, com",
+    outro2: "a mineração de lítio e o comércio internacional como eixos centrais.",
+  },
+  fr: {
+    intro1: "Après deux semaines au format classique,",
+    intro2: "ExpoJuy se réinvente :",
+    outro1: "avec des rencontres d'affaires le matin et des expositions l'après-midi, avec",
+    outro2: "l'extraction de lithium et le commerce international comme axes centraux.",
   },
   zh: {
     intro1: "在经历了经典的两周形式后，",
     intro2: "ExpoJuy 焕新重塑：",
-    outro1: "上午举办商务洽谈，",
-    outro2: "下午举办产业展览，",
-    outro3: "以锂矿开采",
-    outro4: "与国际贸易",
-    outro5: "为核心主轴。",
+    outro1: "上午举办商务洽谈，下午举办产业展览，",
+    outro2: "以锂矿开采与国际贸易为核心主轴。",
   },
 };
 
@@ -85,7 +74,7 @@ export function HeroAboutStage() {
   const tHero = useTranslations("Landing.Hero");
   const tAbout = useTranslations("Landing.About");
   const locale = useLocale();
-  const lines = ABOUT_LINES[locale] ?? ABOUT_LINES.es;
+  const lines = ABOUT_LINES[locale] ?? ABOUT_LINES["es-AR"];
   const stageRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -169,17 +158,17 @@ export function HeroAboutStage() {
       const glideX = (1 - easedGlide) * 18;
       stage.style.setProperty("--about-glide-x", `${glideX.toFixed(2)}vw`);
 
-      // ── ACTO 4: CARGA SIMULTÁNEA DE LAS 4 BARRAS (0.68 a 0.86) ──
+      // ── ACTO 4: CARGA SIMULTÁNEA DE LAS 4 BARRAS (0.58 a 0.78) ──
       const barsProgress = Math.min(
-        Math.max((progress - 0.68) / 0.18, 0),
+        Math.max((progress - 0.58) / 0.20, 0),
         1,
       );
       const barsScale = barsProgress;
       const barsOpacity = Math.min(1, barsProgress * 2.0);
 
-      // ── ACTO 5: SUBTÍTULOS Y PUNTOS SOLO APARECEN CUANDO LAS BARRAS ESTÁN COMPLETAS (0.86 a 0.95) ──
+      // ── ACTO 5: SUBTÍTULOS APARECEN ÚNICAMENTE CUANDO LAS BARRAS YA ESTÁN 100% COMPLETAS (0.78 a 0.90) ──
       const labelsProgress = Math.min(
-        Math.max((progress - 0.86) / 0.09, 0),
+        Math.max((progress - 0.78) / 0.12, 0),
         1,
       );
       const labelsOpacity = labelsProgress;
@@ -254,8 +243,9 @@ export function HeroAboutStage() {
             />
             <span>{tHero("eyebrow")}</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <span className="hidden sm:inline">{tHero("edition")}</span>
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </nav>
@@ -339,7 +329,7 @@ export function HeroAboutStage() {
           }}
         >
           <div className="grid gap-y-8 lg:grid-cols-12 lg:gap-x-12 lg:items-center">
-            {/* Bloque de texto con tipografía de 8 líneas y traslación armónica del centro a la izquierda sin ghosting */}
+            {/* Bloque de texto con las 8 líneas originales en Manrope/Unbounded y traslación armónica */}
             <div
               className="pointer-events-auto lg:col-span-7 will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
               style={{
@@ -350,60 +340,51 @@ export function HeroAboutStage() {
             >
               <div className="relative w-full max-w-none mx-auto lg:mx-0">
                 <div className="flex flex-col text-left">
-                  {/* Líneas 1 y 2 */}
-                  <div className="flex flex-col gap-1.5 sm:gap-2">
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
+                  {/* Líneas 1 y 2 de la captura */}
+                  <div className="flex flex-col gap-1 sm:gap-1.5">
+                    <span className="block whitespace-normal sm:whitespace-nowrap font-ambit text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,2.5vw,3rem)] leading-[1.12] font-semibold text-paper tracking-tight">
                       {lines.intro1}
                     </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
+                    <span className="block whitespace-normal sm:whitespace-nowrap font-ambit text-2xl sm:text-3xl md:text-4xl lg:text-[clamp(1.75rem,2.5vw,3rem)] leading-[1.12] font-semibold text-paper tracking-tight">
                       {lines.intro2}
                     </span>
                   </div>
 
                   {/* Línea 3: cuatro días */}
-                  <div className="my-4 sm:my-5 lg:my-6">
-                    <span className="block font-display text-[clamp(3.6rem,7.5vw,6.5rem)] leading-[0.88] font-black tracking-tight text-accent drop-shadow-[0_0_35px_rgba(0,240,255,0.4)]">
+                  <div className="my-3 sm:my-4 lg:my-6 xl:my-7">
+                    <span className="block font-ambit text-[clamp(3.8rem,8.5vw,8.5rem)] leading-[0.88] font-bold tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)]">
                       {tAbout("descriptionEmphasis")}
                     </span>
                   </div>
 
-                  {/* Líneas 4, 5, 6, 7 y 8 */}
-                  <div className="flex flex-col gap-1.5 sm:gap-2">
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
+                  {/* Líneas 4 y 5 de la captura */}
+                  <div className="flex flex-col gap-1 sm:gap-1.5 max-w-2xl xl:max-w-none">
+                    <span className="block whitespace-normal lg:whitespace-nowrap font-ambit text-sm sm:text-base md:text-lg lg:text-[clamp(1rem,1.35vw,1.5rem)] text-paper-dim leading-relaxed font-normal">
                       {lines.outro1}
                     </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
+                    <span className="block whitespace-normal lg:whitespace-nowrap font-ambit text-sm sm:text-base md:text-lg lg:text-[clamp(1rem,1.35vw,1.5rem)] text-paper-dim leading-relaxed font-normal">
                       {lines.outro2}
-                    </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
-                      {lines.outro3}
-                    </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
-                      {lines.outro4}
-                    </span>
-                    <span className="block whitespace-normal sm:whitespace-nowrap font-display text-[clamp(1.15rem,1.65vw,1.8rem)] leading-snug font-medium text-paper">
-                      {lines.outro5}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 4 Barras de estratos: se cargan todas a la vez sin distorsión tipográfica */}
+            {/* 4 Barras de estratos: una arriba de la otra, con tipografía Ambit y revelación de subtítulos al completarse */}
             <div className="relative pointer-events-auto lg:col-span-5 lg:col-start-8 lg:self-center">
               {/* Resplandor ambiental de fondo */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -inset-6 rounded-3xl bg-gradient-to-br from-accent/10 via-purple-500/5 to-transparent blur-2xl opacity-50"
               />
-              <dl className="relative flex flex-col gap-2">
+              <dl className="relative flex flex-col gap-2 sm:gap-2.5">
                 {STATS.map((stat, i) => (
                   <div
                     key={stat.key}
                     className={`group relative flex flex-col-reverse ${BAND_WIDTH[i]}`}
                   >
                     <dt
-                      className="flex items-center justify-end gap-2.5 px-3 pt-2 pb-1 font-mono text-[0.72rem] tracking-[0.14em] text-paper-dim uppercase font-semibold will-change-transform motion-reduce:opacity-100"
+                      className="flex items-center justify-end gap-2.5 px-3 pt-2 pb-1 font-ambit text-[0.72rem] tracking-[0.14em] text-paper-dim uppercase font-semibold will-change-transform motion-reduce:opacity-100"
                       style={{
                         opacity: "var(--labels-opacity, 0)",
                       }}
@@ -420,7 +401,7 @@ export function HeroAboutStage() {
                       />
                     </dt>
                     <dd
-                      className="relative flex items-center justify-end overflow-hidden rounded-xl px-7 py-4 font-mono text-3xl font-black text-ink tabular-nums shadow-sm transition-all duration-500 group-hover:shadow-[0_6px_20px_-4px_rgba(0,0,0,0.4)] sm:py-5 sm:text-4xl lg:text-5xl will-change-transform"
+                      className="relative flex items-center justify-end overflow-hidden rounded-xl px-7 py-4 font-ambit text-3xl font-bold text-ink tabular-nums shadow-sm transition-all duration-500 group-hover:shadow-[0_6px_20px_-4px_rgba(0,0,0,0.4)] sm:py-5 sm:text-4xl lg:text-5xl will-change-transform"
                       style={{
                         backgroundColor: stat.color,
                         clipPath:
@@ -433,15 +414,15 @@ export function HeroAboutStage() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1200 ease-in-out group-hover:translate-x-[200%]"
                       />
-                      <div className="relative z-10">
+                      <div className="relative z-10 flex items-baseline">
                         {stat.key === "dates" ? (
-                          <span>
-                            9
-                            <span className="mx-1.5 text-[0.52em] font-normal tracking-normal lowercase opacity-75">
+                          <>
+                            <span>9</span>
+                            <span className="mx-2 text-[0.48em] font-normal tracking-normal text-ink/40 lowercase select-none">
                               al
                             </span>
-                            12 OCT
-                          </span>
+                            <span>12 OCT</span>
+                          </>
                         ) : (
                           <span>{stat.value}</span>
                         )}

@@ -170,7 +170,7 @@ export function ProgramSection() {
           {/* Tarjeta Mañana (Entra volando desde la izquierda) */}
           <div
             key={`morning-${activeDate}`}
-            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-cyan/50 hover:shadow-[0_16px_36px_-15px_rgba(45,227,214,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
+            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-cyan/50 hover:shadow-[0_16px_36px_-15px_rgba(45,227,214,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
             style={{
               transform: inView
                 ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"
@@ -199,7 +199,7 @@ export function ProgramSection() {
           {/* Tarjeta Tarde (Entra volando desde la derecha) */}
           <div
             key={`afternoon-${activeDate}`}
-            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-lavender/50 hover:shadow-[0_16px_36px_-15px_rgba(185,166,245,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
+            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-lavender/50 hover:shadow-[0_16px_36px_-15px_rgba(185,166,245,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
             style={{
               transform: inView
                 ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"

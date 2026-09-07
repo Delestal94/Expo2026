@@ -77,11 +77,12 @@
   --color-ink-fixed: #0d0b2e;
   --color-paper-fixed: #f5f1e8;
 
-  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
-     roles tipográficos del sitio: display, body y mono. */
-  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  /* Tipografías del proyecto: Unbounded (display futurista/mineral),
+     Manrope (lectura elegante), JetBrains Mono (telemetría/códigos) y Ambit (marca oficial) */
+  --font-display: var(--font-unbounded), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-manrope), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-ambit:   'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*

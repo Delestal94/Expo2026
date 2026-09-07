@@ -31,7 +31,7 @@ function EjeCard({
   return (
     <article
       style={cardStyle}
-      className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] px-8 py-7 transition-all duration-500 hover:border-paper/25 hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)] sm:w-auto sm:shrink ${className}`}
+      className={`group relative flex w-[82vw] shrink-0 snap-start flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 px-8 py-7 backdrop-blur-sm transition-all duration-500 hover:border-paper/25 hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)] sm:w-auto sm:shrink ${className}`}
     >
       {/* Destello metálico sutil y pausado en hover */}
       <div

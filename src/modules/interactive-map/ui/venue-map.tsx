@@ -478,7 +478,7 @@ export function VenueMap() {
                     aria-haspopup="listbox"
                     aria-expanded={isDropdownOpen}
                     onClick={() => setIsDropdownOpen((prev) => !prev)}
-                    className="w-full cursor-pointer rounded-xl border border-line bg-[#090e24] pl-3.5 pr-10 py-2.5 text-xs text-left text-paper outline-none transition focus-visible:border-accent hover:border-paper-dim flex items-center justify-between"
+                    className="w-full cursor-pointer rounded-xl border border-line bg-surface pl-3.5 pr-10 py-2.5 text-xs text-left text-paper outline-none transition focus-visible:border-accent hover:border-paper-dim flex items-center justify-between"
                   >
                     <span className="truncate">
                       {active ? (
@@ -515,7 +515,7 @@ export function VenueMap() {
                   {isDropdownOpen && (
                     <div
                       role="listbox"
-                      className="absolute z-50 top-full left-0 mt-1.5 w-full max-h-60 overflow-y-auto rounded-xl border border-line bg-[#090e24]/95 backdrop-blur-md p-1.5 shadow-2xl [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.35)_#070b1e] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#070b1e] [&::-webkit-scrollbar-thumb]:bg-paper-dim/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-accent"
+                      className="absolute z-50 top-full left-0 mt-1.5 w-full max-h-60 overflow-y-auto rounded-xl border border-line bg-surface/95 backdrop-blur-md p-1.5 shadow-2xl [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.35)_#070b1e] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#070b1e] [&::-webkit-scrollbar-thumb]:bg-paper-dim/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-accent"
                     >
                       <button
                         type="button"
@@ -536,7 +536,7 @@ export function VenueMap() {
 
                       {groupedStands.map((group) => (
                         <div key={group.label} className="mt-2 first:mt-0">
-                          <div className="sticky top-0 z-10 bg-[#090e24]/95 backdrop-blur-sm px-2.5 py-1 font-mono text-[0.66rem] font-bold text-accent uppercase tracking-wider border-b border-line/30 mb-0.5">
+                          <div className="sticky top-0 z-10 bg-surface/95 backdrop-blur-sm px-2.5 py-1 font-mono text-[0.66rem] font-bold text-accent uppercase tracking-wider border-b border-line/30 mb-0.5">
                             {group.label}
                           </div>
                           {group.stands.map((zone) => {
@@ -613,7 +613,7 @@ export function VenueMap() {
                     </div>
 
                     {/* Servicios y equipamiento incluidos */}
-                    <div className="rounded-xl border border-line/60 bg-[#090e24] p-3 xl:p-4 text-xs">
+                    <div className="rounded-xl border border-line/60 bg-surface p-3 xl:p-4 text-xs">
                       <span className="font-mono text-[0.68rem] font-semibold tracking-wider text-accent uppercase block mb-2">
                         Servicios y equipamiento incluidos
                       </span>
@@ -670,7 +670,7 @@ export function VenueMap() {
                     </div>
 
                     {/* Ficha informativa del predio (Captura 1) */}
-                    <div className="rounded-xl border border-line/60 bg-[#090e24] p-3.5 text-xs text-paper-dim space-y-2">
+                    <div className="rounded-xl border border-line/60 bg-surface p-3.5 text-xs text-paper-dim space-y-2">
                       <span className="font-mono text-[0.68rem] font-semibold tracking-wider text-accent uppercase block">
                         Predio Ciudad Cultural · Jujuy
                       </span>
@@ -728,7 +728,9 @@ export function VenueMap() {
                 className="cursor-pointer rounded-full border px-3.5 py-1.5 font-mono text-xs transition will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim"
                 style={{
                   borderColor: filter === null ? "var(--color-paper)" : "var(--color-line)",
-                  color: filter === null ? "var(--color-paper)" : "var(--color-paper-dim)",
+                  backgroundColor: filter === null ? "var(--color-paper)" : "var(--color-surface)",
+                  color: filter === null ? "var(--color-ink)" : "var(--color-paper-dim)",
+                  fontWeight: filter === null ? 700 : 500,
                   transform: isDrawn ? "none" : "translate3d(var(--map-pill-0-x, 260px), 0, 0)",
                   opacity: isDrawn ? 1 : "var(--map-pill-0-opacity, 0)",
                 }}
@@ -747,18 +749,20 @@ export function VenueMap() {
                     className="cursor-pointer flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs transition will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim"
                     style={{
                       borderColor: isOn ? cat.color : "var(--color-line)",
+                      backgroundColor: isOn ? "color-mix(in srgb, " + cat.color + " 18%, var(--color-surface))" : "var(--color-surface)",
                       color: isOn ? "var(--color-paper)" : "var(--color-paper-dim)",
+                      fontWeight: isOn ? 700 : 500,
                       transform: isDrawn ? "none" : `translate3d(var(--map-pill-${pillIdx}-x, 260px), 0, 0)`,
                       opacity: isDrawn ? 1 : `var(--map-pill-${pillIdx}-opacity, 0)`,
                     }}
                   >
                     <span
                       aria-hidden="true"
-                      className="h-2.5 w-2.5 rounded-full"
+                      className="h-2.5 w-2.5 rounded-full shrink-0"
                       style={{ backgroundColor: cat.color }}
                     />
-                    {t(`category.${cat.id}`)}
-                    <span className="tabular-nums opacity-70">{counts.get(cat.id) ?? 0}</span>
+                    <span>{t(`category.${cat.id}`)}</span>
+                    <span className="tabular-nums opacity-85 font-semibold">{counts.get(cat.id) ?? 0}</span>
                   </button>
                 );
               })}

@@ -29,7 +29,7 @@ export function ExhibitorCard({
 
   return (
     <article
-      className="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#120f26]/95 via-ink to-[#0c0a1a] p-6 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_36px_-20px_var(--card-color)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:hover:translate-y-0"
+      className="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-[var(--card-color)] hover:shadow-[0_16px_36px_-20px_var(--card-color)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:hover:translate-y-0"
       style={
         {
           "--card-color": exhibitor.color,

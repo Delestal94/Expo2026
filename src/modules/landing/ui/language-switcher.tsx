@@ -29,7 +29,7 @@ export function LanguageSwitcher() {
     <div
       role="group"
       aria-label="Elegir idioma"
-      className="relative flex items-center gap-1 rounded-full border border-line bg-ink/70 p-0.5 backdrop-blur-sm"
+      className="relative flex shrink-0 items-center gap-0.5 sm:gap-1 rounded-full border border-line bg-surface/80 p-1 backdrop-blur-sm"
     >
       {routing.locales.map((code) => {
         const isActive = code === locale;
@@ -44,7 +44,7 @@ export function LanguageSwitcher() {
                 router.replace(pathname, { locale: code });
               });
             }}
-            className={`group relative rounded-full px-2.5 py-1 font-mono text-[0.68rem] tracking-[0.08em] uppercase transition-all duration-300 ease-out ${
+            className={`group relative flex items-center justify-center rounded-full px-2 py-1 sm:px-2.5 sm:py-1 font-mono text-[0.65rem] sm:text-[0.68rem] leading-none tracking-[0.05em] uppercase transition-all duration-300 ease-out ${
               isActive
                 ? "bg-paper font-bold text-ink shadow-sm"
                 : "cursor-pointer text-paper-dim hover:bg-paper/10 hover:text-paper active:scale-95"
@@ -56,7 +56,7 @@ export function LanguageSwitcher() {
                 className="pointer-events-none absolute inset-0 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet))] opacity-0 transition-opacity duration-300 group-hover:opacity-25"
               />
             )}
-            <span className="relative z-10">{LOCALE_LABEL[code]}</span>
+            <span className="relative z-10 leading-none">{LOCALE_LABEL[code]}</span>
           </button>
         );
       })}
