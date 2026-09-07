@@ -29,7 +29,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-pressed={isLight}
       aria-label={isLight ? t("switchToDark") : t("switchToLight")}
-      className="flex h-6 w-6 items-center justify-center rounded-full text-paper-dim transition-colors hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="flex h-11 w-11 items-center justify-center rounded-full text-paper-dim transition-colors hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {isLight ? (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4" aria-hidden="true">

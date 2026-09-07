@@ -136,7 +136,7 @@ export function GalleryGrid() {
               <span className="rounded-full border border-line bg-ink/80 px-2.5 py-1 font-mono text-[0.65rem] tracking-wider text-paper uppercase backdrop-blur-sm">
                 #{String(photo.n).padStart(2, "0")}
               </span>
-              <span className="font-mono text-xs text-magenta">↗</span>
+              <span className="font-mono text-xs text-magenta-text">↗</span>
             </div>
             <span
               aria-hidden="true"

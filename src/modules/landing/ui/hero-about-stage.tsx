@@ -2,59 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Countdown } from "./countdown";
 import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { StrataCanvas } from "./strata-canvas";
-
-const ABOUT_LINES: Record<
-  string,
-  {
-    intro1: string;
-    intro2: string;
-    outro1: string;
-    outro2: string;
-  }
-> = {
-  "es-AR": {
-    intro1: "Después de dos semanas de formato",
-    intro2: "clásico, ExpoJuy se reinventa:",
-    outro1: "de rondas de negocios por la mañana y exposición por la tarde, con",
-    outro2: "la minería del litio y el comercio internacional como ejes centrales.",
-  },
-  es: {
-    intro1: "Después de dos semanas de formato",
-    intro2: "clásico, ExpoJuy se reinventa:",
-    outro1: "de rondas de negocios por la mañana y exposición por la tarde, con",
-    outro2: "la minería del litio y el comercio internacional como ejes centrales.",
-  },
-  en: {
-    intro1: "After two weeks of classic format,",
-    intro2: "ExpoJuy reinvents itself:",
-    outro1: "with morning business rounds and afternoon exhibits, with",
-    outro2: "lithium mining and international trade as central themes.",
-  },
-  pt: {
-    intro1: "Após duas semanas em formato clássico,",
-    intro2: "a ExpoJuy se reinventa:",
-    outro1: "de rodadas de negócios pela manhã e exposição à tarde, com",
-    outro2: "a mineração de lítio e o comércio internacional como eixos centrais.",
-  },
-  fr: {
-    intro1: "Après deux semaines au format classique,",
-    intro2: "ExpoJuy se réinvente :",
-    outro1: "avec des rencontres d'affaires le matin et des expositions l'après-midi, avec",
-    outro2: "l'extraction de lithium et le commerce international comme axes centraux.",
-  },
-  zh: {
-    intro1: "在经历了经典的两周形式后，",
-    intro2: "ExpoJuy 焕新重塑：",
-    outro1: "上午举办商务洽谈，下午举办产业展览，",
-    outro2: "以锂矿开采与国际贸易为核心主轴。",
-  },
-};
 
 /** Datos duros del evento: acompañan al titular, no compiten con los ejes. */
 const STATS = [
@@ -76,8 +29,6 @@ export function HeroAboutStage() {
   const tHero = useTranslations("Landing.Hero");
   const tAbout = useTranslations("Landing.About");
   const tEjes = useTranslations("Landing.Ejes");
-  const locale = useLocale();
-  const lines = ABOUT_LINES[locale] ?? ABOUT_LINES["es-AR"];
   const stageRef = useRef<HTMLElement>(null);
   // Eje apuntado. Arranca en el primero para que la franja de abajo nunca
   // esté vacía y se entienda que las líneas responden.
@@ -451,8 +402,14 @@ export function HeroAboutStage() {
           >
             {/* ── Columna izquierda: el relato y los datos duros ── */}
             <div className="lg:col-span-4">
+              {/* El bloque se quedó sin encabezado al fusionar Ejes acá
+                  adentro: quien navega por headings saltaba del h1 del hero
+                  directo a Noticias y "Sobre" no existía para él. Va oculto
+                  porque el titular visual de la sección es el propio relato,
+                  no un rótulo. */}
+              <h2 className="sr-only">{tAbout("title")}</h2>
               <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(1.9vw,3.2vh),1.6rem)]">
-                {lines.intro1} {lines.intro2}
+                {tAbout("descriptionIntro")}
               </p>
 
               <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(4.6vw,9vh),5.5rem)]">
@@ -460,7 +417,7 @@ export function HeroAboutStage() {
               </p>
 
               <p className="mt-3 max-w-lg font-ambit leading-snug font-normal text-paper-dim text-[clamp(0.75rem,min(1.25vw,2.2vh),1.05rem)]">
-                {lines.outro1} {lines.outro2}
+                {tAbout("descriptionOutro")}
               </p>
 
               <dl

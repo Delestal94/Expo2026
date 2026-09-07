@@ -89,10 +89,10 @@ export function SiteFooter() {
           </span>
           <LogoGrid logos={INSTITUTIONAL_PARTNERS} />
         </div>
-        <div className="text-center">
-          <span className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
+        <div id="sponsors" className="scroll-mt-24 text-center">
+          <h2 className="font-mono text-xs tracking-[0.25em] text-paper-dim uppercase">
             Nuestros sponsors
-          </span>
+          </h2>
           <LogoGrid logos={SPONSORS} />
         </div>
         <div className="text-center">
@@ -103,7 +103,10 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-380 gap-8 border-b border-line py-12 lg:grid-cols-12 lg:gap-10">
+      <div
+        id="contacto"
+        className="mx-auto grid max-w-380 gap-8 scroll-mt-24 border-b border-line py-12 lg:grid-cols-12 lg:gap-10"
+      >
         <div className="lg:col-span-5">
           <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
             {contact("eyebrow")}
@@ -163,10 +166,13 @@ export function SiteFooter() {
           />
         </div>
         <p className="max-w-md text-sm text-paper-dim">{t("institutions")}</p>
-        <div className="flex flex-col items-center gap-2 sm:items-end">
-          <span className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
+        <div
+          id="redes"
+          className="flex scroll-mt-24 flex-col items-center gap-2 sm:items-end"
+        >
+          <h2 className="font-mono text-xs tracking-[0.1em] text-paper-dim uppercase">
             {contact("socialTitle")}
-          </span>
+          </h2>
           <SocialLinks />
           <span className="font-mono text-xs text-paper-dim">{t("badge")}</span>
         </div>

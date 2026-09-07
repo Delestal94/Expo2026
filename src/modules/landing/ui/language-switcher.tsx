@@ -44,7 +44,7 @@ export function LanguageSwitcher() {
                 router.replace(pathname, { locale: code });
               });
             }}
-            className={`group relative flex items-center justify-center rounded-full px-2 py-1 sm:px-2.5 sm:py-1 font-mono text-[0.65rem] sm:text-[0.68rem] leading-none tracking-[0.05em] uppercase transition-[background-color,color,box-shadow] duration-300 ease-out motion-reduce:transition-none ${
+            className={`group relative flex min-h-11 items-center justify-center rounded-full px-2 py-1 sm:px-2.5 sm:py-1 font-mono text-[0.65rem] sm:text-[0.68rem] leading-none tracking-[0.05em] uppercase transition-[background-color,color,box-shadow] duration-300 ease-out motion-reduce:transition-none ${
               isActive
                 ? "bg-paper font-bold text-ink shadow-sm"
                 : "cursor-pointer text-paper-dim hover:bg-paper/10 hover:text-paper active:scale-95"
