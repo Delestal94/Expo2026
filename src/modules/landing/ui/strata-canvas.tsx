@@ -3,12 +3,24 @@
 import { useEffect, useRef } from "react";
 import { getCurrentTheme, THEME_CHANGE_EVENT, type Theme } from "@/lib/ui/theme";
 
-// Mismos tonos que --color-ink en cada tema (ver globals.css) — el canvas
-// no puede leer variables CSS directamente en fillStyle, así que se
-// duplican acá.
+/**
+ * Relleno de fondo del canvas. NO es el color que se ve: es el elemento
+ * neutro del modo de fusión, elegido para que el canvas no altere el color
+ * de la página y solo aporten luz las bandas.
+ *
+ * Con `screen`, ese neutro es el negro — `screen(0, x) = x` — así que el
+ * fondo del hero termina siendo exactamente `--color-ink`, igual que el
+ * resto del sitio. Cualquier otro valor aclara: el relleno estuvo en
+ * #2b2456 y por eso el hero se veía más claro que la página, y subir
+ * `--color-ink` no cerraba la brecha (screen aclara más cuanto más claro es
+ * lo que tiene detrás, así que el hero subía a la par).
+ *
+ * En claro el modo es `multiply` y su neutro es el blanco, por el mismo
+ * motivo invertido.
+ */
 const BG_FILL: Record<Theme, string> = {
-  dark: "#0b0a12",
-  light: "#f5f1e8",
+  dark: "#000000",
+  light: "#ffffff",
 };
 
 // "screen" aclara — funciona porque las bandas son más claras que el
@@ -35,6 +47,23 @@ interface Band {
 
 const PALETTE = ["#2de3d6", "#7c4dff", "#b83fe0", "#b9a6f5"];
 
+/**
+ * Pasadas concéntricas con las que se reconstruye la caída del halo, y
+ * opacidad de cada una.
+ *
+ * Al pintarse una sobre otra, el centro acumula las cinco y el filo recibe
+ * una sola: la opacidad resultante va de LAYER_ALPHA en el borde a
+ * 1-(1-LAYER_ALPHA)^GLOW_LAYERS en el núcleo. Con 0.129 y 5 capas eso da
+ * ~0.13 afuera y ~0.50 adentro, que es el mismo núcleo que tenía el trazo
+ * original con `shadowBlur`, pero llegando por una rampa en vez de por un
+ * escalón.
+ *
+ * Cinco es el punto de equilibrio: con menos vuelve a notarse el borde, y
+ * cada capa extra es otro stroke del path por banda y por frame.
+ */
+const GLOW_LAYERS = 5;
+const LAYER_ALPHA = 0.129;
+
 function createBands(height: number): Band[] {
   return PALETTE.map((color, i) => ({
     baseY: height * (0.16 + i * 0.135),
@@ -44,8 +73,9 @@ function createBands(height: number): Band[] {
     phase: i * 1.7,
     width: 46 - i * 3,
     color,
-    // Bajado de 28 a 18: shadowBlur es la operación más cara de este loop,
-    // y a este radio el glow sigue siendo visible (issues #36, #80).
+    // Ancho EXTRA que alcanza el halo por fuera del núcleo, no un radio de
+    // blur. Estuvo en 26 y la banda se veía borrosa: sobre un núcleo de
+    // 34-46px, un halo de 26 es tanta superficie difusa como banda nítida.
     glow: 18,
   }));
 }
@@ -70,9 +100,16 @@ export function StrataCanvas() {
     ).matches;
 
     let bands = createBands(canvas.clientHeight);
-    let frame = 0;
+    // Un solo handle para todo el sistema. Antes había dos (`frame` para el
+    // que encolaba el propio draw, `raf` para el que encolaba el
+    // IntersectionObserver): al reentrar en pantalla se podía dejar vivo un
+    // bucle viejo y quedaban dos draws compitiendo por el mismo canvas.
     let raf = 0;
-    let lastDraw = 0;
+    let running = false;
+    // -Infinity, no 0: el cap de 30fps compara `time - lastDraw`, y con
+    // lastDraw en 0 el primer `draw(0)` del modo movimiento-reducido caía en
+    // el early-return del throttle y el canvas quedaba en blanco para siempre.
+    let lastDraw = Number.NEGATIVE_INFINITY;
     let bgFill = BG_FILL[getCurrentTheme()];
 
     function applyBlendMode(theme: Theme) {
@@ -84,7 +121,12 @@ export function StrataCanvas() {
       const theme = (event as CustomEvent<Theme>).detail ?? getCurrentTheme();
       bgFill = BG_FILL[theme];
       applyBlendMode(theme);
-      if (prefersReducedMotion) draw(lastDraw);
+      // Con movimiento reducido no hay bucle que repinte solo: hay que
+      // forzar un cuadro, salteando el cap de 30fps.
+      if (prefersReducedMotion) {
+        lastDraw = Number.NEGATIVE_INFINITY;
+        draw(0);
+      }
     }
     window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
 
@@ -102,13 +144,20 @@ export function StrataCanvas() {
       canvas.height = canvas.clientHeight * dpr;
       ctx.scale(dpr, dpr);
       bands = createBands(canvas.clientHeight);
+      // Asignar canvas.width limpia el bitmap. Con el bucle corriendo el
+      // próximo frame lo repinta solo; con movimiento reducido no hay
+      // próximo frame, así que el canvas quedaría vacío tras un resize.
+      if (prefersReducedMotion) {
+        lastDraw = Number.NEGATIVE_INFINITY;
+        draw(0);
+      }
     }
 
     function draw(time: number) {
       if (!canvas || !ctx) return;
 
       if (time - lastDraw < FRAME_INTERVAL_MS) {
-        if (!prefersReducedMotion) frame = requestAnimationFrame(draw);
+        if (running) raf = requestAnimationFrame(draw);
         return;
       }
       lastDraw = time;
@@ -120,7 +169,25 @@ export function StrataCanvas() {
       ctx.fillStyle = bgFill;
       ctx.fillRect(0, 0, w, h);
 
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
       for (const band of bands) {
+        // Un solo path por banda, estampado en varias pasadas concéntricas
+        // que van de la más ancha a la más angosta.
+        //
+        // `shadowBlur` daría el mismo halo de una, pero es una convolución
+        // por software en cada frame y este proyecto ya pagó 940ms y 1480ms
+        // de TBT por eso (issues #36 y #80). El problema es que sustituirlo
+        // por UN trazo ancho de opacidad plana deja dos cantos duros: uno
+        // donde corta el halo y otro donde arranca el núcleo, y la banda
+        // queda con un contorno que el gaussiano no tenía.
+        //
+        // Con varias pasadas de alfa bajo, cada zona recibe tantas capas
+        // como profundidad tenga: el centro las acumula todas y el borde
+        // recibe una sola, así que la opacidad cae de forma escalonada en
+        // vez de cortarse de golpe. Es la caída del blur reconstruida a
+        // fuerza de composición, que es barata, en vez de convolución.
         ctx.beginPath();
         for (let x = 0; x <= w; x += 8) {
           const y =
@@ -131,20 +198,36 @@ export function StrataCanvas() {
           else ctx.lineTo(x, y);
         }
         ctx.strokeStyle = band.color;
-        ctx.lineWidth = band.width;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.globalAlpha = 0.5;
-        ctx.shadowColor = band.color;
-        ctx.shadowBlur = band.glow;
-        ctx.stroke();
+        ctx.globalAlpha = LAYER_ALPHA;
+
+        for (let layer = GLOW_LAYERS - 1; layer >= 0; layer--) {
+          // t = 1 en la pasada más ancha (el filo del halo), 0 en el núcleo.
+          // Va al cuadrado para que las capas se apiñen cerca del núcleo:
+          // repartidas de forma pareja, la luz queda esparcida en un halo
+          // ancho y uniforme que se lee como desenfoque. Un gaussiano
+          // concentra casi todo el brillo junto al centro y cae rápido, y
+          // eso es lo que reproduce la curva.
+          const t = layer / (GLOW_LAYERS - 1);
+          ctx.lineWidth = band.width + band.glow * t * t;
+          ctx.stroke();
+        }
       }
       ctx.globalAlpha = 1;
-      ctx.shadowBlur = 0;
 
-      if (!prefersReducedMotion) {
-        frame = requestAnimationFrame(draw);
+      if (running) {
+        raf = requestAnimationFrame(draw);
       }
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(draw);
+    }
+
+    function stop() {
+      running = false;
+      cancelAnimationFrame(raf);
     }
 
     resize();
@@ -162,12 +245,8 @@ export function StrataCanvas() {
     // de que el visitante scrollea más allá del hero — sin esto anima
     // para siempre fuera de pantalla, quemando CPU sin que nadie lo vea.
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        raf = requestAnimationFrame(draw);
-      } else {
-        cancelAnimationFrame(raf);
-        cancelAnimationFrame(frame);
-      }
+      if (entry?.isIntersecting) start();
+      else stop();
     });
     observer.observe(canvas);
 
@@ -175,8 +254,7 @@ export function StrataCanvas() {
       window.removeEventListener("resize", resize);
       window.removeEventListener(THEME_CHANGE_EVENT, handleThemeChange);
       observer.disconnect();
-      cancelAnimationFrame(raf);
-      cancelAnimationFrame(frame);
+      stop();
     };
   }, []);
 
@@ -184,7 +262,11 @@ export function StrataCanvas() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full opacity-70"
+      // La opacidad la manda el hero por variable. Estuvo fija en 0.70 y la
+      // variable quedó escribiéndose sin que nadie la leyera: el canvas
+      // ignoraba al hero y el fondo se veía más apagado de lo pedido.
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      style={{ opacity: "var(--strata-canvas-opacity, 0.85)" }}
     />
   );
 }

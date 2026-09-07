@@ -19,4 +19,5 @@ export interface AuthProvider {
   signIn(email: string, password: string): Promise<AuthSession>;
   signOut(): Promise<void>;
   getSession(): Promise<AuthSession | null>;
+  resetPassword(email: string): Promise<void>;
 }

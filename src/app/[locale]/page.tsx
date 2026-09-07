@@ -2,9 +2,8 @@ import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/lib/i18n/routing";
 import {
   AccessInfo,
-  Ejes,
   EventStructuredData,
-  Hero,
+  HeroAboutStage,
   SectionNav,
   SiteFooter,
 } from "@/modules/landing";
@@ -25,11 +24,10 @@ export default async function Home({
   setRequestLocale(locale);
 
   return (
-    <main>
+    <main className="overflow-x-clip">
       <EventStructuredData />
       <SectionNav />
-      <Hero />
-      <Ejes />
+      <HeroAboutStage />
       <NewsSection />
       <GalleryPreview />
       <MapSection />

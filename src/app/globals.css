@@ -34,10 +34,14 @@
 }
 
 @theme {
-  /* Azul-índigo oscuro (no negro casi puro) — pedido explícito para que el
-     fondo del sitio lea como el navy saturado de la referencia, no como un
-     gris-negro neutro. */
-  --color-ink: #0d0b2e;
+  /* Índigo obsidiana: el fondo de toda la página. Estuvo en #070b19 (azul
+     casi negro) y quedaba un salto duro contra el hero, que sobre el canvas
+     de estratos se lee cerca de rgb(40,38,86): el hero violeta y el resto
+     del sitio negro parecían dos páginas distintas. Este valor los acerca
+     manteniendo el fondo bien oscuro para texto largo.
+     Los 12 usos de `text-ink` son todos sobre bg-paper o bg-accent (fondos
+     claros), así que siguen midiendo ~16:1 y ~12:1: AA de sobra. */
+  --color-ink: #14122c;
   --color-paper: #f5f1e8;
   --color-paper-dim: #b3ab9c;
   /* Paleta de marca ExpoJuy — sampleada directamente de los 4 rellenos
@@ -51,8 +55,11 @@
   --color-accent: #2de3d6;
   --color-line: rgba(245, 241, 232, 0.14);
   /* Fondo de card, un tono más claro que --color-ink — antes repetido como
-     literal `bg-[#121022]` en 7 lugares de 6 módulos (issue #84). */
-  --color-surface: #121022;
+     literal `bg-[#121022]` en 7 lugares de 6 módulos (issue #84).
+     Subido junto con --color-ink: con el ink en #14122c, el #121022 viejo
+     había quedado MÁS oscuro que la página y las tarjetas se hundían en vez
+     de levantarse. */
+  --color-surface: #1e1b40;
   /* --color-violet mide ~3.3:1 contra --color-ink como texto/fondo sólido a
      tamaños chicos — no llega al 4.5:1 de WCAG AA (issue #35). Esta variante
      más clara conserva el matiz de marca pero solo se usa donde el violeta
@@ -79,11 +86,12 @@
   --color-ink-fixed: #0d0b2e;
   --color-paper-fixed: #f5f1e8;
 
-  /* Ambit es la tipografía oficial de ExpoJuy 2026 — se usa en los tres
-     roles tipográficos del sitio: display, body y mono. */
-  --font-display: 'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    'Ambit', ui-sans-serif, system-ui, sans-serif;
-  --font-mono:    'Ambit', ui-sans-serif, system-ui, sans-serif;
+  /* Tipografías del proyecto: Unbounded (display futurista/mineral),
+     Manrope (lectura elegante), JetBrains Mono (telemetría/códigos) y Ambit (marca oficial) */
+  --font-display: var(--font-unbounded), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-manrope), 'Ambit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-ambit:   'Ambit', ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
@@ -122,8 +130,34 @@
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Scrollbar refinada a tono con la estética dark / cyber-mineral del sitio */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 241, 232, 0.25) #1b1838;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1b1838;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 241, 232, 0.22);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -135,6 +169,9 @@ html {
 body {
   background: var(--color-ink);
   color: var(--color-paper);
+  overflow-x: clip;
+  max-width: 100vw;
+  min-height: 100vh;
 }
 
 ::selection {
@@ -196,6 +233,36 @@ body {
   }
 }
 
+/* Flujo cromático continuo para la veta de cuenta regresiva y acentos */
+.strata-flow-bar {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-cyan) 0%,
+    var(--color-violet) 25%,
+    var(--color-magenta) 50%,
+    var(--color-lavender) 75%,
+    var(--color-cyan) 100%
+  );
+  background-size: 200% 100%;
+  animation: strata-flow 3.5s linear infinite;
+}
+
+@keyframes strata-flow {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strata-flow-bar {
+    animation: none;
+    background-position: 0% 0;
+  }
+}
+
 /* La galería se comporta como una sucesión de momentos, no como una pared
    inmóvil: cada toma deriva apenas sobre su encuadre y recibe un reflejo de
    luz de marca. Ambas animaciones se desactivan con reducir movimiento. */
@@ -237,14 +304,123 @@ body {
   }
 }
 
-/* Las tarjetas de Ejes necesitan vida sin depender del hover: el número de
-   fondo respira de forma sutil y continua. */
-@keyframes ejes-breathe {
-  0%,
-  100% {
-    opacity: 0.55;
+/* ─── Asistente flotante ──────────────────────────────────────────────────
+   Cuatro gestos, todos gateados por motion-safe: en el markup. */
+
+/* El botón llega al dock: sube desde abajo del borde y se asienta. */
+@keyframes bot-dock-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.85);
   }
-  50% {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* La ventana crece desde la esquina de donde salió el botón. */
+@keyframes bot-panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Cada burbuja nueva entra desde abajo, corta. */
+@keyframes bot-msg-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Onda del punto de aviso. Propia y no `animate-ping` de Tailwind porque se
+   corre un número finito de veces con `both`: el último cuadro queda en el
+   estado transparente, o sea invisible, en vez de congelarse a mitad. */
+@keyframes bot-badge-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Cadencia de escritura: tres puntos con el mismo ciclo y 150ms de desfase.
+   No es un evento (para eso está el ping), es un ritmo que dura lo que dure
+   la espera. */
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-3px);
     opacity: 1;
   }
 }
+
+/* Cambio de contenido en un panel que ya está en pantalla (tabs de día de
+   la Agenda). No es una entrada de sección: es más corto y sin compresión,
+   solo lo justo para que se lea "esto cambió" y no como un corte seco.
+   Gateado por motion-safe: en el markup. */
+@keyframes panel-swap {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Sistema de entrada de secciones ─────────────────────────────────────
+ *
+ * `.motion-entrance` marca cualquier elemento cuyo estado inicial (oculto,
+ * desplazado, borroso) viene de un ESTILO INLINE calculado en JS.
+ *
+ * Existe porque `motion-reduce:opacity-100` de Tailwind genera una regla de
+ * clase, y una regla de clase pierde contra un estilo inline. El markup
+ * decía "con movimiento reducido se ve" y el navegador aplicaba igual el
+ * `opacity: 0` inline: la Agenda, el Portal de expositores, la sección de
+ * Acceso y todo el bloque "Sobre" del hero quedaban INVISIBLES para quien
+ * pide movimiento reducido. `!important` acá es la única forma de que la
+ * salida de accesibilidad gane, y de paso cubre el caso sin JS.
+ *
+ * Regla de oro del proyecto: el estado con movimiento reducido es el estado
+ * FINAL, nunca el inicial.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .motion-entrance {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Pausa de animaciones decorativas continuas fuera del viewport (grilla de
+   la galería). El compositor sigue trabajando en animaciones infinitas
+   aunque nadie las vea; `useIdleOffscreen` alterna esta clase con un solo
+   IntersectionObserver compartido. */
+.motion-idle,
+.motion-idle * {
+  animation-play-state: paused !important;
+}
+

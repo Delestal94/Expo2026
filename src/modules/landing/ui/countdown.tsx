@@ -51,7 +51,7 @@ export function Countdown() {
         </span>
         <span
           aria-hidden="true"
-          className="mt-2 h-[3px] w-10 rounded-full bg-[linear-gradient(90deg,var(--color-cyan),var(--color-violet),var(--color-magenta),var(--color-lavender))]"
+          className="strata-flow-bar mt-2 h-[3px] w-10 rounded-full shadow-[0_0_8px_rgba(45,227,214,0.3)]"
         />
         <span className="mt-1.5 font-mono text-[0.65rem] tracking-[0.3em] text-paper-dim uppercase">
           {t("days")}

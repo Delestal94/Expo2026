@@ -74,4 +74,9 @@ export class SupabaseAuthProvider implements AuthProvider {
     if (error) throw error;
     return data.session ? toAuthSession(data.session) : null;
   }
+
+  async resetPassword(email: string): Promise<void> {
+    const { error } = await getClient().resetPasswordForEmail(email);
+    if (error) throw error;
+  }
 }

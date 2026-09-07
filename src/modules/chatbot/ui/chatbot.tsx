@@ -171,7 +171,11 @@ export function ChatBot() {
           // acá sube por encima del dock en mobile/tablet y vuelve a bottom-6
           // en desktop, donde el dock no existe (reemplazado por el riel
           // vertical).
-          className="fixed right-6 bottom-24 z-50 transition-transform duration-200 hover:scale-105 lg:bottom-6"
+          // El botón se monta al dejar el hero: entra con su propia
+          // animación en vez de aparecer de golpe (antes el montaje era un
+          // corte seco y el `transition-transform` de acá solo servía para
+          // el hover).
+          className="fixed right-6 bottom-24 z-50 transition-transform duration-200 ease-out hover:scale-105 lg:bottom-6 motion-safe:animate-[bot-dock-in_0.45s_cubic-bezier(0.16,1,0.3,1)_backwards]"
         >
           <button
             type="button"
@@ -183,7 +187,13 @@ export function ChatBot() {
               className="absolute -top-1 -right-1 flex h-3.5 w-3.5"
               aria-hidden="true"
             >
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-cyan)] opacity-75" />
+              {/* Tres pings y se calla. `animate-ping` infinito llamaba la
+                  atención para siempre desde una esquina fija de TODA la
+                  página: un punto de notificación que late sin parar sobre
+                  contenido que nunca cambia deja de significar algo y pasa
+                  a ser ruido permanente en el campo visual. Llamar al
+                  llegar y después quedarse quieto sí comunica. */}
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[var(--color-cyan)] opacity-75 motion-safe:animate-[bot-badge-ping_1.4s_cubic-bezier(0,0,0.2,1)_3_both]" />
               <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-[var(--color-cyan)]" />
             </span>
             <svg
@@ -209,7 +219,13 @@ export function ChatBot() {
         <section
           role="dialog"
           aria-label={t.assistantTitle}
-          className="fixed right-4 bottom-20 z-50 flex h-[min(600px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-ink/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl transition-all duration-300 sm:right-6 sm:w-[400px] lg:bottom-6 lg:h-[min(600px,calc(100vh-2rem))]"
+          // El panel se monta al abrir: una `transition` sobre un elemento
+          // recién montado nunca dispara (no hay estado anterior desde el
+          // cual transicionar), así que el `transition-all duration-300` que
+          // había acá no animaba nada y la ventana aparecía de golpe. Una
+          // keyframe sí corre al montar, y crece desde la esquina inferior
+          // derecha — de donde salió el botón que la abrió.
+          className="fixed right-4 bottom-20 z-50 flex h-[min(600px,calc(100vh-6rem))] w-[calc(100vw-2rem)] max-w-sm origin-bottom-right flex-col overflow-hidden rounded-2xl border border-[var(--color-line)] bg-ink/95 text-[var(--color-paper)] shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:right-6 sm:w-[400px] lg:bottom-6 lg:h-[min(600px,calc(100vh-2rem))] motion-safe:animate-[bot-panel-in_0.28s_cubic-bezier(0.16,1,0.3,1)]"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[var(--color-line)] bg-surface/90 px-4 py-3 sm:px-5">
@@ -225,7 +241,7 @@ export function ChatBot() {
                   {t.assistantTitle}
                 </h2>
                 <div className="flex items-center gap-1.5 text-[0.65rem] font-mono text-[var(--color-cyan)]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-cyan)] animate-pulse" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-cyan)] motion-safe:animate-pulse" />
                   <span>{t.statusOnline}</span>
                 </div>
               </div>
@@ -254,7 +270,10 @@ export function ChatBot() {
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`flex ${msg.role === "assistant" ? "justify-start" : "justify-end"}`}
+                // La lista solo crece: los índices ya montados conservan su
+                // identidad y no vuelven a animar, así que la keyframe corre
+                // una sola vez, sobre el mensaje nuevo.
+                className={`flex motion-safe:animate-[bot-msg-in_0.24s_cubic-bezier(0.16,1,0.3,1)] ${msg.role === "assistant" ? "justify-start" : "justify-end"}`}
               >
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs leading-relaxed sm:text-sm ${
@@ -270,9 +289,22 @@ export function ChatBot() {
 
             {/* Estado de carga / escribiendo */}
             {isLoading && (
-              <div className="flex justify-start">
+              <div className="flex justify-start motion-safe:animate-[bot-panel-in_0.24s_cubic-bezier(0.16,1,0.3,1)]">
                 <div className="flex items-center gap-2 rounded-2xl border border-[var(--color-line)] bg-surface px-4 py-2.5 text-xs font-mono text-[var(--color-paper-dim)]">
-                  <span className="h-2 w-2 rounded-full bg-[var(--color-cyan)] animate-ping" />
+                  {/* Tres puntos con rebote desfasado, no un `animate-ping`.
+                      El ping es una onda expansiva —el gesto de "algo pasó
+                      acá"— y se estaba usando para decir "estoy escribiendo",
+                      que es una cadencia, no un evento. Además era un solo
+                      punto que se desvanecía: se leía como un parpadeo roto. */}
+                  <span aria-hidden="true" className="flex items-center gap-1">
+                    {[0, 1, 2].map((i) => (
+                      <span
+                        key={i}
+                        className="h-1.5 w-1.5 rounded-full bg-[var(--color-cyan)] motion-safe:animate-[typing-dot_1.05s_ease-in-out_infinite]"
+                        style={{ animationDelay: `${i * 0.15}s` }}
+                      />
+                    ))}
+                  </span>
                   <span>{t.typing}</span>
                 </div>
               </div>
@@ -349,7 +381,7 @@ export function ChatBot() {
               <button
                 type="submit"
                 disabled={isLoading || !inputValue.trim()}
-                className="inline-flex h-9 items-center justify-center rounded-full bg-[var(--color-cyan)] px-4 font-mono text-xs font-semibold tracking-wider text-[var(--color-ink)] uppercase transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex h-9 items-center justify-center rounded-full bg-[var(--color-cyan)] px-4 font-mono text-xs font-semibold tracking-wider text-[var(--color-ink-fixed)] uppercase transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 aria-label={t.sendButton}
               >
                 {t.sendButton}
