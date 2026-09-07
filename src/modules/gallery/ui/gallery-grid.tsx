@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useIdleOffscreen } from "@/lib/ui/use-idle-offscreen";
 import { GALLERY_PHOTOS } from "./gallery-data";
 
 const TOTAL = GALLERY_PHOTOS.length;
@@ -19,6 +20,10 @@ export function GalleryGrid() {
   const open = openIndex !== null ? GALLERY_PHOTOS[openIndex] : null;
   const currentNumber = openIndex !== null ? openIndex + 1 : null;
   const isOpen = openIndex !== null;
+
+  // Congela la deriva y el destello de las tarjetas fuera de pantalla: son
+  // 30 fotos × 2 animaciones perpetuas y solo una docena visible a la vez.
+  const gridRef = useIdleOffscreen<HTMLDivElement>();
 
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -96,14 +101,21 @@ export function GalleryGrid() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div
+        ref={gridRef}
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      >
         {GALLERY_PHOTOS.map((photo, i) => (
           <button
             key={photo.src}
             type="button"
             onClick={() => setOpenIndex(i)}
             aria-label={t("photoAlt", { n: photo.n })}
-            className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line/80 bg-ink/60 shadow-[0_10px_24px_rgba(0,0,0,0.18)] outline-none transition-all duration-500 hover:-translate-y-1 hover:border-magenta/60 hover:shadow-[0_16px_36px_rgba(217,70,239,0.22)] focus-visible:border-magenta"
+            // La deriva y el destello de esta tarjeta se congelan cuando sale
+            // del viewport (ver useIdleOffscreen): son 30 fotos con dos
+            // animaciones perpetuas cada una y solo una docena a la vista.
+            data-idle-offscreen=""
+            className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-line/80 bg-ink/60 shadow-[0_10px_24px_rgba(0,0,0,0.18)] outline-none transition-[transform,border-color,box-shadow] duration-500 motion-reduce:transition-none hover:-translate-y-1 hover:border-magenta/60 hover:shadow-[0_16px_36px_rgba(217,70,239,0.22)] focus-visible:border-magenta"
           >
             <Image
               src={photo.src}

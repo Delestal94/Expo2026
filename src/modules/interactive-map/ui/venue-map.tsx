@@ -186,12 +186,15 @@ export function VenueMap() {
       return;
     }
 
-    let ticking = false;
-    let maxApproachProg = 0;
-    let maxMapProg = 0;
     let completed = false;
+    let introTriggered = false;
+    let introRaf = 0;
+    // Duración de toda la presentación del mapa. Antes el trazado dependía
+    // de cuánto scrolleabas dentro de la sección; ahora es una línea de
+    // tiempo única que arranca al entrar y termina sola.
+    const INTRO_MS = 1600;
 
-    // Inicializar propiedades CSS en estado oculto/esperando scroll
+    // Estado inicial: todo oculto, esperando que la sección entre en pantalla.
     runway.style.setProperty("--map-box-border", "0");
     runway.style.setProperty("--map-left-content-opacity", "0");
     runway.style.setProperty("--map-left-content-y", "16px");
@@ -204,13 +207,69 @@ export function VenueMap() {
       runway.style.setProperty(`--map-w${w}-fill`, "0");
     }
 
+    /**
+     * Presentación completa del mapa en una sola pasada de tiempo:
+     *  - 0.00 a 0.45 → se dibujan los contenedores, entra el panel izquierdo
+     *    y las píldoras de filtro rebotan desde la derecha.
+     *  - 0.30 a 1.00 → se trazan los 7 sectores de stands, solapándose con
+     *    el final de la fase anterior para que no se lea como dos etapas.
+     */
+    function runIntro(startTime: number) {
+      function step(now: number) {
+        if (!runway) return;
+        const t = Math.min((now - startTime) / INTRO_MS, 1);
+
+        // ── Fase A: contenedores, panel izquierdo y píldoras ──
+        const approach = Math.min(t / 0.45, 1);
+
+        const boxEase = 1 - Math.pow(1 - approach, 2.2);
+        runway.style.setProperty("--map-box-border", boxEase.toFixed(3));
+
+        const leftEase = approach * (2 - approach);
+        runway.style.setProperty("--map-left-content-opacity", leftEase.toFixed(3));
+        runway.style.setProperty("--map-left-content-y", `${((1 - leftEase) * 16).toFixed(1)}px`);
+
+        for (let i = 0; i < 6; i++) {
+          const pStart = 0.04 + i * 0.12;
+          const pEnd = pStart + 0.28;
+          const { x, opacity } = getPillBounce(approach, pStart, pEnd);
+          runway.style.setProperty(`--map-pill-${i}-x`, `${x.toFixed(1)}px`);
+          runway.style.setProperty(`--map-pill-${i}-opacity`, opacity.toFixed(3));
+        }
+
+        // ── Fase B: el trazado de los stands, sector por sector ──
+        const mapProg = Math.min(Math.max((t - 0.3) / 0.7, 0), 1);
+        WAVE_WINDOWS.forEach(({ start, end }, w) => {
+          const p = Math.min(Math.max((mapProg - start) / (end - start), 0), 1);
+          const strokeEase = 1 - Math.pow(1 - p, 2.4);
+          const fillOp = Math.min(Math.max((p - 0.35) / 0.65, 0), 1);
+          runway.style.setProperty(`--map-w${w}`, strokeEase.toFixed(3));
+          runway.style.setProperty(`--map-w${w}-fill`, fillOp.toFixed(3));
+        });
+
+        if (t < 1) {
+          introRaf = requestAnimationFrame(step);
+        } else {
+          completed = true;
+          setIsDrawn(true);
+          applyAssembled(runway);
+        }
+      }
+      introRaf = requestAnimationFrame(step);
+    }
+
+    function startIntro() {
+      if (introTriggered || completed) return;
+      introTriggered = true;
+      runIntro(performance.now());
+    }
+
     function handleFastLoad() {
       completed = true;
-      maxApproachProg = 1;
-      maxMapProg = 1;
+      introTriggered = true;
+      cancelAnimationFrame(introRaf);
       setIsDrawn(true);
       if (runway) applyAssembled(runway);
-      window.removeEventListener("scroll", onScroll);
     }
 
     // Carga inmediata en navegación directa por hash o click en la barra lateral
@@ -232,104 +291,24 @@ export function VenueMap() {
     };
     document.addEventListener("click", onGlobalClick, { capture: true });
 
-    function update() {
-      if (!runway || completed) return;
-
-      const rect = runway.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-
-      // ── 1. FASE DE APROXIMACIÓN (a medida que va subiendo la sección) ──
-      // Se activa desde que la sección empieza a asomar en el viewport hasta que su tope llega a top: 0
-      const approachWindow = viewH * 0.85;
-      const rawApproach = rect.top <= 0 ? 1 : Math.min(Math.max((approachWindow - rect.top) / approachWindow, 0), 1);
-      maxApproachProg = Math.max(maxApproachProg, rawApproach);
-      const approachProg = maxApproachProg;
-
-      // A. Bordes de los contenedores: se dibujan entre approachProg 0.05 y 0.70
-      const boxBorderProg = Math.min(Math.max((approachProg - 0.05) / 0.65, 0), 1);
-      const boxEase = 1 - Math.pow(1 - boxBorderProg, 2.2);
-      runway.style.setProperty("--map-box-border", boxEase.toFixed(3));
-
-      // B. Contenido del panel izquierdo ("Selector rápido"): aparece entre approachProg 0.35 y 0.85
-      const leftContentProg = Math.min(Math.max((approachProg - 0.35) / 0.50, 0), 1);
-      const leftContentEase = leftContentProg * (2 - leftContentProg);
-      runway.style.setProperty("--map-left-content-opacity", leftContentEase.toFixed(3));
-      runway.style.setProperty("--map-left-content-y", `${((1 - leftContentEase) * 16).toFixed(1)}px`);
-
-      // C. Píldoras de filtro superior: entran de derecha a izquierda con choque y rebote elástico
-      for (let i = 0; i < 6; i++) {
-        const pStart = 0.04 + i * 0.12;
-        const pEnd = pStart + 0.28;
-        const { x, opacity } = getPillBounce(approachProg, pStart, pEnd);
-        runway.style.setProperty(`--map-pill-${i}-x`, `${x.toFixed(1)}px`);
-        runway.style.setProperty(`--map-pill-${i}-opacity`, opacity.toFixed(3));
-      }
-
-      // ── 2. FASE DEL MAPA: Solo cuando rect.top <= 0 (llega arriba y se posiciona en el tope) ──
-      if (rect.top > 0) {
-        // Mientras no llegue al tope, los stands permanecen vacíos esperando el scroll del mapa
-        for (let w = 0; w < 7; w++) {
-          runway.style.setProperty(`--map-w${w}`, "0");
-          runway.style.setProperty(`--map-w${w}-fill`, "0");
+    // El disparo va por visibilidad, no por posición de scroll: apenas la
+    // sección asoma, la animación arranca y se completa sola.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startIntro();
+          observer.disconnect();
         }
-        ticking = false;
-        return;
-      }
-
-      // La sección ya calzó arriba: aseguramos que contenedores y filtros queden en su estado final
-      runway.style.setProperty("--map-box-border", "1");
-      runway.style.setProperty("--map-left-content-opacity", "1");
-      runway.style.setProperty("--map-left-content-y", "0px");
-      for (let i = 0; i < 6; i++) {
-        runway.style.setProperty(`--map-pill-${i}-x`, "0px");
-        runway.style.setProperty(`--map-pill-${i}-opacity`, "1");
-      }
-
-      const totalScroll = rect.height - viewH;
-      if (totalScroll <= 0) {
-        ticking = false;
-        return;
-      }
-
-      const scrolled = -rect.top;
-      const rawMapProg = Math.min(Math.max(scrolled / totalScroll, 0), 1);
-      maxMapProg = Math.max(maxMapProg, rawMapProg);
-      const mapProg = maxMapProg;
-
-      // Trazado por sectores: Cianes -> Magentas -> Morados -> Lavanda/Teal -> Grises
-      WAVE_WINDOWS.forEach(({ start, end }, w) => {
-        const p = Math.min(Math.max((mapProg - start) / (end - start), 0), 1);
-        const strokeEase = 1 - Math.pow(1 - p, 2.4);
-        const fillOp = Math.min(Math.max((p - 0.35) / 0.65, 0), 1);
-        runway.style.setProperty(`--map-w${w}`, strokeEase.toFixed(3));
-        runway.style.setProperty(`--map-w${w}-fill`, fillOp.toFixed(3));
-      });
-
-      // Bloqueo interactivo al completar
-      if (maxMapProg >= 0.98) {
-        completed = true;
-        setIsDrawn(true);
-        applyAssembled(runway);
-        window.removeEventListener("scroll", onScroll);
-      }
-
-      ticking = false;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(runway);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
       window.removeEventListener("hashchange", onHashChange);
       document.removeEventListener("click", onGlobalClick, { capture: true });
+      cancelAnimationFrame(introRaf);
     };
   }, []);
 
@@ -432,7 +411,7 @@ export function VenueMap() {
 
             {/* Contenido interior que aparece a medida que se dibuja el borde */}
             <div
-              className="flex flex-col justify-between gap-4 flex-1 min-h-0 transition-opacity will-change-transform motion-reduce:transform-none motion-reduce:opacity-100"
+              className={`flex flex-col justify-between gap-4 flex-1 min-h-0 transition-opacity motion-entrance ${isDrawn ? "" : "will-change-transform"}`}
               style={{
                 opacity: isDrawn ? 1 : "var(--map-left-content-opacity, 0)",
                 transform: isDrawn
@@ -725,7 +704,7 @@ export function VenueMap() {
                 type="button"
                 onClick={() => setFilter(null)}
                 aria-pressed={filter === null}
-                className="cursor-pointer rounded-full border px-3.5 py-1.5 font-mono text-xs transition will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim"
+                className={`cursor-pointer rounded-full border px-3.5 py-1.5 font-mono text-xs transition motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim ${isDrawn ? "" : "will-change-transform"}`}
                 style={{
                   borderColor: filter === null ? "var(--color-paper)" : "var(--color-line)",
                   backgroundColor: filter === null ? "var(--color-paper)" : "var(--color-surface)",
@@ -746,7 +725,7 @@ export function VenueMap() {
                     type="button"
                     onClick={() => setFilter(isOn ? null : cat.id)}
                     aria-pressed={isOn}
-                    className="cursor-pointer flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs transition will-change-transform motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim"
+                    className={`cursor-pointer flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs transition motion-reduce:transform-none motion-reduce:opacity-100 hover:border-paper-dim ${isDrawn ? "" : "will-change-transform"}`}
                     style={{
                       borderColor: isOn ? cat.color : "var(--color-line)",
                       backgroundColor: isOn ? "color-mix(in srgb, " + cat.color + " 18%, var(--color-surface))" : "var(--color-surface)",
@@ -912,7 +891,7 @@ export function VenueMap() {
             {/* Barra inferior de estado (Captura 2) */}
             <div className="mt-2 flex items-center justify-between border-t border-line/40 pt-2 px-1 text-xs text-paper-dim shrink-0">
               <div className="flex items-center gap-2 font-mono text-[0.72rem]">
-                <span className="inline-block h-2 w-2 rounded-full bg-accent animate-pulse" />
+                <span className="inline-block h-2 w-2 rounded-full bg-accent motion-safe:animate-pulse" />
                 {hoveredZone ? (
                   <span>
                     Explorando: <strong className="text-paper">{hoveredZone.label}</strong> — {categoryMeta(hoveredZone.category).label}

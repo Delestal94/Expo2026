@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
+import { Reveal } from "@/lib/ui/reveal";
+import { useSectionReveal } from "@/lib/ui/use-section-reveal";
 
 interface PortalContextValue {
   inView: boolean;
@@ -31,63 +33,9 @@ export function PortalEntrance({
   description: string;
   children: ReactNode;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const prefersReducedMotion = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
-
-    if (prefersReducedMotion) {
-      return;
-    }
-
-    let ticking = false;
-    let hasTriggered = false;
-
-    function evaluateVisibility() {
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-
-      // Parallax continuo de fondo mineral
-      const parallaxY = rect.top * -0.13;
-      section.style.setProperty("--portal-bg-parallax", `${parallaxY.toFixed(1)}px`);
-
-      // Se dispara solo la primera vez cuando ya se mostró ~3/4 de la sección en pantalla
-      if (!hasTriggered) {
-        const isThreeQuartersShown = rect.top <= viewH * 0.35;
-        const isStillInView = rect.bottom >= viewH * 0.15;
-
-        if (isThreeQuartersShown && isStillInView) {
-          hasTriggered = true;
-          setInView(true);
-        }
-      }
-    }
-
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          evaluateVisibility();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    const timer = setTimeout(evaluateVisibility, 60);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  const { ref: sectionRef, revealed: inView } = useSectionReveal<HTMLElement>({
+    parallax: { property: "--portal-bg-parallax", factor: -0.13 },
+  });
 
   return (
     <PortalContext.Provider value={{ inView }}>
@@ -121,13 +69,7 @@ export function PortalEntrance({
         <EntranceVein color="var(--color-cyan)" />
 
         {/* Encabezado con entrada en escena dinámica */}
-        <div
-          className="relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-          style={{
-            transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 40px, 0) scale(0.96)",
-            opacity: inView ? 1 : 0,
-          }}
-        >
+        <Reveal revealed={inView} className="relative">
           <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
             {eyebrow}
           </span>
@@ -135,7 +77,7 @@ export function PortalEntrance({
             {title}
           </h2>
           <p className="mt-4 max-w-2xl text-paper-dim">{description}</p>
-        </div>
+        </Reveal>
 
         {/* Contenido (Directorio y desplegables) */}
         <div className="relative mt-8">

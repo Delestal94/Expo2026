@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
+import { Reveal } from "@/lib/ui/reveal";
+import { useSectionReveal } from "@/lib/ui/use-section-reveal";
 import { PROGRAM_DAYS } from "./program-data";
 
 const SECTION_WASH = {
@@ -18,63 +20,9 @@ export function ProgramSection() {
   const [activeDate, setActiveDate] = useState(PROGRAM_DAYS[0]!.date);
   const active = PROGRAM_DAYS.find((day) => day.date === activeDate) ?? PROGRAM_DAYS[0]!;
 
-  const sectionRef = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const prefersReducedMotion = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    )?.matches;
-
-    if (prefersReducedMotion) {
-      return;
-    }
-
-    let ticking = false;
-    let hasTriggered = false;
-
-    function evaluateVisibility() {
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-
-      // Parallax continuo de fondo mineral
-      const parallaxY = rect.top * -0.14;
-      section.style.setProperty("--agenda-bg-parallax", `${parallaxY.toFixed(1)}px`);
-
-      // Se dispara solo la primera vez cuando ya se mostró ~3/4 de la sección en pantalla
-      if (!hasTriggered) {
-        const isThreeQuartersShown = rect.top <= viewH * 0.35;
-        const isStillInView = rect.bottom >= viewH * 0.15;
-
-        if (isThreeQuartersShown && isStillInView) {
-          hasTriggered = true;
-          setInView(true);
-        }
-      }
-    }
-
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          evaluateVisibility();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    const timer = setTimeout(evaluateVisibility, 60);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  const { ref: sectionRef, revealed: inView } = useSectionReveal<HTMLElement>({
+    parallax: { property: "--agenda-bg-parallax", factor: -0.14 },
+  });
 
   return (
     <section
@@ -107,13 +55,7 @@ export function ProgramSection() {
       <EntranceVein color="var(--color-violet)" />
 
       {/* Encabezado con entrada en escena dinámica */}
-      <div
-        className="relative transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-        style={{
-          transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 40px, 0) scale(0.96)",
-          opacity: inView ? 1 : 0,
-        }}
-      >
+      <Reveal revealed={inView} className="relative">
         <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
           {t("eyebrow")}
         </span>
@@ -121,19 +63,11 @@ export function ProgramSection() {
           {t("title")}
         </h2>
         <p className="mt-4 max-w-2xl text-paper-dim">{t("description")}</p>
-      </div>
+      </Reveal>
 
       {/* Selector de días */}
-      <div
-        className="relative mt-8 flex flex-wrap gap-2 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-        style={{
-          transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 30px, 0) scale(0.95)",
-          opacity: inView ? 1 : 0,
-          transitionDelay: inView ? "100ms" : "0ms",
-        }}
-        role="tablist"
-        aria-label={t("dayTabsLabel")}
-      >
+      <Reveal revealed={inView} delay={100} y={30} scale={0.95} className="relative mt-8">
+        <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("dayTabsLabel")}>
         {PROGRAM_DAYS.map((day) => {
           const isActive = day.date === activeDate;
           return (
@@ -143,7 +77,7 @@ export function ProgramSection() {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveDate(day.date)}
-              className={`cursor-pointer rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-all duration-200 active:scale-[0.96] motion-reduce:active:scale-100 ${
+              className={`cursor-pointer rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] transition-[border-color,background-color,color,box-shadow,transform] duration-200 motion-reduce:transition-none active:scale-[0.96] motion-reduce:active:scale-100 ${
                 isActive
                   ? "border-paper bg-paper text-ink shadow-[0_0_16px_rgba(245,241,232,0.25)]"
                   : "border-line text-paper-dim hover:border-paper-dim hover:text-paper"
@@ -162,27 +96,30 @@ export function ProgramSection() {
             </button>
           );
         })}
-      </div>
+        </div>
+      </Reveal>
 
-      {/* Tabpanel: Contenedores con vuelo lateral parallax y acentos de color */}
-      <div role="tabpanel" className="relative mt-8 flex flex-col gap-4">
+      {/* Tabpanel: el panel entero se vuelve a montar al cambiar de día
+          (`key`) y arranca con un `panel-swap` de 320ms — antes las tres
+          tarjetas tenían `key` propia pero la transición de entrada ya
+          estaba en su estado final al montarse, así que el remonte no
+          animaba nada: el contenido cambiaba de golpe y el trabajo de
+          remontar tres subárboles no compraba nada. */}
+      <div
+        key={activeDate}
+        role="tabpanel"
+        className="relative mt-8 flex flex-col gap-4 motion-safe:animate-[panel-swap_0.32s_cubic-bezier(0.16,1,0.3,1)]"
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           {/* Tarjeta Mañana (Entra volando desde la izquierda) */}
+          <Reveal revealed={inView} delay={160} x={-35} y={40} scale={0.94} rotate={-1.5}>
           <div
-            key={`morning-${activeDate}`}
-            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-cyan/50 hover:shadow-[0_16px_36px_-15px_rgba(45,227,214,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-            style={{
-              transform: inView
-                ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"
-                : "translate3d(-35px, 40px, 0) rotate(-1.5deg) scale(0.94)",
-              opacity: inView ? 1 : 0,
-              transitionDelay: inView ? "160ms" : "0ms",
-            }}
+            className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:border-cyan/50 hover:shadow-[0_16px_36px_-15px_rgba(45,227,214,0.3)] hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {/* Vena superior mineral cian */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan/70 to-transparent transition-all duration-300 group-hover:h-[3px] group-hover:via-cyan"
+              className="absolute inset-x-0 top-0 h-[2px] origin-top bg-gradient-to-r from-transparent via-cyan/70 to-transparent transition-[transform,opacity] duration-300 motion-reduce:transition-none group-hover:scale-y-150 group-hover:opacity-100"
             />
             {/* Resplandor ambiental de esquina */}
             <div
@@ -195,23 +132,17 @@ export function ProgramSection() {
             <h3 className="mt-2 font-display text-lg text-paper sm:text-xl">{active.morningTitle}</h3>
             <p className="mt-2 text-sm text-paper-dim leading-relaxed">{active.morningDescription}</p>
           </div>
+          </Reveal>
 
           {/* Tarjeta Tarde (Entra volando desde la derecha) */}
+          <Reveal revealed={inView} delay={240} x={35} y={40} scale={0.94} rotate={1.5}>
           <div
-            key={`afternoon-${activeDate}`}
-            className="group relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-lavender/50 hover:shadow-[0_16px_36px_-15px_rgba(185,166,245,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-            style={{
-              transform: inView
-                ? "translate3d(0, 0, 0) rotate(0deg) scale(1)"
-                : "translate3d(35px, 40px, 0) rotate(1.5deg) scale(0.94)",
-              opacity: inView ? 1 : 0,
-              transitionDelay: inView ? "240ms" : "0ms",
-            }}
+            className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-surface via-surface/95 to-surface/85 backdrop-blur-sm p-6 sm:p-8 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:border-lavender/50 hover:shadow-[0_16px_36px_-15px_rgba(185,166,245,0.3)] hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             {/* Vena superior mineral lavanda */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-lavender/70 to-transparent transition-all duration-300 group-hover:h-[3px] group-hover:via-lavender"
+              className="absolute inset-x-0 top-0 h-[2px] origin-top bg-gradient-to-r from-transparent via-lavender/70 to-transparent transition-[transform,opacity] duration-300 motion-reduce:transition-none group-hover:scale-y-150 group-hover:opacity-100"
             />
             {/* Resplandor ambiental de esquina */}
             <div
@@ -224,37 +155,28 @@ export function ProgramSection() {
             <h3 className="mt-2 font-display text-lg text-paper sm:text-xl">{active.afternoonTitle}</h3>
             <p className="mt-2 text-sm text-paper-dim leading-relaxed">{active.afternoonDescription}</p>
           </div>
+          </Reveal>
         </div>
 
         {/* Actividades destacadas: Contenedor amplio y chips escalonados */}
+        <Reveal revealed={inView} delay={320} y={45} scale={0.94}>
         <div
-          key={`activities-${activeDate}`}
-          className="relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#100c24]/90 via-ink to-[#080614]/90 p-5 sm:p-7 backdrop-blur-sm transition-all duration-800 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-          style={{
-            transform: inView ? "translate3d(0, 0, 0) scale(1)" : "translate3d(0, 45px, 0) scale(0.94)",
-            opacity: inView ? 1 : 0,
-            transitionDelay: inView ? "320ms" : "0ms",
-          }}
+          className="relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#100c24]/90 via-ink to-[#080614]/90 p-5 sm:p-7 backdrop-blur-sm"
         >
           <div className="flex items-center justify-between gap-2 border-b border-line/60 pb-3">
             <span className="font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
               Actividades destacadas · {tDays(active.dayKey)} {active.dayNumber}
             </span>
             <span className="flex items-center gap-1.5 font-mono text-[0.65rem] text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent motion-safe:animate-pulse" />
               Confirmado
             </span>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {active.activities.map((act, idx) => (
+              <Reveal key={act.time} revealed={inView} delay={400 + idx * 70} y={25} scale={1}>
               <div
-                key={act.time}
-                className="group flex flex-col justify-between rounded-xl border border-line/70 bg-[#080614]/95 p-3.5 transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-accent/60 hover:shadow-[0_8px_24px_-8px_rgba(45,227,214,0.3)] hover:-translate-y-1 will-change-transform motion-reduce:transition-none motion-reduce:transform-none motion-reduce:opacity-100"
-                style={{
-                  transform: inView ? "translate3d(0, 0, 0)" : "translate3d(0, 25px, 0)",
-                  opacity: inView ? 1 : 0,
-                  transitionDelay: inView ? `${400 + idx * 80}ms` : "0ms",
-                }}
+                className="group flex h-full flex-col justify-between rounded-xl border border-line/70 bg-[#080614]/95 p-3.5 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:border-accent/60 hover:shadow-[0_8px_24px_-8px_rgba(45,227,214,0.3)] hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-xs font-semibold text-accent">{act.time} hs</span>
@@ -264,9 +186,11 @@ export function ProgramSection() {
                 </div>
                 <p className="mt-2.5 text-xs leading-snug text-paper group-hover:text-paper">{act.title}</p>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
+        </Reveal>
       </div>
 
       <p className="relative mt-6 text-sm text-paper-dim">

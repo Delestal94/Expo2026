@@ -36,17 +36,18 @@ El sitio es una sola página de scroll con anclas, más dos rutas secundarias (`
 | Orden | Sección | Por qué ahí |
 |---|---|---|
 | 1 | Inicio | Identidad, cuenta regresiva y llamada a la acción — la primera impresión. |
-| 2 | Sobre ExpoJuy 2026 | El contexto que justifica todo lo demás: por qué el evento cambió de formato. |
-| 3 | Ejes | Los 4 ejes productivos de esta edición, en detalle. |
-| 4 | Noticias | Prueba de que el evento es real y está en marcha ahora — cobertura de prensa real más novedades del sitio. |
-| 5 | Galería | Prueba social de la edición anterior. |
-| 6 | Mapa | El predio, ya como algo concreto de recorrer. |
-| 7 | Agenda | Qué pasa cada uno de los 4 días. |
-| 8 | Expositores | El directorio y las rondas de negocios — el corazón comercial del evento. |
-| 9 | Acceso y cómo llegar | Entradas, ubicación y cómo postularse como proveedor. |
-| 10 | Contacto | Vías directas de comunicación institucional. |
-| 11 | Preguntas frecuentes | Últimas dudas antes de irse. |
-| 12 | Pie de página | Sponsors, organiza y redes sociales — presente en todo momento, no solo al final. |
+| 2 | Sobre ExpoJuy 2026 | El contexto que justifica todo lo demás: por qué el evento cambió de formato, los datos duros de la edición y los 4 ejes productivos. |
+| 3 | Noticias | Prueba de que el evento es real y está en marcha ahora — cobertura de prensa real más novedades del sitio. |
+| 4 | Galería | Prueba social de la edición anterior. |
+| 5 | Mapa | El predio, ya como algo concreto de recorrer. |
+| 6 | Agenda | Qué pasa cada uno de los 4 días. |
+| 7 | Expositores | El directorio y las rondas de negocios — el corazón comercial del evento. |
+| 8 | Acceso y cómo llegar | Entradas, ubicación y cómo postularse como proveedor. |
+| 9 | Contacto | Vías directas de comunicación institucional. |
+| 10 | Preguntas frecuentes | Últimas dudas antes de irse. |
+| 11 | Pie de página | Sponsors, organiza y redes sociales — presente en todo momento, no solo al final. |
+
+Los ejes productivos no tienen sección propia: viven dentro de "Sobre", como cuatro líneas de tipografía grande que se despliegan al apuntarlas. Separarlos obligaba a leer dos veces el mismo marco —el evento cambió de formato *porque* estos son los ejes— y sumaba una parada de scroll para contenido que se entiende mejor junto.
 
 El índice de secciones (`SectionNav`) navega por ancla y resalta la sección activa mientras se hace scroll, así que el orden también funciona como mapa de navegación directa, no solo como guion de lectura.
 
@@ -54,7 +55,7 @@ El índice de secciones (`SectionNav`) navega por ancla y resalta la sección ac
 
 | Elemento | Elección | Motivo |
 |---|---|---|
-| Paleta | Fondo casi negro (cielo de altura) + cian, violeta, magenta y lavanda — los 4 colores del isotipo "J" de ExpoJuy — con el cian también como acento de acción | Coherencia de marca real entre el sitio y el Instagram oficial del evento, no una paleta inventada |
+| Paleta | Índigo obsidiana de fondo (cielo de altura) + cian, violeta, magenta y lavanda — los 4 colores del isotipo "J" de ExpoJuy — con el cian también como acento de acción | Coherencia de marca real entre el sitio y el Instagram oficial del evento, no una paleta inventada |
 | Tipografía display | `Unbounded` | Geométrica, con peso y carácter propio — no una fuente "segura" de plantilla |
 | Tipografía de texto | `Manrope` | Alta legibilidad sin perder calidez |
 | Tipografía de datos | `JetBrains Mono` | Cifras, fechas y etiquetas con precisión técnica |
@@ -70,7 +71,7 @@ Documento técnico completo en [`docs/architecture.md`](architecture.md) y en la
 - **Nada hardcodeado**: cada módulo funcional (registro de acceso, portal de expositores, asistente IA, mapa interactivo) es una *feature flag* editable sin deploy, con kill-switch de emergencia.
 - **Nada atado a un proveedor**: pagos, CMS, IA, email, storage y realtime están detrás de una interfaz propia (arquitectura de puertos y adaptadores) — cambiar de proveedor es escribir un adaptador nuevo, no reescribir la lógica de negocio.
 - **Nada acoplado entre módulos**: cada capacidad de negocio vive en su propia carpeta con un único punto de entrada público, verificado por una regla de lint que rompe el build si se viola.
-- **Multiidioma real**: español, inglés, portugués y mandarín priorizados por la audiencia real del evento (Corredor Bioceánico, inversión minera), no por una lista genérica de "idiomas más hablados".
+- **Multiidioma real**: español, inglés, portugués, mandarín y francés priorizados por la audiencia real del evento (Corredor Bioceánico, inversión minera), no por una lista genérica de "idiomas más hablados". Los cinco están completos, incluido el asistente con IA.
 
 Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo lint, type-check, tests y build en cada cambio, protección de ramas real, y un historial de decisiones (ADRs) que registra cada elección con su fecha y su porqué.
 
@@ -82,7 +83,7 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 | Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §8) | **Construido** (alta de cuenta, login y QR de ingreso en modo gratuito); cobro en modo pago (Mercado Pago), pendiente |
 | Portal de expositores + rondas de negocios | Directorio con buscador y filtro por eje, matching por rubro/país, agenda de reuniones | **Construido** (datos de ejemplo) — ver sección 12 |
 | Agenda de actividades | Estructura diaria confirmada (rondas AM / expo PM) para los 4 días, con selector interactivo | **Construido** — la grilla horaria detallada de charlas y shows la publica la organización más cerca de la fecha |
-| Asistente con IA | Responde sobre agenda y ubicación con el contenido real del sitio (RAG), deriva a humano fuera de su alcance | Diseñado, pendiente de implementación |
+| Asistente con IA | Responde sobre fechas, sede, ejes y acceso recuperando el contenido real del sitio (RAG), en los 5 idiomas | **Construido** — endpoint propio contra OpenRouter; sin credencial cargada degrada a respuestas guiadas en vez de fallar. La derivación a un humano está diseñada, no construida |
 | Mapa interactivo | Plano calcado del CAD de Ciudad Cultural, con más de 200 zonas filtrables por categoría | **Construido** — ver sección 12 |
 
 ## 8. Dos decisiones que no bloquearon el avance
@@ -114,7 +115,7 @@ También lo aplicamos hacia adentro: usamos herramientas de IA como asistencia d
 
 No hay un breakpoint "mobile" tratado como una versión reducida del sitio de escritorio — cada sección resuelve su propio layout en los tres anchos:
 
-- **Grillas fluidas con Tailwind** (`sm:`/`lg:`), no un rediseño paralelo: las mismas secciones (Sobre, Ejes, Expositores, Agenda) pasan de una columna en mobile a grillas de 2 o 3 columnas en desktop.
+- **Grillas fluidas con Tailwind** (`sm:`/`lg:`), no un rediseño paralelo: las mismas secciones (Sobre, Expositores, Agenda) pasan de una columna en mobile a grillas de 2 o 3 columnas en desktop.
 - **Patrones de contenido largo resueltos por dispositivo, no ocultos**: la Galería y el índice de secciones (`SectionNav`) son una tira con scroll horizontal y *snap* en mobile, y una grilla o riel fijo en desktop — mismo contenido, mecánica de navegación distinta según el espacio disponible.
 - **Tipografía fluida con `clamp()`** en los títulos más grandes (Hero, About), para que el texto no se desborde ni quede minúsculo en los extremos del rango de anchos.
 - **Objetivos táctiles de tamaño real** en todos los controles interactivos (filtros, tabs, acordeón), sin depender de hover para funciones esenciales — el estado "dormido" de los logos del pie, por ejemplo, solo se activa en dispositivos con hover real, así nunca queda un logo apagado de forma permanente en mobile.
@@ -133,10 +134,12 @@ Verificado manualmente en 390px (mobile), 768px (tablet) y 1440px/1920px (deskto
 
 | Fecha | Fase | Entregable |
 |---|---|---|
-| 31/08 – 08/09 | Fase 0 | Este documento + mockup navegable |
-| 11/09 – 20/09 | Fase 1 | Landing completa + CMS |
-| 20/09 – 27/09 | Fase 2 | Registro de acceso + portal de expositores |
-| 27/09 – 30/09 | Fase 3 | Asistente IA + entrega final |
+| 31/08 – 08/09 | Fase 0 | Este documento + prototipo funcional navegable |
+| 11/09 – 20/09 | Fase 1 | Gestor de contenidos, para que la Cámara publique sin depender del equipo |
+| 20/09 – 27/09 | Fase 2 | Cobro de entradas y datos reales de expositores |
+| 27/09 – 30/09 | Fase 3 | Derivación a humano en el asistente, grilla horaria definitiva y entrega final |
+
+La landing, el registro de acceso, el portal de expositores, el mapa interactivo y el asistente con IA se adelantaron a la Fase 0 y ya están construidos (ver §7). Lo que queda en las fases siguientes es, sobre todo, lo que depende de terceros: el esquema de precios que define la Cámara, los datos reales de expositores y la grilla horaria que publica la organización.
 
 ## 14. Equipo
 
