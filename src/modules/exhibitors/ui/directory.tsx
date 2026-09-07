@@ -25,6 +25,7 @@ function EmptyDirectory({
   activeEje: { label: string; color: string } | null;
   onClearQuery: () => void;
 }) {
+  const t = useTranslations("Exhibitors");
   const bands = activeEje ? [activeEje.color] : EJE_FILTERS.map((eje) => eje.color);
 
   return (
@@ -44,22 +45,24 @@ function EmptyDirectory({
         ))}
       </div>
       <p className="max-w-sm text-sm text-paper-dim">
-        {activeEje ? (
-          <>
-            Ninguna veta de{" "}
-            <span style={{ color: textSafeColor(activeEje.color) }}>{activeEje.label}</span> coincide con
-            &ldquo;{query}&rdquo;.
-          </>
-        ) : (
-          <>Ninguna veta coincide con &ldquo;{query}&rdquo;.</>
-        )}
+        {activeEje
+          ? t.rich("noResultsInEje", {
+              query,
+              ejeLabel: activeEje.label,
+              eje: (chunks) => (
+                <span style={{ color: textSafeColor(activeEje.color) }}>
+                  {chunks}
+                </span>
+              ),
+            })
+          : t("noResults", { query })}
       </p>
       <button
         type="button"
         onClick={onClearQuery}
         className="rounded-full border border-line px-4 py-2 font-mono text-xs uppercase tracking-[0.08em] text-paper-dim transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        Borrar búsqueda
+        {t("clearSearch")}
       </button>
     </div>
   );

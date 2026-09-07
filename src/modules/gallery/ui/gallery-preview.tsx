@@ -459,7 +459,7 @@ export function GalleryPreview() {
           >
             <span
               ref={eyebrowRef}
-              className={`font-mono text-xs tracking-[0.25em] text-magenta uppercase motion-reduce:transform-none ${isAssembled ? "" : "will-change-transform"}`}
+              className={`font-mono text-xs tracking-[0.25em] text-magenta-text uppercase motion-reduce:transform-none ${isAssembled ? "" : "will-change-transform"}`}
               style={{
                 transform: "translate3d(var(--gal-eyebrow-x, 0px), 0, 0)",
               }}
@@ -504,7 +504,7 @@ export function GalleryPreview() {
 
             <Link
               href="/galeria"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-xs uppercase tracking-[0.1em] text-paper-dim transition hover:border-magenta hover:text-magenta"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-xs uppercase tracking-[0.1em] text-paper-dim transition hover:border-magenta hover:text-magenta-text"
             >
               {t("viewFullCta")}
               <span aria-hidden="true">→</span>
@@ -564,7 +564,7 @@ export function GalleryPreview() {
                     opacity: isAssembled ? 1 : "var(--gal-c0-badge-opacity, 1)",
                   }}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta-text backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
                 </div>
@@ -609,7 +609,7 @@ export function GalleryPreview() {
                     opacity: isAssembled ? 1 : "var(--gal-c1-badge-opacity, 1)",
                   }}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta-text backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
                 </div>
@@ -662,7 +662,7 @@ export function GalleryPreview() {
                     opacity: isAssembled ? 1 : "var(--gal-c2-badge-opacity, 1)",
                   }}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta-text backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
                 </div>
@@ -707,7 +707,7 @@ export function GalleryPreview() {
                     opacity: isAssembled ? 1 : "var(--gal-c3-badge-opacity, 1)",
                   }}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta-text backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
                 </div>
@@ -752,7 +752,7 @@ export function GalleryPreview() {
                     opacity: isAssembled ? 1 : "var(--gal-c4-badge-opacity, 1)",
                   }}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ink/80 font-mono text-xs text-magenta-text backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
                     ↗
                   </span>
                 </div>
@@ -781,7 +781,7 @@ export function GalleryPreview() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-60" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end">
-                    <span className="font-mono text-xs text-magenta">↗</span>
+                    <span className="font-mono text-xs text-magenta-text">↗</span>
                   </div>
                 </Link>
               );

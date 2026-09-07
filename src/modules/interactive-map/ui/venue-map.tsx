@@ -334,12 +334,12 @@ export function VenueMap() {
       if (items.length > 0) {
         const title =
           prefix === "A" || prefix === "B" || prefix === "C"
-            ? `Pabellón cubierto — Serie ${prefix}`
+            ? t("groupCovered", { prefix })
             : prefix === "D"
-              ? "Exterior — Serie D (Descubiertos)"
+              ? t("groupOutdoor")
               : prefix === "E"
-                ? "Sector E — Artesanos y Juegos"
-                : "Sector F — Gastronómicos";
+                ? t("groupCrafts")
+                : t("groupFood");
         groups.push({ label: title, stands: items });
       }
     }
@@ -348,7 +348,7 @@ export function VenueMap() {
       (z) => !seriesOrder.some((p) => z.label.startsWith(p)),
     );
     if (remaining.length > 0) {
-      groups.push({ label: "Otros puestos", stands: remaining });
+      groups.push({ label: t("groupOther"), stands: remaining });
     }
 
     return groups;
@@ -425,7 +425,7 @@ export function VenueMap() {
                   htmlFor="stand-quick-select"
                   className="font-mono text-[0.68rem] tracking-[0.15em] text-paper-dim uppercase flex items-center justify-between"
                 >
-                  <span>Selector rápido de puesto</span>
+                  <span>{t("quickSelect")}</span>
                   <span className="text-paper-dim/60 font-mono text-[0.65rem]">{totalStands} stands</span>
                 </label>
                 <div ref={dropdownRef} className="relative w-full">
@@ -438,7 +438,7 @@ export function VenueMap() {
                     onChange={(e) => setActiveId(e.target.value || null)}
                     className="sr-only"
                   >
-                    <option value="">Elegí un puesto de la lista o tocá el plano...</option>
+                    <option value="">{t("quickSelectPlaceholder")}</option>
                     {groupedStands.map((group) => (
                       <optgroup key={group.label} label={group.label}>
                         {group.stands.map((zone) => (
@@ -510,7 +510,7 @@ export function VenueMap() {
                             : "text-paper-dim hover:bg-white/5 hover:text-paper"
                         }`}
                       >
-                        <span>Elegí un puesto de la lista o tocá el plano...</span>
+                        <span>{t("quickSelectPlaceholder")}</span>
                       </button>
 
                       {groupedStands.map((group) => (
@@ -581,7 +581,7 @@ export function VenueMap() {
                           {t(`category.${active.category}`)}
                         </span>
                         <span className="font-mono text-xs text-paper-dim">
-                          {active.areaM2 ? t("area", { m2: active.areaM2 }) : "16 m² de superficie"}
+                          {active.areaM2 ? t("area", { m2: active.areaM2 }) : t("areaFallback")}
                         </span>
                       </div>
 
@@ -594,24 +594,24 @@ export function VenueMap() {
                     {/* Servicios y equipamiento incluidos */}
                     <div className="rounded-xl border border-line/60 bg-surface p-3 xl:p-4 text-xs">
                       <span className="font-mono text-[0.68rem] font-semibold tracking-wider text-accent uppercase block mb-2">
-                        Servicios y equipamiento incluidos
+                        {t("servicesTitle")}
                       </span>
                       <ul className="space-y-1.5 xl:space-y-2 text-[0.78rem] text-paper-dim">
                         <li className="flex items-center gap-2.5">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/20 font-mono text-[0.65rem] text-accent">✓</span>
-                          <span>Conexión eléctrica 220V monofásica</span>
+                          <span>{t("servicePower")}</span>
                         </li>
                         <li className="flex items-center gap-2.5">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/20 font-mono text-[0.65rem] text-accent">✓</span>
-                          <span>Iluminación focal y cenefa frontal con rotulado</span>
+                          <span>{t("serviceLighting")}</span>
                         </li>
                         <li className="flex items-center gap-2.5">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/20 font-mono text-[0.65rem] text-accent">✓</span>
-                          <span>Seguridad perimetral y vigilancia privada 24 hs</span>
+                          <span>{t("serviceSecurity")}</span>
                         </li>
                         <li className="flex items-center gap-2.5">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/20 font-mono text-[0.65rem] text-accent">✓</span>
-                          <span>Wi-Fi de alta velocidad para expositores</span>
+                          <span>{t("serviceWifi")}</span>
                         </li>
                       </ul>
                     </div>
@@ -621,13 +621,17 @@ export function VenueMap() {
                   <div className="flex flex-col gap-2 pt-1 shrink-0">
                     <a
                       href={`https://wa.me/5493884212955?text=${encodeURIComponent(
-                        `Hola! Quisiera consultar la disponibilidad y condiciones comerciales del stand ${active.label} (${categoryMeta(active.category).label}${active.areaM2 ? `, ${active.areaM2} m²` : ""}) en ExpoJuy 2026.`,
+                        t("whatsappTemplate", {
+                          stand: active.label,
+                          category: categoryMeta(active.category).label,
+                          area: active.areaM2 ? `, ${active.areaM2} m²` : "",
+                        }),
                       )}`}
                       target="_blank"
                       rel="noopener"
                       className="flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 xl:py-3 font-body text-xs font-semibold text-ink transition hover:brightness-110 shadow-[0_0_20px_rgba(45,227,214,0.35)] active:scale-[0.98]"
                     >
-                      <span>Consultar disponibilidad</span>
+                      <span>{t("askAvailability")}</span>
                       <span aria-hidden="true">→</span>
                     </a>
                     <button
@@ -651,18 +655,18 @@ export function VenueMap() {
                     {/* Ficha informativa del predio (Captura 1) */}
                     <div className="rounded-xl border border-line/60 bg-surface p-3.5 text-xs text-paper-dim space-y-2">
                       <span className="font-mono text-[0.68rem] font-semibold tracking-wider text-accent uppercase block">
-                        Predio Ciudad Cultural · Jujuy
+                        {t("venueTitle")}
                       </span>
                       <div className="flex justify-between border-b border-line/40 pb-1.5">
-                        <span>Superficie total:</span>
+                        <span>{t("venueArea")}</span>
                         <strong className="font-mono text-paper">25.000 m²</strong>
                       </div>
                       <div className="flex justify-between border-b border-line/40 pb-1.5">
-                        <span>Stands comerciales:</span>
+                        <span>{t("venueStands")}</span>
                         <strong className="font-mono text-paper">+200 espacios</strong>
                       </div>
                       <div className="flex justify-between">
-                        <span>Capacidad cocheras:</span>
+                        <span>{t("venueParking")}</span>
                         <strong className="font-mono text-paper">+1.500 vehículos</strong>
                       </div>
                     </div>
@@ -894,16 +898,16 @@ export function VenueMap() {
                 <span className="inline-block h-2 w-2 rounded-full bg-accent motion-safe:animate-pulse" />
                 {hoveredZone ? (
                   <span>
-                    Explorando: <strong className="text-paper">{hoveredZone.label}</strong> — {categoryMeta(hoveredZone.category).label}
+                    {t("exploring")} <strong className="text-paper">{hoveredZone.label}</strong> — {categoryMeta(hoveredZone.category).label}
                     {hoveredZone.areaM2 ? ` (${hoveredZone.areaM2} m²)` : ""}
                   </span>
                 ) : active ? (
                   <span>
-                    Stand seleccionado: <strong className="text-paper">{active.label}</strong> ({categoryMeta(active.category).label})
+                    {t("selectedStand")} <strong className="text-paper">{active.label}</strong> ({categoryMeta(active.category).label})
                   </span>
                 ) : (
                   <span className="text-paper-dim/80">
-                    Tocá cualquier puesto para ver características y servicios
+                    {t("tapHint")}
                   </span>
                 )}
               </div>
@@ -914,7 +918,7 @@ export function VenueMap() {
                   onClick={() => setActiveId(null)}
                   className="cursor-pointer font-mono text-xs text-accent transition hover:underline mr-8 sm:mr-10"
                 >
-                  ✕ Limpiar selección
+                  ✕ {t("clearSelection")}
                 </button>
               )}
             </div>

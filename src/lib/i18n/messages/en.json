@@ -34,7 +34,30 @@
       "juego": "Games",
       "institucional": "Institutional",
       "infraestructura": "Infrastructure"
-    }
+    },
+    "groupCovered": "Indoor hall — Series {prefix}",
+    "groupOutdoor": "Outdoor — Series D (Open-air)",
+    "groupCrafts": "Sector E — Artisans and Games",
+    "groupFood": "Sector F — Food court",
+    "groupOther": "Other stands",
+    "quickSelect": "Quick stand finder",
+    "quickSelectPlaceholder": "Pick a stand from the list or tap the map...",
+    "servicesTitle": "Services and equipment included",
+    "servicePower": "220V single-phase power supply",
+    "serviceLighting": "Spot lighting and signed front fascia",
+    "serviceSecurity": "Perimeter security and 24h private surveillance",
+    "serviceWifi": "High-speed Wi-Fi for exhibitors",
+    "askAvailability": "Ask about availability",
+    "venueTitle": "Ciudad Cultural venue · Jujuy",
+    "venueArea": "Total area:",
+    "venueStands": "Commercial stands:",
+    "venueParking": "Parking capacity:",
+    "whatsappTemplate": "Hello! I'd like to ask about availability and commercial terms for stand {stand} ({category}{area}) at ExpoJuy 2026.",
+    "areaFallback": "16 m² of floor space",
+    "exploring": "Exploring:",
+    "selectedStand": "Selected stand:",
+    "tapHint": "Tap any stand to see its features and services",
+    "clearSelection": "Clear selection"
   },
   "Landing": {
     "Hero": {
@@ -47,6 +70,7 @@
       "ctaProviders": "Register my company as a supplier"
     },
     "About": {
+      "title": "About ExpoJuy 2026",
       "descriptionIntro": "After two weeks in its classic format, ExpoJuy reinvents itself:",
       "descriptionEmphasis": "four days",
       "descriptionOutro": "of morning business rounds and afternoon exhibits, with lithium mining and international trade as the central themes.",
@@ -202,7 +226,7 @@
     "viewProfilesCta": "View all {count} profiles",
     "collapseCta": "Show less",
     "buscaLabel": "Looking for",
-    "noResults": "No exhibitor matches “{query}”. Try another term or industry.",
+    "noResults": "No vein matches “{query}”.",
     "ejes": {
       "mineria": "Mining and lithium",
       "comercio": "Foreign trade",
@@ -255,15 +279,21 @@
     },
     "Matching": {
       "expositorLabel": "Exhibitor",
-      "a": { "detail": "Offers: international freight brokerage" },
-      "b": { "detail": "Offers: transport via the Jama pass" },
+      "a": {
+        "detail": "Offers: international freight brokerage"
+      },
+      "b": {
+        "detail": "Offers: transport via the Jama pass"
+      },
       "shared": {
         "corredor": "Bioceanic Corridor",
         "logistica": "International logistics",
         "pasoDeJama": "Jama pass"
       },
       "disclaimer": "In this first version, the suggestion is calculated by shared industry and country — not full semantic similarity (see the decision in <code>docs/architecture.md</code>). Booking meetings unlocks in the next stage."
-    }
+    },
+    "noResultsInEje": "No <eje>{ejeLabel}</eje> vein matches “{query}”.",
+    "clearSearch": "Clear search"
   },
   "BusinessRounds": {
     "Agenda": {
@@ -280,7 +310,12 @@
         "automatizacionProcesos": "Process automation",
         "comercioExterior": "Foreign trade"
       },
-      "days": { "fri": "Fri", "sat": "Sat", "sun": "Sun", "mon": "Mon" },
+      "days": {
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun",
+        "mon": "Mon"
+      },
       "exampleDisclaimer": "Sample agenda — meeting booking doesn't have a real backend yet."
     },
     "Program": {
@@ -292,7 +327,10 @@
       "morningContent": "International business rounds — Bioceanic Corridor",
       "afternoonLabel": "Afternoon",
       "afternoonContent": "Expo open at Ciudad Cultural — stands, mining, foreign trade and the knowledge economy",
-      "highlight": { "apertura": "Opening", "cierre": "Closing" },
+      "highlight": {
+        "apertura": "Opening",
+        "cierre": "Closing"
+      },
       "highlightNote": {
         "apertura": "opening day of the event.",
         "cierre": "closing day of the event."

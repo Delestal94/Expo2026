@@ -34,7 +34,30 @@
       "juego": "游乐区",
       "institucional": "机构区",
       "infraestructura": "基础设施"
-    }
+    },
+    "groupCovered": "室内展馆 — {prefix} 系列",
+    "groupOutdoor": "室外 — D 系列（露天）",
+    "groupCrafts": "E 区 — 手工艺与游戏",
+    "groupFood": "F 区 — 餐饮",
+    "groupOther": "其他展位",
+    "quickSelect": "展位快速查找",
+    "quickSelectPlaceholder": "从列表中选择展位，或点击平面图……",
+    "servicesTitle": "含配套服务与设备",
+    "servicePower": "220V 单相供电",
+    "serviceLighting": "重点照明及带标识的正面楣板",
+    "serviceSecurity": "周界安保与 24 小时专人值守",
+    "serviceWifi": "为参展商提供高速 Wi-Fi",
+    "askAvailability": "咨询展位空缺",
+    "venueTitle": "文化城展馆 · 胡胡伊",
+    "venueArea": "总面积：",
+    "venueStands": "商业展位：",
+    "venueParking": "停车位数量：",
+    "whatsappTemplate": "您好！我想咨询 ExpoJuy 2026 中 {stand} 展位（{category}{area}）的空缺情况与商务条件。",
+    "areaFallback": "16 平方米面积",
+    "exploring": "正在查看：",
+    "selectedStand": "已选展位：",
+    "tapHint": "点击任一展位即可查看其特点与配套服务",
+    "clearSelection": "清除选择"
   },
   "Landing": {
     "Hero": {
@@ -47,6 +70,7 @@
       "ctaProviders": "将我的公司注册为供应商"
     },
     "About": {
+      "title": "关于 ExpoJuy 2026",
       "descriptionIntro": "经过两周的传统形式后，ExpoJuy 重新定义自己：",
       "descriptionEmphasis": "四天",
       "descriptionOutro": "上午商务对接、下午展览，以锂矿开采和国际贸易为核心主题。",
@@ -202,7 +226,7 @@
     "viewProfilesCta": "查看全部 {count} 个资料",
     "collapseCta": "收起列表",
     "buscaLabel": "需求",
-    "noResults": "没有找到与“{query}”匹配的参展商。请尝试其他关键词或行业。",
+    "noResults": "没有与「{query}」匹配的展商。",
     "ejes": {
       "mineria": "矿业与锂",
       "comercio": "对外贸易",
@@ -255,15 +279,21 @@
     },
     "Matching": {
       "expositorLabel": "参展商",
-      "a": { "detail": "提供：国际货运经纪服务" },
-      "b": { "detail": "提供：经Jama口岸的运输服务" },
+      "a": {
+        "detail": "提供：国际货运经纪服务"
+      },
+      "b": {
+        "detail": "提供：经Jama口岸的运输服务"
+      },
       "shared": {
         "corredor": "双洋走廊",
         "logistica": "国际物流",
         "pasoDeJama": "Jama 口岸"
       },
       "disclaimer": "在这一初始版本中，推荐结果基于共同的行业和国家计算得出——并非完整的语义相似度匹配（详见 <code>docs/architecture.md</code> 中的相关决策）。会面预约功能将在下一阶段开放。"
-    }
+    },
+    "noResultsInEje": "没有与「{query}」匹配的<eje>{ejeLabel}</eje>展商。",
+    "clearSearch": "清除搜索"
   },
   "BusinessRounds": {
     "Agenda": {
@@ -280,7 +310,12 @@
         "automatizacionProcesos": "流程自动化",
         "comercioExterior": "对外贸易"
       },
-      "days": { "fri": "周五", "sat": "周六", "sun": "周日", "mon": "周一" },
+      "days": {
+        "fri": "周五",
+        "sat": "周六",
+        "sun": "周日",
+        "mon": "周一"
+      },
       "exampleDisclaimer": "示例日程——会面预约功能目前还没有真实的后端系统支持。"
     },
     "Program": {
@@ -292,7 +327,10 @@
       "morningContent": "国际商务对接会 — 双洋走廊",
       "afternoonLabel": "下午",
       "afternoonContent": "文化城展览开放 — 展位、矿业、对外贸易与知识经济",
-      "highlight": { "apertura": "开幕", "cierre": "闭幕" },
+      "highlight": {
+        "apertura": "开幕",
+        "cierre": "闭幕"
+      },
       "highlightNote": {
         "apertura": "活动开幕日。",
         "cierre": "活动闭幕日。"
