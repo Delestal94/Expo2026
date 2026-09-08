@@ -214,10 +214,22 @@ export function HeroAboutStage() {
       // la corrección de la carrera: pase lo que pase antes, la primera vez
       // que `update()` logra leer un progreso válido, ese valor se toma
       // como punto de partida y nunca como "cruce".
+      //
+      // Pero no alcanza con solo tomar nota: si el navegador restauró el
+      // scroll a mitad de camino entre hero y "sobre" (progreso, digamos,
+      // 0.5), esto deja la pantalla en ese estado intermedio —hero
+      // desvanecido a medias, "sobre" apareciendo a medias— y ahí se queda
+      // congelada hasta que el visitante vuelva a scrollear. `settle()` es
+      // la misma función que ya resuelve "soltaste el scroll a mitad de
+      // camino": la reusamos una vez acá para completar hacia el extremo
+      // más cercano a la posición real donde arrancó, en vez de forzar
+      // siempre hacia "sobre" (el bug original) o de no forzar nunca
+      // (dejarlo congelado, este bug).
       if (isFirstUpdate) {
         isFirstUpdate = false;
         lastProgress = progress;
         ticking = false;
+        settle();
         return;
       }
 
