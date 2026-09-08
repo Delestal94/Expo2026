@@ -8,6 +8,7 @@ import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { StrataCanvas } from "./strata-canvas";
+import { Wordmark } from "./wordmark";
 
 /** Datos duros del evento: acompañan al titular, no compiten con los ejes. */
 const STATS = [
@@ -280,14 +281,20 @@ export function HeroAboutStage() {
       ref={stageRef}
       className="relative h-auto overflow-x-clip motion-safe:h-[112vh]"
     >
-      {/* Puntos de anclaje para navegación oficial (#inicio y #sobre) */}
+      {/* Puntos de anclaje para navegación oficial (#inicio y #sobre).
+          El top de #sobre tiene que caer dentro del recorrido real de
+          scroll del pin (altura de sección menos el viewport: 112vh - 100vh
+          = 12vh), no ser proporcional a la altura de la sección. Si cae más
+          allá, `getProgress()` lo clampea a 1 y `settle()` lo da por llegado
+          sin corregirlo — el navegador queda con el scroll real muy pasado
+          del contenido pineado, mostrando el hueco después de la sección. */}
       <div
         id="inicio"
         className="pointer-events-none absolute top-0 left-0 h-screen w-full"
       />
       <div
         id="sobre"
-        className="pointer-events-none absolute motion-safe:top-[69vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
+        className="pointer-events-none absolute motion-safe:top-[12vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
       />
 
       {/* Viewport fijo durante el recorrido scrollytelling */}
@@ -338,27 +345,20 @@ export function HeroAboutStage() {
 
         {/* Bloque central Hero (Zoom hacia la cámara al scrollear) */}
         <div
-          className="motion-entrance pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform drop-shadow-[0_2px_16px_rgba(7,11,25,0.95)]"
+          className="motion-entrance pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform drop-shadow-[0_2px_14px_color-mix(in_srgb,var(--color-ink)_92%,transparent)]"
           style={{
             transform: "scale(var(--hero-mid-scale, 1))",
             opacity: "var(--hero-mid-opacity, 1)",
             filter: "blur(var(--hero-mid-blur, 0px))",
           }}
         >
-          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase drop-shadow-[0_1px_6px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
+          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase drop-shadow-[0_1px_6px_color-mix(in_srgb,var(--color-ink)_90%,transparent)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
             {tHero("tagline")}
           </span>
           <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
-            <Image
-              src="/images/logos/expojuy-wordmark-dark.svg"
-              alt={tHero("titleAlt")}
-              width={1000}
-              height={305}
-              priority
-              className="h-auto w-full max-w-205 drop-shadow-[0_2px_12px_rgba(7,11,25,0.8)]"
-            />
+            <Wordmark alt={tHero("titleAlt")} />
           </h1>
-          <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
+          <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--color-ink)_90%,transparent)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
             {tHero("description")}
           </p>
         </div>
@@ -512,8 +512,11 @@ export function HeroAboutStage() {
                         className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.2rem,min(3.7vw,6.6vh),3.5rem)]"
                         style={{
                           color: isActive ? eje.color : "var(--color-paper)",
-                          opacity: isActive ? 1 : 0.4,
+                          opacity: isActive ? 1 : 0.65,
                           letterSpacing: isActive ? "0.03em" : "-0.02em",
+                          textShadow: isActive
+                            ? "none"
+                            : "0 2px 16px color-mix(in srgb, var(--color-ink) 85%, transparent)",
                         }}
                       >
                         {tEjes(`items.${eje.key}.title`)}

@@ -1,11 +1,27 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
 import { Reveal } from "@/lib/ui/reveal";
 import { useSectionReveal } from "@/lib/ui/use-section-reveal";
-import { PROGRAM_DAYS } from "./program-data";
+import { PROGRAM_DAYS, type ProgramActivity } from "./program-data";
+
+type ActivityStatus = "past" | "live" | "upcoming";
+
+/**
+ * Compara contra la hora real del visitante: sirve para marcar "en vivo"
+ * durante el evento (9-12 oct 2026) y queda simplemente en "upcoming"
+ * cualquier otro día del año, sin rama especial que mantener.
+ */
+function getActivityStatus(date: string, activities: ProgramActivity[], index: number, now: Date): ActivityStatus {
+  const start = new Date(`${date}T${activities[index]!.time}:00`);
+  const next = activities[index + 1];
+  const end = next ? new Date(`${date}T${next.time}:00`) : new Date(start.getTime() + 2 * 60 * 60 * 1000);
+  if (now >= end) return "past";
+  if (now >= start) return "live";
+  return "upcoming";
+}
 
 const SECTION_WASH = {
   background: [
@@ -23,6 +39,71 @@ export function ProgramSection() {
   const { ref: sectionRef, revealed: inView } = useSectionReveal<HTMLElement>({
     parallax: { property: "--agenda-bg-parallax", factor: -0.14 },
   });
+
+  // Reloj propio (no Date.now() en render) para poder marcar la actividad
+  // "en vivo" sin desincronizar el server render; se actualiza cada minuto,
+  // suficiente para una franja horaria que nunca dura menos de 30'.
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hidrata el reloj tras el montaje a propósito, para evitar desincronizar el server render
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const realLiveIndex = useMemo(() => {
+    if (!now) return -1;
+    return active.activities.findIndex(
+      (_, idx) => getActivityStatus(active.date, active.activities, idx, now) === "live",
+    );
+  }, [active, now]);
+
+  // Fuera de las fechas reales del evento (9-12 oct 2026) no hay ninguna
+  // actividad "en vivo" de verdad — se simula una para que la demo muestre
+  // el estado en cualquier momento en que se visite el sitio.
+  const liveIndex = now ? (realLiveIndex >= 0 ? realLiveIndex : 1 % active.activities.length) : -1;
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Al entrar en vista o cambiar la actividad en vivo, la tira horizontal
+  // se desliza sola para que quede centrada sin que el visitante tenga que
+  // buscarla arrastrando.
+  useEffect(() => {
+    if (liveIndex < 0) return;
+    const card = cardRefs.current[liveIndex];
+    const track = trackRef.current;
+    if (!card || !track) return;
+    const offset = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+    track.scrollTo({ left: Math.max(offset, 0), behavior: "smooth" });
+  }, [liveIndex, activeDate]);
+
+  // Arrastre con mouse: la tira solo tiene scroll nativo en touch/trackpad,
+  // así que con mouse no había forma de deslizarla salvo la barra. Solo se
+  // activa para pointerType "mouse" — en touch el scroll nativo ya funciona
+  // y agregar esto encima duplicaría/pelearía con el momentum del sistema.
+  const dragState = useRef({ active: false, startX: 0, startScrollLeft: 0 });
+
+  function handleTrackPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.pointerType !== "mouse") return;
+    const track = trackRef.current;
+    if (!track) return;
+    dragState.current = { active: true, startX: e.clientX, startScrollLeft: track.scrollLeft };
+    track.setPointerCapture(e.pointerId);
+  }
+
+  function handleTrackPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!dragState.current.active) return;
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollLeft = dragState.current.startScrollLeft - (e.clientX - dragState.current.startX);
+  }
+
+  function handleTrackPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    if (!dragState.current.active) return;
+    dragState.current.active = false;
+    trackRef.current?.releasePointerCapture(e.pointerId);
+  }
 
   return (
     <section
@@ -161,33 +242,112 @@ export function ProgramSection() {
         {/* Actividades destacadas: Contenedor amplio y chips escalonados */}
         <Reveal revealed={inView} delay={320} y={45} scale={0.94}>
         <div
-          className="relative overflow-hidden rounded-2xl border border-line/80 bg-gradient-to-br from-[#100c24]/90 via-ink to-[#080614]/90 p-5 sm:p-7 backdrop-blur-sm"
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#100c24]/95 via-[#0c0920]/95 to-[#080614]/95 p-5 sm:p-7 backdrop-blur-sm"
         >
-          <div className="flex items-center justify-between gap-2 border-b border-line/60 pb-3">
-            <span className="font-mono text-xs tracking-[0.2em] text-paper-dim uppercase">
+          <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <span className="font-mono text-xs tracking-[0.2em] text-white/60 uppercase">
               Actividades destacadas · {tDays(active.dayKey)} {active.dayNumber}
             </span>
-            <span className="flex items-center gap-1.5 font-mono text-[0.65rem] text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent motion-safe:animate-pulse" />
-              Confirmado
+            <span className="flex items-center gap-1.5 font-mono text-[0.65rem] text-cyan">
+              <span className="h-1.5 w-1.5 rounded-full bg-cyan motion-safe:animate-pulse" />
+              {liveIndex >= 0 ? "En vivo" : "Confirmado"}
             </span>
           </div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {active.activities.map((act, idx) => (
-              <Reveal key={act.time} revealed={inView} delay={400 + idx * 70} y={25} scale={1}>
-              <div
-                className="group flex h-full flex-col justify-between rounded-xl border border-line/70 bg-[#080614]/95 p-3.5 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:border-accent/60 hover:shadow-[0_8px_24px_-8px_rgba(45,227,214,0.3)] hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs font-semibold text-accent">{act.time} hs</span>
-                  <span className="rounded-full border border-line px-2 py-0.5 font-mono text-[0.6rem] text-paper-dim uppercase transition-colors group-hover:border-accent/40 group-hover:text-paper">
-                    {act.tag}
-                  </span>
-                </div>
-                <p className="mt-2.5 text-xs leading-snug text-paper group-hover:text-paper">{act.title}</p>
-              </div>
-              </Reveal>
-            ))}
+
+          {/* Tira horizontal con scroll-snap: acepta cualquier cantidad de
+              actividades sin romper el layout, en vez de forzar más filas
+              de grilla. Los degradés en los bordes avisan que hay más
+              contenido para deslizar. */}
+          <div className="relative mt-4">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#080614] to-transparent"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#080614] to-transparent"
+            />
+            <div
+              ref={trackRef}
+              onPointerDown={handleTrackPointerDown}
+              onPointerMove={handleTrackPointerMove}
+              onPointerUp={handleTrackPointerUp}
+              onPointerLeave={handleTrackPointerUp}
+              onPointerCancel={handleTrackPointerUp}
+              className="flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto scroll-smooth pt-1 pb-3 cursor-grab active:cursor-grabbing select-none [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.45)_rgba(255,255,255,0.08)] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-cyan/45 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-cyan/70"
+            >
+              {active.activities.map((act, idx) => {
+                const isLive = idx === liveIndex;
+                const status = liveIndex < 0 ? "upcoming" : idx < liveIndex ? "past" : isLive ? "live" : "upcoming";
+                const isPast = status === "past";
+                return (
+                  <Reveal
+                    key={act.time}
+                    revealed={inView}
+                    delay={400 + idx * 70}
+                    y={25}
+                    scale={1}
+                    className="w-[calc((100%-2.25rem)/4)] min-w-[9.5rem] shrink-0 snap-start"
+                  >
+                    <div
+                      ref={(el) => {
+                        cardRefs.current[idx] = el;
+                      }}
+                      className={`group relative flex h-full w-full flex-col gap-2.5 overflow-hidden rounded-xl border p-4 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
+                        isLive
+                          ? "border-cyan/70 bg-[#0a1420]/95 shadow-[0_0_0_1px_rgba(45,227,214,0.25),0_10px_28px_-10px_rgba(45,227,214,0.45)]"
+                          : isPast
+                            ? "border-white/10 bg-[#0c0920]/80 hover:border-white/20"
+                            : "border-white/10 bg-[#080614]/95 hover:border-cyan/60 hover:shadow-[0_8px_24px_-8px_rgba(45,227,214,0.3)]"
+                      }`}
+                    >
+                      {isLive && (
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-x-3 top-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-cyan to-transparent motion-safe:animate-pulse"
+                        />
+                      )}
+                      <div className="flex items-center justify-between gap-2">
+                        <span
+                          className={`font-mono text-sm font-semibold ${
+                            isLive ? "text-cyan" : isPast ? "text-white/45 line-through decoration-white/25" : "text-cyan-text"
+                          }`}
+                        >
+                          {act.time} hs
+                        </span>
+                        {isLive ? (
+                          <span className="flex items-center gap-1 rounded-full border border-cyan/50 bg-cyan/10 px-2 py-0.5 font-mono text-[0.65rem] text-cyan uppercase">
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan motion-safe:animate-ping" />
+                            Ahora
+                          </span>
+                        ) : (
+                          <span
+                            className={`rounded-full border px-2 py-0.5 font-mono text-[0.65rem] uppercase transition-colors ${
+                              isPast
+                                ? "border-white/15 text-white/45"
+                                : "border-white/20 text-white/70 group-hover:border-cyan/40 group-hover:text-white"
+                            }`}
+                          >
+                            {act.tag}
+                          </span>
+                        )}
+                      </div>
+                      <p
+                        className={`text-sm leading-snug ${
+                          isLive
+                            ? "font-medium text-white"
+                            : isPast
+                              ? "text-white/55"
+                              : "text-white group-hover:text-white"
+                        }`}
+                      >
+                        {act.title}
+                      </p>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
         </div>
         </Reveal>

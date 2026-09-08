@@ -20,7 +20,7 @@ function LogoGrid({
 }: {
   logos: Logo[];
   logoSizes?: string;
-  tone?: "light" | "dark";
+  tone?: "light" | "dark" | "vivid";
 }) {
   return (
     <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -30,14 +30,13 @@ function LogoGrid({
           <div
             key={logo.src}
             // bg-ink-fixed/bg-paper-fixed, no bg-surface/bg-paper: estos
-            // logos son artwork real (oscuro/color sobre placa clara,
-            // blanco sobre placa oscura para el organizador) — el tono de
-            // la placa no puede invertirse con el tema o el logo
+            // logos son artwork real (oscuro/color sobre placa clara) — el
+            // tono de la placa no puede invertirse con el tema o el logo
             // desaparece contra su propio fondo (issue reportado en tema
             // claro: quedaban ilegibles).
             className={
               tone === "dark"
-                ? "flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center rounded-xl border border-line bg-ink-fixed p-6 transition duration-300 hover:border-accent/40"
+                ? "flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-ink-fixed p-6 transition duration-300 hover:border-cyan/40"
                 : "group relative flex h-36 w-60 sm:h-40 sm:w-72 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-paper-fixed p-6 shadow-sm transition duration-300 hover:shadow-md"
             }
           >
@@ -48,8 +47,11 @@ function LogoGrid({
                 fill
                 sizes={logoSizes ?? "288px"}
                 className={
-                  tone === "dark"
-                    ? "object-contain"
+                  tone === "dark" || tone === "vivid"
+                    ? // El organizador (vivid) va siempre a color, sin el
+                      // estado "dormido" de sponsors — es la entidad que
+                      // organiza, no un acompañante entre varios.
+                      "object-contain"
                     : // El estado "dormido" (gris, apagado) solo aplica en dispositivos con
                       // hover real — en touch nunca se dispara el hover que lo despierta, así
                       // que los logos quedarían apagados para siempre en mobile.
@@ -57,7 +59,7 @@ function LogoGrid({
                 }
               />
             </div>
-            {tone === "light" && (
+            {tone !== "dark" && (
               <span
                 aria-hidden="true"
                 className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 ease-out motion-reduce:transition-none group-hover:scale-x-100"
@@ -75,7 +77,7 @@ export function SiteFooter() {
   const t = useTranslations("Landing.SiteFooter");
   const contact = useTranslations("Landing.Contact");
   const organizer: Logo = {
-    src: "/images/logos/camara-comercio-exterior.png",
+    src: "/images/logos/camara-comercio-exterior-v3.png",
     alt: t("organizerAlt"),
   };
 
@@ -99,7 +101,7 @@ export function SiteFooter() {
           <span className="font-mono text-xs font-semibold tracking-[0.25em] text-accent uppercase">
             {t("organizes")}
           </span>
-          <LogoGrid logos={[organizer]} tone="dark" />
+          <LogoGrid logos={[organizer]} tone="vivid" />
         </div>
       </div>
 
