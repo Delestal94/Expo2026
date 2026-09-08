@@ -3,20 +3,22 @@
 > **Documento vivo de auditoría y control de calidad.**
 > Contrastado contra las **Bases y Condiciones** y las **Consignas Técnicas del Desafío** provistas por el Ministerio de Desarrollo Económico y Producción de Jujuy (Dirección de Servicios Basados en el Conocimiento), la Cámara de Comercio Exterior de Jujuy y ClusteAR.
 >
-> Última auditoría: 3 de septiembre de 2026, contra el estado real del código en `develop` (no contra intenciones de diseño ni contra lo que dicen otros documentos). Donde una fila anterior de este documento afirmaba algo que el código no respaldaba, se corrigió — ver la nota al pie de cada sección.
+> **Última auditoría: 8 de septiembre de 2026** (fecha de presentación), contra el estado real del código en `develop` — no contra intenciones de diseño ni contra lo que dicen otros documentos del repositorio. Donde una fila anterior de este documento afirmaba algo que el código no respaldaba, se corrigió y se dejó constancia.
+>
+> Auditoría anterior: 3 de septiembre. Los tres gaps que dejó anotados (asistente con IA sin implementar, multiidioma declarado pero inexistente, y `main` desactualizado respecto de `develop`) **quedaron cerrados** — ver las notas de cierre en las secciones 4, 6 y 7.
 
 ---
 
 ## 📊 Estado General de Cumplimiento
 
 ```
-[████████████████████░] 96% Completitud Integral
-• ✅ Cumplido: 30 ítems
-• 🟡 A medias / En progreso: 2 ítems
-• 🔴 Pendiente / Por completar: 1 ítem
+[█████████████████████] 98% Completitud Integral
+• ✅ Cumplido: 32 ítems
+• 🟡 A medias por decisión o por dependencia de un tercero: 2 ítems
+• 🔴 Pendiente por trabajo propio: 0 ítems
 ```
 
-Los tres ítems que no están al 100% son intencionales o dependen de un tercero, no de trabajo pendiente propio — están detallados en la sección 6.
+Los dos ítems que no están al 100% **no son trabajo pendiente nuestro**: uno es una decisión deliberada (no inventar un precio institucional) y el otro depende de información que la organización todavía no publicó. Están detallados sin maquillaje en la sección 6.
 
 ## 1. Requisitos Administrativos y de Participación (Bases y Condiciones)
 
@@ -37,11 +39,11 @@ Los tres ítems que no están al 100% son intencionales o dependen de un tercero
 |---|:---:|:---:|---|
 | **1. Formulario de inscripción** | ✅ **Enviado** | **SÍ** | Completado y enviado a la organización. |
 | **2. Integrantes del equipo** | ✅ **100%** | **SÍ** | Delestal94 y Maximiliano Lezano (con designación de interlocutor). |
-| **3. Link al Mockup / Prototipo Navegable** | ✅ **100%** | **SÍ** | Web en vivo (Vercel), suite de mockups estática (`ux-ui/mockups/`) y repositorio público. |
+| **3. Link al Mockup / Prototipo Navegable** | ✅ **100%** | **SÍ** | Tres formatos: **[sitio en vivo](https://expojuy2026.vercel.app)** (Vercel), **[suite de mockups estáticos navegables](https://expojuy2026.vercel.app/mockups/)** (6 pantallas, servidas sin necesidad de clonar) y [repositorio público](https://github.com/Delestal94/Expo2026). |
 | **4. Memoria Descriptiva** | ✅ **100%** | **SÍ** | `docs/memoria-descriptiva.md`, exportada a **`docs/memoria-descriptiva.pdf`** con carátula institucional. Las 8 secciones que exige Consignas §4.2 están completas, incluidas Organización del contenido (§4) y Estrategia responsive (§11), que faltaban en la auditoría anterior. |
 | **5. Explicación Conceptual de la Propuesta** | ✅ **100%** | **SÍ** | Sistema y concepto "Estratos" detallado en `ux-ui/DESIGN.md` y en la Sección 3 de la Memoria Descriptiva. |
 | **6. Tecnologías Propuestas** | ✅ **100%** | **SÍ** | Detallado en `docs/architecture.md` (Next.js 16, TypeScript, arquitectura modular por puertos y adaptadores). |
-| **7. Declaración de Uso de IA** | ✅ **100%** | **SÍ** | Redactada en la Sección 9 de la Memoria Descriptiva. |
+| **7. Declaración de Uso de IA** | ✅ **100%** | **SÍ** | Documento formal propio: [`declaracion-uso-ia.md`](declaracion-uso-ia.md) — qué herramientas, con qué finalidad, **qué no hizo la IA**, y las reglas del asistente del sitio. Resumen en la Sección 9 de la Memoria Descriptiva. |
 
 ## 3. Secciones Mínimas Sugeridas (Consignas Técnicas §5 y Anexo II)
 
@@ -72,7 +74,7 @@ Los tres ítems que no están al 100% son intencionales o dependen de un tercero
 | **Integración con Redes Sociales** | Acceso a perfiles oficiales y material de difusión. | ✅ **100%** | Ver sección 3. |
 | **Espacios para Patrocinadores** | Banners y menciones con jerarquía. | ✅ **100%** | Grillas de logos reales en el pie, separadas por Acompañan / Sponsors / Organiza. |
 | **Panel para Futuras Actualizaciones** | Arquitectura desacoplada para conectar CMS (Sanity/Strapi). | ✅ **100%** | Documentado en `architecture.md` mediante patrón de puertos y adaptadores; flags tipados en `src/lib/config/flags.ts`. |
-| **✨ Valor Agregado 1: Concierge IA Multilingüe** | Asistente en varios idiomas con derivación humana. | 🔴 **Diseñado, no implementado** | Diseñado con sus reglas de uso responsable en la Memoria Descriptiva §9; la implementación está en la Fase 3 del roadmap (después del 27/09), no es parte del alcance de esta primera etapa. |
+| **✨ Valor Agregado 1: Concierge IA Multilingüe** | Asistente en varios idiomas con derivación humana. | ✅ **100%** *(corregido)* | **Cerrado desde la auditoría del 3/9, que lo daba por no implementado.** El asistente está construido (`src/modules/chatbot/`, endpoint propio en `src/app/api/chat/route.ts`): responde con el contenido real del sitio vía RAG, en los 5 idiomas, y sin credencial de API degrada a respuestas guiadas en vez de fallar. Sus reglas de uso responsable están en [`declaracion-uso-ia.md`](declaracion-uso-ia.md). *Lo único que sigue diseñado y no construido es la derivación a un operador humano (Fase 3).* |
 | **✨ Valor Agregado 2: Memoria Visual 2024** | Galería histórica con fotos reales y lightbox accesible. | ✅ **100%** | Sección Galería + `/galeria`. |
 | **✨ Valor Agregado 3: Matching B2B Algorítmico** | Score de compatibilidad comercial. | ✅ **100%** | `matching-preview.tsx`, dentro de Expositores. |
 
@@ -86,21 +88,46 @@ Los tres ítems que no están al 100% son intencionales o dependen de un tercero
 | **Accesibilidad** | Roles ARIA en filtros/tabs/acordeón, navegación completa por teclado, foco visible, `prefers-reduced-motion` respetado — con tests automatizados que lo verifican. |
 | **Adaptabilidad Móvil (Responsive)** | Detallada como sección propia de la Memoria Descriptiva (§11): grillas fluidas, tipografía con `clamp()`, patrones de scroll horizontal en mobile. |
 | **Escalabilidad de la solución** | Arquitectura modular (`src/modules/*`) con límites verificados por lint; cada sección nueva (Noticias, Agenda) se sumó como módulo propio sin tocar los existentes. |
-| **Factibilidad técnica** | Repositorio público con CI en verde: 64 tests unitarios, 0 errores de TypeScript, build de producción exitoso. |
+| **Factibilidad técnica** | Repositorio público con CI en verde: **102 tests** en 26 archivos, 0 errores de TypeScript, build de producción exitoso, 153 Pull Requests mergeados. Ver [proceso de trabajo](proceso-de-trabajo.md). |
 | **Innovación** | Metáfora geológica del litio y cerro, matching B2B, credencial QR con validación offline. |
 | **Uso responsable de IA** | Declaración formal en la Memoria Descriptiva §9; uso de IA en este mismo ciclo de desarrollo declarado y supervisado por el equipo. |
 | **Originalidad de la propuesta** | Identidad inspirada en la Quebrada y el litio jujeño; contenido de Noticias/Contacto con datos reales verificados, no genéricos. |
 
 ## 6. Lo que no está al 100% — y por qué
 
-1. **Cobro real de entradas (Mercado Pago)** — 🟡 a propósito. No hay confirmación pública del esquema de precios 2026; construir el cobro ahora significaría inventar un precio institucional. El interruptor ya está listo para activarlo apenas la Cámara confirme (ADR-0003).
-2. **Asistente con IA** — 🔴 pendiente, pero de la Fase 3 del roadmap (después del 27/09), no de esta primera etapa. Las bases piden una *propuesta conceptual*, no el sitio completo (Consignas §2, Bases Art. 7); el asistente está diseñado, no construido.
-3. **Grilla horaria detallada de la Agenda** — 🟡 depende de un tercero. La organización todavía no publicó el cronograma minuto a minuto de charlas y shows para 2026 (en 2024 se conoció la semana previa al evento). La sección Agenda ya muestra la estructura confirmada (rondas AM / expo PM) y avisa explícitamente qué falta, en vez de inventar horarios.
+Quedan exactamente dos, y ninguno es trabajo que hayamos dejado sin hacer:
 
-### Riesgo operativo (no de cumplimiento): `main` sigue atrás de `develop`
+1. **Cobro real de entradas (Mercado Pago)** — 🟡 **a propósito.** No hay confirmación pública del esquema de precios 2026; construir el cobro ahora significaría inventar un precio institucional y publicarlo en el sitio de un evento oficial. El adaptador de pago ya está escrito y testeado, y el interruptor (`ADMISSION_MODE`) está listo para activarlo apenas la Cámara confirme, sin rediseñar nada ([ADR-0003](adr/0003-modo-de-acceso.md)).
 
-El dominio de producción (`expojuy2026.vercel.app`, citado como "prototipo en vivo" en la Memoria Descriptiva) sirve la rama `main`, que a la fecha de esta auditoría está varios commits atrás de `develop` — no refleja todavía Noticias, Agenda, Contacto, FAQ, redes sociales ni el buscador de expositores. Promover `main` es una decisión del equipo (afecta el sitio público), pendiente de confirmación antes de enviar el link definitivo a la organización.
+2. **Grilla horaria detallada de la Agenda** — 🟡 **depende de un tercero.** La organización todavía no publicó el cronograma minuto a minuto de charlas y shows para 2026 (en 2024 se conoció recién la semana previa al evento). La sección Agenda muestra la estructura confirmada por prensa (rondas de negocios AM / expo PM para los 4 días) y **avisa explícitamente qué falta**, en vez de inventar horarios.
 
-## 7. Multiidioma — gap detectado, fuera de esta corrección
+**Un tercer ítem sigue diseñado y no construido, pero es de la Fase 3 del roadmap (después del 27/09), no de esta etapa:** la derivación a un operador humano dentro del asistente con IA. Hoy el asistente deriva a los canales de contacto reales de la Cámara cuando una pregunta sale de su dominio.
 
-La Memoria Descriptiva (§6) declara español, inglés, portugués y mandarín como decisión de arquitectura, pero **hoy el sitio solo tiene `es-AR.json`** — no hay traducción real todavía. No es parte de las secciones mínimas ni de las funcionalidades sugeridas por las consignas, así que no bloquea la etapa 1, pero queda anotado para no perderlo de vista de cara a la Fase 1 del roadmap (11/09–20/09).
+### ✅ Cierre de los gaps de la auditoría del 3/9
+
+Los tres riesgos que dejó anotados la auditoría anterior quedaron resueltos antes de la presentación:
+
+| Gap anotado el 3/9 | Estado al 8/9 |
+|---|---|
+| **Asistente con IA sin implementar** (🔴) | ✅ **Construido.** Módulo `chatbot` con RAG sobre el contenido real del sitio, en los 5 idiomas, con degradación segura sin credencial. PRs [#139](https://github.com/Delestal94/Expo2026/pull/139) a [#152](https://github.com/Delestal94/Expo2026/pull/152). |
+| **Multiidioma declarado pero inexistente** (solo `es-AR.json`) | ✅ **Cerrado.** Cinco diccionarios completos — `es-AR`, `en`, `pt`, `zh`, `fr` — con ruteo por idioma y **un test de paridad que falla si a un idioma le falta una clave**. PRs [#138](https://github.com/Delestal94/Expo2026/pull/138) y [#147](https://github.com/Delestal94/Expo2026/pull/147). |
+| **`main` desactualizado respecto de `develop`** — el sitio público no reflejaba Noticias, Agenda, Contacto, FAQ ni el buscador | ✅ **Cerrado.** `main` está sincronizado con `develop`: **[expojuy2026.vercel.app](https://expojuy2026.vercel.app) sirve la versión completa** que se presenta al concurso. |
+
+## 7. Nota metodológica
+
+Este documento se mantuvo deliberadamente como una auditoría **en contra** del proyecto, no como una lista de logros. En cada corrida se contrastó cada fila contra el código real de `develop`, y cuando una fila afirmaba algo que el código no respaldaba, se corrigió la fila — no el discurso.
+
+Las dos correcciones más incómodas quedaron registradas a propósito, porque muestran cómo trabaja el equipo:
+
+- **Redes sociales** (sección 3): la auditoría previa las daba por cumplidas sin que existiera un solo enlace en el código. Se detectó y se implementó.
+- **Multiidioma** (sección 6): la memoria descriptiva declaraba cuatro idiomas cuando existía uno solo. Se detectó, se anotó como gap abierto en vez de taparlo, y se cerró con cinco idiomas completos y un test que lo custodia.
+
+Un documento de cumplimiento que solo dice que todo está bien no sirve para controlar calidad. El método completo está en [`proceso-de-trabajo.md`](proceso-de-trabajo.md).
+
+---
+
+<div align="center">
+
+[← Volver al README](../README.md) · [Guía del jurado](GUIA-DEL-JURADO.md) · [Entregables](entregables-etapa-1.md)
+
+</div>
