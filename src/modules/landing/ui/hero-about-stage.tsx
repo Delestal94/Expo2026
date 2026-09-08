@@ -123,18 +123,12 @@ export function HeroAboutStage() {
     }
 
     // Último progreso REAL (derivado del scroll), para disparar el snap por
-    // flanco —al cruzar el umbral— y no por nivel.
-    //
-    // Arranca en 0 a propósito NO, arranca en el progreso real del momento:
-    // el navegador restaura la posición de scroll al recargar con F5 (es
-    // comportamiento nativo, no un bug del sitio). Si `lastProgress`
-    // arrancaba en 0 y la página cargaba ya scrolleada más abajo del hero
-    // (progress, digamos, 0.5), el primer `update()` comparaba "estoy en
-    // 0.5" contra "vengo de 0" y lo leía como que el visitante acababa de
-    // cruzar el umbral hacia adelante — disparaba `snapTo(1)` de una y
-    // saltaba directo a "sobre", el hero nunca llegaba a mostrarse. Semillar
-    // con el progreso inicial real evita tratar "así empezó" como "cruzó".
+    // flanco —al cruzar el umbral— y no por nivel. Semillado con la
+    // medición actual en vez de 0 fijo: es solo el valor de arranque, la
+    // garantía real contra la carrera de layout está en `isFirstUpdate`
+    // más abajo.
     let lastProgress = getProgress() ?? 0;
+    let isFirstUpdate = true;
 
     /**
      * Completa el recorrido moviendo el scroll de verdad hasta el extremo
@@ -208,6 +202,24 @@ export function HeroAboutStage() {
       }
 
       apply(progress);
+
+      // La primera medición útil nunca evalúa flancos, sin importar cuándo
+      // llegue.
+      //
+      // La seed de `lastProgress` de más arriba ayuda, pero no alcanza: si
+      // en el instante exacto de la seed el layout todavía no había
+      // terminado de asentarse (fuentes, imágenes), `getProgress()` podía
+      // devolver `null` y la seed caía de nuevo a 0 — reproduciendo el bug
+      // original en cuanto llegaba la primera medición real. Este flag saca
+      // la corrección de la carrera: pase lo que pase antes, la primera vez
+      // que `update()` logra leer un progreso válido, ese valor se toma
+      // como punto de partida y nunca como "cruce".
+      if (isFirstUpdate) {
+        isFirstUpdate = false;
+        lastProgress = progress;
+        ticking = false;
+        return;
+      }
 
       // Mientras el snap está en curso no se evalúan flancos: si no, el
       // propio scroll suave se dispararía a sí mismo.
