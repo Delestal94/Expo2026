@@ -73,7 +73,7 @@ export function ProgramSection() {
     if (liveIndex < 0) return;
     const card = cardRefs.current[liveIndex];
     const track = trackRef.current;
-    if (!card || !track) return;
+    if (!card || !track || typeof track.scrollTo !== "function") return;
     const offset = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
     track.scrollTo({ left: Math.max(offset, 0), behavior: "smooth" });
   }, [liveIndex, activeDate]);
