@@ -1,8 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/lib/i18n/routing";
+import type { Locale } from "@/lib/i18n/routing";
 import {
   AccessInfo,
   EventStructuredData,
+  FaqSection,
   HeroAboutStage,
   SectionNav,
   SiteFooter,
@@ -12,8 +13,6 @@ import { PortalSection } from "@/modules/exhibitors";
 import { GalleryPreview } from "@/modules/gallery";
 import { NewsSection } from "@/modules/news";
 import { ProgramSection } from "@/modules/business-rounds";
-
-type Locale = (typeof routing.locales)[number];
 
 export default async function Home({
   params,
@@ -25,7 +24,7 @@ export default async function Home({
 
   return (
     <main className="overflow-x-clip">
-      <EventStructuredData />
+      <EventStructuredData locale={locale} />
       <SectionNav />
       <HeroAboutStage />
       <NewsSection />
@@ -34,6 +33,7 @@ export default async function Home({
       <ProgramSection />
       <PortalSection />
       <AccessInfo />
+      <FaqSection locale={locale} />
       <SiteFooter />
     </main>
   );
