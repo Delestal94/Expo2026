@@ -55,15 +55,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = t("title");
   const description = t("description");
 
+  // `localePrefix: "as-needed"` deja es-AR sin prefijo — mismo criterio
+  // que `sitemap.ts` y que el middleware de next-intl, para que hreflang
+  // apunte a las URLs que el sitio realmente sirve.
+  const path = (l: (typeof routing.locales)[number]) =>
+    l === routing.defaultLocale ? "/" : `/${l}`;
+
   return {
     metadataBase: new URL("https://expojuy2026.vercel.app"),
     title,
     description,
+    // Sin esto, un buscador podía indexar un solo idioma como canónico y
+    // no tenía forma de ofrecer la variante correcta a cada visitante —
+    // cinco idiomas configurados, cero declarados como alternativas entre
+    // sí.
+    alternates: {
+      canonical: path(locale),
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, path(l)]),
+      ),
+    },
     openGraph: {
       title,
       description,
-      url: "/",
-      siteName: title,
+      url: path(locale),
+      // Nombre corto de marca, no el título largo con fecha/lugar: es lo
+      // que WhatsApp/X muestran como origen del link, separado del título
+      // del preview.
+      siteName: "ExpoJuy 2026",
       locale: OG_LOCALE[locale],
       type: "website",
     },

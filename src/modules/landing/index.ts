@@ -1,5 +1,6 @@
 export { AccessInfo } from "./ui/access-info";
 export { CtaLink } from "./ui/cta-link";
+export { FaqSection } from "./ui/faq-section";
 export { HeroAboutStage } from "./ui/hero-about-stage";
 export { LanguageSwitcher } from "./ui/language-switcher";
 export { SectionNav } from "./ui/section-nav";

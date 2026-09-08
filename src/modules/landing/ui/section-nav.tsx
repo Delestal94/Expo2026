@@ -24,6 +24,7 @@ const SECTIONS: SectionLink[] = [
   { id: "agenda", label: "Agenda", shortLabel: "Agenda", color: "var(--color-violet)" },
   { id: "expositores", label: "Expositores", shortLabel: "Expositores", color: "var(--color-cyan)" },
   { id: "acceso", label: "Acceso y cómo llegar", shortLabel: "Acceso", color: "var(--color-violet)" },
+  { id: "faq", label: "Preguntas frecuentes", shortLabel: "FAQ", color: "var(--color-magenta)" },
   // Sponsors, contacto y redes viven dentro del pie, pero son tres de las
   // secciones que las consignas piden como mínimo (§5): sin ancla ni entrada
   // acá, para el visitante —y para quien evalúa recorriendo la página— no

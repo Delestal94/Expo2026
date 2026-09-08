@@ -512,6 +512,21 @@ export function HeroAboutStage() {
                   ? tEjes("eyebrow")
                   : tEjes(`items.${EJES[activeEje].key}.description`)}
               </p>
+
+              {/* Las otras 3 descripciones solo existen en el DOM cuando su
+                  eje está activo — server-side siempre es el primero. Un
+                  lector de pantalla o un motor que extrae texto plano (no
+                  ejecuta hover/click) nunca ve las otras tres. Este bloque
+                  las deja siempre presentes y accesibles, sin duplicar lo
+                  visible: la interacción de arriba sigue igual. */}
+              <dl className="sr-only">
+                {EJES.map((eje) => (
+                  <div key={eje.n}>
+                    <dt>{tEjes(`items.${eje.key}.title`)}</dt>
+                    <dd>{tEjes(`items.${eje.key}.description`)}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </div>
