@@ -16,7 +16,7 @@
     "eyebrow": "Mapa interactivo",
     "title": "El plano del predio, como datos — no como una imagen fija",
     "description": "Calco del plano de la edición 2024 en Ciudad Cultural: el pabellón cubierto, los stands descubiertos, el patio gastronómico y los sectores de servicios. Filtrá por tipo o tocá un stand para ver su código y superficie. Las cantidades por categoría son las del calco; el layout definitivo de 2026 se confirma con la Cámara.",
-    "svgLabel": "Plano del predio de Ciudad Cultural con los stands de la edición 2024",
+    "svgLabel": "Plano del predio de Ciudad Cultural: calles perimetrales, acceso principal peatonal por el oeste, acceso vehicular y estacionamiento por el noreste, y los stands de la edición 2024 agrupados por sector.",
     "legend": "Referencias",
     "area": "{m2} m² de superficie",
     "standHint": "Los stands se asignan por la convocatoria oficial de la Cámara, no desde este sitio.",
@@ -58,7 +58,23 @@
     "selectedStand": "Stand seleccionado:",
     "tapHint": "Tocá cualquier puesto para ver características y servicios",
     "clearSelection": "Limpiar selección",
-    "backToVenue": "Ver información general del predio"
+    "backToVenue": "Ver información general del predio",
+    "context": {
+      "streetNorth": "Calle perimetral norte",
+      "streetSouth": "Calle perimetral sur",
+      "streetWest": "Vía de acceso peatonal",
+      "streetEast": "Vía de acceso vehicular",
+      "parking": "Estacionamiento",
+      "accessMain": "Acceso principal",
+      "accessVehicle": "Acceso vehicular",
+      "sectorInstitutional": "Sector institucional",
+      "sectorPavilion": "Pabellón cubierto",
+      "sectorOutdoor": "Stands descubiertos",
+      "sectorFood": "Patio de comidas",
+      "sectorServices": "Servicios y juegos",
+      "north": "N",
+      "scale": "20 m"
+    }
   },
   "Landing": {
     "Hero": {
@@ -202,6 +218,25 @@
       "organizerAlt": "Cámara de Comercio Exterior de Jujuy",
       "institutions": "Cámara de Comercio Exterior de Jujuy · Ministerio de Desarrollo Económico y Producción · Dirección Provincial de Servicios Basados en el Conocimiento · Clustear.",
       "badge": "Prototipo — Desafío Digital 2026"
+    },
+    "SectionNav": {
+      "ariaLabel": "Secciones de la página",
+      "sections": {
+        "sobre": { "label": "Sobre el evento", "shortLabel": "Sobre" },
+        "noticias": { "label": "Noticias", "shortLabel": "Noticias" },
+        "galeria": { "label": "Galería", "shortLabel": "Galería" },
+        "mapa": { "label": "Mapa", "shortLabel": "Mapa" },
+        "agenda": { "label": "Agenda", "shortLabel": "Agenda" },
+        "expositores": { "label": "Expositores", "shortLabel": "Expositores" },
+        "llegar": { "label": "Acceso y cómo llegar", "shortLabel": "Acceso" },
+        "faq": { "label": "Preguntas frecuentes", "shortLabel": "FAQ" },
+        "sponsors": { "label": "Sponsors", "shortLabel": "Sponsors" },
+        "contacto": { "label": "Contacto", "shortLabel": "Contacto" },
+        "redes": { "label": "Redes sociales", "shortLabel": "Redes" }
+      }
+    },
+    "LanguageSwitcher": {
+      "ariaLabel": "Elegir idioma"
     }
   },
   "Pages": {
@@ -324,6 +359,12 @@
       "title": "Cuatro días, un mismo ritmo",
       "description": "Mañana de rondas de negocios, tarde de expo — así confirmó la organización el formato 2026. La grilla horaria de charlas, paneles y shows nocturnos se publica más cerca de la fecha, como en la edición anterior.",
       "dayTabsLabel": "Elegir día de la agenda",
+      "activitiesLabel": "Actividades destacadas",
+      "liveBadge": "En vivo",
+      "confirmedBadge": "Confirmado",
+      "nowBadge": "Ahora",
+      "showMore": "Ver {count, plural, one {# actividad más} other {# actividades más}}",
+      "showLess": "Ver menos actividades",
       "morningLabel": "Mañana",
       "morningContent": "Rondas de negocios internacionales — Corredor Bioceánico",
       "afternoonLabel": "Tarde",
@@ -347,7 +388,9 @@
     "closeLabel": "Cerrar",
     "prevLabel": "Foto anterior",
     "nextLabel": "Foto siguiente",
-    "dialogAnnounce": "Foto {current} de {total}: {alt}"
+    "dialogAnnounce": "Foto {current} de {total}: {alt}",
+    "compositionSelectorLabel": "Selector de composición",
+    "compositionLabel": "Composición {n}"
   },
   "News": {
     "eyebrow": "Noticias",

@@ -4,10 +4,8 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CATEGORIES, VENUE_PLAN, categoryMeta, polygonPoints } from "./venue-plan";
 import type { Category, VenueZone } from "./venue-plan";
+import { VENUE_VIEW_BOX, VenueContext } from "./venue-context";
 import { useMapPresence } from "./use-map-presence";
-
-const VIEW_W = 1200;
-const VIEW_H = 865;
 
 /** Categorías que son stands asignables; el resto es contexto del predio. */
 const STAND_CATEGORIES: Category[] = ["cubierto", "artesano", "descubierto", "gastronomico", "juego"];
@@ -800,12 +798,15 @@ export function VenueMap() {
             )}
             <div className="w-full h-full flex-1 min-h-0 flex items-center justify-center overflow-hidden">
               <svg
-                viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+                viewBox={VENUE_VIEW_BOX}
                 role="img"
                 aria-label={t("svgLabel")}
                 preserveAspectRatio="xMidYMid meet"
                 className="w-full h-full select-none"
               >
+                {/* El predio y su manzana van primero: son el suelo sobre el
+                    que se apoyan los stands, no un adorno por encima. */}
+                <VenueContext drawn={isDrawn} />
                 {VENUE_PLAN.map((zone) => {
                   const meta = categoryMeta(zone.category);
                   const cx = zone.x + zone.width / 2;
