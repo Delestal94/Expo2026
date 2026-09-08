@@ -187,11 +187,13 @@ El sitio arranca y es totalmente navegable **sin configurar ninguna credencial**
 
 ## 🌐 Entornos
 
-| Entorno | Rama | URL |
-|---|---|---|
-| **Producción** | `main` | **[expojuy2026.vercel.app](https://expojuy2026.vercel.app)** |
-| Staging | `develop` | [preview de `develop`](https://expojuy2026-git-develop-delestalmiguelignacio-5787s-projects.vercel.app) |
-| Preview por PR | `feature/*`, `fix/*`… | uno automático por cada Pull Request |
+| Entorno | Rama | URL | Acceso |
+|---|---|---|---|
+| **Producción** | `main` | **[expojuy2026.vercel.app](https://expojuy2026.vercel.app)** | 🌐 **Público** — es el link para evaluar la propuesta |
+| Staging | `develop` | preview interno de `develop` | 🔒 Restringido al equipo (requiere login de Vercel) |
+| Preview por PR | `feature/*`, `fix/*`… | uno automático por cada Pull Request | 🔒 Restringido al equipo |
+
+> Los entornos de staging y preview están protegidos con autenticación de Vercel a propósito: son ambientes de trabajo interno, no versiones para mostrar. **Todo lo que hay que ver para evaluar la propuesta está en el entorno de producción**, que es público y no pide ninguna credencial.
 
 ## 👥 Equipo
 
