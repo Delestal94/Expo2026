@@ -124,7 +124,17 @@ export function HeroAboutStage() {
 
     // Último progreso REAL (derivado del scroll), para disparar el snap por
     // flanco —al cruzar el umbral— y no por nivel.
-    let lastProgress = 0;
+    //
+    // Arranca en 0 a propósito NO, arranca en el progreso real del momento:
+    // el navegador restaura la posición de scroll al recargar con F5 (es
+    // comportamiento nativo, no un bug del sitio). Si `lastProgress`
+    // arrancaba en 0 y la página cargaba ya scrolleada más abajo del hero
+    // (progress, digamos, 0.5), el primer `update()` comparaba "estoy en
+    // 0.5" contra "vengo de 0" y lo leía como que el visitante acababa de
+    // cruzar el umbral hacia adelante — disparaba `snapTo(1)` de una y
+    // saltaba directo a "sobre", el hero nunca llegaba a mostrarse. Semillar
+    // con el progreso inicial real evita tratar "así empezó" como "cruzó".
+    let lastProgress = getProgress() ?? 0;
 
     /**
      * Completa el recorrido moviendo el scroll de verdad hasta el extremo
