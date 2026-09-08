@@ -71,8 +71,16 @@ export function HeroAboutStage() {
       const heroControlsOpacity = Math.max(0, 1 - heroZoomProgress * 2.0);
       const heroControlsY = heroZoomProgress * 30;
 
-      // Las líneas ondulantes se mantienen activas y dejan que el canvas module su estilo tenue y elegante
-      const strataOpacity = 1.0;
+      // El fondo cede protagonismo cuando entra el bloque "sobre".
+      //
+      // A plena intensidad las bandas pasan por detrás de los ejes y el
+      // texto queda sobre cian o magenta saturado: ahí no hay color de
+      // tipografía que sostenga el contraste, porque el fondo cambia de
+      // luminancia debajo de una misma palabra. Se atenúan con la misma
+      // ventana en la que aparece el texto, así el hero —donde no hay nada
+      // que leer sobre las bandas— las conserva a full.
+      const strataFade = Math.min(Math.max((progress - 0.22) / 0.36, 0), 1);
+      const strataOpacity = 1 - strataFade * 0.62;
 
       stage.style.setProperty("--hero-mid-scale", heroMidScale.toFixed(3));
       stage.style.setProperty("--hero-mid-opacity", heroMidOpacity.toFixed(3));
@@ -421,20 +429,36 @@ export function HeroAboutStage() {
             final, y `motion-safe:absolute` lo saca de la superposición sobre
             el hero para que caiga en el flujo, debajo, donde se puede leer. */}
         <div
-          className="motion-entrance pointer-events-none z-30 flex items-center motion-safe:absolute motion-safe:inset-0 motion-reduce:relative motion-reduce:mt-12 px-6 py-6 sm:px-10 lg:px-12 xl:px-16"
+          className="motion-entrance pointer-events-none z-30 flex items-stretch motion-safe:absolute motion-safe:inset-0 motion-reduce:relative motion-reduce:mt-12 px-6 py-[clamp(1.25rem,4.5vh,3.5rem)] sm:px-10 lg:px-12 xl:px-16"
           style={{
             opacity: "var(--about-text-opacity, 0)",
             pointerEvents: "var(--about-pointer-events, none)" as React.CSSProperties["pointerEvents"],
           }}
         >
+          {/* Velo de legibilidad. Atenuar el canvas no alcanza solo: las
+              bandas siguen siendo cuatro colores saturados moviéndose bajo
+              el texto, y el contraste de una misma línea cambia según por
+              dónde pase la onda. El velo aplana ese piso a un valor
+              conocido —el propio color de página— sin tapar las bandas, que
+              siguen leyéndose como cinta de color detrás. Va atado a la
+              opacidad del bloque, así que no existe durante el hero.
+
+              Los insets negativos son para el caso de movimiento reducido:
+              ahí el bloque está en flujo, no superpuesto, así que `inset-0`
+              cubre solo su caja y el velo se recortaba como un rectángulo
+              visible contra el padding del contenedor. */}
           <div
-            className="motion-entrance pointer-events-auto grid w-full gap-6 will-change-transform lg:grid-cols-12 lg:items-center lg:gap-12"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 bg-ink/55 motion-reduce:-inset-x-6 motion-reduce:-top-12 motion-reduce:-bottom-10 sm:motion-reduce:-inset-x-10 lg:motion-reduce:-inset-x-16"
+          />
+          <div
+            className="motion-entrance pointer-events-auto grid w-full gap-6 will-change-transform lg:h-full lg:grid-cols-12 lg:content-evenly lg:items-center lg:gap-x-10 lg:gap-y-8 xl:gap-x-14"
             style={{
               transform: "scale(var(--about-text-scale, 1))",
               filter: "blur(var(--about-text-blur, 0px))",
             }}
           >
-            {/* ── Columna izquierda: el relato y los datos duros ── */}
+            {/* ── Columna izquierda: el relato ── */}
             <div className="lg:col-span-4">
               {/* El bloque se quedó sin encabezado al fusionar Ejes acá
                   adentro: quien navega por headings saltaba del h1 del hero
@@ -442,39 +466,17 @@ export function HeroAboutStage() {
                   porque el titular visual de la sección es el propio relato,
                   no un rótulo. */}
               <h2 className="sr-only">{tAbout("title")}</h2>
-              <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(1.9vw,3.2vh),1.6rem)]">
+              <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(2.3vw,3.8vh),2rem)]">
                 {tAbout("descriptionIntro")}
               </p>
 
-              <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(4.6vw,9vh),5.5rem)]">
+              <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(5.4vw,10.4vh),6.5rem)]">
                 {tAbout("descriptionEmphasis")}
               </p>
 
-              <p className="mt-3 max-w-lg font-ambit leading-snug font-normal text-paper-dim text-[clamp(0.75rem,min(1.25vw,2.2vh),1.05rem)]">
+              <p className="mt-4 max-w-xl font-ambit leading-snug font-normal text-paper text-[clamp(0.8rem,min(1.5vw,2.6vh),1.25rem)]">
                 {tAbout("descriptionOutro")}
               </p>
-
-              <dl
-                className="motion-entrance mt-5 flex flex-wrap gap-x-7 gap-y-3 border-t border-line pt-4 will-change-transform"
-                style={{
-                  opacity: "var(--bars-opacity, 0)",
-                  transform: "translateY(calc((1 - var(--bars-scale, 0)) * 14px))",
-                }}
-              >
-                {STATS.map((stat) => (
-                  <div key={stat.key} className="flex flex-col">
-                    <dd
-                      className="font-ambit font-bold tabular-nums leading-none tracking-tight text-[clamp(1.1rem,min(2vw,3.4vh),1.9rem)]"
-                      style={{ color: stat.color }}
-                    >
-                      {stat.value}
-                    </dd>
-                    <dt className="mt-1 max-w-32 font-mono uppercase leading-tight tracking-[0.12em] text-paper-dim text-[clamp(0.5rem,min(0.75vw,1.25vh),0.72rem)]">
-                      {tAbout(`stats.${stat.key}`)}
-                    </dt>
-                  </div>
-                ))}
-              </dl>
             </div>
 
             {/* ── Columna derecha: los cuatro ejes en tipografía cinética ── */}
@@ -485,7 +487,7 @@ export function HeroAboutStage() {
                 transform: "translateY(calc((1 - var(--bars-scale, 0)) * 18px))",
               }}
             >
-              <p className="mb-3 font-mono uppercase tracking-[0.25em] text-paper-dim text-[clamp(0.55rem,min(0.8vw,1.35vh),0.78rem)]">
+              <p className="mb-4 font-mono uppercase tracking-[0.25em] text-paper-dim text-[clamp(0.6rem,min(0.9vw,1.5vh),0.86rem)]">
                 {tEjes("eyebrow")}
               </p>
 
@@ -499,20 +501,20 @@ export function HeroAboutStage() {
                     onMouseEnter={() => setActiveEje(i)}
                     onFocus={() => setActiveEje(i)}
                     onClick={() => setActiveEje(i)}
-                    className="group block w-full cursor-pointer border-0 bg-transparent py-1.5 text-left"
+                    className="group block w-full cursor-pointer border-0 bg-transparent py-2 text-left"
                   >
                     <span className="flex items-baseline gap-3 sm:gap-5">
                       <span
-                        className="shrink-0 font-mono tabular-nums tracking-[0.2em] transition-colors duration-500 text-[clamp(0.55rem,min(0.9vw,1.5vh),0.85rem)]"
+                        className="shrink-0 font-mono tabular-nums tracking-[0.2em] transition-colors duration-500 text-[clamp(0.6rem,min(1vw,1.7vh),0.95rem)]"
                         style={{ color: isActive ? eje.color : "var(--color-paper-dim)" }}
                       >
                         {eje.n}
                       </span>
                       <span
-                        className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.2rem,min(3.7vw,6.6vh),3.5rem)]"
+                        className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.3rem,min(4.5vw,7.6vh),4.75rem)]"
                         style={{
                           color: isActive ? eje.color : "var(--color-paper)",
-                          opacity: isActive ? 1 : 0.65,
+                          opacity: isActive ? 1 : 0.92,
                           letterSpacing: isActive ? "0.03em" : "-0.02em",
                           textShadow: isActive
                             ? "none"
@@ -539,7 +541,7 @@ export function HeroAboutStage() {
               {/* Descripción del eje activo: alto reservado para que
                   cambiar de eje no mueva nunca las líneas de arriba. */}
               <p
-                className="mt-4 max-w-3xl border-l-2 pl-4 leading-relaxed text-paper-dim transition-colors duration-500 text-[clamp(0.8rem,min(1.3vw,2.2vh),1.1rem)]"
+                className="mt-6 max-w-3xl border-l-2 pl-4 leading-relaxed text-paper transition-colors duration-500 text-[clamp(0.85rem,min(1.55vw,2.6vh),1.3rem)]"
                 style={{
                   borderColor: activeEje === null ? "var(--color-line)" : EJES[activeEje].color,
                   minHeight: "4.5em",
@@ -565,6 +567,37 @@ export function HeroAboutStage() {
                 ))}
               </dl>
             </div>
+
+            {/* ── Tercera fila: los datos duros, a todo el ancho y al pie ──
+
+                Estaban apilados dentro de la columna izquierda, donde solo
+                tenían 400px: las etiquetas se partían en cuatro líneas
+                ("DÍAS DE / OCTUBRE, / CIUDAD / CULTURAL") y, sobre todo,
+                dejaban el tercio inferior del viewport vacío mientras el
+                bloque entero flotaba al medio. Como fila propia ocupan ese
+                hueco, alinean en cuatro columnas y cierran la composición
+                contra el borde de abajo. */}
+            <dl
+              className="motion-entrance grid grid-cols-2 gap-x-8 gap-y-5 border-t border-line pt-5 will-change-transform sm:grid-cols-4 lg:col-span-12"
+              style={{
+                opacity: "var(--bars-opacity, 0)",
+                transform: "translateY(calc((1 - var(--bars-scale, 0)) * 14px))",
+              }}
+            >
+              {STATS.map((stat) => (
+                <div key={stat.key} className="flex flex-col">
+                  <dd
+                    className="font-ambit font-bold tabular-nums leading-none tracking-tight text-[clamp(1.1rem,min(2.4vw,4vh),2.4rem)]"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.value}
+                  </dd>
+                  <dt className="mt-1 font-mono uppercase leading-tight tracking-[0.12em] text-paper-dim text-[clamp(0.55rem,min(0.85vw,1.45vh),0.82rem)]">
+                    {tAbout(`stats.${stat.key}`)}
+                  </dt>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </div>

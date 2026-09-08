@@ -485,14 +485,14 @@ export function GalleryPreview() {
             {/* Indicadores de composición interactivos */}
             <div
               className="hidden sm:flex items-center gap-1.5 rounded-full border border-line bg-ink/70 px-3 py-1.5 backdrop-blur-sm"
-              aria-label="Selector de composición"
+              aria-label={t("compositionSelectorLabel")}
             >
               {COMPOSITIONS.map((_, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setCompositionIndex(i)}
-                  aria-label={`Composición ${i + 1}`}
+                  aria-label={t("compositionLabel", { n: i + 1 })}
                   className={`h-2 rounded-full transition-[width,background-color] duration-500 motion-reduce:transition-none ${
                     compositionIndex === i
                       ? "w-6 bg-magenta"
