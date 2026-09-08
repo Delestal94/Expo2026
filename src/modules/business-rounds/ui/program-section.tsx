@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { EntranceVein } from "@/lib/ui/entrance-vein";
-import { Reveal } from "@/lib/ui/reveal";
+import { ENTRANCE_EASE, ENTRANCE_MS, Reveal } from "@/lib/ui/reveal";
 import { useSectionReveal } from "@/lib/ui/use-section-reveal";
 import { PROGRAM_DAYS, type ProgramActivity } from "./program-data";
 
@@ -22,6 +22,13 @@ function getActivityStatus(date: string, activities: ProgramActivity[], index: n
   if (now >= start) return "live";
   return "upcoming";
 }
+
+/**
+ * Actividades visibles antes de pedir "ver más". Con 4 entran la franja de
+ * la mañana y el arranque de la tarde sin que el bloque empuje al resto de
+ * la sección fuera de pantalla en un teléfono.
+ */
+export const COLLAPSED_COUNT = 4;
 
 const SECTION_WASH = {
   background: [
@@ -63,47 +70,15 @@ export function ProgramSection() {
   // el estado en cualquier momento en que se visite el sitio.
   const liveIndex = now ? (realLiveIndex >= 0 ? realLiveIndex : 1 % active.activities.length) : -1;
 
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const listId = useId();
+  const [expandedDate, setExpandedDate] = useState<string | null>(null);
 
-  // Al entrar en vista o cambiar la actividad en vivo, la tira horizontal
-  // se desliza sola para que quede centrada sin que el visitante tenga que
-  // buscarla arrastrando.
-  useEffect(() => {
-    if (liveIndex < 0) return;
-    const card = cardRefs.current[liveIndex];
-    const track = trackRef.current;
-    if (!card || !track || typeof track.scrollTo !== "function") return;
-    const offset = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
-    track.scrollTo({ left: Math.max(offset, 0), behavior: "smooth" });
-  }, [liveIndex, activeDate]);
-
-  // Arrastre con mouse: la tira solo tiene scroll nativo en touch/trackpad,
-  // así que con mouse no había forma de deslizarla salvo la barra. Solo se
-  // activa para pointerType "mouse" — en touch el scroll nativo ya funciona
-  // y agregar esto encima duplicaría/pelearía con el momentum del sistema.
-  const dragState = useRef({ active: false, startX: 0, startScrollLeft: 0 });
-
-  function handleTrackPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (e.pointerType !== "mouse") return;
-    const track = trackRef.current;
-    if (!track) return;
-    dragState.current = { active: true, startX: e.clientX, startScrollLeft: track.scrollLeft };
-    track.setPointerCapture(e.pointerId);
-  }
-
-  function handleTrackPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!dragState.current.active) return;
-    const track = trackRef.current;
-    if (!track) return;
-    track.scrollLeft = dragState.current.startScrollLeft - (e.clientX - dragState.current.startX);
-  }
-
-  function handleTrackPointerUp(e: React.PointerEvent<HTMLDivElement>) {
-    if (!dragState.current.active) return;
-    dragState.current.active = false;
-    trackRef.current?.releasePointerCapture(e.pointerId);
-  }
+  // La actividad en vivo no puede quedar tapada por el corte: si cae fuera,
+  // el día arranca desplegado (y ahí el botón deja de tener sentido).
+  const forcedOpen = liveIndex >= COLLAPSED_COUNT;
+  const expanded = forcedOpen || expandedDate === active.date;
+  const hiddenCount = Math.max(active.activities.length - COLLAPSED_COUNT, 0);
+  const visibleActivities = expanded ? active.activities : active.activities.slice(0, COLLAPSED_COUNT);
 
   return (
     <section
@@ -239,116 +214,154 @@ export function ProgramSection() {
           </Reveal>
         </div>
 
-        {/* Actividades destacadas: Contenedor amplio y chips escalonados */}
+        {/* Actividades destacadas: grilla horaria vertical.
+
+            Antes esto era una tira horizontal con scroll-snap y arrastre con
+            mouse. Deslizar de costado es un gesto que no todo el mundo
+            descubre —y con teclado o motricidad reducida es directamente un
+            muro—, así que lo que no entraba en el ancho quedaba invisible:
+            en el día de apertura, 3 de 7 actividades. La lectura vertical
+            usa el mismo scroll que el resto de la página y lo que no entra
+            se despliega con un botón explícito. */}
         <Reveal revealed={inView} delay={320} y={45} scale={0.94}>
         <div
           className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#100c24]/95 via-[#0c0920]/95 to-[#080614]/95 p-5 sm:p-7 backdrop-blur-sm"
         >
           <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
             <span className="font-mono text-xs tracking-[0.2em] text-white/60 uppercase">
-              Actividades destacadas · {tDays(active.dayKey)} {active.dayNumber}
+              {t("activitiesLabel")} · {tDays(active.dayKey)} {active.dayNumber}
             </span>
-            <span className="flex items-center gap-1.5 font-mono text-[0.65rem] text-cyan">
+            <span className="flex shrink-0 items-center gap-1.5 font-mono text-[0.65rem] text-cyan">
               <span className="h-1.5 w-1.5 rounded-full bg-cyan motion-safe:animate-pulse" />
-              {liveIndex >= 0 ? "En vivo" : "Confirmado"}
+              {liveIndex >= 0 ? t("liveBadge") : t("confirmedBadge")}
             </span>
           </div>
 
-          {/* Tira horizontal con scroll-snap: acepta cualquier cantidad de
-              actividades sin romper el layout, en vez de forzar más filas
-              de grilla. Los degradés en los bordes avisan que hay más
-              contenido para deslizar. */}
-          <div className="relative mt-4">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#080614] to-transparent"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#080614] to-transparent"
-            />
-            <div
-              ref={trackRef}
-              onPointerDown={handleTrackPointerDown}
-              onPointerMove={handleTrackPointerMove}
-              onPointerUp={handleTrackPointerUp}
-              onPointerLeave={handleTrackPointerUp}
-              onPointerCancel={handleTrackPointerUp}
-              className="flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto scroll-smooth pt-1 pb-3 cursor-grab active:cursor-grabbing select-none [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.45)_rgba(255,255,255,0.08)] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-cyan/45 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-cyan/70"
-            >
-              {active.activities.map((act, idx) => {
-                const isLive = idx === liveIndex;
-                const status = liveIndex < 0 ? "upcoming" : idx < liveIndex ? "past" : isLive ? "live" : "upcoming";
-                const isPast = status === "past";
-                return (
-                  <Reveal
-                    key={act.time}
-                    revealed={inView}
-                    delay={400 + idx * 70}
-                    y={25}
-                    scale={1}
-                    className="w-[calc((100%-2.25rem)/4)] min-w-[9.5rem] shrink-0 snap-start"
+          <ol
+            id={listId}
+            aria-label={`${t("activitiesLabel")} — ${tDays(active.dayKey)} ${active.dayNumber}`}
+            className="relative mt-4"
+          >
+            {visibleActivities.map((act, idx) => {
+              const isLive = idx === liveIndex;
+              const status: ActivityStatus =
+                liveIndex < 0 ? "upcoming" : idx < liveIndex ? "past" : isLive ? "live" : "upcoming";
+              const isPast = status === "past";
+              const isLast = idx === visibleActivities.length - 1;
+              const delay = 400 + idx * 60;
+              return (
+                // La entrada escalonada va inline y no con <Reveal>: ese
+                // componente monta un <div>, y un <div> entre <ol> y <li> no
+                // es HTML válido. `motion-entrance` conserva la misma salida
+                // por prefers-reduced-motion que el resto de la sección.
+                <li
+                  key={act.time}
+                  className={`motion-entrance grid grid-cols-[3rem_1.25rem_minmax(0,1fr)] sm:grid-cols-[3.75rem_1.5rem_minmax(0,1fr)] ${
+                    idx >= COLLAPSED_COUNT
+                      ? "motion-safe:animate-[panel-swap_0.32s_cubic-bezier(0.16,1,0.3,1)]"
+                      : ""
+                  }`}
+                  style={{
+                    // Las filas que aparecen al desplegar montan ya reveladas
+                    // (sin transición que animar): para esas la entrada es el
+                    // panel-swap de arriba.
+                    transform: inView ? "none" : "translate3d(0, 18px, 0)",
+                    opacity: inView ? 1 : 0,
+                    transition: `transform ${ENTRANCE_MS}ms ${ENTRANCE_EASE} ${delay}ms, opacity ${ENTRANCE_MS}ms ${ENTRANCE_EASE} ${delay}ms`,
+                  }}
+                >
+                  <span
+                    className={`pt-3 text-right font-mono text-xs font-semibold tabular-nums sm:text-sm ${
+                      isLive
+                        ? "text-cyan"
+                        : isPast
+                          ? "text-white/45 line-through decoration-white/25"
+                          : "text-cyan-text"
+                    }`}
                   >
-                    <div
-                      ref={(el) => {
-                        cardRefs.current[idx] = el;
-                      }}
-                      className={`group relative flex h-full w-full flex-col gap-2.5 overflow-hidden rounded-xl border p-4 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
+                    {act.time}
+                  </span>
+
+                  {/* Riel de la jornada: línea continua entre franjas y un
+                      nodo por actividad. En la última fila la línea se corta
+                      en el nodo, para que la agenda termine y no quede
+                      sugiriendo que hay algo más abajo. */}
+                  <div aria-hidden="true" className="relative flex justify-center">
+                    <span className={`absolute top-0 w-px bg-white/10 ${isLast ? "h-[1.4rem]" : "bottom-0"}`} />
+                    <span
+                      className={`relative mt-[1.05rem] h-2 w-2 shrink-0 rounded-full ${
                         isLive
-                          ? "border-cyan/70 bg-[#0a1420]/95 shadow-[0_0_0_1px_rgba(45,227,214,0.25),0_10px_28px_-10px_rgba(45,227,214,0.45)]"
+                          ? "bg-cyan shadow-[0_0_0_4px_rgba(45,227,214,0.18)]"
                           : isPast
-                            ? "border-white/10 bg-[#0c0920]/80 hover:border-white/20"
-                            : "border-white/10 bg-[#080614]/95 hover:border-cyan/60 hover:shadow-[0_8px_24px_-8px_rgba(45,227,214,0.3)]"
+                            ? "bg-white/25"
+                            : "bg-white/40"
+                      }`}
+                    />
+                  </div>
+
+                  <div className="pb-2.5">
+                    <div
+                      className={`group/row flex flex-col gap-1.5 rounded-xl border px-3.5 py-2.5 transition-[border-color,background-color,box-shadow] duration-200 motion-reduce:transition-none sm:flex-row sm:items-start sm:justify-between sm:gap-3 ${
+                        isLive
+                          ? "border-cyan/60 bg-[#0a1420]/95 shadow-[0_0_0_1px_rgba(45,227,214,0.2),0_10px_28px_-14px_rgba(45,227,214,0.5)]"
+                          : isPast
+                            ? "border-white/[0.07] bg-white/[0.015] hover:border-white/20"
+                            : "border-white/10 bg-white/[0.03] hover:border-cyan/50 hover:bg-cyan/[0.04]"
                       }`}
                     >
-                      {isLive && (
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-x-3 top-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-cyan to-transparent motion-safe:animate-pulse"
-                        />
-                      )}
-                      <div className="flex items-center justify-between gap-2">
-                        <span
-                          className={`font-mono text-sm font-semibold ${
-                            isLive ? "text-cyan" : isPast ? "text-white/45 line-through decoration-white/25" : "text-cyan-text"
-                          }`}
-                        >
-                          {act.time} hs
-                        </span>
-                        {isLive ? (
-                          <span className="flex items-center gap-1 rounded-full border border-cyan/50 bg-cyan/10 px-2 py-0.5 font-mono text-[0.65rem] text-cyan uppercase">
-                            <span className="h-1.5 w-1.5 rounded-full bg-cyan motion-safe:animate-ping" />
-                            Ahora
-                          </span>
-                        ) : (
-                          <span
-                            className={`rounded-full border px-2 py-0.5 font-mono text-[0.65rem] uppercase transition-colors ${
-                              isPast
-                                ? "border-white/15 text-white/45"
-                                : "border-white/20 text-white/70 group-hover:border-cyan/40 group-hover:text-white"
-                            }`}
-                          >
-                            {act.tag}
-                          </span>
-                        )}
-                      </div>
                       <p
                         className={`text-sm leading-snug ${
-                          isLive
-                            ? "font-medium text-white"
-                            : isPast
-                              ? "text-white/55"
-                              : "text-white group-hover:text-white"
+                          isLive ? "font-medium text-white" : isPast ? "text-white/55" : "text-white/90"
                         }`}
                       >
                         {act.title}
                       </p>
+                      {isLive ? (
+                        <span className="flex shrink-0 items-center gap-1 self-start rounded-full border border-cyan/50 bg-cyan/10 px-2 py-0.5 font-mono text-[0.65rem] text-cyan uppercase">
+                          <span className="h-1.5 w-1.5 rounded-full bg-cyan motion-safe:animate-ping" />
+                          {t("nowBadge")}
+                        </span>
+                      ) : (
+                        <span
+                          className={`shrink-0 self-start rounded-full border px-2 py-0.5 font-mono text-[0.65rem] uppercase transition-colors ${
+                            isPast
+                              ? "border-white/15 text-white/45"
+                              : "border-white/20 text-white/70 group-hover/row:border-cyan/40 group-hover/row:text-white"
+                          }`}
+                        >
+                          {act.tag}
+                        </span>
+                      )}
                     </div>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          {hiddenCount > 0 && !forcedOpen && (
+            <button
+              type="button"
+              onClick={() => setExpandedDate(expanded ? null : active.date)}
+              aria-expanded={expanded}
+              aria-controls={listId}
+              className="mt-1 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-white/70 transition-[border-color,background-color,color] duration-200 hover:border-cyan/50 hover:bg-cyan/[0.06] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none"
+            >
+              {expanded ? t("showLess") : t("showMore", { count: hiddenCount })}
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`h-3 w-3 transition-transform duration-200 motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`}
+              >
+                <path d="M3 4.5 6 7.5 9 4.5" />
+              </svg>
+            </button>
+          )}
         </div>
         </Reveal>
       </div>
