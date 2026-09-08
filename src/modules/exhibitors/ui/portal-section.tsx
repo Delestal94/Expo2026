@@ -24,20 +24,20 @@ function SectionDisclosure({
   children: ReactNode;
 }) {
   return (
-    <details className="group rounded-2xl border border-line bg-gradient-to-br from-[#100e22]/90 via-ink to-[#090716]/90 transition-colors duration-300 open:bg-surface hover:border-paper/20">
+    <details className="group rounded-2xl border border-white/10 bg-gradient-to-br from-[#100e22]/90 via-[#0c0920]/90 to-[#090716]/90 transition-colors duration-300 open:bg-surface open:border-line hover:border-white/25">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
         <span>
-          <span className="block font-mono text-xs tracking-[0.2em] text-accent uppercase">
+          <span className="block font-mono text-xs tracking-[0.2em] text-cyan group-open:text-accent uppercase">
             {eyebrow}
           </span>
-          <span className="mt-1 block font-display text-lg text-paper">{title}</span>
+          <span className="mt-1 block font-display text-lg text-white group-open:text-paper">{title}</span>
         </span>
         <svg
           aria-hidden="true"
           width="16"
           height="16"
           viewBox="0 0 16 16"
-          className="shrink-0 text-paper-dim transition-transform duration-300 group-open:rotate-180 group-open:text-accent motion-reduce:transition-none"
+          className="shrink-0 text-white/60 transition-transform duration-300 group-open:rotate-180 group-open:text-accent motion-reduce:transition-none"
         >
           <path
             d="M3 6l5 5 5-5"
