@@ -12,18 +12,18 @@ import { Wordmark } from "./wordmark";
 
 /** Datos duros del evento: acompañan al titular, no compiten con los ejes. */
 const STATS = [
-  { key: "edition", value: "17ª", color: "var(--color-cyan)" },
-  { key: "days", value: "4", color: "var(--color-violet)" },
-  { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
+  { key: "edition", value: "17ª", color: "var(--color-cyan-text)" },
+  { key: "days", value: "4", color: "var(--color-violet-text)" },
+  { key: "stands", value: "+200", color: "var(--color-magenta-text)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender-text)" },
 ] as const;
 
 /** Los cuatro ejes temáticos: cada uno es una línea de tipografía viva. */
 const EJES = [
-  { n: "01", key: "mineria", color: "var(--color-cyan)" },
-  { n: "02", key: "comercio", color: "var(--color-violet)" },
-  { n: "03", key: "corredor", color: "var(--color-magenta)" },
-  { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
+  { n: "01", key: "mineria", color: "var(--color-cyan-text)" },
+  { n: "02", key: "comercio", color: "var(--color-violet-text)" },
+  { n: "03", key: "corredor", color: "var(--color-magenta-text)" },
+  { n: "04", key: "conocimiento", color: "var(--color-lavender-text)" },
 ] as const;
 
 export function HeroAboutStage() {
@@ -42,7 +42,24 @@ export function HeroAboutStage() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      // Sin scroll-jacking, la sección queda en flujo normal (`h-auto`,
+      // no-sticky por los `motion-safe:` de arriba) y todo su contenido
+      // debe estar visible de entrada: sin este `apply(1)`, los fallbacks
+      // en 0 de --about-text-opacity/--bars-opacity dejarían "Sobre
+      // ExpoJuy" y los ejes invisibles para siempre, porque el resto del
+      // efecto (que es lo único que fija esas variables) nunca corre.
+      apply(1);
+      return;
+    }
+
+    // En puntero táctil el track real (112vh - 100vh, ~12vh) mide unos
+    // 100px: un solo flick lo cruza entero y el `scrollTo` suave del snap
+    // reposiciona la página por su cuenta a mitad del gesto del usuario,
+    // sintiéndose como si el sitio "peleara" el scroll. La animación
+    // dirigida por scroll (`apply`, más abajo) se mantiene igual — solo se
+    // desactiva el re-scroll forzado hacia los extremos.
+    const allowForcedSnap = !window.matchMedia("(pointer: coarse)").matches;
 
     let ticking = false;
     let snapping = false;
@@ -139,18 +156,6 @@ export function HeroAboutStage() {
     let lastProgress = getProgress() ?? 0;
     let isFirstUpdate = true;
 
-    /**
-     * Completa el recorrido moviendo el scroll de verdad hasta el extremo
-     * del track, en vez de animar solo las variables CSS.
-     *
-     * La versión anterior animaba las variables con su propio rAF y dejaba
-     * la posición real de scroll donde estaba: el estado visual decía
-     * "progreso 1" mientras el scroll real seguía en ~0.3. Como el flanco se
-     * calcula contra `lastProgress`, el siguiente scroll leía
-     * `0.3 < 0.96 && 1 >= 0.96` y disparaba el snap hacia atrás — de ahí el
-     * rebote al hero al segundo scroll hacia abajo. Moviendo el scroll real,
-     * lo visual y la posición nunca se separan y el bug no puede existir.
-     */
     /** Progreso real 0→1 dentro de la pista, o null si todavía no aplica. */
     function getProgress(): number | null {
       if (!stage) return null;
@@ -161,7 +166,30 @@ export function HeroAboutStage() {
       return Math.min(Math.max(-rect.top / totalScroll, 0), 1);
     }
 
-    function snapTo(target: 0 | 1) {
+    // Duración del snap animado a mano, en ms. El `scrollTo({behavior:
+    // "smooth"})` nativo recorre esta pista (~12vh) en muy pocos cuadros
+    // porque su duración escala con la distancia, que acá es corta: se
+    // sentía como un corte, no como una transición. Animando el scroll
+    // nosotros mismos con una duración fija —independiente de la
+    // distancia— la transición entre el hero y "sobre ExpoJuy" queda
+    // notoriamente más lenta y pareja.
+    const SNAP_DURATION_MS = 1600;
+
+    function easeInOutCubic(t: number) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    /**
+     * @param from Progreso desde el que arranca el recorrido. Es un dato
+     * aparte de la posición real de scroll a propósito: la pista mide
+     * apenas 12vh (~100-130px) y un solo golpe de rueda son ~100px, así
+     * que para cuando esto corre el scroll nativo YA se comió casi toda la
+     * pista. Tomando el progreso de ahí, el snap arrancaba en ~0.8: se veía
+     * un corte seco hasta el 80% del recorrido y después 1,6s arrastrando
+     * el 20% restante. Quien cruza el umbral pasa el progreso que había
+     * ANTES del gesto, y el recorrido se reproduce entero.
+     */
+    function snapTo(target: 0 | 1, from: number) {
       if (!stage) return;
       const rect = stage.getBoundingClientRect();
       const viewH = window.innerHeight || 800;
@@ -169,19 +197,56 @@ export function HeroAboutStage() {
       if (totalScroll <= 0) return;
 
       const sectionTop = window.scrollY + rect.top;
+      const startProgress = Math.min(Math.max(from, 0), 1);
+
       snapping = true;
-      window.clearTimeout(snapTimeout);
-      window.scrollTo({
-        top: sectionTop + target * totalScroll,
-        behavior: "smooth",
-      });
-      // El scroll suave no avisa cuándo terminó: liberamos el bloqueo cuando
-      // ya no puede seguir en curso, y verificamos que efectivamente haya
-      // llegado a un extremo (el usuario pudo haberlo interrumpido).
-      snapTimeout = window.setTimeout(() => {
-        snapping = false;
-        settle();
-      }, 700);
+      window.cancelAnimationFrame(snapTimeout);
+
+      // El primer cuadro se pinta acá mismo, sincrónico. Si se esperara al
+      // rAF, el navegador alcanzaba a pintar un cuadro con el progreso al
+      // que lo había llevado el scroll nativo (~0.8) antes de que el snap
+      // lo devolviera al arranque: un destello del bloque "sobre" y vuelta
+      // al hero.
+      apply(startProgress);
+      window.scrollTo(0, sectionTop + startProgress * totalScroll);
+      lastProgress = startProgress;
+
+      const startTime = performance.now();
+
+      // Una vez disparado, el snap se completa siempre: no se cancela con
+      // el scroll del usuario.
+      //
+      // Cancelarlo con el evento "wheel" parecía lo correcto —no pelear
+      // contra el gesto— pero es justamente lo que lo hacía trabarse. Un
+      // solo golpe de rueda o de trackpad no produce un evento: produce
+      // una ráfaga que sigue llegando cientos de ms por la inercia. El
+      // primero cruzaba el umbral y lanzaba el snap, y los siguientes
+      // —el mismo gesto, no uno nuevo— lo cancelaban a los pocos cuadros.
+      // Después `settle()` lo relanzaba desde donde había quedado: eso es
+      // el "se traba y después continúa", una animación cortada y
+      // recomenzada, no una animación lenta.
+      //
+      // El evento "scroll" del navegador, además, se coalesca: si fuera él
+      // quien dispara `apply()`, el efecto visual avanzaría a saltos aunque
+      // la posición de scroll se moviera a 60fps. Por eso el progreso se
+      // calcula acá, en cada cuadro del rAF, y visual y scroll avanzan
+      // juntos.
+      function step(now: number) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / SNAP_DURATION_MS, 1);
+        const progress =
+          startProgress + (target - startProgress) * easeInOutCubic(t);
+        apply(progress);
+        window.scrollTo(0, sectionTop + progress * totalScroll);
+        lastProgress = progress;
+        if (t < 1) {
+          snapTimeout = window.requestAnimationFrame(step);
+        } else {
+          snapping = false;
+        }
+      }
+
+      snapTimeout = window.requestAnimationFrame(step);
     }
 
     /**
@@ -196,21 +261,32 @@ export function HeroAboutStage() {
      * resuelve mirando dónde quedó, sin depender de por dónde pasó.
      */
     function settle() {
-      if (snapping) return;
+      if (!allowForcedSnap || snapping) return;
       const progress = getProgress();
       if (progress === null) return;
       if (progress <= TRIGGER_PROGRESS || progress >= 1 - TRIGGER_PROGRESS) return;
-      snapTo(progress < 0.5 ? 0 : 1);
+      // Acá sí se arranca desde donde quedó de verdad: esto no es el
+      // comienzo de un recorrido, es completar uno que quedó a mitad.
+      snapTo(progress < 0.5 ? 0 : 1, progress);
     }
 
     function update() {
+      // Mientras `snapTo` está animando, su propio `step()` ya llama a
+      // `apply()`, mueve el scroll real y actualiza `lastProgress` en cada
+      // cuadro. El scroll programático de esos frames también dispara este
+      // `update()` vía el listener de "scroll": sin esta guarda, cada
+      // cuadro del snap terminaba haciendo el trabajo (reflow incluido)
+      // dos veces por nada.
+      if (snapping) {
+        ticking = false;
+        return;
+      }
+
       const progress = getProgress();
       if (progress === null) {
         ticking = false;
         return;
       }
-
-      apply(progress);
 
       // La primera medición útil nunca evalúa flancos, sin importar cuándo
       // llegue.
@@ -236,33 +312,43 @@ export function HeroAboutStage() {
       // (dejarlo congelado, este bug).
       if (isFirstUpdate) {
         isFirstUpdate = false;
+        apply(progress);
         lastProgress = progress;
         ticking = false;
         settle();
         return;
       }
 
-      // Mientras el snap está en curso no se evalúan flancos: si no, el
-      // propio scroll suave se dispararía a sí mismo.
-      if (!snapping) {
+      if (allowForcedSnap) {
         const crossedForward =
           progress > TRIGGER_PROGRESS && lastProgress <= TRIGGER_PROGRESS;
         const crossedBackward =
           progress < 1 - TRIGGER_PROGRESS && lastProgress >= 1 - TRIGGER_PROGRESS;
 
+        // El snap arranca desde `lastProgress` —dónde estaba ANTES de este
+        // gesto—, no desde `progress`, que ya viene con toda la pista que
+        // se comió el scroll nativo. Y se sale sin llamar a `apply()`: ese
+        // valor adelantado no se pinta nunca, lo pinta `snapTo` desde el
+        // arranque del recorrido.
         if (crossedForward) {
-          snapTo(1);
-        } else if (crossedBackward) {
-          snapTo(0);
+          snapTo(1, lastProgress);
+          ticking = false;
+          return;
+        }
+        if (crossedBackward) {
+          snapTo(0, lastProgress);
+          ticking = false;
+          return;
         }
       }
 
+      apply(progress);
       lastProgress = progress;
       ticking = false;
     }
 
     function onScroll() {
-      if (!ticking) {
+      if (!snapping && !ticking) {
         requestAnimationFrame(update);
         ticking = true;
       }
@@ -274,12 +360,61 @@ export function HeroAboutStage() {
       }
     }
 
+    /**
+     * Mientras el snap corre, el input de scroll nativo se bloquea.
+     *
+     * Sin esto son dos animaciones moviendo la misma página a la vez: la
+     * nuestra (un `scrollTo` por cuadro) y la del navegador, que sigue
+     * procesando la ráfaga de inercia de la rueda con su propio scroll
+     * suave. Cada cuadro el navegador empuja para un lado y nosotros
+     * corregimos para el otro — de ahí el tironeo. Cancelando el evento
+     * mientras dura el snap, la única que mueve la página es la nuestra.
+     *
+     * Va un solo listener por montaje (no uno por snap) y sale enseguida
+     * cuando no hay snap en curso, así el costo de tenerlo en no-pasivo es
+     * despreciable.
+     */
+    const SCROLL_KEYS = new Set([
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End",
+      " ",
+    ]);
+
+    function blockNativeScroll(event: Event) {
+      if (!snapping) return;
+      if (event.type === "keydown") {
+        if (!SCROLL_KEYS.has((event as KeyboardEvent).key)) return;
+        // El listener es de `window` y vive todo el montaje: si alguien
+        // está escribiendo en un campo de otra sección justo mientras
+        // corre el snap, la barra espaciadora y las flechas son texto, no
+        // scroll, y tragárselas rompe la escritura.
+        const target = event.target as HTMLElement | null;
+        if (
+          target?.isContentEditable ||
+          ["INPUT", "TEXTAREA", "SELECT"].includes(target?.tagName ?? "")
+        ) {
+          return;
+        }
+      }
+      event.preventDefault();
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", blockNativeScroll, { passive: false });
+    window.addEventListener("touchmove", blockNativeScroll, { passive: false });
+    window.addEventListener("keydown", blockNativeScroll, { passive: false });
     update();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(snapTimeout);
+      window.removeEventListener("wheel", blockNativeScroll);
+      window.removeEventListener("touchmove", blockNativeScroll);
+      window.removeEventListener("keydown", blockNativeScroll);
+      window.cancelAnimationFrame(snapTimeout);
       window.clearTimeout(settleTimeout);
     };
   }, []);
@@ -327,7 +462,7 @@ export function HeroAboutStage() {
 
         {/* Navegación superior del Hero */}
         <nav
-          className="motion-entrance relative z-20 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_backwards]"
+          className="motion-entrance relative z-20 flex flex-col items-center gap-y-2 font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_backwards] sm:flex-row sm:flex-wrap sm:justify-between sm:gap-x-3"
           style={{
             opacity: "var(--hero-controls-opacity, 1)",
             transform: "translate3d(0, calc(-1 * var(--hero-controls-y, 0px)), 0)",
@@ -340,7 +475,7 @@ export function HeroAboutStage() {
               alt=""
               width={20}
               height={28}
-              className="h-7 w-auto"
+              className="h-7 w-auto shrink-0"
             />
             <span>{tHero("eyebrow")}</span>
           </div>
@@ -497,7 +632,7 @@ export function HeroAboutStage() {
                   <button
                     key={eje.n}
                     type="button"
-                    aria-expanded={isActive}
+                    aria-pressed={isActive}
                     onMouseEnter={() => setActiveEje(i)}
                     onFocus={() => setActiveEje(i)}
                     onClick={() => setActiveEje(i)}
