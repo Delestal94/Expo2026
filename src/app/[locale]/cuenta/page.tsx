@@ -27,7 +27,10 @@ export default async function CuentaPage({ params }: Props) {
 
   return (
     <main className="mx-auto min-h-screen max-w-md px-6 py-24 sm:px-10">
-      <Link href="/" className="font-mono text-xs tracking-[0.2em] text-accent uppercase">
+      <Link
+        href="/"
+        className="-mx-2 -my-3 inline-block px-2 py-3 font-mono text-xs tracking-[0.2em] text-accent uppercase"
+      >
         {t("backLink")}
       </Link>
       <h1 className="mt-6 text-balance font-display text-3xl font-medium text-paper">
