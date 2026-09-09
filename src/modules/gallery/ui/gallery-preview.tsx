@@ -442,7 +442,7 @@ export function GalleryPreview() {
       className="relative w-full motion-safe:sm:h-[150vh] h-auto"
     >
       {/* Contenedor encajonado sticky a pantalla completa */}
-      <div className="sticky top-0 w-full min-h-screen lg:h-screen lg:max-h-screen px-6 py-4 sm:px-10 lg:px-16 sm:py-6 lg:py-6 flex flex-col justify-between overflow-hidden">
+      <div className="sticky top-0 w-full sm:min-h-screen lg:h-screen lg:max-h-screen px-6 py-4 sm:px-10 lg:px-16 sm:py-6 lg:py-6 flex flex-col justify-between overflow-hidden">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={GALLERY_WASH} />
         <EntranceVein color="var(--color-magenta)" />
 
@@ -761,32 +761,37 @@ export function GalleryPreview() {
           </div>
         </div>
 
-        {/* ── MOBILE: Tira táctil horizontal con snap ── */}
-        <div className="relative -mx-6 mt-8 sm:hidden">
-          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {photoIndices.map((idx, slot) => {
-              const photo = GALLERY_PHOTOS[idx % GALLERY_PHOTOS.length]!;
-              return (
-                <Link
-                  key={slot}
-                  href="/galeria"
-                  className="group relative w-[80vw] shrink-0 snap-start overflow-hidden rounded-2xl border border-line/70 bg-ink/60 aspect-[16/10]"
-                >
-                  <Image
-                    src={photo.src}
-                    alt={t("photoAlt", { n: photo.n })}
-                    fill
-                    sizes="80vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-60" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end">
-                    <span className="font-mono text-xs text-magenta-text">↗</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+        {/* ── MOBILE: pila vertical de 3 fotos que rotan ──
+            Antes era una tira horizontal con scroll-snap: dos tarjetas a
+            medias asomando en los bordes no comunican "hay una galería acá"
+            tan bien como tres fotos completas, y el scroll lateral es un
+            gesto que compite con el scroll vertical de la página. Usa los
+            primeros 3 slots de `photoIndices` — el mismo estado que ya rota
+            round-robin para el bento de desktop — así ambos layouts
+            comparten un solo ciclo de rotación. */}
+        <div className="mt-8 flex flex-col gap-3 sm:hidden">
+          {photoIndices.slice(0, 3).map((idx, slot) => {
+            const photo = GALLERY_PHOTOS[idx % GALLERY_PHOTOS.length]!;
+            return (
+              <Link
+                key={slot}
+                href="/galeria"
+                className="group relative aspect-video w-full overflow-hidden rounded-2xl border border-line/70 bg-ink/60"
+              >
+                <Image
+                  src={photo.src}
+                  alt={t("photoAlt", { n: photo.n })}
+                  fill
+                  sizes="100vw"
+                  className="object-cover transition-opacity duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-60" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-end">
+                  <span className="font-mono text-xs text-magenta-text">↗</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="mt-8 sm:hidden">

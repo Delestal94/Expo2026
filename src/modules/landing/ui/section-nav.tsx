@@ -208,7 +208,7 @@ export function SectionNav() {
                 onClick={() => setActiveId(section.id)}
                 aria-current={isActive ? "true" : undefined}
                 tabIndex={visible ? 0 : -1}
-                className="flex shrink-0 scroll-mx-3 snap-start items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="flex min-h-11 shrink-0 scroll-mx-3 snap-start items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 style={{
                   borderColor: isActive ? section.color : "var(--color-line)",
                   color: isActive ? "var(--color-paper)" : "var(--color-paper-dim)",
