@@ -40,6 +40,8 @@ Thumbs.db
 .atl/
 openspec/
 
-# Local Claude Code tooling state
-.claude/
+# Local Claude Code tooling state (los agentes revisores propios SI se versionan:
+# son parte de la evidencia de metodo, ver docs/proceso-de-trabajo.md)
+.claude/*
+!.claude/agents/
 

@@ -8,21 +8,22 @@ import { CtaLink } from "./cta-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { StrataCanvas } from "./strata-canvas";
+import { Wordmark } from "./wordmark";
 
 /** Datos duros del evento: acompañan al titular, no compiten con los ejes. */
 const STATS = [
-  { key: "edition", value: "17ª", color: "var(--color-cyan)" },
-  { key: "days", value: "4", color: "var(--color-violet)" },
-  { key: "stands", value: "+200", color: "var(--color-magenta)" },
-  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender)" },
+  { key: "edition", value: "17ª", color: "var(--color-cyan-text)" },
+  { key: "days", value: "4", color: "var(--color-violet-text)" },
+  { key: "stands", value: "+200", color: "var(--color-magenta-text)" },
+  { key: "dates", value: "9–12 OCT", color: "var(--color-lavender-text)" },
 ] as const;
 
 /** Los cuatro ejes temáticos: cada uno es una línea de tipografía viva. */
 const EJES = [
-  { n: "01", key: "mineria", color: "var(--color-cyan)" },
-  { n: "02", key: "comercio", color: "var(--color-violet)" },
-  { n: "03", key: "corredor", color: "var(--color-magenta)" },
-  { n: "04", key: "conocimiento", color: "var(--color-lavender)" },
+  { n: "01", key: "mineria", color: "var(--color-cyan-text)" },
+  { n: "02", key: "comercio", color: "var(--color-violet-text)" },
+  { n: "03", key: "corredor", color: "var(--color-magenta-text)" },
+  { n: "04", key: "conocimiento", color: "var(--color-lavender-text)" },
 ] as const;
 
 export function HeroAboutStage() {
@@ -41,23 +42,35 @@ export function HeroAboutStage() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      // Sin scroll-jacking, la sección queda en flujo normal (`h-auto`,
+      // no-sticky por los `motion-safe:` de arriba) y todo su contenido
+      // debe estar visible de entrada: sin este `apply(1)`, los fallbacks
+      // en 0 de --about-text-opacity/--bars-opacity dejarían "Sobre
+      // ExpoJuy" y los ejes invisibles para siempre, porque el resto del
+      // efecto (que es lo único que fija esas variables) nunca corre.
+      apply(1);
+      return;
+    }
 
-    let ticking = false;
-    let snapping = false;
-    let snapTimeout = 0;
-    let settleTimeout = 0;
-    // Umbral mínimo de scroll real para disparar el snap: un toque de
-    // rueda/trackpad alcanza, no hace falta agotar los 112vh del track.
-    const TRIGGER_PROGRESS = 0.04;
+    // Altura calibrada: 147vh (100vh de viewport + 35vh de transición + 12vh de lock).
+    // - 0 a 35vh: Transición scrollytelling cinematográfica Hero → Sobre (0 → 1).
+    // - 35vh a 47vh: Zona de lock corta (12vh, exactamente 1 a 2 scrolls de rueda para pasar a Noticias).
+    const TRANSITION_VH = 35;
+    const LOCK_VH = 12;
+    const TRANSITION_DURATION_MS = 1100; // Animación pausada, cinematográfica y fluida
+
+    let currentProgress = 0;
+    let animRafId = 0;
+    let isAnimating = false;
+    let currentStage: "hero" | "sobre" = "hero";
+
+    function easeInOutCubic(t: number) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
 
     /**
      * Los tres actos se solapan y cubren el recorrido completo (0 → 0.92).
-     *
-     * Antes quedaban dos huecos grandes —de 0.38 a 0.58 y de 0.78 a 1.0—
-     * heredados de un acto de traslación que se eliminó: el 42% del scroll
-     * no animaba nada y el recorrido se sentía lento y a los tirones. Con
-     * las ventanas encadenadas siempre hay algo en movimiento.
      */
     function apply(progress: number) {
       if (!stage) return;
@@ -70,8 +83,9 @@ export function HeroAboutStage() {
       const heroControlsOpacity = Math.max(0, 1 - heroZoomProgress * 2.0);
       const heroControlsY = heroZoomProgress * 30;
 
-      // Las líneas ondulantes se mantienen activas y dejan que el canvas module su estilo tenue y elegante
-      const strataOpacity = 1.0;
+      // El fondo cede protagonismo cuando entra el bloque "sobre".
+      const strataFade = Math.min(Math.max((progress - 0.22) / 0.36, 0), 1);
+      const strataOpacity = 1 - strataFade * 0.62;
 
       stage.style.setProperty("--hero-mid-scale", heroMidScale.toFixed(3));
       stage.style.setProperty("--hero-mid-opacity", heroMidOpacity.toFixed(3));
@@ -122,172 +136,180 @@ export function HeroAboutStage() {
       stage.style.setProperty("--bars-opacity", barsOpacity.toFixed(3));
     }
 
-    // Último progreso REAL (derivado del scroll), para disparar el snap por
-    // flanco —al cruzar el umbral— y no por nivel. Semillado con la
-    // medición actual en vez de 0 fijo: es solo el valor de arranque, la
-    // garantía real contra la carrera de layout está en `isFirstUpdate`
-    // más abajo.
-    let lastProgress = getProgress() ?? 0;
-    let isFirstUpdate = true;
-
-    /**
-     * Completa el recorrido moviendo el scroll de verdad hasta el extremo
-     * del track, en vez de animar solo las variables CSS.
-     *
-     * La versión anterior animaba las variables con su propio rAF y dejaba
-     * la posición real de scroll donde estaba: el estado visual decía
-     * "progreso 1" mientras el scroll real seguía en ~0.3. Como el flanco se
-     * calcula contra `lastProgress`, el siguiente scroll leía
-     * `0.3 < 0.96 && 1 >= 0.96` y disparaba el snap hacia atrás — de ahí el
-     * rebote al hero al segundo scroll hacia abajo. Moviendo el scroll real,
-     * lo visual y la posición nunca se separan y el bug no puede existir.
-     */
-    /** Progreso real 0→1 dentro de la pista, o null si todavía no aplica. */
-    function getProgress(): number | null {
+    function getMetrics() {
       if (!stage) return null;
       const rect = stage.getBoundingClientRect();
       const viewH = window.innerHeight || 800;
       const totalScroll = rect.height - viewH;
       if (totalScroll <= 0) return null;
-      return Math.min(Math.max(-rect.top / totalScroll, 0), 1);
+      const transitionScroll = viewH * (TRANSITION_VH / 100);
+      const lockScroll = viewH * (LOCK_VH / 100);
+      const currentScroll = -rect.top;
+      return { rect, viewH, totalScroll, transitionScroll, lockScroll, currentScroll };
     }
 
-    function snapTo(target: 0 | 1) {
-      if (!stage) return;
-      const rect = stage.getBoundingClientRect();
-      const viewH = window.innerHeight || 800;
-      const totalScroll = rect.height - viewH;
-      if (totalScroll <= 0) return;
+    function animateTo(target: "hero" | "sobre") {
+      const m = getMetrics();
+      if (!stage || !m) return;
 
-      const sectionTop = window.scrollY + rect.top;
-      snapping = true;
-      window.clearTimeout(snapTimeout);
-      window.scrollTo({
-        top: sectionTop + target * totalScroll,
-        behavior: "smooth",
-      });
-      // El scroll suave no avisa cuándo terminó: liberamos el bloqueo cuando
-      // ya no puede seguir en curso, y verificamos que efectivamente haya
-      // llegado a un extremo (el usuario pudo haberlo interrumpido).
-      snapTimeout = window.setTimeout(() => {
-        snapping = false;
-        settle();
-      }, 700);
-    }
+      const sectionTop = window.scrollY + m.rect.top;
+      const startP = currentProgress;
+      const targetP = target === "sobre" ? 1 : 0;
+      const startScroll = window.scrollY;
+      const targetScroll =
+        target === "sobre" ? sectionTop + m.transitionScroll : sectionTop;
 
-    /**
-     * Red de contención: al dejar de scrollear, si el recorrido quedó a
-     * mitad de camino lo lleva al extremo más cercano.
-     *
-     * El disparo por flanco solo se cumple viniendo de un extremo
-     * (`lastProgress` ≤ 0.04 o ≥ 0.96). Scrolleando muy despacio, el propio
-     * scroll del usuario interrumpe el `scrollTo` suave y el recorrido queda
-     * parado en el medio: desde ahí ninguna de las dos condiciones puede
-     * volver a cumplirse nunca y la animación se congela a mitad. Esto lo
-     * resuelve mirando dónde quedó, sin depender de por dónde pasó.
-     */
-    function settle() {
-      if (snapping) return;
-      const progress = getProgress();
-      if (progress === null) return;
-      if (progress <= TRIGGER_PROGRESS || progress >= 1 - TRIGGER_PROGRESS) return;
-      snapTo(progress < 0.5 ? 0 : 1);
-    }
+      isAnimating = true;
+      currentStage = target;
+      window.cancelAnimationFrame(animRafId);
 
-    function update() {
-      const progress = getProgress();
-      if (progress === null) {
-        ticking = false;
-        return;
-      }
+      const startTime = performance.now();
 
-      apply(progress);
+      function step(now: number) {
+        const elapsed = now - startTime;
+        const rawT = Math.min(elapsed / TRANSITION_DURATION_MS, 1);
+        const t = easeInOutCubic(rawT);
 
-      // La primera medición útil nunca evalúa flancos, sin importar cuándo
-      // llegue.
-      //
-      // La seed de `lastProgress` de más arriba ayuda, pero no alcanza: si
-      // en el instante exacto de la seed el layout todavía no había
-      // terminado de asentarse (fuentes, imágenes), `getProgress()` podía
-      // devolver `null` y la seed caía de nuevo a 0 — reproduciendo el bug
-      // original en cuanto llegaba la primera medición real. Este flag saca
-      // la corrección de la carrera: pase lo que pase antes, la primera vez
-      // que `update()` logra leer un progreso válido, ese valor se toma
-      // como punto de partida y nunca como "cruce".
-      //
-      // Pero no alcanza con solo tomar nota: si el navegador restauró el
-      // scroll a mitad de camino entre hero y "sobre" (progreso, digamos,
-      // 0.5), esto deja la pantalla en ese estado intermedio —hero
-      // desvanecido a medias, "sobre" apareciendo a medias— y ahí se queda
-      // congelada hasta que el visitante vuelva a scrollear. `settle()` es
-      // la misma función que ya resuelve "soltaste el scroll a mitad de
-      // camino": la reusamos una vez acá para completar hacia el extremo
-      // más cercano a la posición real donde arrancó, en vez de forzar
-      // siempre hacia "sobre" (el bug original) o de no forzar nunca
-      // (dejarlo congelado, este bug).
-      if (isFirstUpdate) {
-        isFirstUpdate = false;
-        lastProgress = progress;
-        ticking = false;
-        settle();
-        return;
-      }
+        const p = startP + (targetP - startP) * t;
+        const s = startScroll + (targetScroll - startScroll) * t;
 
-      // Mientras el snap está en curso no se evalúan flancos: si no, el
-      // propio scroll suave se dispararía a sí mismo.
-      if (!snapping) {
-        const crossedForward =
-          progress > TRIGGER_PROGRESS && lastProgress <= TRIGGER_PROGRESS;
-        const crossedBackward =
-          progress < 1 - TRIGGER_PROGRESS && lastProgress >= 1 - TRIGGER_PROGRESS;
+        currentProgress = p;
+        apply(p);
+        window.scrollTo(0, s);
 
-        if (crossedForward) {
-          snapTo(1);
-        } else if (crossedBackward) {
-          snapTo(0);
+        if (rawT < 1) {
+          animRafId = window.requestAnimationFrame(step);
+        } else {
+          currentProgress = targetP;
+          apply(targetP);
+          window.scrollTo(0, targetScroll);
+          // Período de gracia para absorber eventos asíncronos de scroll derivados del scrollTo final
+          window.setTimeout(() => {
+            isAnimating = false;
+          }, 100);
         }
       }
 
-      lastProgress = progress;
-      ticking = false;
+      animRafId = window.requestAnimationFrame(step);
     }
 
     function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
+      if (isAnimating) return;
+
+      const m = getMetrics();
+      if (!m) return;
+
+      // En mobile con pantalla táctil, el scroll físico conduce el progreso
+      if (window.matchMedia("(pointer: coarse)").matches) {
+        const p = Math.min(Math.max(m.currentScroll / m.transitionScroll, 0), 1);
+        currentProgress = p;
+        apply(p);
+        return;
       }
-      // Cada scroll reinicia la cuenta: `settle` corre recién cuando el
-      // visitante suelta, no durante el gesto.
-      if (!snapping) {
-        window.clearTimeout(settleTimeout);
-        settleTimeout = window.setTimeout(settle, 140);
+
+      // En desktop, mantenemos los estados limpios y sin recálculos erráticos
+      if (m.currentScroll >= m.transitionScroll) {
+        currentStage = "sobre";
+        if (currentProgress !== 1) {
+          currentProgress = 1;
+          apply(1);
+        }
+        return;
+      }
+
+      if (m.currentScroll <= 0) {
+        currentStage = "hero";
+        if (currentProgress !== 0) {
+          currentProgress = 0;
+          apply(0);
+        }
+        return;
       }
     }
 
+    function onWheel(e: WheelEvent) {
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (isAnimating) {
+        // Absorbe la inercia de la rueda mientras dura la animación cinematográfica
+        e.preventDefault();
+        return;
+      }
+
+      const m = getMetrics();
+      if (!m) return;
+
+      const currentScroll = -m.rect.top;
+
+      // 1. Estando en el Hero (o cerca del tope), scroll hacia abajo dispara la animación fluida a Sobre
+      if (currentStage === "hero" || currentScroll <= 30) {
+        if (e.deltaY > 8) {
+          e.preventDefault();
+          animateTo("sobre");
+          return;
+        }
+        return;
+      }
+
+      // 2. Estando dentro de la zona de permanencia (lock) de Sobre, scroll hacia arriba regresa al Hero
+      if (
+        currentScroll >= m.transitionScroll - 20 &&
+        currentScroll <= m.transitionScroll + m.lockScroll + 15 &&
+        e.deltaY < -8
+      ) {
+        e.preventDefault();
+        animateTo("hero");
+        return;
+      }
+
+      // 3. Estando en Sobre con scroll hacia abajo: no intervenimos.
+      // El scroll nativo recorre los 12vh del lock (1 a 2 toques) y pasa directo a Noticias con apply(1) fijo.
+    }
+
+    function onResize() {
+      if (isAnimating) return;
+      const m = getMetrics();
+      if (!m) return;
+      const p = m.currentScroll >= m.transitionScroll ? 1 : m.currentScroll <= 0 ? 0 : currentProgress;
+      currentProgress = p;
+      apply(p);
+    }
+
+    // Inicialización sincrónica según scroll actual
+    const initialMetrics = getMetrics();
+    if (initialMetrics) {
+      const p = initialMetrics.currentScroll >= initialMetrics.transitionScroll ? 1 : 0;
+      currentStage = p === 1 ? "sobre" : "hero";
+      currentProgress = p;
+      apply(p);
+    }
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    update();
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(snapTimeout);
-      window.clearTimeout(settleTimeout);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("resize", onResize);
+      window.cancelAnimationFrame(animRafId);
     };
   }, []);
 
   return (
     <section
       ref={stageRef}
-      className="relative h-auto overflow-x-clip motion-safe:h-[112vh]"
+      className="relative h-auto overflow-x-clip motion-safe:h-[147vh]"
     >
-      {/* Puntos de anclaje para navegación oficial (#inicio y #sobre) */}
+      {/* Puntos de anclaje para navegación oficial (#inicio y #sobre).
+          El top de #sobre cae a 35vh, exactamente donde culmina la transición
+          del scrollytelling y arranca la zona de permanencia (lock). */}
       <div
         id="inicio"
         className="pointer-events-none absolute top-0 left-0 h-screen w-full"
       />
       <div
         id="sobre"
-        className="pointer-events-none absolute motion-safe:top-[69vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
+        className="pointer-events-none absolute motion-safe:top-[35vh] top-0 bottom-0 left-0 w-full scroll-mt-0"
       />
 
       {/* Viewport fijo durante el recorrido scrollytelling */}
@@ -312,7 +334,7 @@ export function HeroAboutStage() {
 
         {/* Navegación superior del Hero */}
         <nav
-          className="motion-entrance relative z-20 flex items-center justify-between font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_backwards]"
+          className="motion-entrance relative z-20 flex flex-col items-center gap-y-2 font-mono text-xs tracking-[0.2em] text-paper-dim uppercase will-change-transform motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_backwards] sm:flex-row sm:flex-wrap sm:justify-between sm:gap-x-3"
           style={{
             opacity: "var(--hero-controls-opacity, 1)",
             transform: "translate3d(0, calc(-1 * var(--hero-controls-y, 0px)), 0)",
@@ -325,7 +347,7 @@ export function HeroAboutStage() {
               alt=""
               width={20}
               height={28}
-              className="h-7 w-auto"
+              className="h-7 w-auto shrink-0"
             />
             <span>{tHero("eyebrow")}</span>
           </div>
@@ -338,27 +360,20 @@ export function HeroAboutStage() {
 
         {/* Bloque central Hero (Zoom hacia la cámara al scrollear) */}
         <div
-          className="motion-entrance pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform drop-shadow-[0_2px_16px_rgba(7,11,25,0.95)]"
+          className="motion-entrance pointer-events-none relative z-10 my-auto flex flex-col gap-8 will-change-transform drop-shadow-[0_2px_14px_color-mix(in_srgb,var(--color-ink)_92%,transparent)]"
           style={{
             transform: "scale(var(--hero-mid-scale, 1))",
             opacity: "var(--hero-mid-opacity, 1)",
             filter: "blur(var(--hero-mid-blur, 0px))",
           }}
         >
-          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase drop-shadow-[0_1px_6px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
+          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase drop-shadow-[0_1px_6px_color-mix(in_srgb,var(--color-ink)_90%,transparent)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.08s_backwards]">
             {tHero("tagline")}
           </span>
           <h1 className="motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.16s_backwards]">
-            <Image
-              src="/images/logos/expojuy-wordmark-dark.svg"
-              alt={tHero("titleAlt")}
-              width={1000}
-              height={305}
-              priority
-              className="h-auto w-full max-w-205 drop-shadow-[0_2px_12px_rgba(7,11,25,0.8)]"
-            />
+            <Wordmark alt={tHero("titleAlt")} />
           </h1>
-          <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_rgba(7,11,25,0.9)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
+          <p className="max-w-xl text-balance font-body text-lg text-paper sm:text-xl drop-shadow-[0_1px_8px_color-mix(in_srgb,var(--color-ink)_90%,transparent)] motion-safe:animate-[strata-settle_0.7s_cubic-bezier(0.16,1,0.3,1)_0.38s_backwards]">
             {tHero("description")}
           </p>
         </div>
@@ -421,20 +436,36 @@ export function HeroAboutStage() {
             final, y `motion-safe:absolute` lo saca de la superposición sobre
             el hero para que caiga en el flujo, debajo, donde se puede leer. */}
         <div
-          className="motion-entrance pointer-events-none z-30 flex items-center motion-safe:absolute motion-safe:inset-0 motion-reduce:relative motion-reduce:mt-12 px-6 py-6 sm:px-10 lg:px-12 xl:px-16"
+          className="motion-entrance pointer-events-none z-30 flex items-stretch motion-safe:absolute motion-safe:inset-0 motion-reduce:relative motion-reduce:mt-12 px-6 py-[clamp(1.25rem,4.5vh,3.5rem)] sm:px-10 lg:px-12 xl:px-16"
           style={{
             opacity: "var(--about-text-opacity, 0)",
             pointerEvents: "var(--about-pointer-events, none)" as React.CSSProperties["pointerEvents"],
           }}
         >
+          {/* Velo de legibilidad. Atenuar el canvas no alcanza solo: las
+              bandas siguen siendo cuatro colores saturados moviéndose bajo
+              el texto, y el contraste de una misma línea cambia según por
+              dónde pase la onda. El velo aplana ese piso a un valor
+              conocido —el propio color de página— sin tapar las bandas, que
+              siguen leyéndose como cinta de color detrás. Va atado a la
+              opacidad del bloque, así que no existe durante el hero.
+
+              Los insets negativos son para el caso de movimiento reducido:
+              ahí el bloque está en flujo, no superpuesto, así que `inset-0`
+              cubre solo su caja y el velo se recortaba como un rectángulo
+              visible contra el padding del contenedor. */}
           <div
-            className="motion-entrance pointer-events-auto grid w-full gap-6 will-change-transform lg:grid-cols-12 lg:items-center lg:gap-12"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 bg-ink/55 motion-reduce:-inset-x-6 motion-reduce:-top-12 motion-reduce:-bottom-10 sm:motion-reduce:-inset-x-10 lg:motion-reduce:-inset-x-16"
+          />
+          <div
+            className="motion-entrance pointer-events-auto grid w-full gap-6 will-change-transform lg:h-full lg:grid-cols-12 lg:content-evenly lg:items-center lg:gap-x-10 lg:gap-y-8 xl:gap-x-14"
             style={{
               transform: "scale(var(--about-text-scale, 1))",
               filter: "blur(var(--about-text-blur, 0px))",
             }}
           >
-            {/* ── Columna izquierda: el relato y los datos duros ── */}
+            {/* ── Columna izquierda: el relato ── */}
             <div className="lg:col-span-4">
               {/* El bloque se quedó sin encabezado al fusionar Ejes acá
                   adentro: quien navega por headings saltaba del h1 del hero
@@ -442,39 +473,17 @@ export function HeroAboutStage() {
                   porque el titular visual de la sección es el propio relato,
                   no un rótulo. */}
               <h2 className="sr-only">{tAbout("title")}</h2>
-              <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(1.9vw,3.2vh),1.6rem)]">
+              <p className="font-ambit font-semibold leading-[1.15] tracking-tight text-paper text-[clamp(1rem,min(2.3vw,3.8vh),2rem)]">
                 {tAbout("descriptionIntro")}
               </p>
 
-              <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(4.6vw,9vh),5.5rem)]">
+              <p className="mt-1 font-ambit font-bold leading-[0.92] tracking-tight text-accent drop-shadow-[0_0_45px_rgba(45,227,214,0.45)] text-[clamp(2rem,min(5.4vw,10.4vh),6.5rem)]">
                 {tAbout("descriptionEmphasis")}
               </p>
 
-              <p className="mt-3 max-w-lg font-ambit leading-snug font-normal text-paper-dim text-[clamp(0.75rem,min(1.25vw,2.2vh),1.05rem)]">
+              <p className="mt-4 max-w-xl font-ambit leading-snug font-normal text-paper text-[clamp(0.8rem,min(1.5vw,2.6vh),1.25rem)]">
                 {tAbout("descriptionOutro")}
               </p>
-
-              <dl
-                className="motion-entrance mt-5 flex flex-wrap gap-x-7 gap-y-3 border-t border-line pt-4 will-change-transform"
-                style={{
-                  opacity: "var(--bars-opacity, 0)",
-                  transform: "translateY(calc((1 - var(--bars-scale, 0)) * 14px))",
-                }}
-              >
-                {STATS.map((stat) => (
-                  <div key={stat.key} className="flex flex-col">
-                    <dd
-                      className="font-ambit font-bold tabular-nums leading-none tracking-tight text-[clamp(1.1rem,min(2vw,3.4vh),1.9rem)]"
-                      style={{ color: stat.color }}
-                    >
-                      {stat.value}
-                    </dd>
-                    <dt className="mt-1 max-w-32 font-mono uppercase leading-tight tracking-[0.12em] text-paper-dim text-[clamp(0.5rem,min(0.75vw,1.25vh),0.72rem)]">
-                      {tAbout(`stats.${stat.key}`)}
-                    </dt>
-                  </div>
-                ))}
-              </dl>
             </div>
 
             {/* ── Columna derecha: los cuatro ejes en tipografía cinética ── */}
@@ -485,7 +494,7 @@ export function HeroAboutStage() {
                 transform: "translateY(calc((1 - var(--bars-scale, 0)) * 18px))",
               }}
             >
-              <p className="mb-3 font-mono uppercase tracking-[0.25em] text-paper-dim text-[clamp(0.55rem,min(0.8vw,1.35vh),0.78rem)]">
+              <p className="mb-4 font-mono uppercase tracking-[0.25em] text-paper-dim text-[clamp(0.6rem,min(0.9vw,1.5vh),0.86rem)]">
                 {tEjes("eyebrow")}
               </p>
 
@@ -495,25 +504,28 @@ export function HeroAboutStage() {
                   <button
                     key={eje.n}
                     type="button"
-                    aria-expanded={isActive}
+                    aria-pressed={isActive}
                     onMouseEnter={() => setActiveEje(i)}
                     onFocus={() => setActiveEje(i)}
                     onClick={() => setActiveEje(i)}
-                    className="group block w-full cursor-pointer border-0 bg-transparent py-1.5 text-left"
+                    className="group block w-full cursor-pointer border-0 bg-transparent py-2 text-left"
                   >
                     <span className="flex items-baseline gap-3 sm:gap-5">
                       <span
-                        className="shrink-0 font-mono tabular-nums tracking-[0.2em] transition-colors duration-500 text-[clamp(0.55rem,min(0.9vw,1.5vh),0.85rem)]"
+                        className="shrink-0 font-mono tabular-nums tracking-[0.2em] transition-colors duration-500 text-[clamp(0.6rem,min(1vw,1.7vh),0.95rem)]"
                         style={{ color: isActive ? eje.color : "var(--color-paper-dim)" }}
                       >
                         {eje.n}
                       </span>
                       <span
-                        className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.2rem,min(3.7vw,6.6vh),3.5rem)]"
+                        className="block font-ambit font-bold uppercase leading-[1.02] transition-[letter-spacing,color,opacity] duration-500 ease-out motion-reduce:transition-none text-[clamp(1.3rem,min(4.5vw,7.6vh),4.75rem)]"
                         style={{
                           color: isActive ? eje.color : "var(--color-paper)",
-                          opacity: isActive ? 1 : 0.4,
+                          opacity: isActive ? 1 : 0.92,
                           letterSpacing: isActive ? "0.03em" : "-0.02em",
+                          textShadow: isActive
+                            ? "none"
+                            : "0 2px 16px color-mix(in srgb, var(--color-ink) 85%, transparent)",
                         }}
                       >
                         {tEjes(`items.${eje.key}.title`)}
@@ -536,7 +548,7 @@ export function HeroAboutStage() {
               {/* Descripción del eje activo: alto reservado para que
                   cambiar de eje no mueva nunca las líneas de arriba. */}
               <p
-                className="mt-4 max-w-3xl border-l-2 pl-4 leading-relaxed text-paper-dim transition-colors duration-500 text-[clamp(0.8rem,min(1.3vw,2.2vh),1.1rem)]"
+                className="mt-6 max-w-3xl border-l-2 pl-4 leading-relaxed text-paper transition-colors duration-500 text-[clamp(0.85rem,min(1.55vw,2.6vh),1.3rem)]"
                 style={{
                   borderColor: activeEje === null ? "var(--color-line)" : EJES[activeEje].color,
                   minHeight: "4.5em",
@@ -562,6 +574,37 @@ export function HeroAboutStage() {
                 ))}
               </dl>
             </div>
+
+            {/* ── Tercera fila: los datos duros, a todo el ancho y al pie ──
+
+                Estaban apilados dentro de la columna izquierda, donde solo
+                tenían 400px: las etiquetas se partían en cuatro líneas
+                ("DÍAS DE / OCTUBRE, / CIUDAD / CULTURAL") y, sobre todo,
+                dejaban el tercio inferior del viewport vacío mientras el
+                bloque entero flotaba al medio. Como fila propia ocupan ese
+                hueco, alinean en cuatro columnas y cierran la composición
+                contra el borde de abajo. */}
+            <dl
+              className="motion-entrance grid grid-cols-2 gap-x-8 gap-y-5 border-t border-line pt-5 will-change-transform sm:grid-cols-4 lg:col-span-12"
+              style={{
+                opacity: "var(--bars-opacity, 0)",
+                transform: "translateY(calc((1 - var(--bars-scale, 0)) * 14px))",
+              }}
+            >
+              {STATS.map((stat) => (
+                <div key={stat.key} className="flex flex-col">
+                  <dd
+                    className="font-ambit font-bold tabular-nums leading-none tracking-tight text-[clamp(1.1rem,min(2.4vw,4vh),2.4rem)]"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.value}
+                  </dd>
+                  <dt className="mt-1 font-mono uppercase leading-tight tracking-[0.12em] text-paper-dim text-[clamp(0.55rem,min(0.85vw,1.45vh),0.82rem)]">
+                    {tAbout(`stats.${stat.key}`)}
+                  </dt>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </div>

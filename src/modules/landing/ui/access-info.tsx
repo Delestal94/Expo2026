@@ -105,7 +105,7 @@ export async function AccessInfo() {
                       {isFree && (
                         <span
                           aria-hidden="true"
-                          className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta-text uppercase shadow-[0_0_12px_rgba(217,70,239,0.35)]"
+                          className="absolute top-3 right-3 -rotate-6 rounded-full border border-dashed border-magenta bg-magenta/20 px-2.5 py-1 font-mono text-[0.62rem] font-bold tracking-[0.15em] text-magenta-text uppercase"
                         >
                           {t("pricing.freeBadge")}
                         </span>

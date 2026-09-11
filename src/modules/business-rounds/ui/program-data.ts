@@ -34,8 +34,11 @@ export const PROGRAM_DAYS: ProgramDay[] = [
     activities: [
       { time: "09:00", title: "Acreditaciones y desayuno de trabajo empresarial", tag: "Networking" },
       { time: "10:30", title: "Mesas de negocio: Minería, litio y proveedores locales", tag: "B2B" },
+      { time: "12:30", title: "Firma del primer memorando de entendimiento bilateral", tag: "Convenios" },
       { time: "15:00", title: "Corte de cinta y apertura de pabellones al público", tag: "Feria" },
+      { time: "16:30", title: "Recorrida institucional por los stands provinciales", tag: "Institucional" },
       { time: "18:00", title: "Panel: Jujuy en el mercado global del litio", tag: "Conferencia" },
+      { time: "20:00", title: "Brindis de bienvenida con delegaciones internacionales", tag: "Networking" },
     ],
   },
   {
