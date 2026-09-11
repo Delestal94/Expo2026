@@ -61,7 +61,7 @@ El índice de secciones (`SectionNav`) navega por ancla y resalta la sección ac
 | Tipografía de datos | `JetBrains Mono` | Cifras, fechas y etiquetas con precisión técnica |
 | Motion | Canvas 2D con bandas fluyendo + cuenta regresiva real al 9/10 | Refuerza el concepto sin depender de una librería pesada; respeta `prefers-reduced-motion` |
 
-Capturas del prototipo real (no wireframes) en la sección 12.
+El prototipo real —no wireframes— se puede recorrer en vivo: ver sección 12.
 
 ## 6. Arquitectura y factibilidad técnica
 
@@ -79,12 +79,12 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 
 | Módulo | Qué hace | Estado en este prototipo |
 |---|---|---|
-| Landing | Identidad, ejes, noticias, contacto y FAQ | **Construido** — ver sección 12 |
+| Landing | Identidad, ejes, noticias, contacto y FAQ | **Construido** — recorrerlo en vivo, ver sección 12 |
 | Registro de acceso | QR de ingreso, gratuito o pago según `ADMISSION_MODE` (ver §8) | **Construido** (alta de cuenta, login y QR de ingreso en modo gratuito); cobro en modo pago (Mercado Pago), pendiente |
-| Portal de expositores + rondas de negocios | Directorio con buscador y filtro por eje, matching por rubro/país, agenda de reuniones | **Construido** (datos de ejemplo) — ver sección 12 |
+| Portal de expositores + rondas de negocios | Directorio con buscador y filtro por eje, matching por rubro/país, agenda de reuniones | **Construido** (datos de ejemplo) — recorrerlo en vivo, ver sección 12 |
 | Agenda de actividades | Estructura diaria confirmada (rondas AM / expo PM) para los 4 días, con selector interactivo | **Construido** — la grilla horaria detallada de charlas y shows la publica la organización más cerca de la fecha |
 | Asistente con IA | Responde sobre fechas, sede, ejes y acceso recuperando el contenido real del sitio (RAG), en los 5 idiomas | **Construido** — endpoint propio contra OpenRouter; sin credencial cargada degrada a respuestas guiadas en vez de fallar. La derivación a un humano está diseñada, no construida |
-| Mapa interactivo | Plano calcado del CAD de Ciudad Cultural, con más de 200 zonas filtrables por categoría | **Construido** — ver sección 12 |
+| Mapa interactivo | Plano calcado del CAD de Ciudad Cultural, con más de 200 zonas filtrables por categoría | **Construido** — recorrerlo en vivo, ver sección 12 |
 
 ## 8. Dos decisiones que no bloquearon el avance
 
@@ -93,6 +93,8 @@ Evidencia de que esto no es solo un documento: el repositorio tiene CI corriendo
 **Alta de expositores.** Los proveedores no se registran en el sitio: se postulan por la convocatoria oficial de la Cámara (formulario de Google) y por WhatsApp. El portal de expositores deriva a esos canales reales en vez de duplicar un formulario propio. Detalle en [ADR-0005](adr/0005-acceso-libre-sin-registro.md).
 
 ## 9. Uso responsable de IA
+
+> Declaración formal completa, con el detalle de herramientas y finalidades que exige el Art. 11 de las Bases: [`docs/declaracion-uso-ia.md`](declaracion-uso-ia.md).
 
 El asistente conversacional (módulo `aiAssistant`) se diseñó con estas reglas, no como una ocurrencia tardía:
 
@@ -122,13 +124,26 @@ No hay un breakpoint "mobile" tratado como una versión reducida del sitio de es
 
 Verificado manualmente en 390px (mobile), 768px (tablet) y 1440px/1920px (desktop) en cada sección nueva antes de integrarla.
 
-## 12. Repositorio y prototipo funcional
+## 12. Cómo verlo y cómo verificarlo
 
-- **Sitio en vivo: [expojuy2026.vercel.app](https://expojuy2026.vercel.app)** — no hace falta clonar nada para navegarlo.
-- Repositorio público: [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026) — código real, no solo mockup.
-- CI en verde en cada cambio: [Actions](https://github.com/Delestal94/Expo2026/actions).
+No hace falta clonar ni instalar nada para evaluar la propuesta.
+
+| Qué | Dónde |
+|---|---|
+| **Prototipo funcional navegable** | **[expojuy2026.vercel.app](https://expojuy2026.vercel.app)** |
+| **Suite de mockups estáticos** (6 pantallas: roadmap, acreditación QR, rondas B2B, asistente, galería, plano) | **[expojuy2026.vercel.app/mockups/](https://expojuy2026.vercel.app/mockups/)** |
+| **Recorrido guiado para el jurado** — qué mirar, en qué orden y por qué | [`docs/GUIA-DEL-JURADO.md`](GUIA-DEL-JURADO.md) |
+| Repositorio público con el código real | [github.com/Delestal94/Expo2026](https://github.com/Delestal94/Expo2026) |
+
+Y para verificar que el trabajo es real, no declarado:
+
+- **153 Pull Requests mergeados** entre el 31/08 y el 08/09, con fecha pública — [historial de PRs](https://github.com/Delestal94/Expo2026/pulls?q=is%3Apr+is%3Amerged).
+- **CI en verde en cada cambio**: lint (con límites entre módulos), type-check, **102 tests** y build de producción — [Actions](https://github.com/Delestal94/Expo2026/actions).
+- **Cero commits directos** a `main` o `develop`: todo entró por Pull Request con revisión.
+- **Auditoría de cumplimiento** contra cada consigna, incluido lo que no está al 100% — [`docs/matriz-consignas-desafio.md`](matriz-consignas-desafio.md).
+- **El método completo**, documentado — [`docs/proceso-de-trabajo.md`](proceso-de-trabajo.md).
+- Documentación técnica: [`docs/architecture.md`](architecture.md), [decisiones de arquitectura](adr/), [tecnologías propuestas](tecnologias-propuestas.md).
 - Board de tareas mapeado al roadmap: [Project ExpoJuy 2026](https://github.com/users/Delestal94/projects/1).
-- Documentación técnica completa: [`docs/architecture.md`](architecture.md), [decisiones de arquitectura](adr/).
 
 ## 13. Roadmap
 
@@ -145,5 +160,5 @@ La landing, el registro de acceso, el portal de expositores, el mapa interactivo
 
 | Integrante | Rol |
 |---|---|
-| Delestal94 | _(completar)_ |
-| Maximiliano Lezano | _(completar)_ |
+| **Miguel Ignacio Delestal** ([@Delestal94](https://github.com/Delestal94)) | **Representante del equipo** e interlocutor oficial ante la organización · Arquitectura de software y desarrollo |
+| **Maximiliano Lezano** ([@MaxLezano](https://github.com/MaxLezano)) | Desarrollo · Diseño UX/UI |

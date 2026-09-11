@@ -116,11 +116,11 @@
  * falta el mismo contraste que en texto plano.
  */
 :root[data-theme="light"] {
-  --color-ink: #f5f1e8;
+  --color-ink: #f2ede1;
   --color-paper: #0d0b2e;
   --color-paper-dim: #6b6355;
   --color-line: rgba(13, 11, 46, 0.14);
-  --color-surface: #fbf9f4;
+  --color-surface: #f8f4ea;
   --color-accent: #0f766e;
   --color-cyan-text: #0f766e;
   --color-violet-text: #6d28d9;
