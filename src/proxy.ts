@@ -10,9 +10,11 @@ import { routing } from "@/lib/i18n/routing";
 export default createMiddleware(routing);
 
 export const config = {
-  // Corre en toda la app salvo assets estáticos y API routes. El editor
+  // Corre en toda la app salvo assets estáticos, API routes y /mockups
+  // (la suite de mockups estáticos del concurso: se sirve tal cual desde
+  // public/ y no tiene versión por idioma — ver next.config.ts). El editor
   // interno del mapa vive bajo [locale] igual que el resto (así hay un
   // único layout raíz con <html>/<body>, ver ADR-0007) pero no usa
   // traducciones — el locale que le toque es irrelevante para su UI.
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|_vercel|mockups|.*\\..*).*)"],
 };

@@ -29,17 +29,22 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-pressed={isLight}
       aria-label={isLight ? t("switchToDark") : t("switchToLight")}
-      className="flex h-11 w-11 items-center justify-center rounded-full text-paper-dim transition-colors hover:text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="group flex min-h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
-      {isLight ? (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m9-9h-1.5M4.5 12H3m15.36-6.36-1.06 1.06M6.7 17.3l-1.06 1.06m0-12.72 1.06 1.06M17.3 17.3l1.06 1.06M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
-        </svg>
-      )}
+      {/* Círculo visual del mismo alto que las píldoras del selector de
+          idioma (h-8/h-9) para que ambos controles lean como un solo grupo
+          en mobile — el botón conserva el hit-area de 44px por fuera. */}
+      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-surface/80 text-paper-dim backdrop-blur-sm transition-colors group-hover:text-paper sm:h-9 sm:w-9">
+        {isLight ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1.5m0 15V21m9-9h-1.5M4.5 12H3m15.36-6.36-1.06 1.06M6.7 17.3l-1.06 1.06m0-12.72 1.06 1.06M17.3 17.3l1.06 1.06M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+          </svg>
+        )}
+      </span>
     </button>
   );
 }

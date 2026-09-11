@@ -58,11 +58,13 @@ const PALETTE = ["#2de3d6", "#7c4dff", "#b83fe0", "#b9a6f5"];
  * original con `shadowBlur`, pero llegando por una rampa en vez de por un
  * escalón.
  *
- * Cinco es el punto de equilibrio: con menos vuelve a notarse el borde, y
- * cada capa extra es otro stroke del path por banda y por frame.
+ * Diez es el punto de equilibrio: con menos se notan los anillos de la
+ * aproximación (cada capa es un escalón de opacidad, y con pocas capas el
+ * ojo distingue el escalón como un anillo duro), y cada capa extra es otro
+ * stroke del path por banda y por frame.
  */
-const GLOW_LAYERS = 5;
-const LAYER_ALPHA = 0.129;
+const GLOW_LAYERS = 10;
+const LAYER_ALPHA = 0.1;
 
 function createBands(height: number): Band[] {
   return PALETTE.map((color, i) => ({

@@ -30,6 +30,8 @@ export function ChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialMessageShown = useRef(false);
+  const panelRef = useRef<HTMLElement>(null);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
 
   const rawLocale = useLocale();
   const locale: ChatbotLocale =
@@ -76,15 +78,38 @@ export function ChatBot() {
     }
   }, [isOpen]);
 
-  // Close on Escape key
+  // Close on Escape key, atrapa el Tab dentro del panel mientras está
+  // abierto y devuelve el foco al botón que lo abrió al cerrar — el mismo
+  // contrato que ya cumple el modal de la galería (gallery-grid.tsx).
   useEffect(() => {
+    if (!isOpen) return;
+
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === "Escape") {
         setIsOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusable = panelRef.current?.querySelectorAll<HTMLElement>(
+        "button, [href], input, textarea, select, [tabindex]:not([tabindex='-1'])",
+      );
+      if (!focusable || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     }
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      openButtonRef.current?.focus();
+    };
   }, [isOpen]);
 
   const handleOpen = () => {
@@ -178,6 +203,7 @@ export function ChatBot() {
           className="fixed right-6 bottom-24 z-50 transition-transform duration-200 ease-out hover:scale-105 lg:bottom-6 motion-safe:animate-[bot-dock-in_0.45s_cubic-bezier(0.16,1,0.3,1)_backwards]"
         >
           <button
+            ref={openButtonRef}
             type="button"
             onClick={handleOpen}
             aria-label={t.openLabel}
@@ -217,7 +243,9 @@ export function ChatBot() {
       {/* Ventana del Chat */}
       {isOpen && (
         <section
+          ref={panelRef}
           role="dialog"
+          aria-modal="true"
           aria-label={t.assistantTitle}
           // El panel se monta al abrir: una `transition` sobre un elemento
           // recién montado nunca dispara (no hay estado anterior desde el

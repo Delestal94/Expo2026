@@ -27,8 +27,8 @@ Detalle técnico completo en [`docs/architecture.md`](architecture.md).
 
 | Integrante | Rol |
 |---|---|
-| Delestal94 | _(completar)_ |
-| Maximiliano Lezano | _(completar)_ |
+| **Miguel Ignacio Delestal** ([@Delestal94](https://github.com/Delestal94)) | **Representante del equipo** e interlocutor oficial ante la organización · Arquitectura de software y desarrollo |
+| **Maximiliano Lezano** ([@MaxLezano](https://github.com/MaxLezano)) | Desarrollo · Diseño UX/UI |
 
 ## 5. Bitácora de avance
 
