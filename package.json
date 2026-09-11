@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "@supabase/auth-js": "^2.112.4",
+    "@supabase/auth-js": "^2.115.0",
     "@supabase/realtime-js": "^2.115.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "next": "16.3.4",
