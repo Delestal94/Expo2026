@@ -16,7 +16,7 @@
     "eyebrow": "Interactive map",
     "title": "The venue plan, as data — not a static image",
     "description": "Traced from the 2024 plan at Ciudad Cultural: the covered pavilion, the outdoor stands, the food court and the service areas. Filter by type or tap a stand to see its code and area. The counts per category match the trace; the final 2026 layout is confirmed with the Chamber.",
-    "svgLabel": "Ciudad Cultural venue plan with the 2024 edition's stands",
+    "svgLabel": "Site plan of Ciudad Cultural: perimeter streets, main pedestrian entrance on the west side, vehicle entrance and parking on the north-east, and the 2024 stands grouped by sector.",
     "legend": "Legend",
     "area": "{m2} m² of floor space",
     "standHint": "Stands are assigned through the Chamber's official call for exhibitors, not from this site.",
@@ -58,7 +58,23 @@
     "selectedStand": "Selected stand:",
     "tapHint": "Tap any stand to see its features and services",
     "clearSelection": "Clear selection",
-    "backToVenue": "See general venue information"
+    "backToVenue": "See general venue information",
+    "context": {
+      "streetNorth": "North perimeter street",
+      "streetSouth": "South perimeter street",
+      "streetWest": "Pedestrian access road",
+      "streetEast": "Vehicle access road",
+      "parking": "Parking",
+      "accessMain": "Main entrance",
+      "accessVehicle": "Vehicle entrance",
+      "sectorInstitutional": "Institutional area",
+      "sectorPavilion": "Indoor pavilion",
+      "sectorOutdoor": "Outdoor stands",
+      "sectorFood": "Food court",
+      "sectorServices": "Services and play area",
+      "north": "N",
+      "scale": "20 m"
+    }
   },
   "Landing": {
     "Hero": {
@@ -160,7 +176,7 @@
     },
     "Faq": {
       "eyebrow": "Frequently asked questions",
-      "title": "Before you ask",
+      "title": "Everything you need to know",
       "items": {
         "dates": {
           "question": "When and where is ExpoJuy 2026?",
@@ -202,6 +218,25 @@
       "organizerAlt": "Jujuy Foreign Trade Chamber",
       "institutions": "Jujuy Foreign Trade Chamber · Ministry of Economic Development and Production · Provincial Directorate of Knowledge-Based Services · Clustear.",
       "badge": "Prototype — 2026 Digital Challenge"
+    },
+    "SectionNav": {
+      "ariaLabel": "Page sections",
+      "sections": {
+        "sobre": { "label": "About the event", "shortLabel": "About" },
+        "noticias": { "label": "News", "shortLabel": "News" },
+        "galeria": { "label": "Gallery", "shortLabel": "Gallery" },
+        "mapa": { "label": "Map", "shortLabel": "Map" },
+        "agenda": { "label": "Agenda", "shortLabel": "Agenda" },
+        "expositores": { "label": "Exhibitors", "shortLabel": "Exhibitors" },
+        "llegar": { "label": "Access and getting there", "shortLabel": "Access" },
+        "faq": { "label": "Frequently asked questions", "shortLabel": "FAQ" },
+        "sponsors": { "label": "Sponsors", "shortLabel": "Sponsors" },
+        "contacto": { "label": "Contact", "shortLabel": "Contact" },
+        "redes": { "label": "Social media", "shortLabel": "Social" }
+      }
+    },
+    "LanguageSwitcher": {
+      "ariaLabel": "Choose language"
     }
   },
   "Pages": {
@@ -324,6 +359,12 @@
       "title": "Four days, one steady rhythm",
       "description": "Business rounds in the morning, expo in the afternoon — that's the 2026 format the organization confirmed. The detailed schedule of talks, panels and evening shows will be published closer to the date, as in the previous edition.",
       "dayTabsLabel": "Choose an agenda day",
+      "activitiesLabel": "Featured activities",
+      "liveBadge": "Live now",
+      "confirmedBadge": "Confirmed",
+      "nowBadge": "Now",
+      "showMore": "Show {count, plural, one {# more activity} other {# more activities}}",
+      "showLess": "Show fewer activities",
       "morningLabel": "Morning",
       "morningContent": "International business rounds — Bioceanic Corridor",
       "afternoonLabel": "Afternoon",
@@ -347,7 +388,9 @@
     "closeLabel": "Close",
     "prevLabel": "Previous photo",
     "nextLabel": "Next photo",
-    "dialogAnnounce": "Photo {current} of {total}: {alt}"
+    "dialogAnnounce": "Photo {current} of {total}: {alt}",
+    "compositionSelectorLabel": "Composition selector",
+    "compositionLabel": "Composition {n}"
   },
   "News": {
     "eyebrow": "News",

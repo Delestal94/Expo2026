@@ -16,7 +16,7 @@
     "eyebrow": "互动地图",
     "title": "场地平面图，以数据呈现——而非静态图片",
     "description": "根据2024年文化城（Ciudad Cultural）的平面图绘制：室内展馆、露天展位、美食广场和服务区。按类型筛选，或点击展位查看编号和面积。各类别数量以此图为准；2026年的最终布局将与商会确认。",
-    "svgLabel": "文化城场地平面图，含2024届展位",
+    "svgLabel": "Ciudad Cultural 会场平面图：环绕场地的道路、西侧的主要步行入口、东北侧的车辆入口与停车场，以及按区域分组的 2024 年展位。",
     "legend": "图例",
     "area": "{m2} 平方米",
     "standHint": "展位由商会官方招募流程分配，本网站不负责分配。",
@@ -58,7 +58,23 @@
     "selectedStand": "已选展位：",
     "tapHint": "点击任一展位即可查看其特点与配套服务",
     "clearSelection": "清除选择",
-    "backToVenue": "查看场馆总体信息"
+    "backToVenue": "查看场馆总体信息",
+    "context": {
+      "streetNorth": "北侧环路",
+      "streetSouth": "南侧环路",
+      "streetWest": "步行入口道路",
+      "streetEast": "车辆入口道路",
+      "parking": "停车场",
+      "accessMain": "主入口",
+      "accessVehicle": "车辆入口",
+      "sectorInstitutional": "机构展区",
+      "sectorPavilion": "室内展馆",
+      "sectorOutdoor": "室外展位",
+      "sectorFood": "美食广场",
+      "sectorServices": "服务与游乐区",
+      "north": "北",
+      "scale": "20 米"
+    }
   },
   "Landing": {
     "Hero": {
@@ -160,7 +176,7 @@
     },
     "Faq": {
       "eyebrow": "常见问题",
-      "title": "在您提问之前",
+      "title": "您需要了解的一切",
       "items": {
         "dates": {
           "question": "ExpoJuy 2026 何时何地举行？",
@@ -202,6 +218,25 @@
       "organizerAlt": "胡胡伊对外贸易商会",
       "institutions": "胡胡伊对外贸易商会 · 经济发展与生产部 · 省知识型服务管理局 · Clustear。",
       "badge": "原型 — 2026年数字挑战赛"
+    },
+    "SectionNav": {
+      "ariaLabel": "页面分区",
+      "sections": {
+        "sobre": { "label": "关于活动", "shortLabel": "关于" },
+        "noticias": { "label": "新闻", "shortLabel": "新闻" },
+        "galeria": { "label": "图库", "shortLabel": "图库" },
+        "mapa": { "label": "地图", "shortLabel": "地图" },
+        "agenda": { "label": "日程", "shortLabel": "日程" },
+        "expositores": { "label": "参展商", "shortLabel": "参展商" },
+        "llegar": { "label": "交通与入场", "shortLabel": "交通" },
+        "faq": { "label": "常见问题", "shortLabel": "常见问题" },
+        "sponsors": { "label": "赞助商", "shortLabel": "赞助商" },
+        "contacto": { "label": "联系方式", "shortLabel": "联系" },
+        "redes": { "label": "社交媒体", "shortLabel": "社交" }
+      }
+    },
+    "LanguageSwitcher": {
+      "ariaLabel": "选择语言"
     }
   },
   "Pages": {
@@ -324,6 +359,12 @@
       "title": "四天，同一个节奏",
       "description": "上午商务对接、下午展览——这是主办方确认的2026年活动形式。具体的讲座、圆桌论坛和夜间演出时间表将在活动临近时公布，与上一届的做法一致。",
       "dayTabsLabel": "选择日程日期",
+      "activitiesLabel": "重点活动",
+      "liveBadge": "进行中",
+      "confirmedBadge": "已确认",
+      "nowBadge": "正在进行",
+      "showMore": "再显示 {count} 项活动",
+      "showLess": "收起活动",
       "morningLabel": "上午",
       "morningContent": "国际商务对接会 — 双洋走廊",
       "afternoonLabel": "下午",
@@ -347,7 +388,9 @@
     "closeLabel": "关闭",
     "prevLabel": "上一张照片",
     "nextLabel": "下一张照片",
-    "dialogAnnounce": "第 {current} 张，共 {total} 张：{alt}"
+    "dialogAnnounce": "第 {current} 张，共 {total} 张：{alt}",
+    "compositionSelectorLabel": "构图选择器",
+    "compositionLabel": "构图 {n}"
   },
   "News": {
     "eyebrow": "新闻",

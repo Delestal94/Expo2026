@@ -7,6 +7,7 @@ import Script from "next/script";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
 import { routing } from "@/lib/i18n/routing";
+import { SCROLL_RESTORATION_INIT_SCRIPT } from "@/lib/ui/scroll";
 import { THEME_INIT_SCRIPT } from "@/lib/ui/theme";
 import { ThemeSync } from "@/lib/ui/theme-sync";
 import "@/app/globals.css";
@@ -114,6 +115,11 @@ export default async function LocaleLayout({ children, params }: Props) {
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
+        <Script
+          id="scroll-restoration-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: SCROLL_RESTORATION_INIT_SCRIPT }}
         />
       </head>
       <body className="font-body antialiased overflow-x-clip">
