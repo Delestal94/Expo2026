@@ -16,7 +16,7 @@
     "eyebrow": "Mapa interativo",
     "title": "O mapa do local, como dados — não como uma imagem fixa",
     "description": "Traçado a partir do mapa da edição 2024 na Ciudad Cultural: o pavilhão coberto, os estandes ao ar livre, a praça de alimentação e as áreas de serviço. Filtre por tipo ou toque em um estande para ver seu código e área. As quantidades por categoria são as do traçado; o layout definitivo de 2026 é confirmado com a Câmara.",
-    "svgLabel": "Mapa do local da Ciudad Cultural com os estandes da edição 2024",
+    "svgLabel": "Planta do recinto Ciudad Cultural: ruas perimetrais, acesso principal de pedestres pelo oeste, acesso de veículos e estacionamento pelo nordeste, e os estandes da edição 2024 agrupados por setor.",
     "legend": "Legenda",
     "area": "{m2} m² de área",
     "standHint": "Os estandes são atribuídos pela convocatória oficial da Câmara, não a partir deste site.",
@@ -58,7 +58,23 @@
     "selectedStand": "Estande selecionado:",
     "tapHint": "Toque em qualquer estande para ver características e serviços",
     "clearSelection": "Limpar seleção",
-    "backToVenue": "Ver informações gerais do local"
+    "backToVenue": "Ver informações gerais do local",
+    "context": {
+      "streetNorth": "Rua perimetral norte",
+      "streetSouth": "Rua perimetral sul",
+      "streetWest": "Via de acesso de pedestres",
+      "streetEast": "Via de acesso de veículos",
+      "parking": "Estacionamento",
+      "accessMain": "Acesso principal",
+      "accessVehicle": "Acesso de veículos",
+      "sectorInstitutional": "Setor institucional",
+      "sectorPavilion": "Pavilhão coberto",
+      "sectorOutdoor": "Estandes descobertos",
+      "sectorFood": "Praça de alimentação",
+      "sectorServices": "Serviços e brinquedos",
+      "north": "N",
+      "scale": "20 m"
+    }
   },
   "Landing": {
     "Hero": {
@@ -160,7 +176,7 @@
     },
     "Faq": {
       "eyebrow": "Perguntas frequentes",
-      "title": "Antes que você pergunte",
+      "title": "Tudo o que você precisa saber",
       "items": {
         "dates": {
           "question": "Quando e onde é a ExpoJuy 2026?",
@@ -202,6 +218,25 @@
       "organizerAlt": "Câmara de Comércio Exterior de Jujuy",
       "institutions": "Câmara de Comércio Exterior de Jujuy · Ministério do Desenvolvimento Econômico e Produção · Diretoria Provincial de Serviços Baseados em Conhecimento · Clustear.",
       "badge": "Protótipo — Desafio Digital 2026"
+    },
+    "SectionNav": {
+      "ariaLabel": "Seções da página",
+      "sections": {
+        "sobre": { "label": "Sobre o evento", "shortLabel": "Sobre" },
+        "noticias": { "label": "Notícias", "shortLabel": "Notícias" },
+        "galeria": { "label": "Galeria", "shortLabel": "Galeria" },
+        "mapa": { "label": "Mapa", "shortLabel": "Mapa" },
+        "agenda": { "label": "Agenda", "shortLabel": "Agenda" },
+        "expositores": { "label": "Expositores", "shortLabel": "Expositores" },
+        "llegar": { "label": "Acesso e como chegar", "shortLabel": "Acesso" },
+        "faq": { "label": "Perguntas frequentes", "shortLabel": "FAQ" },
+        "sponsors": { "label": "Patrocinadores", "shortLabel": "Patrocinadores" },
+        "contacto": { "label": "Contato", "shortLabel": "Contato" },
+        "redes": { "label": "Redes sociais", "shortLabel": "Redes" }
+      }
+    },
+    "LanguageSwitcher": {
+      "ariaLabel": "Escolher idioma"
     }
   },
   "Pages": {
@@ -324,6 +359,12 @@
       "title": "Quatro dias, um mesmo ritmo",
       "description": "Manhã de rodadas de negócios, tarde de feira — assim a organização confirmou o formato 2026. A grade horária de palestras, painéis e shows noturnos é publicada mais perto da data, como na edição anterior.",
       "dayTabsLabel": "Escolher dia da agenda",
+      "activitiesLabel": "Atividades em destaque",
+      "liveBadge": "Ao vivo",
+      "confirmedBadge": "Confirmado",
+      "nowBadge": "Agora",
+      "showMore": "Ver {count, plural, one {mais # atividade} other {mais # atividades}}",
+      "showLess": "Ver menos atividades",
       "morningLabel": "Manhã",
       "morningContent": "Rodadas de negócios internacionais — Corredor Bioceânico",
       "afternoonLabel": "Tarde",
@@ -347,7 +388,9 @@
     "closeLabel": "Fechar",
     "prevLabel": "Foto anterior",
     "nextLabel": "Próxima foto",
-    "dialogAnnounce": "Foto {current} de {total}: {alt}"
+    "dialogAnnounce": "Foto {current} de {total}: {alt}",
+    "compositionSelectorLabel": "Seletor de composição",
+    "compositionLabel": "Composição {n}"
   },
   "News": {
     "eyebrow": "Notícias",

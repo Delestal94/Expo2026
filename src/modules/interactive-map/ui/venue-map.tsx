@@ -4,10 +4,8 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CATEGORIES, VENUE_PLAN, categoryMeta, polygonPoints } from "./venue-plan";
 import type { Category, VenueZone } from "./venue-plan";
+import { VENUE_VIEW_BOX, VenueContext } from "./venue-context";
 import { useMapPresence } from "./use-map-presence";
-
-const VIEW_W = 1200;
-const VIEW_H = 865;
 
 /** Categorías que son stands asignables; el resto es contexto del predio. */
 const STAND_CATEGORIES: Category[] = ["cubierto", "artesano", "descubierto", "gastronomico", "juego"];
@@ -355,30 +353,30 @@ export function VenueMap() {
   }, []);
 
   return (
-    <div ref={rootRef} className="w-full h-full flex-1 flex flex-col min-h-0">
+    <div ref={rootRef} className="w-full h-auto lg:h-full flex-1 flex flex-col min-h-0">
       {/* ── Grilla Principal:
           Columna Izquierda: Encabezado de la sección + Selector rápido e Inspector
           Columna Derecha: Filtros superiores de categorías + Gran Lienzo del Mapa (Captura 1 y 2)
       ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-8 items-stretch w-full flex-1 h-full min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 xl:gap-8 items-start lg:items-stretch w-full flex-1 h-auto lg:h-full min-h-0">
         {/* ── COLUMNA IZQUIERDA: Header + Inspector ── */}
-        <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between h-full min-h-0 gap-4 xl:gap-5">
+        <div className="lg:col-span-4 xl:col-span-4 flex flex-col h-auto lg:h-full min-h-0 gap-4 lg:gap-3 xl:gap-5">
           {/* Bloque de Cabecera: Eyebrow + Título + Descripción (Captura 1) */}
-          <div className="flex flex-col gap-2 xl:gap-3 shrink-0">
+          <div className="flex flex-col gap-2 lg:gap-1.5 xl:gap-3 shrink-0">
             <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase">
               {t("eyebrow")}
             </span>
-            <h2 className="text-balance font-display text-2xl sm:text-3xl xl:text-4xl font-medium text-paper leading-[1.14]">
+            <h2 className="text-balance font-display text-2xl sm:text-3xl lg:text-2xl xl:text-4xl font-medium text-paper leading-[1.14]">
               {t("title")}
             </h2>
-            <p className="text-xs xl:text-sm text-paper-dim leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-xs xl:text-base text-paper-dim leading-relaxed">
               {t("description")}
             </p>
           </div>
 
           {/* Tarjeta del Inspector: Selector Rápido + Ficha Técnica / Estado Inicial */}
           <div
-            className="relative flex-1 min-h-0 rounded-2xl bg-ink/80 p-4 sm:p-5 xl:p-6 backdrop-blur-md shadow-xl flex flex-col justify-between gap-4 overflow-y-auto overflow-x-hidden border"
+            className="relative h-auto lg:flex-1 lg:min-h-0 rounded-2xl bg-ink/80 p-4 sm:p-5 lg:p-4 xl:p-7 backdrop-blur-md shadow-xl flex flex-col gap-4 sm:gap-5 lg:gap-3 xl:gap-6 overflow-visible lg:overflow-y-auto border"
             style={{
               borderColor: isDrawn
                 ? "var(--color-line)"
@@ -411,7 +409,7 @@ export function VenueMap() {
 
             {/* Contenido interior que aparece a medida que se dibuja el borde */}
             <div
-              className={`flex flex-col justify-between gap-4 flex-1 min-h-0 transition-opacity motion-entrance ${isDrawn ? "" : "will-change-transform"}`}
+              className={`flex flex-col gap-4 transition-opacity motion-entrance ${isDrawn ? "" : "will-change-transform"}`}
               style={{
                 opacity: isDrawn ? 1 : "var(--map-left-content-opacity, 0)",
                 transform: isDrawn
@@ -420,13 +418,13 @@ export function VenueMap() {
               }}
             >
               {/* Selector rápido de stand */}
-              <div className="flex flex-col gap-1.5 shrink-0">
+              <div className="flex flex-col gap-1.5 lg:gap-1 shrink-0">
                 <label
                   htmlFor="stand-quick-select"
-                  className="font-mono text-[0.68rem] tracking-[0.15em] text-paper-dim uppercase flex items-center justify-between"
+                  className="font-mono text-xs sm:text-sm lg:text-[0.68rem] xl:text-sm tracking-[0.15em] text-paper-dim uppercase flex items-center justify-between"
                 >
                   <span>{t("quickSelect")}</span>
-                  <span className="text-paper-dim/60 font-mono text-[0.65rem]">{totalStands} stands</span>
+                  <span className="text-paper-dim/60 font-mono text-xs sm:text-sm lg:text-[0.65rem] xl:text-sm">{totalStands} stands</span>
                 </label>
                 <div ref={dropdownRef} className="relative w-full">
                   {/* Select nativo oculto para accesibilidad y pruebas */}
@@ -457,7 +455,7 @@ export function VenueMap() {
                     aria-haspopup="listbox"
                     aria-expanded={isDropdownOpen}
                     onClick={() => setIsDropdownOpen((prev) => !prev)}
-                    className="w-full cursor-pointer rounded-xl border border-line bg-surface pl-3.5 pr-10 py-2.5 text-xs text-left text-paper outline-none transition focus-visible:border-accent hover:border-paper-dim flex items-center justify-between"
+                    className="w-full cursor-pointer rounded-xl border border-line bg-surface pl-3.5 pr-10 py-2.5 sm:py-3 lg:py-2 xl:py-3.5 text-sm sm:text-base lg:text-xs xl:text-base text-left text-paper outline-none transition focus-visible:border-accent hover:border-paper-dim flex items-center justify-between"
                   >
                     <span className="truncate">
                       {active ? (
@@ -494,7 +492,7 @@ export function VenueMap() {
                   {isDropdownOpen && (
                     <div
                       role="listbox"
-                      className="absolute z-50 top-full left-0 mt-1.5 w-full max-h-60 overflow-y-auto rounded-xl border border-line bg-surface/95 backdrop-blur-md p-1.5 shadow-2xl [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.35)_#070b1e] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#070b1e] [&::-webkit-scrollbar-thumb]:bg-paper-dim/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-accent"
+                      className="absolute z-50 top-full left-0 mt-1.5 w-full max-h-60 overflow-y-auto rounded-xl border border-line bg-surface/95 backdrop-blur-md p-1.5 shadow-2xl [scrollbar-width:thin] [scrollbar-color:rgba(45,227,214,0.35)_var(--color-surface)] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-surface [&::-webkit-scrollbar-thumb]:bg-paper-dim/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-accent"
                     >
                       <button
                         type="button"
@@ -565,7 +563,7 @@ export function VenueMap() {
 
               {/* Ficha de Stand Seleccionado vs Estado Inicial */}
               {active ? (
-                <div className="flex flex-col justify-between gap-4 flex-1 min-h-0">
+                <div className="flex flex-col gap-5 xl:gap-6">
                   <div className="flex flex-col gap-3">
                     {/* Cabecera del Stand */}
                     <div className="flex flex-col gap-1.5">
@@ -644,49 +642,57 @@ export function VenueMap() {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col justify-between gap-4 flex-1 min-h-0">
-                  <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-6 lg:gap-4 xl:gap-8">
+                  <div className="flex flex-col gap-4 lg:gap-2.5 xl:gap-5">
                     {/* Encabezado sin selección */}
-                    <div className="flex flex-col gap-1">
-                      <h3 className="font-display text-xl xl:text-2xl font-medium text-paper">{t("emptyTitle")}</h3>
-                      <p className="text-xs text-paper-dim leading-relaxed">{t("emptyHint")}</p>
+                    <div className="flex flex-col gap-2 lg:gap-1">
+                      <h3 className="font-display text-xl sm:text-2xl lg:text-lg xl:text-3xl font-medium text-paper">{t("emptyTitle")}</h3>
+                      <p className="text-sm sm:text-base lg:text-xs xl:text-lg text-paper-dim leading-relaxed">{t("emptyHint")}</p>
                     </div>
 
-                    {/* Ficha informativa del predio (Captura 1) */}
-                    <div className="rounded-xl border border-line/60 bg-surface p-3.5 text-xs text-paper-dim space-y-2">
-                      <span className="font-mono text-[0.68rem] font-semibold tracking-wider text-accent uppercase block">
+                    {/* Ficha informativa del predio: tarjetas de estadísticas (Captura 1) */}
+                    <div className="flex flex-col gap-2.5 lg:gap-2 xl:gap-3">
+                      <span className="font-mono text-xs sm:text-sm lg:text-[0.68rem] xl:text-sm font-semibold tracking-wider text-accent uppercase block">
                         {t("venueTitle")}
                       </span>
-                      <div className="flex justify-between border-b border-line/40 pb-1.5">
-                        <span>{t("venueArea")}</span>
-                        <strong className="font-mono text-paper">25.000 m²</strong>
-                      </div>
-                      <div className="flex justify-between border-b border-line/40 pb-1.5">
-                        <span>{t("venueStands")}</span>
-                        <strong className="font-mono text-paper">+200 espacios</strong>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>{t("venueParking")}</span>
-                        <strong className="font-mono text-paper">+1.500 vehículos</strong>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2.5 lg:gap-2 xl:gap-3">
+                        {[
+                          { label: t("venueArea"), value: "25.000 m²" },
+                          { label: t("venueStands"), value: "+200 espacios" },
+                          { label: t("venueParking"), value: "+1.500 vehículos" },
+                        ].map((stat) => (
+                          <div
+                            key={stat.label}
+                            className="rounded-xl border border-line/60 bg-surface p-4 lg:p-2.5 xl:p-5 flex flex-col gap-1.5 lg:gap-1"
+                          >
+                            <span className="text-xs sm:text-sm lg:text-[0.68rem] xl:text-sm text-paper-dim">{stat.label}</span>
+                            <strong className="font-mono text-lg sm:text-xl lg:text-sm xl:text-2xl text-paper">
+                              {stat.value}
+                            </strong>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
 
                   {/* Leyenda de referencias por categoría (Captura 1) */}
-                  <div className="flex flex-col gap-2 shrink-0">
-                    <span className="font-mono text-[0.65rem] tracking-[0.2em] text-paper-dim uppercase">
+                  <div className="flex flex-col gap-3 lg:gap-2 xl:gap-4 shrink-0">
+                    <span className="font-mono text-xs sm:text-sm lg:text-[0.65rem] xl:text-sm tracking-[0.2em] text-paper-dim uppercase">
                       {t("legend")}
                     </span>
-                    <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs">
+                    <ul className="grid grid-cols-2 gap-x-3 gap-y-3 lg:gap-y-1.5 xl:gap-y-4 text-sm sm:text-base lg:text-xs xl:text-base">
                       {CATEGORIES.map((cat) => (
-                        <li key={cat.id} className="flex items-center gap-2 text-paper-dim">
+                        <li
+                          key={cat.id}
+                          className="flex items-center gap-2.5 lg:gap-1.5 text-paper-dim rounded-lg border border-line/40 bg-surface/60 px-3 lg:px-2 py-2 lg:py-1 xl:py-2.5"
+                        >
                           <span
                             aria-hidden="true"
-                            className="h-2.5 w-2.5 shrink-0 rounded-full"
+                            className="h-3 w-3 sm:h-3.5 sm:w-3.5 lg:h-2.5 lg:w-2.5 xl:h-3.5 xl:w-3.5 shrink-0 rounded-full"
                             style={{ backgroundColor: cat.color }}
                           />
-                          <span className="truncate text-[0.75rem]">{t(`category.${cat.id}`)}</span>
-                          <span className="ml-auto font-mono text-[0.68rem] tabular-nums text-paper-dim/80">
+                          <span className="truncate">{t(`category.${cat.id}`)}</span>
+                          <span className="ml-auto font-mono text-xs sm:text-sm lg:text-[0.65rem] xl:text-sm tabular-nums text-paper-dim/80">
                             {counts.get(cat.id) ?? 0}
                           </span>
                         </li>
@@ -700,7 +706,7 @@ export function VenueMap() {
         </div>
 
         {/* ── COLUMNA DERECHA: Filtros Superiores + Gran Contenedor del Mapa ── */}
-        <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-between h-full min-h-0 gap-2.5 xl:gap-3 w-full">
+        <div className="lg:col-span-8 xl:col-span-8 flex flex-col justify-between h-auto lg:h-full min-h-0 gap-2.5 xl:gap-3 w-full">
           {/* Barra superior de Filtros de categorías con efecto rebote de derecha a izquierda */}
           <div className="flex flex-wrap items-center justify-between gap-2.5 shrink-0 overflow-hidden py-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -760,11 +766,11 @@ export function VenueMap() {
 
           {/* Contenedor del Mapa (Captura 2: Borde redondeado, canvas oscuro, adaptado a VH) */}
           <div
-            className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-[#070b1e] p-2.5 sm:p-4 shadow-2xl flex-1 min-h-0 w-full h-full border"
+            className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-[#070b1e] p-2.5 sm:p-4 shadow-2xl flex-1 min-h-105 lg:min-h-0 w-full h-auto lg:h-full border"
             style={{
               borderColor: isDrawn
-                ? "var(--color-line)"
-                : "color-mix(in srgb, var(--color-line) calc(var(--map-box-border, 0) * 100%), transparent)",
+                ? "rgba(255,255,255,0.1)"
+                : "color-mix(in srgb, rgba(255,255,255,0.1) calc(var(--map-box-border, 0) * 100%), transparent)",
             }}
           >
             {/* SVG que dibuja el borde perimetral durante la aproximación */}
@@ -792,12 +798,15 @@ export function VenueMap() {
             )}
             <div className="w-full h-full flex-1 min-h-0 flex items-center justify-center overflow-hidden">
               <svg
-                viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+                viewBox={VENUE_VIEW_BOX}
                 role="img"
                 aria-label={t("svgLabel")}
                 preserveAspectRatio="xMidYMid meet"
                 className="w-full h-full select-none"
               >
+                {/* El predio y su manzana van primero: son el suelo sobre el
+                    que se apoyan los stands, no un adorno por encima. */}
+                <VenueContext drawn={isDrawn} />
                 {VENUE_PLAN.map((zone) => {
                   const meta = categoryMeta(zone.category);
                   const cx = zone.x + zone.width / 2;
@@ -893,20 +902,20 @@ export function VenueMap() {
             </div>
 
             {/* Barra inferior de estado (Captura 2) */}
-            <div className="mt-2 flex items-center justify-between border-t border-line/40 pt-2 px-1 text-xs text-paper-dim shrink-0">
+            <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-2 px-1 text-xs text-white/60 shrink-0">
               <div className="flex items-center gap-2 font-mono text-[0.72rem]">
-                <span className="inline-block h-2 w-2 rounded-full bg-accent motion-safe:animate-pulse" />
+                <span className="inline-block h-2 w-2 rounded-full bg-cyan motion-safe:animate-pulse" />
                 {hoveredZone ? (
                   <span>
-                    {t("exploring")} <strong className="text-paper">{hoveredZone.label}</strong> — {categoryMeta(hoveredZone.category).label}
+                    {t("exploring")} <strong className="text-white">{hoveredZone.label}</strong> — {categoryMeta(hoveredZone.category).label}
                     {hoveredZone.areaM2 ? ` (${hoveredZone.areaM2} m²)` : ""}
                   </span>
                 ) : active ? (
                   <span>
-                    {t("selectedStand")} <strong className="text-paper">{active.label}</strong> ({categoryMeta(active.category).label})
+                    {t("selectedStand")} <strong className="text-white">{active.label}</strong> ({categoryMeta(active.category).label})
                   </span>
                 ) : (
-                  <span className="text-paper-dim/80">
+                  <span className="text-white/50">
                     {t("tapHint")}
                   </span>
                 )}
@@ -916,7 +925,7 @@ export function VenueMap() {
                 <button
                   type="button"
                   onClick={() => setActiveId(null)}
-                  className="cursor-pointer font-mono text-xs text-accent transition hover:underline mr-8 sm:mr-10"
+                  className="cursor-pointer font-mono text-xs text-cyan transition hover:underline mr-8 sm:mr-10"
                 >
                   ✕ {t("clearSelection")}
                 </button>

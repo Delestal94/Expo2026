@@ -16,7 +16,7 @@
     "eyebrow": "Plan interactif",
     "title": "Le plan du site, comme des données — pas comme une image fixe",
     "description": "Calque du plan de l'édition 2024 à Ciudad Cultural : le pavillon couvert, les stands en plein air, la cour gastronomique et les zones de services. Filtrez par type ou touchez un stand pour voir son code et sa surface. Les quantités par catégorie sont celles du calque ; la disposition définitive de 2026 sera confirmée par la Chambre.",
-    "svgLabel": "Plan du site de Ciudad Cultural avec les stands de l'édition 2024",
+    "svgLabel": "Plan du site de Ciudad Cultural : rues périphériques, accès principal piéton à l'ouest, accès véhicules et stationnement au nord-est, et les stands de l'édition 2024 regroupés par secteur.",
     "legend": "Légende",
     "area": "{m2} m² de surface",
     "standHint": "Les stands sont attribués par l'appel officiel de la Chambre, pas depuis ce site.",
@@ -58,7 +58,23 @@
     "selectedStand": "Stand sélectionné :",
     "tapHint": "Touchez un stand pour voir ses caractéristiques et services",
     "clearSelection": "Effacer la sélection",
-    "backToVenue": "Voir les informations générales du site"
+    "backToVenue": "Voir les informations générales du site",
+    "context": {
+      "streetNorth": "Rue périphérique nord",
+      "streetSouth": "Rue périphérique sud",
+      "streetWest": "Voie d'accès piéton",
+      "streetEast": "Voie d'accès véhicules",
+      "parking": "Stationnement",
+      "accessMain": "Accès principal",
+      "accessVehicle": "Accès véhicules",
+      "sectorInstitutional": "Secteur institutionnel",
+      "sectorPavilion": "Pavillon couvert",
+      "sectorOutdoor": "Stands extérieurs",
+      "sectorFood": "Espace restauration",
+      "sectorServices": "Services et jeux",
+      "north": "N",
+      "scale": "20 m"
+    }
   },
   "Landing": {
     "Hero": {
@@ -160,7 +176,7 @@
     },
     "Faq": {
       "eyebrow": "Questions fréquentes",
-      "title": "Avant de demander",
+      "title": "Tout ce qu'il faut savoir",
       "items": {
         "dates": {
           "question": "Quand et où a lieu ExpoJuy 2026 ?",
@@ -202,6 +218,25 @@
       "organizerAlt": "Chambre de Commerce Extérieur de Jujuy",
       "institutions": "Chambre de Commerce Extérieur de Jujuy · Ministère du Développement Économique et de la Production · Direction Provinciale des Services basés sur la Connaissance · Clustear.",
       "badge": "Prototype — Défi Numérique 2026"
+    },
+    "SectionNav": {
+      "ariaLabel": "Sections de la page",
+      "sections": {
+        "sobre": { "label": "À propos de l'événement", "shortLabel": "À propos" },
+        "noticias": { "label": "Actualités", "shortLabel": "Actualités" },
+        "galeria": { "label": "Galerie", "shortLabel": "Galerie" },
+        "mapa": { "label": "Plan", "shortLabel": "Plan" },
+        "agenda": { "label": "Agenda", "shortLabel": "Agenda" },
+        "expositores": { "label": "Exposants", "shortLabel": "Exposants" },
+        "llegar": { "label": "Accès et comment venir", "shortLabel": "Accès" },
+        "faq": { "label": "Questions fréquentes", "shortLabel": "FAQ" },
+        "sponsors": { "label": "Sponsors", "shortLabel": "Sponsors" },
+        "contacto": { "label": "Contact", "shortLabel": "Contact" },
+        "redes": { "label": "Réseaux sociaux", "shortLabel": "Réseaux" }
+      }
+    },
+    "LanguageSwitcher": {
+      "ariaLabel": "Choisir la langue"
     }
   },
   "Pages": {
@@ -324,6 +359,12 @@
       "title": "Quatre jours, un même rythme",
       "description": "Matin de rencontres d'affaires, après-midi d'expo — c'est le format 2026 confirmé par l'organisation. Le programme horaire des conférences, panels et spectacles nocturnes sera publié plus près de la date, comme lors de l'édition précédente.",
       "dayTabsLabel": "Choisir le jour de l'agenda",
+      "activitiesLabel": "Activités à la une",
+      "liveBadge": "En direct",
+      "confirmedBadge": "Confirmé",
+      "nowBadge": "En cours",
+      "showMore": "Voir {count, plural, one {# activité de plus} other {# activités de plus}}",
+      "showLess": "Voir moins d’activités",
       "morningLabel": "Matin",
       "morningContent": "Rencontres d'affaires internationales — Corridor Bioocéanique",
       "afternoonLabel": "Après-midi",
@@ -347,7 +388,9 @@
     "closeLabel": "Fermer",
     "prevLabel": "Photo précédente",
     "nextLabel": "Photo suivante",
-    "dialogAnnounce": "Photo {current} sur {total} : {alt}"
+    "dialogAnnounce": "Photo {current} sur {total} : {alt}",
+    "compositionSelectorLabel": "Sélecteur de composition",
+    "compositionLabel": "Composition {n}"
   },
   "News": {
     "eyebrow": "Actualités",

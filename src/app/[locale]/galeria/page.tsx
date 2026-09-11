@@ -22,7 +22,7 @@ export default async function GaleriaPage({ params }: Props) {
     <main className="px-6 py-16 sm:px-10 lg:px-16">
       <Link
         href="/#galeria"
-        className="font-mono text-xs tracking-[0.2em] text-paper-dim uppercase transition hover:text-paper"
+        className="-mx-2 -my-3 inline-block px-2 py-3 font-mono text-xs tracking-[0.2em] text-paper-dim uppercase transition hover:text-paper"
       >
         {t("backLink")}
       </Link>

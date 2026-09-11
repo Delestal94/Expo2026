@@ -5,7 +5,7 @@
 - **Venue & Dates**: October 9–12, 2026, Ciudad Cultural, San Salvador de Jujuy, Argentina.
 - **Key Focus**: International lithium mining trade summit, Bioceanic Capricorn Corridor logistics integration (Argentina, Chile, Paraguay, Brazil), knowledge economy, and high-intensity B2B business rounds.
 - **Production Reference**: [https://expojuy2026.vercel.app](https://expojuy2026.vercel.app)
-- **Develop Preview**: [https://expojuy2026-git-develop-delestalmiguelignacio-5787s-projects.vercel.app/](https://expojuy2026-git-develop-delestalmiguelignacio-5787s-projects.vercel.app/)
+- **Develop Preview**: internal staging environment — 🔒 team-only (Vercel authentication required). The public reference is the production URL above.
 - **Repository**: [https://github.com/Delestal94/Expo2026.git](https://github.com/Delestal94/Expo2026.git)
 
 ---
