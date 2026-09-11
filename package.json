@@ -48,7 +48,7 @@
     "eslint-plugin-boundaries": "^7.2.0",
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.5.0",
     "md-to-pdf": "^5.2.5",
     "tailwindcss": "^4",
     "typescript": "^5",
