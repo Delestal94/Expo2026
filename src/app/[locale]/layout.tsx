@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
@@ -130,6 +131,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           {children}
           <ChatBot />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
