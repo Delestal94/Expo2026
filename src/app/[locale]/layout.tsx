@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
@@ -130,6 +131,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           {children}
           <ChatBot />
         </NextIntlClientProvider>
+        {/* Vercel Web Analytics: visitas y páginas vistas, sin cookies. Solo
+            reporta en deploys de Vercel; en local queda en modo debug. */}
+        <Analytics />
       </body>
     </html>
   );
