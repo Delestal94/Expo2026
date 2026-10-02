@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import type { ReactNode } from "react";
 import { ChatBot } from "@/modules/chatbot";
+import { CreditsBanner } from "@/modules/landing";
 import { routing } from "@/lib/i18n/routing";
 import { SCROLL_RESTORATION_INIT_SCRIPT } from "@/lib/ui/scroll";
 import { THEME_INIT_SCRIPT } from "@/lib/ui/theme";
@@ -125,6 +126,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="font-body antialiased overflow-x-clip">
         <NextIntlClientProvider>
           <ThemeSync />
+          <CreditsBanner />
           {children}
           <ChatBot />
         </NextIntlClientProvider>
